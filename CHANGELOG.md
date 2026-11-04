@@ -1,3 +1,9 @@
+## 2026-11-04 — Post-fix SMS TestMode uses retained historical snapshots
+
+- New 19:05–19:07 TestMode log: analyzer and triggers healthy; previous saved SMS entries still contain 6 BTC, 1 ETH, 1 SOL foreign descriptions.
+- All eight SMS activation timestamps remain 18:32 KST with `RefreshOffTriggers=false`: the original snapshots were reserialized, not regenerated.
+- **Not evidence of a failed source fix**; focused fresh-snapshot test remains pending. See [evidence record](updates/2026-11-04-sms-postfix-retained-snapshots.md).
+
 ## 2026-11-04 — Verify SMS summary isolation fix (58/58 tests)
 
 - User-run `git pull --ff-only` already up to date at application fix commit `0e8ab70`; `dotnet build` succeeded in **5.9s** for Core/PTMagic/Monitor (.NET 10).

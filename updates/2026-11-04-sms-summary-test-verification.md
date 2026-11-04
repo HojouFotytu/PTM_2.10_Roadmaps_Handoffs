@@ -26,3 +26,7 @@ dotnet run --project Tests/Phase1AReadiness/Phase1AReadiness.csproj
 - **58/58 deterministic checks passed**.
 
 **Verification boundary:** The corrected production helper is compiled and all deterministic tests pass, including list separation and JSON serialization. A deployed TestMode raid using two or more simultaneously active SMS per market, followed by inspection of each setting's persisted `TriggerSnapshot.MatchedTriggersContent` in `_data/SingleMarketSettingSummary.json`, has not been supplied. This is the final outstanding issue-specific runtime check for Phase 1C closeout. Previous live analytics/trigger TestMode and Monitor content evidence remains valid.
+
+## Uploaded TestMode follow-up (19:05–19:07 KST)
+
+The user supplied a later deployed TestMode log and JSON exports. The eight SMS entries still contain old activation timestamps from 18:32 KST and `RefreshOffTriggers=false`; the first BTC/ETH/SOL entries retain old foreign trigger lines. They were **loaded and resaved**, not freshly generated. This leaves the new runtime list-copy fix **unconfirmed by live JSON**, but does not contradict the 58/58 passing tests. See [detailed validation](2026-11-04-sms-postfix-retained-snapshots.md).

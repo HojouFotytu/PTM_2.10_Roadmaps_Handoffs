@@ -46,3 +46,7 @@ Application commit [`0e8ab70`](https://github.com/HojouFotytu/PTMagic/commit/0e8
 ## 2026-11-04 — Post-fix SMS isolation tests passed
 
 At `0e8ab70`, the user ran a successful .NET 10 build (5.9s) and all five test harnesses: SMS isolation 5/5, Phase1COhlcv 13/13, metric warnings 7/7, three-valued triggers 29/29, readiness 4/4 (**58/58 passed**). The remaining gate before Phase 1C closeout is **a deployed TestMode raid with multiple SMS settings on the same market** and comparison of their own matched trigger descriptions against `_data/SingleMarketSettingSummary.json`. Do not infer that the prior runtime log tested this latest fix.
+
+## 2026-11-04 — Retained SMS historical state in subsequent TestMode
+
+19:05–19:07 KST TestMode confirmed the analyzer, global triggers and SMS activations but reloaded eight existing SMS snapshots with 18:32 KST activation timestamps and `RefreshOffTriggers=false`. Foreign descriptions in the first BTC/ETH/SOL entry are **pre-fix persisted data**, not proof the list-copy change failed. A focused new snapshot test is needed: temporarily enable `RefreshOffTriggers=true` on two or more active diagnostic SMS for one market and verify fresh activation timestamps, per-setting trigger content only, unchanged market-wide PT comment aggregation (in TestMode no PT write), then restore the setting. Do not mark Phase1C closed until this is verified.

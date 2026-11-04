@@ -106,3 +106,16 @@ Five deterministic cases under `Tests/Phase1SmsSummaryIsolation` cover contamina
 ## 2026-11-04 — SMS summary alias fix: build and regression verification passed
 
 User reported `git pull --ff-only` **Already up to date** on the application branch after SMS list-isolation fix `0e8ab7056d32f16d1095a519ac4a1e87a29a4188`. `dotnet build` for Core, PTMagic, and Monitor net10.0 **succeeded in 5.9s** (Core 0.3s, PTMagic 0.1s, Monitor 4.3s). Tests passed: `Phase1SmsSummaryIsolation` **5/5**, `Phase1COhlcv` **13/13**, `Phase1MetricWarnings` **7/7**, `Phase1TriggerLogic` **29/29**, `Phase1AReadiness` **4/4**; **58/58 total**. The defect is now **source-fixed + build/regression verified**. **Still pending:** rerun a deployed TestMode raid with multiple active SMS on the same market and inspect `_data/SingleMarketSettingSummary.json` to verify first SMS descriptions are not contaminated. Do not claim this particular post-fix export behavior runtime-verified or mark Phase 1C completely closed until confirmed. [Verification update](updates/2026-11-04-sms-summary-test-verification.md).
+
+## 2026-11-04 — Post-fix TestMode: reused SMS history, fresh-snapshot test pending
+
+User uploaded a 19:05–19:07 KST deployed TestMode log, `LastRuntimeSummary(3).json`, `MarketTrendAnalytics(3).json` and `SingleMarketSettingSummary(3).json`.
+
+- PTMagic 2.10.0 loaded existing SMS summaries at 19:05:24, refreshed 756/756 Binance Futures normalized series, calculated 1h/2h/4h metrics, matched all 15 diagnostic global 2h triggers, activated 8 diagnostic SMS across BTC/ETH/SOL and saved the summary. No errors/fatals; TestMode made no PT updates.
+- The SMS export still contains **foreign messages** in the first setting per market: BTC **6** (9 total vs 3 own), ETH **1** (5 vs 4), SOL **1** (4 vs 3).
+- Critically, **all eight** saved SMS activation timestamps remain at **2026-11-04 09:32:23Z (18:32 KST)**, over 30 minutes before this raid. Their `RefreshOffTriggers` properties are **false**. The run loaded and reserialized existing pre-fix snapshots; it did **not** demonstrate freshly generated SMS trigger snapshots after fix `0e8ab70`. The retained foreign descriptions are therefore **not evidence of failure of the patched list-copy behavior**.
+- Existing 58/58 deterministic tests remain the current compile/test evidence. For an end-to-end verification, temporarily set `RefreshOffTriggers=true` for the active *diagnostic* SMS settings (at least the first and second BTC settings), perform one new TestMode raid with all those triggers true, then inspect the new activation timestamps and `MatchedTriggersContent`. Each SMS must contain only lines starting with its own `SettingName + ":"`. Revert `RefreshOffTriggers` afterward. Do not delete `SingleMarketSettingSummary.json` or reset real OffTrigger duration state unnecessarily.
+- A subsequent re-save or update to `LastRuntimeSummary.json` alone is insufficient: the original snapshots must be regenerated to validate this specific fix.
+
+**Status:** P1C-SMS-SNAPSHOT-ALIAS build+unit-test verified; *fresh deployed SMS snapshot test still pending*. Phase 1C not yet marked DONE.
+
