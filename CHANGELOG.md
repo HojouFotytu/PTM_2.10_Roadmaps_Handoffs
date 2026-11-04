@@ -1,3 +1,10 @@
+## 2026-11-04 — Verify SMS summary isolation fix (58/58 tests)
+
+- User-run `git pull --ff-only` already up to date at application fix commit `0e8ab70`; `dotnet build` succeeded in **5.9s** for Core/PTMagic/Monitor (.NET 10).
+- New SMS summary isolation suite **5/5 passed**; existing Phase1COhlcv **13/13**, warning **7/7**, trigger **29/29**, readiness **4/4**: **58/58 passed**.
+- The SMS summary alias defect is now build/unit-test verified; deployed TestMode multi-SMS JSON export verification remains pending.
+- [Verification record](updates/2026-11-04-sms-summary-test-verification.md).
+
 ## 2026-11-04 — Fix SMS summary matched-trigger list aliasing
 
 - Isolated market-level PT comment aggregation from persisted per-setting SMS trigger descriptions using defensive copies.

@@ -13,3 +13,7 @@ On the first activated SMS for a market, `matchedMarketTriggers.Add(marketPair, 
 - Added 5 checks under `Tests/Phase1SmsSummaryIsolation`: first setting isolation, order, multiple markets, defensive list copies, and JSON export round-trip.
 
 **Evidence boundary:** This commit is source-only. No .NET build or automated tests were run by the assistant. Rerun build, the five new checks, existing 53 tests, and a TestMode raid with two or more SMS settings per market. The user-provided Market Metrics page already confirmed Phase1C analytics/Monitor content. Do not mark Phase1C fully DONE until this corrective change is verified.
+
+## 2026-11-04 — User-run build and tests
+
+At application fix HEAD `0e8ab70`, `git pull --ff-only` returned already up to date; `dotnet build` succeeded in 5.9s; `Phase1SmsSummaryIsolation` passed 5/5, and all prior suites passed (13+7+29+4). **58/58 total deterministic checks passed.** The initial source-only verification warning above is superseded for build/tests, but **TestMode export verification is still open**. [Detailed verification](2026-11-04-sms-summary-test-verification.md).

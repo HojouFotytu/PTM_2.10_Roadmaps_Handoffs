@@ -1,3 +1,4 @@
+- **[2026-11-04 — SMS summary isolation build and 58/58 tests verified](2026-11-04-sms-summary-test-verification.md)** (most recent; deployed multi-SMS JSON check pending)
 - **[2026-11-04 — SMS trigger snapshot alias fix](2026-11-04-sms-summary-alias-fix.md)** (source committed; build and TestMode verification pending)
 - **[2026-11-04 — Phase 1C deployed TestMode results](2026-11-04-phase1c-live-testmode-validation.md)** (new metrics and triggers pass; SMS summary aliasing and visual Monitor check open)
 - **[2026-11-04 — Phase 1C source implementation](2026-11-04-phase1c-source-implementation.md)** (newest; code committed, tests pending)
