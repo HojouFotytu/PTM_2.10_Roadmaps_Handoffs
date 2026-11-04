@@ -64,3 +64,5 @@ GlobalSetting, SMS and OffTrigger now have a source-code implementation of compl
 **2026-11-04 raid metric diagnostics (D-018):** Commit [`34c30aa`](https://github.com/HojouFotytu/PTMagic/commit/34c30aa08918252d2976d6fabd7dddb1589acfd9) groups missing/unavailable normalized metrics into a compact RAID SUMMARY section and removes repeated per-pair trigger warnings. Seven metric-warning tests are authored but not yet run. Phase 1C ATRP remains next. [Details](updates/2026-11-04-raid-metric-warnings.md).
 
 **D-018 verification (2026-11-04):** User reports `dotnet build` passed and all **40 deterministic tests** passed at application HEAD `34c30aa`: metric warning 7/7, tri-state 29/29, Phase1A 4/4. Actual TestMode RAID SUMMARY output remains pending. [Evidence](updates/2026-11-04-raid-metric-warnings-verification.md).
+
+**D-018 amendment (2026-11-04):** The five-line RAID SUMMARY metric-warning cap was removed at application commit [`64e05e7`](https://github.com/HojouFotytu/PTMagic/commit/64e05e7e2a93aa23828890ef5e4708f002c696b8). All distinct grouped warnings now appear; build/test re-verification pending. [Update](updates/2026-11-04-all-metric-warnings.md).

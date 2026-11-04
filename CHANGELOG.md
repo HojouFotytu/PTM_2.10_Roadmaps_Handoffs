@@ -2,6 +2,13 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Remove RAID SUMMARY metric warning display cap
+
+- Show all distinct grouped metric warnings; remove `... and N more` truncation.
+- Updated seven-case deterministic test harness to check all nine synthetic warnings are displayed.
+- Application commit [`64e05e7`](https://github.com/HojouFotytu/PTMagic/commit/64e05e7e2a93aa23828890ef5e4708f002c696b8); build/TestMode checks pending.
+- Amends D-018; earlier five-detail cap was superseded by user request. [Dated update](updates/2026-11-04-all-metric-warnings.md).
+
 ## 2026-11-04 — Add optional cross-raid historical snapshot reuse optimization
 
 - Added roadmap §12.7 and tracked task `P1-PERF-SNAPSHOT`.

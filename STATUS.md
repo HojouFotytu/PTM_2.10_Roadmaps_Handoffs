@@ -78,3 +78,7 @@ Seven new deterministic checks under `Tests/Phase1MetricWarnings` were added, bu
 ## 2026-11-04 — D-018 deterministic verification passed
 
 User-executed `git pull --ff-only` fast-forwarded `c66b9f3` to application HEAD `34c30aa08918252d2976d6fabd7dddb1589acfd9`. `dotnet build` succeeded in 15.2s (Core .NET 10, PTMagic .NET 10, Monitor .NET 10). `Tests/Phase1MetricWarnings` passed **7/7**, `Tests/Phase1TriggerLogic` passed **29/29**, and `Tests/Phase1AReadiness` passed **4/4**, totaling **40/40 deterministic tests passed**. The compact raid-summary diagnostic implementation is **build/unit-test verified**, but live TestMode RAID SUMMARY output and notification behavior are **not yet runtime-verified**. Phase 1C-01 ATRP remains next. See [verification update](updates/2026-11-04-raid-metric-warnings-verification.md).
+
+## 2026-11-04 — D-018 warning output cap removed
+
+Application commit [`64e05e7`](https://github.com/HojouFotytu/PTMagic/commit/64e05e7e2a93aa23828890ef5e4708f002c696b8) removes the previous five-detail limit and `... and N more` indicator. The RAID SUMMARY now lists **every distinct** MarketTrend/metric warning, retaining duplicate grouping and deterministic sorting. The seven-case `Phase1MetricWarnings` harness was updated to check all nine synthetic warning rows. **Code committed; build/TestMode re-verification pending.** This supersedes the earlier five-detail cap in D-018. No change to metric validity or trigger behavior.
