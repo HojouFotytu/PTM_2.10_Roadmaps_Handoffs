@@ -38,3 +38,7 @@ TestMode: enable representative per-asset/global features on 2h/4h/8h/24h trends
 **Known exception:** Original Phase1B `Concentration` still ranks Top10 by fixed trailing 24h quote volume, separately tracked as `P1B-CONC-WINDOW`. Do not conflate it with new volume-based Phase1C concentration features.
 
 After valid build, 53 test checks and satisfactory TestMode evidence, update STATUS to DONE, record a dated Phase1C closeout and write Phase1D-ready handoff. Do not reopen accepted Phase1A containment.
+
+## 2026-11-04 — SMS summary list-aliasing follow-up
+
+Application commit [`0e8ab70`](https://github.com/HojouFotytu/PTMagic/commit/0e8ab7056d32f16d1095a519ac4a1e87a29a4188) isolates the mutable per-market comment aggregation list from each persisted `TriggerSnapshot.MatchedTriggersContent`. Five new independent regression checks are in `Tests/Phase1SmsSummaryIsolation`. The prior TestMode run and Market Metrics page verified Phase 1C metrics and Monitor content. **New code has not been compiled or runtime-tested yet**. Verify `dotnet build`, `dotnet run --project Tests/Phase1SmsSummaryIsolation/Phase1SmsSummaryIsolation.csproj`, all four prior test harnesses, and a TestMode multi-SMS JSON export before final Phase1C closeout.

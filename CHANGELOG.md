@@ -1,3 +1,11 @@
+## 2026-11-04 — Fix SMS summary matched-trigger list aliasing
+
+- Isolated market-level PT comment aggregation from persisted per-setting SMS trigger descriptions using defensive copies.
+- Added five deterministic regression checks, including JSON snapshot round-trip and cross-market isolation.
+- Application commit [`0e8ab70`](https://github.com/HojouFotytu/PTMagic/commit/0e8ab7056d32f16d1095a519ac4a1e87a29a4188); **build, tests and TestMode revalidation pending**.
+- No change to metric computation, trigger logic or PT settings behavior.
+- [Dated update](updates/2026-11-04-sms-summary-alias-fix.md).
+
 ## 2026-11-04 — Phase 1C build and tests verified
 
 - User-run application .NET 10 build succeeded in 14.8s at `64d063c`.

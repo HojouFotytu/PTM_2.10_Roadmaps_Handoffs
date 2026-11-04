@@ -20,7 +20,7 @@
 | P1C-04 | Recent quote-volume expansion | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
 | P1C-05 | Volume-expansion breadth | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
 | P1C-06 | Volume concentration | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-07 | Registry/Monitor/trigger/test integration | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-07 | Registry/Monitor/trigger/test integration | **IMPLEMENTED; SMS REGRESSION VERIFICATION PENDING** | 53/53 existing tests and deployed Phase 1C runtime/Monitor content verified; SMS list-alias fix `0e8ab70` committed; new 5-case test, build, focused TestMode pending |
 | P1-PERF-SNAPSHOT | Reuse unchanged historical snapshots between raids | **OPTION / PLANNED** | Avoid redundant full-series copy/sort/gap validation; preserve invalidation, staleness and thread safety; benchmark before/after (roadmap §12.7) |
 | P1D-CORR | Synchronized return correlation | PLANNED | TrendMinutes-based return cadence, not independent 5m/15m |
 | P1E-INSPECT | Inspection and additional fault tests | PARTIAL | Carry non-blocking checks below |
@@ -96,3 +96,9 @@ Application branch HEAD: [`64d063c`](https://github.com/HojouFotytu/PTMagic/comm
 ## Phase 1C build and deterministic test verification — 2026-11-04
 
 At source HEAD `64d063c1c9bc8886fb456cae97921780449f5cce`, user reported `git pull --ff-only` already up to date, and `dotnet build` succeeded in 14.8s for Core, PTMagic and Monitor (.NET 10). Phase1COhlcv passed **13/13**, Phase1MetricWarnings **7/7**, Phase1TriggerLogic **29/29**, Phase1AReadiness **4/4**, total **53/53 tests passed**. The Phase 1C source is implemented and build/deterministic-test verified. **Not yet done**: live TestMode raid, GlobalSetting/SMS/OffTrigger checks, and Monitor/export confirmation. Phase 1D remains pending.
+
+## 2026-11-04 — SMS matched-trigger snapshot aliasing fix committed
+
+**Application HEAD:** `0e8ab7056d32f16d1095a519ac4a1e87a29a4188`. Fixed `P1C-SMS-SNAPSHOT-ALIAS`: market-level trigger comment aggregation previously reused the same mutable `List<string>` assigned to the first SMS `TriggerSnapshot.MatchedTriggersContent`, causing later settings' descriptions to contaminate its persisted JSON. Production `Core/Main/PTMagic.cs` now calls `Core.Helper.MatchedMarketTriggerContent.Append`, which copies the initial market-level list, and `CopyForSnapshot`, which copies each saved setting's list. The market-level comment aggregation retains all activated setting descriptions in order; trigger decisions and PT writes are unchanged.
+
+Five deterministic cases under `Tests/Phase1SmsSummaryIsolation` cover contamination, ordered aggregation, different markets, independent mutable list references and serialized snapshot isolation. **Source committed, not yet build/test/TestMode verified.** Run `dotnet build`, new 5-case harness, existing four test suites (previously 53/53), then a TestMode raid with at least two active SMS per market. Inspect the first SMS summary entry for BTC/ETH/SOL; it should contain only that setting's own descriptions. No Phase 1C DONE declaration until accepted verification.
