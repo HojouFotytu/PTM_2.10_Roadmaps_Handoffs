@@ -1,5 +1,20 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-04 — Verbose metric warnings: four-raid Binance Futures TestMode verified
+
+**Application source branch HEAD inspected:** [`efa7b5f`](https://github.com/HojouFotytu/PTMagic/commit/efa7b5ff1a99606395c1b1b9636c828600a55353). Uploaded runtime identifies version 2.10.0 but not Git SHA; new diagnostic strings confirm the implementation is running.
+
+**User local TestMode log (23:19–23:24 KST):** four analyzer raids; metric warning groups **31 → 7 → 7 → 7**; zero ERROR/FATAL; all raids report **no PT configuration updates**. First cold raid (2m) had 142/250 valid global returns and 296/519 valid asset returns due 223 missing latest 5-minute closed endpoints, despite 756/756 successful fetches and 872,424 candles. Data refreshed on the next raid (373/756 updated, 1,119 candles), then recovered to **250/250 global and 519/519 asset** coverage. Following two raids needed no Binance candle requests.
+
+**New warning trace confirmed:** `FILTERED_1h / PriceTrend` originated in SMS activation setting `DIAG_SMS_SOL_FilteredOut`, market `SOLUSDT`, trigger #1, explicit PriceTrend, relation Absolute. This market is explicitly excluded by `IgnoredMarkets="SOL"`. Remaining six groups: asset-only `ATRP` used in a GlobalSetting, explicit `PriceTrend` not enabled on IMPLICIT_1h, and four intentionally insufficient 8h ATRP/volume metrics. Warning source, setting, symbol, relation, reason, counts and coverage diagnostics are operational.
+
+**Export checks:** `MarketTrendAnalytics(6).json` captured second raid at 14:22:14 UTC; eight MarketTrends, all intended fully funded PriceTrend values valid; DEFAULT_1h vs IMPLICIT_1h and BLANK_2h vs FULL_2h match exactly over 519 assets. All **3,116** valid per-asset PriceTrend values match `LastRuntimeSummary(6).json`. Thirteen SMS snapshots across BTC/ETH/SOL, zero cross-setting descriptions; ten activation timestamps from the second raid, three retained historical snapshots. GlobalSetting was initially Default (second raid flood-protected), switched to `DIAG_Global_All15AndImplicit` in third raid, and remained unchanged/reapplication-free in fourth.
+
+**Follow-up issue (new):** Cold startup exchange polling spanned the 14:20 UTC 5m candle close; metrics used `DateTimeOffset.UtcNow` after refresh and demanded the newly closed candle even for symbols fetched before the boundary. This appears to explain temporary false data-coverage gating. Review synchronization of refresh snapshot time and evaluation as-of time, or targeted refresh after boundary. **Hypothesized root cause based on timing and code inspection; not yet patched or regression-tested.** Do not mark cross-boundary consistency fixed.
+
+**Status:** Verbose diagnostic *runtime behavior* verified on Futures. No user-supplied `dotnet build` or 75/75 local harness output, so local build/test status remains **unverified**. Binance Spot and Binance US remain pending. [Detailed findings](updates/2026-11-04-verbose-warning-four-raid-testmode.md).
+
+
 ## 2026-11-04 — Diagnostic expansion for all normalized metric warnings (unverified source)
 
 Application commit: [`efa7b5f`](https://github.com/HojouFotytu/PTMagic/commit/efa7b5ff1a99606395c1b1b9636c828600a55353), branch `phase1/market-data-foundation`.
