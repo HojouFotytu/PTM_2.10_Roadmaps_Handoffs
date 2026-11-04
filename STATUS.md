@@ -1,5 +1,22 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-04 — Full local regression suite PASS: 81/81
+
+**User-executed local .NET 10 verification at PTMagic application commit [`9f88315`](https://github.com/HojouFotytu/PTMagic/commit/9f88315e018db940d9816fdc991e8c444a47d02f):**
+
+- `dotnet build`: **PASS** — Core, PTMagic, and Monitor built successfully (10.4 seconds, previously supplied).
+- `Tests/Phase1MetricWarnings`: **18/18 PASS** (previous local run).
+- `Tests/Phase1AReadiness`: **4/4 PASS**.
+- `Tests/Phase1COhlcv`: **13/13 PASS**.
+- `Tests/Phase1SmsSummaryIsolation`: **5/5 PASS**.
+- `Tests/Phase1TriggerLogic`: **29/29 PASS**.
+- `Tests/NormalizedPriceTrendMigration`: **12/12 PASS**.
+- **Total: 81/81 deterministic regression tests PASS**, all executed locally by user (D-021).
+- Nonfatal compiler warnings: Phase1SmsSummaryIsolation CS8600/CS8602; NormalizedPriceTrendMigration CS8625 ×3, CS8602, CS8629. These warnings do not change the passing test results; optional cleanup remains.
+- **Option C natural-language warning runtime TestMode: NOT YET VERIFIED**; previous Binance Futures runtime verification was for the earlier verbose warning implementation.
+- Separate cold-start 5-minute candle-boundary inconsistency remains open. Binance Spot/US live TestMode and positive SMS OffTrigger deactivation remain open.
+
+
 ## 2026-11-04 — Option C local build and metric-warning regression PASS
 
 User executed `git pull --ff-only`, `dotnet build`, and `dotnet run --project Tests/Phase1MetricWarnings/Phase1MetricWarnings.csproj` on Windows/.NET 10 at application commit [`9f88315`](https://github.com/HojouFotytu/PTMagic/commit/9f88315e018db940d9816fdc991e8c444a47d02f). The user supplied the actual terminal output:
