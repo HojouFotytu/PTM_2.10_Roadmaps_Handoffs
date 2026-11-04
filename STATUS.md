@@ -1,5 +1,18 @@
 # PTMagic 2.10 — Current Development Status
 
+
+## 2026-11-05 — Pinned-refresh candle-boundary fix: full local regression PASS (82/82)
+
+**Application commit:** [`0c31e58`](https://github.com/HojouFotytu/PTMagic/commit/0c31e58451a563406c214dee3438f0812e980ae6), `phase1/market-data-foundation`. User ran the exact PowerShell pull/build/six-harness sequence after implementation and supplied console output. `git pull --ff-only` said *Already up to date*.
+
+- **`dotnet build` passed** on .NET 10: Core, PTMagic and Monitor all succeeded (16.0 seconds).
+- **All 82 deterministic regression tests passed locally**: Phase1AReadiness **5/5** (including new cross-boundary test), Phase1COhlcv **13/13**, Phase1SmsSummaryIsolation **5/5**, Phase1TriggerLogic **29/29**, NormalizedPriceTrendMigration **12/12**, Phase1MetricWarnings **18/18**.
+- Nonfatal nullable-annotation compiler warnings remain in test source only: SMS Summary Isolation `CS8600` and `CS8602`; Normalized PriceTrend Migration `CS8625` ×3, `CS8602`, `CS8629`. Neither project failed.
+- **Not yet live-verified:** Binance Futures cold-start TestMode crossing a five-minute candle boundary on this commit. Need confirm the first raid uses the pinned evaluation timestamp and no artificial `MissingEndpoint` losses; subsequent raid should advance normally. Also evaluate shared Spot and US runtime when available.
+- Thus mark **automated regression acceptance PASS; live cold-start acceptance PENDING**, not fully closed. The deliberately insufficient 8h metric histories remain expected warnings and are unaffected.
+- D-021 remains in force: only the user runs .NET builds, tests and PTMagic TestMode locally; no GitHub Actions tests.
+
+
 ## 2026-11-05 — Cold-start cross-boundary candle consistency fix COMMITTED (local verification pending)
 
 Application commit: [`0c31e58`](https://github.com/HojouFotytu/PTMagic/commit/0c31e58451a563406c214dee3438f0812e980ae6), branch `phase1/market-data-foundation`.
