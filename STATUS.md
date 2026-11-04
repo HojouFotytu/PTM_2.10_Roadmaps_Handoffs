@@ -1,5 +1,22 @@
 # PTMagic 2.10 — Current Development Status
 
+
+## 2026-11-05 — Option C natural-language warnings VERIFIED in Binance Futures TestMode
+
+User-provided local log \`Pasted text(20261104-151249).txt\`, two consecutive raids after the confirmed .NET 10 build and **81/81 local deterministic tests** at source commit [\`9f88315\`](https://github.com/HojouFotytu/PTMagic/commit/9f88315e018db940d9816fdc991e8c444a47d02f).
+
+- **Option C live format: PASS (Binance Futures)**. RAID SUMMARY warnings are natural-language actionable sentences, name SMS/GlobalSetting and market when applicable, explain the cause, suggest fixes, and aggregate multiple callers without raw repeated resolver dumps.
+- Cold first raid (00:09:42–00:11:13 KST; 1m30s) downloaded 872,424 five-minute candles for 756/756 markets with **zero fetch failures**, but after a five-minute boundary only **179/250 global (71.6%)** and **365/519 asset** return observations had the exact newly expected endpoint; **31 warning groups**. GlobalSetting indeterminate; retained Default.
+- Second raid (8s) refreshed **287/756** series (861 candles; 469 skipped; 0 failed), reaching **250/250 global and 519/519 asset** return coverage. **Seven warning groups remained**, all expected diagnostic cases: FILTERED_1h excluded SOL, FULL_2h asset-only ATRP in GlobalSetting, IMPLICIT_1h disabled explicit PriceTrend, four deliberately history-insufficient INSUFFICIENT_8h metrics.
+- \`DIAG_Global_All15AndImplicit\` 18 diagnostic trigger values were logged as triggered, but **GlobalSetting did not switch** because active flood protection prevented the switch until **15:13:12 UTC**. This is not evidence of a metric-trigger failure.
+- **TestMode active:** no ProfitTrailer writes; second raid also logged no config changes. No ERROR/FATAL lines in supplied two-raid log.
+- **Known open issue reaffirmed:** the first refresh started before the 15:09:59.999 UTC five-minute candle close and ended after it. The engine required that newly closed endpoint for every market even though some had been fetched before it existed. Fix startup cross-boundary snapshot consistency separately; recovery on second raid is not a fix.
+- Remaining live acceptance: Binance Spot and Binance US, positive SMS OffTrigger deactivation, optional TrendCurrency=Fiat parity. **No code changes** were made for this validation report.
+
+[Full dated evidence](updates/2026-11-05-option-c-testmode-validation.md).
+
+
+
 ## 2026-11-04 — Full local regression suite PASS: 81/81
 
 **User-executed local .NET 10 verification at PTMagic application commit [`9f88315`](https://github.com/HojouFotytu/PTMagic/commit/9f88315e018db940d9816fdc991e8c444a47d02f):**
