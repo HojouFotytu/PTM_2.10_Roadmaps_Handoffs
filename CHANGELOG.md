@@ -1,3 +1,9 @@
+## 2026-11-04 — Phase 1C build and tests verified
+
+- User-run application .NET 10 build succeeded in 14.8s at `64d063c`.
+- Phase1COhlcv 13/13, metric warnings 7/7, tri-state triggers 29/29, Phase1A 4/4: **53/53 passed**.
+- TestMode raid and Monitor/export acceptance remain pending; Phase 1C not yet closed.
+
 # PTMagic 2.10 — Roadmap Revision History
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.

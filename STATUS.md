@@ -14,13 +14,13 @@
 | P1B-RS | RelativeStrengthMarket / RelativeStrengthBTC | DONE | Scope preserved |
 | P1B-CONC | Top10 return advantage Concentration | DONE | Current ranking uses fixed trailing 24h quote volume; 100% required |
 | P1B-CONC-WINDOW | Align existing concentration-ranking window with MarketTrend.TrendMinutes | FOLLOW-UP | Known current 24h fixed-window exception; separate compatible code change/test |
-| P1C-01 | Per-asset ATRP on MarketTrend.TrendMinutes candles | **CODE IMPLEMENTED — VERIFICATION PENDING** | Committed on phase1/market-data-foundation; see Phase 1C implementation addendum; build/tests/TestMode pending |
-| P1C-02 | MedianATRP on the same configured MarketTrend timeframe | **CODE IMPLEMENTED — VERIFICATION PENDING** | Committed on phase1/market-data-foundation; see Phase 1C implementation addendum; build/tests/TestMode pending |
-| P1C-03 | Volatility breadth | **CODE IMPLEMENTED — VERIFICATION PENDING** | Committed on phase1/market-data-foundation; see Phase 1C implementation addendum; build/tests/TestMode pending |
-| P1C-04 | Recent quote-volume expansion | **CODE IMPLEMENTED — VERIFICATION PENDING** | Committed on phase1/market-data-foundation; see Phase 1C implementation addendum; build/tests/TestMode pending |
-| P1C-05 | Volume-expansion breadth | **CODE IMPLEMENTED — VERIFICATION PENDING** | Committed on phase1/market-data-foundation; see Phase 1C implementation addendum; build/tests/TestMode pending |
-| P1C-06 | Volume concentration | **CODE IMPLEMENTED — VERIFICATION PENDING** | Committed on phase1/market-data-foundation; see Phase 1C implementation addendum; build/tests/TestMode pending |
-| P1C-07 | Registry/Monitor/trigger/test integration | **CODE IMPLEMENTED — VERIFICATION PENDING** | Registry/trigger/Monitor source wired; 13 synthetic cases authored; .NET build/tests/TestMode pending |
+| P1C-01 | Per-asset ATRP on MarketTrend.TrendMinutes candles | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-02 | MedianATRP on the same configured MarketTrend timeframe | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-03 | Volatility breadth | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-04 | Recent quote-volume expansion | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-05 | Volume-expansion breadth | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-06 | Volume concentration | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
+| P1C-07 | Registry/Monitor/trigger/test integration | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
 | P1-PERF-SNAPSHOT | Reuse unchanged historical snapshots between raids | **OPTION / PLANNED** | Avoid redundant full-series copy/sort/gap validation; preserve invalidation, staleness and thread safety; benchmark before/after (roadmap §12.7) |
 | P1D-CORR | Synchronized return correlation | PLANNED | TrendMinutes-based return cadence, not independent 5m/15m |
 | P1E-INSPECT | Inspection and additional fault tests | PARTIAL | Carry non-blocking checks below |
@@ -92,3 +92,7 @@ User-run `git pull --ff-only` returned **Already up to date** at application bra
 Application branch HEAD: [`64d063c`](https://github.com/HojouFotytu/PTMagic/commit/64d063c1c9bc8886fb456cae97921780449f5cce). **P1C-01 through P1C-07 code authored and committed**: trend-sized OHLCV, Wilder ATRP, cross-sectional medians/breadth, quote-volume expansion, HHI/share concentration, metric registry, configuration, triggers, Monitor and a 13-case regression harness. Separate D-017 refinement fixes untagged AND/OR GlobalSetting evaluation as part of this integration.
 
 **Not verified:** This assistant environment has no .NET SDK; no new `dotnet build`, test execution or TestMode evidence for Phase1C. Status is **CODE IMPLEMENTED — BUILD/TEST/TESTMODE PENDING**, NOT Phase1C DONE. The prior 40/40 passing Phase1A/tri-state/metric-warning results predate the Phase1C changes; rerun them. See [dated update](updates/2026-11-04-phase1c-source-implementation.md) and [verification handoff](handoffs/2026-11-04-phase1c-implementation-verification.md).
+
+## Phase 1C build and deterministic test verification — 2026-11-04
+
+At source HEAD `64d063c1c9bc8886fb456cae97921780449f5cce`, user reported `git pull --ff-only` already up to date, and `dotnet build` succeeded in 14.8s for Core, PTMagic and Monitor (.NET 10). Phase1COhlcv passed **13/13**, Phase1MetricWarnings **7/7**, Phase1TriggerLogic **29/29**, Phase1AReadiness **4/4**, total **53/53 tests passed**. The Phase 1C source is implemented and build/deterministic-test verified. **Not yet done**: live TestMode raid, GlobalSetting/SMS/OffTrigger checks, and Monitor/export confirmation. Phase 1D remains pending.
