@@ -38,6 +38,17 @@
 
 A task marked [DONE] must identify the relevant commit and test evidence when available. Unverified claims remain [PARTIAL], [ISSUE] or [PLANNED].
 
+## Development and testing ownership (D-021; 2026-11-04)
+
+This is the default PTMagic 2.10 workflow for this and all future phases/handoffs:
+
+- **Assistant:** Implement source changes, review code, develop regression tests, and fix errors reported from testing.
+- **User:** Run local .NET builds, regression test harnesses, and end-to-end PTMagic TestMode on configured ProfitTrailer/exchange instances.
+- **Joint review:** User supplies build output, test results, runtime summaries and logs; assistant analyzes the evidence and corrects failures. Never report authored but unexecuted tests as passed.
+- **GitHub:** Use for source control, commits, and roadmap/handoff documentation. **Do not set up, trigger, or rely on automatic GitHub Actions builds/tests unless the user explicitly requests them.** No remote compilation as a substitute for user-run local testing without that request.
+
+This policy is procedural, not evidence that a build or TestMode validation has passed. The previously added `PTMagic/.github/workflows/phase1-regression.yml` still exists and automatically triggers on matching pushes; **documentation changes alone do not disable it**. Remove/disable that workflow separately to enforce the no-automatic-build default.
+
 ## Update protocol
 
 1. Read the actual code-branch HEAD and relevant code before any development claim.

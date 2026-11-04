@@ -14,3 +14,15 @@ Date-stamped handoffs preserve what was known, done and planned **at the time of
 ## Handoff procedure
 
 At the end of a working session: add a dated handoff file, reference current branch HEAD and implemented commits, state evidence separately from hypotheses, update [STATUS.md](../STATUS.md), and link any new issues and [updates](../updates/README.md). In the next session: read current HEAD and latest status first, then consult prior handoff. Never assume a handoff snapshot is still current.
+
+## Required development and validation workflow (D-021)
+
+Every new development handoff must preserve this ownership contract:
+
+- **Assistant:** source implementation, code review, regression-test development, and fixes for user-reported errors.
+- **User:** local builds, regression harness execution, and PTMagic TestMode for Binance Futures, Binance Spot, and Binance US as applicable.
+- **Review together:** user provides actual logs, build/test outputs, and runtime summaries; assistant investigates failures and makes fixes.
+- **GitHub:** source control and roadmap/handoff documentation only; automatic CI/GitHub Actions build or testing is **opt-in by explicit user request**.
+
+Mark build, deterministic test and live TestMode results individually as *passed*, *failed*, or *not run*. Never infer a run from test code or a commit. Use the [handoff template](TEMPLATE.md) so this agreement carries into every new chat.
+

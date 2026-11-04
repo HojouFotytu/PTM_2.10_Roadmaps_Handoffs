@@ -1,3 +1,11 @@
+## 2026-11-04 — D-021: Local testing and development responsibility policy
+
+- Accepted explicit division of responsibility: assistant implements/reviews code and authors regression tests; user performs local builds, regression runs, and TestMode.
+- Test failures, output, and runtime logs are reviewed jointly: user provides evidence and assistant corrects source defects.
+- GitHub is for commits and roadmap/handoff tracking, **not automatic builds/tests unless specifically requested**.
+- Updated authoritative roadmap, handoff template/procedure, repository README and decision register. Historical handoffs are preserved.
+- **Existing application GitHub Actions workflow still exists** and requires separate removal/disablement to stop automatic runs.
+
 ## 2026-11-04 — Selective legacy Monitor hardening
 
 - Completed follow-up source hardening through [`40e546c`](https://github.com/HojouFotytu/PTMagic/commit/40e546cb149bac0fca99e0aa257e7673453b7c8e).

@@ -23,6 +23,30 @@ The SHA above is a dated reference, NOT a permanent assertion about branch HEAD.
 At the start of every subsequent session, read the actual branch HEAD again.
 Do not assume that this document supersedes later commits or runtime evidence.
 
+2026-11-04 DEVELOPMENT AND LOCAL-VALIDATION POLICY — D-021 (ACCEPTED)
+---------------------------------------------------------------------
+Responsibility is divided consistently across all PTMagic 2.10 phases:
+
+ASSISTANT: Implement source changes, review code, author deterministic regression
+tests, and fix reported source/runtime errors.
+
+USER: Compile .NET code locally, execute regression test harnesses locally,
+and run PTMagic TestMode against locally configured ProfitTrailer/exchange
+instances.
+
+JOINT REVIEW: The user supplies build results, test output, diagnostic logs,
+and runtime summaries; the assistant evaluates that evidence and remedies
+failures. Report code/tests as NOT RUN until user-provided execution evidence
+confirms them. A successful build is not a substitute for live TestMode.
+
+GITHUB: Source control, commits, and authoritative roadmap/handoff
+documentation. Never introduce or trigger automated GitHub Actions builds or
+remote test runs unless explicitly requested by the user.
+
+This operating policy supersedes any older roadmap/handoff language assigning
+build execution to the assistant. It does NOT itself disable an existing
+application-repository GitHub Actions workflow. See decision D-021.
+
 2026-11-04 TIMEFRAME POLICY CORRECTION — D-016 (ACCEPTED)
 -----------------------------------------------------------
 This section supersedes earlier proposed fixed-window Phase 1C/1D examples.
@@ -584,11 +608,13 @@ For EVERY feature or integration change:
 8. Use strict and clearly documented units/denominators/time windows.
 9. Test old settings without Metrics and verify no normalized requests are
    required for legacy-only operation.
-10. Run dotnet build (Core, PTMagic, Monitor); a build is necessary but not
-    evidence of runtime correctness.
-11. Run a TestMode raid, inspect concise logs, MarketTrendAnalytics.json,
-    LastRuntimeSummary.json and SingleMarketSettingSummary.json, and compare
-    to synthetic/independent results.
+10. USER runs dotnet build locally (Core, PTMagic, Monitor) and shares output
+    with the assistant. A build is necessary but not evidence of runtime
+    correctness.
+11. USER runs local regression harnesses and TestMode raids. USER supplies
+    concise logs, MarketTrendAnalytics.json, LastRuntimeSummary.json and
+    SingleMarketSettingSummary.json. ASSISTANT reviews these results against
+    synthetic/independent expectations and corrects reported failures.
 12. Require permission before modifying release branches, merging, or
     enabling live PT updates.
 
