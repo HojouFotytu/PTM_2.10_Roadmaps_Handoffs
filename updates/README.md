@@ -1,3 +1,4 @@
+- **[2026-11-04 — Phase 1C source implementation](2026-11-04-phase1c-source-implementation.md)** (newest; code committed, tests pending)
 # PTMagic 2.10 — Dated Roadmap and Development Updates
 
 - **[2026-11-04 — All metric warnings build/test verified](2026-11-04-all-metric-warnings-verified.md)** (latest: build + 7/7 passed; TestMode pending)

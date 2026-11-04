@@ -2,6 +2,14 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Phase 1C source implementation (P1C-01 through P1C-07)
+
+- Implemented complete UTC-aligned MarketTrend-duration OHLCV aggregation, Wilder ATRP and quote-volume expansion.
+- Added market-wide medians, volatility/volume breadth, HHI concentration, TopN/BTC/BTC+ETH volume shares, and configurable per-trend parameters.
+- Integrated metric registry, normalized trigger unit labels, Monitor table/tooltip and snapshot export; fixed simple AND/OR GlobalSettings with omitted trigger tags.
+- Added 13 synthetic Phase1COhlcv test cases; **build, tests and TestMode pending**.
+- Current application source HEAD [`64d063c`](https://github.com/HojouFotytu/PTMagic/commit/64d063c1c9bc8886fb456cae97921780449f5cce). [Implementation update](updates/2026-11-04-phase1c-source-implementation.md) / [verification handoff](handoffs/2026-11-04-phase1c-implementation-verification.md).
+
 ## 2026-11-04 — Verify all RAID SUMMARY metric warnings display
 
 - User-run `git pull --ff-only`: already up to date at application HEAD `64e05e7`.

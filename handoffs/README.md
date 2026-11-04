@@ -1,3 +1,4 @@
+- **[2026-11-04 — Phase 1C implementation verification handoff](2026-11-04-phase1c-implementation-verification.md)** (newest; 1C source committed, tests pending)
 # PTMagic 2.10 — Development Handoffs
 
 **[2026-11-04 — Tri-state trigger evaluation verification handoff](2026-11-04-tristate-trigger-logic-verification.md)** (latest source commits; testing pending). Continue with the [timeframe-corrected Phase 1C handoff](2026-11-04-phase-1c-markettrend-timeframe-correction.md) after accounting for these changes.

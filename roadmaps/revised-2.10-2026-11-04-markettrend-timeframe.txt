@@ -516,7 +516,9 @@ I-9. AGREED DEVELOPMENT ORDER FROM THIS CHECKPOINT
 
 COMPLETED: Phase 1A readiness/coverage containment (I-6).
 
-NEXT FEATURE FAMILY: Phase 1C (OHLC/volume), begin trend-duration ATRP.
+PHASE 1C SOURCE IMPLEMENTED (2026-11-04); .NET build, deterministic tests
+and TestMode integration STILL PENDING. Follow the originally specified
+implementation order below, retained as design history.
 Recommended implementation order:
 
   1C-1 Per-asset ATRP + global MedianATRP.
@@ -1233,8 +1235,10 @@ Dispersion should always be calculated over the exact same eligible universe as 
 5.5 Volatility
 ----------------------------------------------------------------------
 
-STATUS: PHASE 1C NEXT; ATRP / MedianATRP / volatility breadth are not
-implemented. The normalized store contains 5m OHLC observations.
+STATUS 2026-11-04: Source for ATRP, MedianATRP and VolatilityBreadth is
+implemented on phase1/market-data-foundation at commit 64d063c1.
+Compilation, synthetic fixture execution and TestMode remain unverified.
+The normalized store retains 5m OHLC observations.
 
 TIMEFRAME: MarketTrend.TrendMinutes determines the ATR candle duration.
 Combine consecutive, valid, closed 5m source candles into complete
@@ -1272,8 +1276,11 @@ BollingerBandWidth, also using MarketTrend-defined analysis windows.
 5.6 Participation via recent quote-volume expansion
 ----------------------------------------------------------------------
 
-STATUS: PHASE 1C NEXT. Normalized 5m quote volume already exists, but
-trend-duration expansion and concentration calculations do not.
+STATUS 2026-11-04: Source for trend-duration VolumeExpansion,
+MedianVolumeExpansion, VolumeExpansionBreadth,
+StrongVolumeExpansionBreadth, VolumeConcentration (HHI index),
+TopNVolumeShare, BTCVolumeShare and BTCETHVolumeShare is implemented.
+Build, test fixtures and live TestMode remain unverified.
 
 All analytic windows are MarketTrend.TrendMinutes, not fixed 5m, 15m
 or 1h indicators. Sum quote volume from a complete group of closed,
@@ -2586,21 +2593,27 @@ PHASE 1B - Price-derived analysis [DONE]
 [x] All eight metrics built and exercised in TestMode runtime.
 [~] Full synthetic/reference regression matrix still part of Phase 1E.
 
-PHASE 1C - OHLC/volume derived analysis [NEXT; timeframe D-016]
+PHASE 1C - OHLC/volume derived analysis [SOURCE IMPLEMENTED; TESTS PENDING]
 ---------------------------------------------
 [x] Accepted policy D-016: every derived metric analysis timeframe is
     MarketTrend.TrendMinutes; 5m is input data resolution only.
-[ ] Implement trend-sized aggregation and ATR period, warm-up and smoothing.
-[ ] Per-asset ATRP and market-wide MedianATRP with the same trend interval.
-[ ] Volatility breadth from valid per-asset ATRP.
-[ ] Closed-period quote-volume expansion ratio vs previous comparable periods.
-[ ] Market-wide median recent volume expansion (recommended adjunct).
-[ ] Volume-expansion breadth and optional strong expansion breadth.
-[ ] Volume concentration (% share over explicit window, TopN, BTC/ETH).
-[ ] New feature names/units/scopes added to actual metric registry.
-[ ] Reuse normalized OHLCV; add no redundant Binance calls.
-[ ] Independent numerical fixtures, validity tests, logging and Monitor view.
-[ ] TestMode trigger and backward-compatibility validation.
+[x] Source: trend-sized UTC aggregation, ATR(14) Wilder warm-up/smoothing.
+[x] Source: per-asset ATRP, global MedianATRP using exact trend interval.
+[x] Source: VolatilityBreadth from valid ATRP with 90% coverage.
+[x] Source: VolumeExpansion ratio using 20 previous complete trend periods.
+[x] Source: MedianVolumeExpansion with 90% coverage.
+[x] Source: VolumeExpansionBreadth and StrongVolumeExpansionBreadth.
+[x] Source: VolumeConcentration HHI index, TopN and BTC/ETH volume shares;
+    concentration/share values require 100% eligible quote-volume coverage.
+[x] Source: registry names/scopes/units and Monitor display.
+[x] Source: normalized OHLCV reused with no new Binance API calls.
+[x] Source: 13 deterministic fixture cases authored for numerical values,
+    history, readiness, units, aggregation and shared snapshot integration.
+[ ] Verify .NET 10 application build and execute all 13 Phase1COhlcv tests.
+[ ] Rerun existing Phase1MetricWarnings, Phase1TriggerLogic and
+    Phase1AReadiness regression harnesses.
+[ ] TestMode: validate GlobalSetting, SMS, OffTrigger and Monitor exports.
+[ ] Mark Phase 1C DONE only after build/tests/TestMode are accepted.
 
 PHASE 1D - Correlation / market cohesion [PLANNED]
 --------------------------------------------------
@@ -2859,3 +2872,75 @@ readiness has been closed by accepted fail-closed containment.
 Do not redesign the architecture unless current code reveals a concrete reason.
 Preserve legacy behavior and the strict 5m closed-candle endpoint semantics.
 Keep Git diffs narrow and check all project builds and TestMode raids.
+
+======================================================================
+2026-11-04 IMPLEMENTATION ADDENDUM — PHASE 1C SOURCE COMPLETE, PENDING TESTS
+======================================================================
+
+APPLICATION: HojouFotytu/PTMagic, branch phase1/market-data-foundation.
+IMPLEMENTATION HEAD: 64d063c1c9bc8886fb456cae97921780449f5cce (recheck branch before further changes).
+
+Authoritative implementation contracts (new source, NOT yet executed):
+- MarketTrend.TrendMinutes specifies the duration of each UTC-aligned OHLCV
+  analytical bar; normalized 5m observations are the input resolution only.
+- ATRP: configurable ATRPeriod (default 14); first N true ranges require
+  N+1 complete consecutive trend-duration bars. Seed is the arithmetic
+  mean of first N TR values from the oldest available contiguous history;
+  apply Wilder recurrence over subsequent complete bars. ATRP is
+  100 * final ATR / last complete trend-bar close.
+- VolumeExpansion: last complete trend-period quote volume / mean of
+  previous VolumeExpansionLookback complete trend periods (default N=20);
+  value is a ratio (x); zero/nonfinite comparison baseline is unavailable.
+- MedianATRP / MedianVolumeExpansion: medians over exact eligible global
+  MarketTrend population, with 90% coverage gate.
+- VolatilityBreadth: valid ATRP > ATRPBreadthThreshold, default 0.5%;
+  VolumeExpansionBreadth: ratio > 1.0x default;
+  StrongVolumeExpansionBreadth: ratio > 1.5x default. Global metrics
+  enforce 90% cross-sectional coverage.
+- VolumeConcentration: sum((symbolVolume/totalVolume)^2)*100,
+  a scaled Herfindahl-Hirschman *index*, not a volume percentage.
+  TopNVolumeShare: sum top TopNVolumeCount symbol quote volumes / total,
+  *100 percent (default N=10). BTCVolumeShare / BTCETHVolumeShare are
+  percentage shares requiring BTC (and ETH) to appear in global population.
+  All four volume-share/index metrics require 100% complete eligible
+  quote-volume population and a positive total volume.
+- New per-trend settings: ATRPeriod, VolumeExpansionLookback,
+  ATRPBreadthThreshold, VolumeExpansionBreadthThreshold,
+  StrongVolumeExpansionThreshold, TopNVolumeCount.
+  Missing values use code defaults, preserving prior JSON compatibility.
+- Input time alignment, missing/gapped/stale candles, invalid OHLC,
+  incomplete current bars, insufficient retention and unsupported
+  TrendMinutes must invalidate the affected metric. Do not substitute
+  0, shorter timeframe, added endpoint or auto-expand StoreDataMaxHours.
+- Expected minimum history: ATR(14) requires 15 trend bars, and
+  VolumeExpansion(20) requires 21 trend bars. For a 24h MarketTrend,
+  these are 360h and 504h respectively, plus boundary margin. For
+  8h they are 120h and 168h respectively; for 4h 60h and 84h.
+  Retain appropriate additional history for UTC alignment.
+- New per-asset and global features are added to existing
+  MarketTrendAnalysisSnapshot and automatically exported to
+  _data/MarketTrendAnalytics.json for Monitor and trigger resolution.
+  VolumeExpansion ratio is displayed with x; HHI with "index"; other
+  percentages with %. Existing normalized metric tri-state trigger
+  safeguards and exact eligible populations remain in force.
+- Existing Phase 1B return Concentration still ranks using trailing 24h
+  quote volume; migration to TrendMinutes remains tracked under
+  P1B-CONC-WINDOW. This is distinct from new VolumeConcentration.
+
+REGRESSION HARNESS:
+  dotnet build
+  dotnet run --project Tests/Phase1COhlcv/Phase1COhlcv.csproj
+  dotnet run --project Tests/Phase1MetricWarnings/Phase1MetricWarnings.csproj
+  dotnet run --project Tests/Phase1TriggerLogic/Phase1TriggerLogic.csproj
+  dotnet run --project Tests/Phase1AReadiness/Phase1AReadiness.csproj
+
+Tests in Phase1COhlcv: 13 independent cases plus internal assertions,
+including 5m/1h/2h/4h/8h/12h/24h ATRP, Wilder recurrence, 72h
+insufficient for 24h ATRP, closed-period selection, quote-volume
+ratio/zero baseline, 90%/100% coverage, BTC/ETH shares, and Monitor
+shared snapshot/registry integration.
+
+EVIDENCE LIMIT: Authoring session has no .NET SDK; no build, test
+execution, exchange runtime or Monitor visual check was performed.
+Do not advance to Phase1D DONE or mark Phase1C verified until
+user/CI evidence is supplied.

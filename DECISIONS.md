@@ -60,3 +60,11 @@ D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activ
 **2026-11-04 D-018 amendment:** The user superseded the earlier five-detail display limit. List **all distinct grouped metric warnings** in the raid summary; do not truncate with `... and N more`. Duplicate grouping remains, with no change to trigger logic. Application commit `64e05e7`; re-verification pending.
 
 **2026-11-04 D-018 amended-policy verification:** User-run .NET 10 Core/PTMagic/Monitor build succeeded (14.1s) and Phase1MetricWarnings regression passed **7/7** at application HEAD `64e05e7`. TestMode raid presentation remains pending. The decision-row wording above now reflects the final accepted no-truncation policy; earlier dated records retain the superseded limit for history.
+
+## Phase 1C metric calculation contracts — D-019 (2026-11-04)
+
+| ID | Decision | State |
+|---|---|---|
+| D-019 | Implement ATRP and volume metrics exclusively on complete `MarketTrend.TrendMinutes` periods assembled from 5m source OHLCV. Per-trend parameters default ATRPeriod=14, VolumeExpansionLookback=20, ATRPBreadthThreshold=0.5%, VolumeExpansionBreadthThreshold=1.0x, StrongVolumeExpansionThreshold=1.5x, TopNVolumeCount=10. Global medians and breadth require 90% coverage. `VolumeConcentration` is HHI ×100 (*index*), while TopN/BTC/BTC+ETH are volume **percentage shares** requiring 100% complete eligible volume population. No short-data fallback or extra exchange calls. | Implemented in source; numerical regression and TestMode pending |
+
+D-019 instantiates D-016's universal trend-duration rule. Defaults are configurable; no legacy setting changes merely because metrics remain disabled. Existing return `Concentration` remains a separately tracked fixed-24h ranking exception, P1B-CONC-WINDOW.
