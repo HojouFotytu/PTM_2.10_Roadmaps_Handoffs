@@ -26,7 +26,7 @@
 | P2-RAW | Futures funding/OI/positioning/flow ingestion | PLANNED | Later |
 | P2B-AGG | Futures market-wide aggregation | PLANNED | Later |
 | P3-STATE | Deterministic higher-order states | PLANNED | Later |
-| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | PARTIAL | First-generation routing works; extend per new metric |
+| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | **CODE UPDATED — VERIFICATION PENDING** | Tri-state OR/AND/NOT integration committed `eeffc05`, `9f18095`; SDK build, deterministic tests and TestMode pending |
 | P5-LIQ | Liquidity/depth/stress | PLANNED | Later |
 | P6-HIST | Feature history and validation | PLANNED | Later |
 
@@ -49,3 +49,11 @@
 All derived metric analysis timeframes come from the configured `MarketTrend.TrendMinutes`. Normalized 5m is the source-data resolution only. P1C-01 `ATRP` and P1C-02 `MedianATRP` use complete, UTC-aligned trend-sized candles; 5m-fixed ATR/15m-fixed participation metrics are not valid Phase 1C designs. ATR(14) needs at least 15 complete trend candles; if `StoreDataMaxHours` is too short, metric is unavailable. This is an accepted **design requirement, not an implemented code change**. Existing return `Concentration` still uses fixed trailing 24h ranking and is recorded as a separate follow-up.
 
 **Next:** [Corrected Phase 1C handoff](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md), starting with dynamic `ATRP` then `MedianATRP`.
+
+## 2026-11-04 trigger-logic refinement: code committed, not yet tested
+
+The user clarified that an unavailable normalized metric must be **unknown**, not a blanket veto. A fully evaluable `true OR unknown` is true, `false AND unknown` is false, and negated unknown remains unknown. This applies to GlobalSetting activation, SMS activation, and SMS OffTriggers. A final unknown result never activates/deactivates a setting. For GlobalSetting selection, only *indeterminate* candidate expressions contribute to the existing active-setting retention condition; valid independent matching candidates remain eligible. An already-active long-term SMS may continue under existing OffTrigger persistence semantics.
+
+Source commits: [`eeffc05`](https://github.com/HojouFotytu/PTMagic/commit/eeffc05d0146ac31f355db31881250d9f93cfbc5) (new shared evaluator and 29-case harness), [`9f18095`](https://github.com/HojouFotytu/PTMagic/commit/9f180952db853659cd94c7b2a26341f972b47fca) (global/SMS/off-trigger integration).
+
+**Evidence level:** Code inspected / committed. No C# build or executable tests performed by the assistant: `.NET` SDK unavailable in execution environment. User or CI must run `dotnet build`, `dotnet run --project Tests/Phase1TriggerLogic/Phase1TriggerLogic.csproj`, existing `Tests/Phase1AReadiness`, and TestMode raids before declaring runtime completion. Phase 1C ATRP remains unimplemented.

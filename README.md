@@ -47,6 +47,10 @@ A task marked [DONE] must identify the relevant commit and test evidence when av
 7. Never label proposed fixes as verified. Never treat successful download or successful build as proof of analytics correctness.
 8. Avoid application code changes in documentation-only commits. Do not merge or alter release branches without explicit authorization.
 
+## D-017 trigger semantics update (2026-11-04)
+
+GlobalSetting, SMS and OffTrigger now have a source-code implementation of complete-expression three-valued evaluation. `true OR unavailable` is true; a final unknown remains ineligible. See [update](updates/2026-11-04-three-valued-trigger-logic.md) and [verification handoff](handoffs/2026-11-04-tristate-trigger-logic-verification.md). **Build/tests/TestMode are pending**, not claimed completed. Source branch HEAD for this code change: `9f180952db853659cd94c7b2a26341f972b47fca`.
+
 ## Current gate
 
 **Phase 1A: DONE — CONTAINED (2026-11-04).** The 90% cross-sectional readiness gate and GlobalSetting safety behavior were implemented, tested and observed in live TestMode. A first-raid incomplete global population is rejected, the next scheduled incremental raid restores coverage and idle raids make no redundant normalized kline requests. The exact original long-bootstrap cause is not proven. See [dated closeout](updates/2026-11-04-phase-1a-closeout.md).

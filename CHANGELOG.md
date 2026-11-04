@@ -2,6 +2,14 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Tri-state trigger evaluation refinement (D-017)
+
+- Accepted complete-expression semantics for unavailable normalized metrics: `true OR unavailable` activates; a final indeterminate expression does not.
+- Applied the same evaluator to GlobalSetting, SMS and SMS OffTrigger source paths, plus 29 deterministic test cases.
+- Code commits `eeffc05`, `9f18095`; **verification pending** (SDK unavailable to assistant).
+- Updated decision register and status; archived a [dated update](updates/2026-11-04-three-valued-trigger-logic.md) and [verification handoff](handoffs/2026-11-04-tristate-trigger-logic-verification.md).
+- No change to completed Phase 1A containment or to Phase 1C MarketTrend timeframe D-016.
+
 ## 2026-11-04 — Correct Phase 1C/1D metric timeframe inheritance (D-016)
 
 - **User decision:** all derived metric analytical timeframes are determined by each `MarketTrend.TrendMinutes`; normalized 5m candles are storage/input resolution, not a fixed metric period.

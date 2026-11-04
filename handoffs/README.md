@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Development Handoffs
 
+**[2026-11-04 — Tri-state trigger evaluation verification handoff](2026-11-04-tristate-trigger-logic-verification.md)** (latest source commits; testing pending). Continue with the [timeframe-corrected Phase 1C handoff](2026-11-04-phase-1c-markettrend-timeframe-correction.md) after accounting for these changes.
+
 Date-stamped handoffs preserve what was known, done and planned **at the time of writing**. They are not automatically authoritative over later code or accepted decisions.
 
 - **[2026-11-04 — Corrected Phase 1C: all metric timeframes from MarketTrend](2026-11-04-phase-1c-markettrend-timeframe-correction.md)** (**latest; use this handoff**)

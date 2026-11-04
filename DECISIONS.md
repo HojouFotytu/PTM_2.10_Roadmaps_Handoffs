@@ -42,3 +42,11 @@ Accepted decisions are not inferred from a merely proposed feature. Add a dated 
 - OD-005: Quote-volume expansion baseline count N (each interval equals `MarketTrend.TrendMinutes`), zero baseline and minimum-history policy.
 
 Do not treat open decisions as already configured in application code.
+
+## Phase 1A trigger refinement — D-017 (2026-11-04)
+
+| ID | Decision | State |
+|---|---|---|
+| D-017 | Evaluate configured GlobalSetting, SMS activation and SMS OffTrigger expressions using **three-valued logic**: true, false, unavailable. `true OR unavailable=true`; `false OR unavailable=unavailable`; `false AND unavailable=false`; `true AND unavailable=unavailable`; `NOT unavailable=unavailable`. A conclusively true complete expression may match even if an unused branch is unavailable. An indeterminate result may not activate a setting or trigger SMS removal. Existing active-setting retention applies when GlobalSetting selection remains indeterminate; existing SMS long-term OffTrigger persistence is preserved. | Accepted / source committed; build/runtime verification pending |
+
+D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activate on an indeterminate final expression**, not “discard the whole setting whenever any input is unknown.” D-016 (metric timeframe inheritance) is unchanged.
