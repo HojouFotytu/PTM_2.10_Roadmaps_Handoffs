@@ -2,6 +2,14 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Compact metric-warning section in RAID SUMMARY (D-018)
+
+- Implemented grouped unavailable metric warnings in the existing analyzer RAID SUMMARY (up to five details, then overflow).
+- Consolidated GlobalSetting/SMS normalized trigger warnings and surfaced active GlobalSetting retention when selection is indeterminate.
+- Added seven deterministic formatter checks; **build, tests and TestMode raid remain unverified**.
+- Code commit [`34c30aa`](https://github.com/HojouFotytu/PTMagic/commit/34c30aa08918252d2976d6fabd7dddb1589acfd9); [dated update](updates/2026-11-04-raid-metric-warnings.md).
+- No change to D-017 tri-state logic, D-016 MarketTrend timeframes or Phase 1C implementation status.
+
 ## 2026-11-04 — Verify tri-state regression harness after CS0121 fix
 
 - User reports `git pull --ff-only` “Already up to date” against latest source branch HEAD `c66b9f3`.

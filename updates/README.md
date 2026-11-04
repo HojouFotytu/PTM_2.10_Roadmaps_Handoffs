@@ -3,6 +3,8 @@
 - **[2026-11-04 — Tri-state trigger test verification](2026-11-04-tristate-test-results.md)** (latest: build + 29/29 + 4/4 passed; TestMode still pending)
 - [2026-11-04 — Three-valued trigger logic implementation](2026-11-04-three-valued-trigger-logic.md)** (latest; source committed, C# tests pending)
 
+- **[2026-11-04 — Compact raid metric warnings](2026-11-04-raid-metric-warnings.md)** (latest: source committed; build/tests pending)
+
 Record each material update in its own dated Markdown file. Keep the [change log](../CHANGELOG.md), [status tracker](../STATUS.md), [decision register](../DECISIONS.md) and any relevant issue in sync.
 
 - **[2026-11-04 — Phase 1C MarketTrend timeframe correction](2026-11-04-phase-1c-timeframe-correction.md)** (latest D-016 design decision)

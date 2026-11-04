@@ -50,3 +50,9 @@ Do not treat open decisions as already configured in application code.
 | D-017 | Evaluate configured GlobalSetting, SMS activation and SMS OffTrigger expressions using **three-valued logic**: true, false, unavailable. `true OR unavailable=true`; `false OR unavailable=unavailable`; `false AND unavailable=false`; `true AND unavailable=unavailable`; `NOT unavailable=unavailable`. A conclusively true complete expression may match even if an unused branch is unavailable. An indeterminate result may not activate a setting or trigger SMS removal. Existing active-setting retention applies when GlobalSetting selection remains indeterminate; existing SMS long-term OffTrigger persistence is preserved. | Accepted / build + 29/29 tri-state tests passed; runtime TestMode pending |
 
 D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activate on an indeterminate final expression**, not “discard the whole setting whenever any input is unknown.” D-016 (metric timeframe inheritance) is unchanged.
+
+## Raid metric diagnostics — D-018 (2026-11-04)
+
+| ID | Decision | State |
+|---|---|---|
+| D-018 | Put a **short, deduplicated Metric warnings section** in the analyzer raid summary, grouping unavailable normalized metrics by MarketTrend/metric with at most five details and an overflow count. Include indeterminate GlobalSetting retention information. Eliminate repetitive per-pair normalized trigger warnings, but do not change tri-state semantics or legacy setting behavior. A Monitor notification may be considered separately. | Accepted / source committed; build and runtime checks pending |
