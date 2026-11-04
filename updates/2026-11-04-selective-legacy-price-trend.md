@@ -32,3 +32,10 @@ dotnet run --project Tests/Phase1AReadiness/Phase1AReadiness.csproj
 Expected **14 new + 58 existing = 72** deterministic tests, but no current passes are claimed. Run a Binance Futures TestMode raid with metrics-only trends and at least one legacy-only or implicit-PriceTrend SMS trend: verify normalized 1h/2h/4h metric population counts, ATRP/volume values, inherited selection rules, legacy trigger activation, current SMS price/24h-volume values, and lack of unintended global reapplication or PT writes.
 
 The earlier Phase1C closeout is still valid for the prior accepted build; this additional refactor is a **new unverified change** and must not be marked complete until fresh evidence.
+
+## Final hardening commits after initial implementation
+
+- `36071d6` / `40e546c`: old `Monitor/Pages/MarketAnalyzer.cshtml` now emits a blank cell **in each missing trend's column**, rather than shifting available later values left; the relative table checks that a global average is present before computing the difference.
+- `c595e8f`: `Core/Main/PTMagic.cs` will not rehydrate historical `LastRuntimeSummary.MarketTrendChanges` graph values for trends with no current legacy average.
+- Current HEAD: [`40e546cb149bac0fca99e0aa257e7673453b7c8e`](https://github.com/HojouFotytu/PTMagic/commit/40e546cb149bac0fca99e0aa257e7673453b7c8e).
+- This is still **unverified source**. No .NET 10 build or TestMode was performed during implementation. Fresh regression commands remain 14 new + 58 prior = **72 expected tests**. Also visually inspect old Market Analyzer absolute/relative alignment and legacy graph absence, and verify ongoing SMS market price/24h volume and normalized metrics.

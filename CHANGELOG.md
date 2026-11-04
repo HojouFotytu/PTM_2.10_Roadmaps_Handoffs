@@ -1,3 +1,10 @@
+## 2026-11-04 — Selective legacy Monitor hardening
+
+- Completed follow-up source hardening through [`40e546c`](https://github.com/HojouFotytu/PTMagic/commit/40e546cb149bac0fca99e0aa257e7673453b7c8e).
+- Old Market Analyzer absolute/relative rows preserve one correctly positioned blank cell per skipped legacy trend; relative values require a calculated global legacy average.
+- Persisted old graph history is no longer shown for trends whose legacy averages were intentionally skipped. Current market prices/volumes are independently populated.
+- **New build, 72/72 expected test run and TestMode verification are still pending.**
+
 ## 2026-11-04 — Selective legacy price-trend calculations (unverified source)
 
 - Application [`1a6b9aa401fac74842e4d53ddbbfb2b2a4c5dc11`](https://github.com/HojouFotytu/PTMagic/commit/1a6b9aa401fac74842e4d53ddbbfb2b2a4c5dc11): only compute legacy asset/global PriceTrend for legacy-only trends or legacy trigger dependencies; normalized Metrics-only trends skip old historical price snapshots and mean.
