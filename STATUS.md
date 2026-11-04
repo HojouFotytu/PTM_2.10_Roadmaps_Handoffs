@@ -26,7 +26,7 @@
 | P2-RAW | Futures funding/OI/positioning/flow ingestion | PLANNED | Later |
 | P2B-AGG | Futures market-wide aggregation | PLANNED | Later |
 | P3-STATE | Deterministic higher-order states | PLANNED | Later |
-| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | **CODE UPDATED — VERIFICATION PENDING** | Tri-state OR/AND/NOT integration committed `eeffc05`, `9f18095`; SDK build, deterministic tests and TestMode pending |
+| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | **BUILD + DETERMINISTIC TESTS PASSED** | D-017: Core/PTMagic/Monitor build passed; tri-state 29/29 and Phase1A 4/4 passed at `c66b9f3`; TestMode integration remains pending |
 | P5-LIQ | Liquidity/depth/stress | PLANNED | Later |
 | P6-HIST | Feature history and validation | PLANNED | Later |
 
@@ -61,3 +61,9 @@ Source commits: [`eeffc05`](https://github.com/HojouFotytu/PTMagic/commit/eeffc0
 **Compatibility follow-up commit:** [`fbc4b35`](https://github.com/HojouFotytu/PTMagic/commit/fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b) preserves the existing AND/OR-only `OffTriggerConnection` contract (unsupported connection strings do not deactivate SMS). Latest application HEAD: `fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b`. Build and runtime tests still pending.
 
 **Follow-up 2026-11-04 build evidence:** User reported `dotnet build` succeeded for Core/PTMagic/Monitor (14.1s), and `Phase1AReadiness` reported 4 passed. The separate `Phase1TriggerLogic` test project failed compilation with 13 CS0121 overload ambiguities from target-typed `new()` dictionary literals. Application branch commit [`c66b9f3`](https://github.com/HojouFotytu/PTMagic/commit/c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953) replaces all 13 with explicit `new Dictionary<string, TriggerTruthValue>`. **Rebuild and execution of the trigger test project remain pending**; do not record the 29 tests as passed. Latest verified application branch HEAD: `c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953`.
+
+## 2026-11-04 D-017 post-fix verification (user-executed)
+
+Against application branch `phase1/market-data-foundation` at verified remote HEAD `c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953`, user reported `git pull --ff-only` returned “Already up to date”; `dotnet build` succeeded in 15.1s (Core net10.0 3.5s; PTMagic 0.7s; Monitor 9.4s). `dotnet run --project Tests/Phase1TriggerLogic/Phase1TriggerLogic.csproj` reported **29 tests passed** and `Tests/Phase1AReadiness/Phase1AReadiness.csproj` reported **4 tests passed**. Total **33 deterministic tests passed**. This closes the reported CS0121 test-harness compilation blocker.
+
+**Evidence boundary:** No new TestMode raid has been provided to validate end-to-end settings switching, SMS activation or OffTrigger persistence. D-017 is build/deterministic-test verified, not yet runtime-verified. Phase 1A remains DONE—CONTAINED; P1C-01 ATRP is still NEXT. See [dated verification update](updates/2026-11-04-tristate-test-results.md).

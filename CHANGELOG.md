@@ -2,6 +2,14 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Verify tri-state regression harness after CS0121 fix
+
+- User reports `git pull --ff-only` “Already up to date” against latest source branch HEAD `c66b9f3`.
+- `dotnet build` succeeded for Core, PTMagic and Monitor (.NET 10); **15.1s**.
+- Independent test projects: **Phase1TriggerLogic 29/29**, **Phase1AReadiness 4/4**, 33 tests total.
+- D-017 is build- and deterministic-test verified; no end-to-end TestMode validation yet. P1C-01 still next.
+- Evidence: [dated test update](updates/2026-11-04-tristate-test-results.md).
+
 ## 2026-11-04 — Fix regression harness compilation ambiguity
 
 - User-run `dotnet build`: Core/PTMagic/Monitor succeeded; separate `Tests/Phase1TriggerLogic` compilation failed with 13 CS0121 ambiguous constructor overloads. Existing Phase1AReadiness tests passed (4/4).
