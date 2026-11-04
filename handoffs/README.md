@@ -2,7 +2,8 @@
 
 Date-stamped handoffs preserve what was known, done and planned **at the time of writing**. They are not automatically authoritative over later code or accepted decisions.
 
-- [2026-11-04 — Phase 1C development handoff](2026-11-04-phase-1c.md)
+- **[2026-11-04 — Phase 1C ready after Phase 1A closeout](2026-11-04-phase-1c-ready.md)** (latest; use to begin new chat)
+- [2026-11-04 — Original Phase 1C development handoff](2026-11-04-phase-1c.md) (archived; readiness was then blocking)
 - [Handoff template](TEMPLATE.md)
 
 ## Handoff procedure
