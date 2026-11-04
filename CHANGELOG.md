@@ -2,6 +2,15 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Correct Phase 1C/1D metric timeframe inheritance (D-016)
+
+- **User decision:** all derived metric analytical timeframes are determined by each `MarketTrend.TrendMinutes`; normalized 5m candles are storage/input resolution, not a fixed metric period.
+- **Previously incorrect:** `ATRP5m`, `MedianATRP5m`, separate 15m quote-volume metrics and roadmap language allowing independent metric intervals.
+- **Corrected:** trend-duration `ATRP`/`MedianATRP`, aligned complete trend-sized ATR, volume, volatility breadth, concentration and correlation windows; explicit retention requirements for ATR(14); fail-closed unsupported/missing periods.
+- **Existing exception:** Phase 1B return `Concentration` still ranks Top10 by fixed trailing 24h quote volume. A separate compatibility-sensitive tested code change is needed to meet the universal D-016 rule.
+- **Documents:** added [new authoritative roadmap](roadmaps/revised-2.10-2026-11-04-markettrend-timeframe.txt) and [superseding handoff](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md); updated README, STATUS and DECISIONS; preserved previous roadmap and handoffs unchanged as historical records.
+- **Source verification:** branch `phase1/market-data-foundation` HEAD `89324bc5c8c5ea19ceb543b6ab5130899f2675dc`. **No application code, build or runtime validation is claimed for this documentation-only correction.** See [dated update](updates/2026-11-04-phase-1c-timeframe-correction.md).
+
 ## 2026-11-04 — Close Phase 1A readiness and hand off Phase 1C
 
 - **Code branch:** `HojouFotytu/PTMagic:phase1/market-data-foundation`, latest inspected HEAD `89324bc5c8c5ea19ceb543b6ab5130899f2675dc`.

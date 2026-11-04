@@ -12,8 +12,8 @@
 
 | Document | Role |
 |---|---|
-| [Revised PTMagic 2.10 roadmap](roadmaps/revised-2.10-2026-11-04.txt) | **Authoritative technical roadmap**; detailed requirements, phase definitions and 2026-11-04 observations |
-| [Original roadmap](roadmaps/original.txt) | Immutable historical baseline for comparison |
+| [Revised PTMagic 2.10 roadmap](roadmaps/revised-2.10-2026-11-04-markettrend-timeframe.txt) | **Authoritative technical roadmap**; detailed requirements, phase definitions and 2026-11-04 observations |
+| [Previous 2.10 roadmap (superseded timeframe assumptions)](roadmaps/revised-2.10-2026-11-04.txt) | Historical 2026-11-04 Phase 1A closeout revision; contains static ATRP5m proposals, now superseded by D-016 |\n| [Original roadmap](roadmaps/original.txt) | Immutable historical baseline for comparison |
 | [Previous 2.9.1-labeled revision](roadmaps/revised-2.9.1-2026-11-04.txt) | Historical revision retained for provenance; **not the current project/version designation** |
 | [Phase 0 architecture audit](audits/phase-0-architecture-audit.txt) | Completed baseline architecture findings |
 | [Current status](STATUS.md) | **Operational source of truth for tracked tasks and blockers**, updated as work proceeds |
@@ -22,7 +22,7 @@
 | [Dated updates](updates/README.md) | Evidence-oriented implementation and roadmap update notes |
 | [Handoffs](handoffs/README.md) | Dated session handoffs, starting with Phase 1C |
 | [Closed Phase 1A readiness issue](issues/001-cold-start-readiness.md) | DONE by verified correctness containment; non-blocking follow-ups recorded |
-| [Latest Phase 1C-ready handoff](handoffs/2026-11-04-phase-1c-ready.md) | **Start the new development chat here** |
+| [Latest corrected Phase 1C handoff](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md) | **Current starting point: all derived metric timeframes from MarketTrend.TrendMinutes** |\n| [Earlier Phase 1C-ready handoff](handoffs/2026-11-04-phase-1c-ready.md) | Historical; proposed fixed ATRP5m incorrectly |
 
 ## Precedence
 
@@ -49,4 +49,4 @@ A task marked [DONE] must identify the relevant commit and test evidence when av
 
 **Phase 1A: DONE — CONTAINED (2026-11-04).** The 90% cross-sectional readiness gate and GlobalSetting safety behavior were implemented, tested and observed in live TestMode. A first-raid incomplete global population is rejected, the next scheduled incremental raid restores coverage and idle raids make no redundant normalized kline requests. The exact original long-bootstrap cause is not proven. See [dated closeout](updates/2026-11-04-phase-1a-closeout.md).
 
-**Next:** [Phase 1C P1C-01 `ATRP5m`, then P1C-02 `MedianATRP5m`](handoffs/2026-11-04-phase-1c-ready.md), followed by volatility breadth and quote-volume expansion and concentration.
+**Next:** [Phase 1C P1C-01 `ATRP`, then P1C-02 `MedianATRP`](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md), using complete `MarketTrend.TrendMinutes`-duration candles aggregated from normalized 5m data. All derived metric timeframes follow the user's MarketTrend definition; volatility breadth and quote-volume expansion/concentration follow the same policy. See D-016.

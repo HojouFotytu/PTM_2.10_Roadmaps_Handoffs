@@ -25,12 +25,20 @@ Accepted decisions are not inferred from a merely proposed feature. Add a dated 
 | D-014 | No automatic trading suspension for transient insufficient coverage. Reapplying the same GlobalSetting is permitted; distinguish setting *switched* from *reapplied* in raid logging. | Accepted / code committed, new logging untested |
 | D-015 | Close Phase 1A as **DONE — CONTAINED**, not a proven root-cause ingestion repair; record non-default-setting retention and updated logging runtime checks as non-blocking Phase 1E items. Phase 1C may start. | Accepted |
 
+## Phase 1C timeframe correction (2026-11-04)
+
+| ID | Decision | State |
+|---|---|---|
+| D-016 | **All derived MarketTrend metrics inherit their analytical timeframe from user-defined `MarketTrend.TrendMinutes`.** Normalized 5m candles are source resolution only. Window-based ATR, quote-volume metrics and correlation must use complete trend-duration periods built from closed input observations. Never hardcode a separate 5m/15m/1h metric timeframe or silently fall back; an N-period lookback counts trend-sized periods. No application code update is implied by this decision. | **Accepted / documentation corrected; implementation pending** |
+
+**Known current exception:** already implemented return `Concentration` ranks Top10 by trailing 24h quote volume, even for other configured TrendMinutes. Its existing runtime and 100% coverage behavior remain unchanged until a separately tested correction is made (P1B-CONC-WINDOW). The universal policy is the target; this exception is **not** claimed fixed.
+
 ## Open decisions for Phase 1C
 
 - OD-001: **Resolved for phase progression by D-010–D-015.** Original ingestion cause remains an unproven hypothesis; sparse listings and further fault injection remain non-blocking validation.
-- OD-002: ATRP: TR formula, Wilder vs alternative smoothing, ATR seed/warm-up, period (roadmap suggests initial 14), 5m closed candles, denominator.
-- OD-003: How ATR interval and lookback relate to `MarketTrend.TrendMinutes` without silently conflating measurement timeframes.
+- OD-002: ATRP: TR formula, Wilder vs alternative smoothing, ATR seed/warm-up, period (initial proposal 14) and closing-price denominator, calculated from complete MarketTrend-sized bars aggregated from normalized 5m source candles.
+- OD-003: **Resolved by D-016:** the ATR, volume and correlation analytical timeframe is `MarketTrend.TrendMinutes`. Lookback counts can differ by metric, but each counted period has the configured trend duration. Exact UTC aggregation/endpoint and sufficient retention are Phase 1C implementation checks.
 - OD-004: Exact metric names and registration/config schema for volatility breadth and volume families.
-- OD-005: Quote-volume expansion window and previous comparable N closed intervals, zero baseline and minimum-history policy.
+- OD-005: Quote-volume expansion baseline count N (each interval equals `MarketTrend.TrendMinutes`), zero baseline and minimum-history policy.
 
 Do not treat open decisions as already configured in application code.
