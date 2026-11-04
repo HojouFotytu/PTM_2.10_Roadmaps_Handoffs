@@ -2,6 +2,13 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Add optional cross-raid historical snapshot reuse optimization
+
+- Added roadmap §12.7 and tracked task `P1-PERF-SNAPSHOT`.
+- Proposed reusing unchanged immutable per-market historical snapshots across raids, avoiding redundant candle-array copying, sorting and gap validation.
+- Requires correct invalidation on data changes and fresh per-raid as-of/staleness evaluation; benchmark CPU, allocations and retained-history performance.
+- **Future optimization only**: no application source changes, no performance improvement claimed. [Dated update](updates/2026-11-04-snapshot-reuse-optimization.md).
+
 ## 2026-11-04 — Validate D-018 compact raid warnings
 
 - User-run application `dotnet build` passed in 15.2s at `34c30aa`.

@@ -2039,6 +2039,36 @@ Use nullable values/status metadata such as:
     IsAvailable
 
 
+12.7 Reuse unchanged historical snapshots across raids [FUTURE OPTIMIZATION]
+--------------------------------------------------------------------------
+
+CURRENT STATE: MarketDataStore.GetSnapshot creates a new candle array;
+MarketDataSeriesSnapshot then sorts retained candles, creates a closed-
+candle array and checks historical gaps. Repeated calls can reconstruct
+and revalidate an unchanged history even when an enabled metric only
+needs a much smaller recent window.
+
+Proposed optimization (not implemented):
+- Cache/reuse immutable per-symbol, per-interval historical snapshots
+  across analyzer raids while the underlying candle series is unchanged.
+- Invalidate or incrementally update the cached snapshot when candles
+  are added, revised, removed by retention trimming, or when relevant
+  data/status inputs change. Do not reuse stale readiness metadata.
+- Separate stable historical indexing and gap validation from per-raid
+  as-of-time checks (closed-candle cutoff, staleness and expected
+  analytical endpoint). Never reuse a prior raid's time-dependent
+  validity conclusion merely because the candle array is unchanged.
+- Preserve thread safety, bounded StoreDataMaxHours retention, exact
+  candle alignment, Phase 1A coverage safeguards, and unchanged
+  Metric/trigger behavior. Do not create a second historical data store.
+- Benchmark CPU, allocations/GC, snapshot construction time and
+  correctness over repeated unchanged raids and new-candle boundaries,
+  using both 72h and 144h retention and the real exchange universe.
+
+Priority: optional follow-up after Phase 1C correctness work; no
+performance gain is asserted until benchmarked.
+
+
 ======================================================================
 13. FEATURE VALIDITY AND DATA QUALITY [COVERAGE GATE IMPLEMENTED]
 ======================================================================
@@ -2536,6 +2566,9 @@ PHASE 1A - Data foundation [DONE — CONTAINED]
     and post-flood GlobalSetting switch in TestMode.
 [ ] Non-blocking Phase 1E: non-default setting retention during below-90%
     coverage, new logging runtime check, extended partial/stale fault tests.
+[OPTION] Reuse unchanged immutable history snapshots across raids to avoid
+         repeated full-series copying, sorting and gap validation; verify
+         invalidation and per-raid as-of freshness (Section 12.7).
 [OPTION] Persist normalized candle cache between process restarts.
 [OPTION] Reduce legacy first-seen/recreation startup I/O independently.
 

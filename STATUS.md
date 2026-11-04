@@ -21,6 +21,7 @@
 | P1C-05 | Volume-expansion breadth | PLANNED | Ratio thresholds and population |
 | P1C-06 | Volume concentration | PLANNED | Volume share, distinct from existing return Concentration |
 | P1C-07 | Registry/Monitor/trigger/test integration | PLANNED | Reuse existing infrastructure |
+| P1-PERF-SNAPSHOT | Reuse unchanged historical snapshots between raids | **OPTION / PLANNED** | Avoid redundant full-series copy/sort/gap validation; preserve invalidation, staleness and thread safety; benchmark before/after (roadmap §12.7) |
 | P1D-CORR | Synchronized return correlation | PLANNED | TrendMinutes-based return cadence, not independent 5m/15m |
 | P1E-INSPECT | Inspection and additional fault tests | PARTIAL | Carry non-blocking checks below |
 | P2-RAW | Futures funding/OI/positioning/flow ingestion | PLANNED | Later |
