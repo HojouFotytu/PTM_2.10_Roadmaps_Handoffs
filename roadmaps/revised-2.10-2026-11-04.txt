@@ -23,6 +23,54 @@ The SHA above is a dated reference, NOT a permanent assertion about branch HEAD.
 At the start of every subsequent session, read the actual branch HEAD again.
 Do not assume that this document supersedes later commits or runtime evidence.
 
+2026-11-04 CLOSEOUT ADDENDUM — PHASE 1A ACCEPTED, PHASE 1C NEXT
+--------------------------------------------------------------
+Latest verified code-branch HEAD for this addendum:
+89324bc5c8c5ea19ceb543b6ab5130899f2675dc (merge commit).
+Re-read branch HEAD before coding. Original HEAD 9e00a1f elsewhere in this
+document is historical, not the latest baseline.
+
+Phase 1A readiness is DONE BY CONTAINMENT. In commit 3a2ba02, normalized
+market-wide aggregates require >=90% valid / eligible returns from the exact
+Phase 0-selected global trend population; required count is ceil(.9*N).
+Existing Concentration requires 100% complete-ranked eligible population.
+Invalid readings stay unavailable, never zero; coverage numerator, eligible
+denominator, percentage, exact expected closed endpoint, and grouped invalid
+reasons are exposed in runtime and Monitor output.
+
+Commit c038a11 prevents unavailable normalized triggers activating settings
+(including negated custom conditions); preserves active GlobalSetting if no
+fully evaluable setting matches; permits valid independent/legacy settings.
+No automatic trading suspension or forced extra Binance requests.
+Commit e002801 adds four independent Phase1AReadiness test scenarios.
+Commit 11d6e28 clarifies the raid summary: setting switched vs reapplied.
+
+User-reported .NET 10 build: Core/PTMagic/Monitor succeeded.
+Phase1AReadiness test executable: 4/4 passed.
+Live TestMode 2026-11-04: first long raid 756/756 fetched, 654696 candles,
+4h global 32/250 (12.8%), 218 MissingEndpoint => dependent metrics invalid.
+Second scheduled raid 705 markets / 2115 incremental candles restored 4h
+global 249/249 and asset metrics 1434/1434. Third raid made ZERO kline
+requests. At 13:33 KST, normal GlobalSetting switched to
+DIAG_Global_AllMetrics after flood protection, then remained stable.
+At the next 5m boundary, 756 markets each received 3 incremental candles.
+TestMode sent no ProfitTrailer settings changes.
+
+Root-cause caveat: longer bootstrap crossing 5m boundaries is a plausible
+explanation, not a proven mechanism. The missing-endpoint condition is
+CONTAINED, not prevented. Non-default active GlobalSetting retention during
+a new low-coverage episode and runtime verification of new summary wording
+remain non-blocking Phase 1E tests. Historical investigation checkboxes
+below are not a new active gate. See STATUS.md, DECISIONS.md, issue 001 and
+2026-11-04 closeout update in the separate documentation repository.
+
+NEXT: P1C-01 per-asset ATRP5m. Define true range from strictly aligned
+closed 5m candles, ATR(14) Wilder seed and smoothing, warm-up/contiguity,
+ATRP denominator and invalid/stale behavior; then P1C-02 global
+MedianATRP5m from exact eligible global universe with 90% coverage.
+No Phase 1C implementation is claimed by this addendum.
+
+
 VERSION BOUNDARY (EXPLICIT PROJECT DECISION)
 --------------------------------------------
 PTMagic 2.9 is FINISHED. Its release scope was .NET modernization, CPU/network
@@ -68,9 +116,9 @@ I-1. WHERE WE ARE
 -----------------
 
 Phase 0      Existing architecture audit                        [DONE]
-Phase 1A     Normalized data foundation                          [PARTIAL]
-             Core foundation operates, but cold-start readiness
-             and data coverage validation require hardening.
+Phase 1A     Normalized data foundation                 [DONE — CONTAINED]
+             90% readiness gate and fail-closed trigger behavior verified;
+             normal cleanup raid restores data. Root mechanism unproven.
 Phase 1B     Price-derived analytics                              [DONE]
 Phase 1C     OHLC/volume-derived analytics                         [NEXT]
 Phase 1D     Correlation / market cohesion                        [PLANNED]
@@ -318,7 +366,9 @@ relationships; it does not replace independent synthetic/reference tests.
 I-6. IMPORTANT OPEN ISSUE: COLD-START CROSS-SECTION READINESS
 --------------------------------------------------------------
 
-Status: [ISSUE] — resolve BEFORE extending the calculation families.
+Status UPDATE 2026-11-04: [DONE — CONTAINED]; Phase 1C is unblocked.
+The original investigation details below are historical; see closeout
+addendum and issue 001 for verified new results.
 
 Observed fact:
 The first raid reported 756/756 kline refresh successes but only 259/1434
@@ -424,9 +474,9 @@ I-8. OTHER OPEN RISKS / RECOMMENDATIONS
 I-9. AGREED DEVELOPMENT ORDER FROM THIS CHECKPOINT
 ---------------------------------------------------
 
-IMMEDIATE HARDENING: Phase 1A readiness/coverage (I-6).
+COMPLETED: Phase 1A readiness/coverage containment (I-6).
 
-NEXT FEATURE FAMILY: Phase 1C (OHLC/volume) after readiness is acceptable.
+NEXT FEATURE FAMILY: Phase 1C (OHLC/volume), begin ATRP5m.
 Recommended implementation order:
 
   1C-1 ATRP per asset + median market ATRP.
@@ -2018,7 +2068,7 @@ Use nullable values/status metadata such as:
 
 
 ======================================================================
-13. FEATURE VALIDITY AND DATA QUALITY [IMPLEMENTED FIELDS; COVERAGE GATE OPEN]
+13. FEATURE VALIDITY AND DATA QUALITY [COVERAGE GATE IMPLEMENTED]
 ======================================================================
 
 CURRENT STATE: FeatureValueSnapshot includes Value, CalculatedAtUtc, SourceDataTimestampUtc, SampleCount, IsValid, IsStale and InvalidReason. Correct individual validity alone is insufficient if a market-wide metric uses a severely incomplete cross-section; require readiness/coverage checks and explicit denominator reporting. See Part I-6.
@@ -2492,7 +2542,7 @@ PHASE 0 - Architecture audit [DONE]
 [x] Audit PT market, type, eligibility, ranking and ignored markets.
 [x] Retain legacy PTMagic behavior, modern .NET 10 HTTP/limiter foundation.
 
-PHASE 1A - Data foundation [PARTIAL: HARDENING REQUIRED]
+PHASE 1A - Data foundation [DONE — CONTAINED]
 --------------------------------------------------------
 [x] Normalized MarketCandle with explicit OHLC, base/quote volume, time.
 [x] Rolling MarketDataStore / MarketDataService and 5m base history.
@@ -2502,10 +2552,14 @@ PHASE 1A - Data foundation [PARTIAL: HARDENING REQUIRED]
 [x] Reuse Phase 0 exact global and per-market universes.
 [x] Common exact closed-candle endpoint and feature validity metadata.
 [x] Latest Monitor analytics snapshot saved after Phase 0 resolution.
-[~] Cold-start completeness after a long bootstrap crosses candle boundaries.
-[ ] Explicit cross-section readiness/coverage gates before normalized triggers.
-[ ] Categorized invalid-reason diagnostics and bounded catch-up verification.
-[ ] Repeatably pass cold-start, fault and cross-boundary TestMode tests.
+[x] Cold-start partial data explicitly rejected as unavailable; recover on
+    next scheduled incremental raid; exact original cause remains unproven.
+[x] 90% eligible global cross-sectional gate; 100% for Concentration ranking.
+[x] Categorized invalid reasons, expected endpoint, count/percent diagnostics.
+[x] Build, four deterministic regression tests, cold-start/cleanup/idle
+    and post-flood GlobalSetting switch in TestMode.
+[ ] Non-blocking Phase 1E: non-default setting retention during below-90%
+    coverage, new logging runtime check, extended partial/stale fault tests.
 [OPTION] Persist normalized candle cache between process restarts.
 [OPTION] Reduce legacy first-seen/recreation startup I/O independently.
 
@@ -2642,7 +2696,7 @@ Gate H: Product/assembly/release-package versions identify this expansion as
 23. PRIORITY SUMMARY [REVISED WITH IMPLEMENTATION STATUS]
 ======================================================================
 
-PTMagic 2.10 NEXT STEPS: Phase 1A cold-start completeness first, then ATRP, volume expansion/concentration, BTC correlation, and independent inspection. The original general priority ranking is preserved below for context.
+PTMagic 2.10 NEXT STEPS: Phase 1A is closed by accepted correctness containment. Begin Phase 1C ATRP5m, then MedianATRP5m, volume expansion/concentration, BTC correlation, and independent inspection. The original general priority ranking is preserved below for context.
 
 Highest value / lowest cost:
 
@@ -2788,7 +2842,8 @@ The development order should favor:
 At the beginning of any future coding session, identify the active project
 as PTMagic 2.10; read Part I above, verify repository HEAD, review applicable
 committed classes and diagnostics, and continue from the NEXT incomplete item:
-Phase 1A readiness before Phase 1C.
+Phase 1C per-asset ATRP5m, then global MedianATRP5m. Phase 1A
+readiness has been closed by accepted fail-closed containment.
 Do not redesign the architecture unless current code reveals a concrete reason.
 Preserve legacy behavior and the strict 5m closed-candle endpoint semantics.
 Keep Git diffs narrow and check all project builds and TestMode raids.
