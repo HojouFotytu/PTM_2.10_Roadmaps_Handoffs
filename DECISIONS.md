@@ -14,9 +14,20 @@ Accepted decisions are not inferred from a merely proposed feature. Add a dated 
 | D-008 | 2026-11-04 | Cold-start completeness must be resolved or explicitly contained before new Phase 1C metrics. Disk warm-start cache is a separate optional performance project. | Accepted |
 | D-009 | 2026-11-04 | Preserve historical roadmap revisions and handoff messages; edit current status/update log rather than overwriting source history. | Accepted |
 
-## Open decisions requiring evidence before Phase 1C
+## Phase 1A closeout decisions (2026-11-04)
 
-- OD-001: Exact first-raid common endpoint and complete-series readiness / minimum coverage policy, including denominator and newly listed assets.
+| ID | Decision | State |
+|---|---|---|
+| D-010 | Enforce global normalized cross-sectional readiness at **90%** of exact eligible Phase 0 trend population; require `ceil(0.90 * N)` valid markets, with nonempty population; do not remove missing samples from denominator. | Accepted / implemented |
+| D-011 | Existing return-based `Concentration` requires **100%** of eligible ranked assets with valid complete trailing quote-volume data. This is stricter than the general 90% policy. | Accepted / implemented |
+| D-012 | Do not force a cleanup raid or redesign ingestion. Let the next normally scheduled incremental refresh repair incomplete closed-candle alignment; dependent normalized metrics must fail closed, independent/legacy metrics remain available. | Accepted / verified |
+| D-013 | When normalized GlobalSetting selection is indeterminate and no fully evaluated independent setting matches, retain the active setting rather than switching to `default`. Prevent unavailable metrics from satisfying negated custom trigger expressions. | Accepted / implemented |
+| D-014 | No automatic trading suspension for transient insufficient coverage. Reapplying the same GlobalSetting is permitted; distinguish setting *switched* from *reapplied* in raid logging. | Accepted / code committed, new logging untested |
+| D-015 | Close Phase 1A as **DONE — CONTAINED**, not a proven root-cause ingestion repair; record non-default-setting retention and updated logging runtime checks as non-blocking Phase 1E items. Phase 1C may start. | Accepted |
+
+## Open decisions for Phase 1C
+
+- OD-001: **Resolved for phase progression by D-010–D-015.** Original ingestion cause remains an unproven hypothesis; sparse listings and further fault injection remain non-blocking validation.
 - OD-002: ATRP: TR formula, Wilder vs alternative smoothing, ATR seed/warm-up, period (roadmap suggests initial 14), 5m closed candles, denominator.
 - OD-003: How ATR interval and lookback relate to `MarketTrend.TrendMinutes` without silently conflating measurement timeframes.
 - OD-004: Exact metric names and registration/config schema for volatility breadth and volume families.
