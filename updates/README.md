@@ -1,3 +1,4 @@
+- **[2026-11-04 — Phase 1C deployed TestMode results](2026-11-04-phase1c-live-testmode-validation.md)** (new metrics and triggers pass; SMS summary aliasing and visual Monitor check open)
 - **[2026-11-04 — Phase 1C source implementation](2026-11-04-phase1c-source-implementation.md)** (newest; code committed, tests pending)
 # PTMagic 2.10 — Dated Roadmap and Development Updates
 
