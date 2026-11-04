@@ -82,3 +82,7 @@ User-executed `git pull --ff-only` fast-forwarded `c66b9f3` to application HEAD 
 ## 2026-11-04 — D-018 warning output cap removed
 
 Application commit [`64e05e7`](https://github.com/HojouFotytu/PTMagic/commit/64e05e7e2a93aa23828890ef5e4708f002c696b8) removes the previous five-detail limit and `... and N more` indicator. The RAID SUMMARY now lists **every distinct** MarketTrend/metric warning, retaining duplicate grouping and deterministic sorting. The seven-case `Phase1MetricWarnings` harness was updated to check all nine synthetic warning rows. **Code committed; build/TestMode re-verification pending.** This supersedes the earlier five-detail cap in D-018. No change to metric validity or trigger behavior.
+
+## 2026-11-04 — All metric warnings display: build and regression verified
+
+User-run `git pull --ff-only` returned **Already up to date** at application branch HEAD `64e05e7e2a93aa23828890ef5e4708f002c696b8`. `dotnet build` succeeded in **14.1s** (Core net10.0 3.3s, PTMagic net10.0 0.7s, Monitor net10.0 8.6s). `dotnet run --project Tests/Phase1MetricWarnings/Phase1MetricWarnings.csproj` reported **7 tests passed**, including the new all-warnings display check. **D-018 amendment: BUILD / DETERMINISTIC TESTS PASSED.** A live TestMode RAID SUMMARY showing all distinct warnings remains unverified. [Verification record](updates/2026-11-04-all-metric-warnings-verified.md).

@@ -2,6 +2,13 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Verify all RAID SUMMARY metric warnings display
+
+- User-run `git pull --ff-only`: already up to date at application HEAD `64e05e7`.
+- `dotnet build` succeeded for Core/PTMagic/Monitor in 14.1s; metric-warning regression harness passed **7/7**.
+- All-distinct-warnings display behavior is build/unit-test verified; end-to-end TestMode log output remains pending.
+- [Verification record](updates/2026-11-04-all-metric-warnings-verified.md).
+
 ## 2026-11-04 — Remove RAID SUMMARY metric warning display cap
 
 - Show all distinct grouped metric warnings; remove `... and N more` truncation.

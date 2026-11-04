@@ -1,6 +1,7 @@
 # PTMagic 2.10 — Dated Roadmap and Development Updates
 
-- **[2026-11-04 — Display all metric warnings](2026-11-04-all-metric-warnings.md)** (latest: cap removed; testing pending)
+- **[2026-11-04 — All metric warnings build/test verified](2026-11-04-all-metric-warnings-verified.md)** (latest: build + 7/7 passed; TestMode pending)
+- [2026-11-04 — Display all metric warnings](2026-11-04-all-metric-warnings.md)** (latest: cap removed; testing pending)
 
 - **[2026-11-04 — Optional cross-raid snapshot reuse optimization](2026-11-04-snapshot-reuse-optimization.md)** (roadmap-only; planned)
 
