@@ -1,5 +1,18 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-04 — Unified normalized PriceTrend migration: Binance Futures TestMode verified
+
+**Latest application branch HEAD checked:** [`8ff8c87`](https://github.com/HojouFotytu/PTMagic/commit/8ff8c87900aa6f56c8721444dd11f0885c99ac3d). Latest uploaded running binary says version 2.10.0 but does not embed git SHA.
+
+**Earlier offline build/test result:** .NET 10 Release build succeeded and all **70/70 deterministic tests** passed in GitHub Actions run [41836826883](https://github.com/HojouFotytu/PTMagic/actions/runs/41836826883), before local-testing policy D-021. The present upload is runtime TestMode evidence, not another local build report.
+
+**User-run Binance Futures TestMode (22:47–22:51 KST):** Three raids, 756 fetched markets / 519 eligible COIN, eight configured normalized MarketTrends, correct omitted/blank/default and implicit PriceTrend, global setting 15 explicit + 3 implicit checks matched; no PT writes; no ERROR/FATAL. All **3,116** per-asset PriceTrend fields in LastRuntimeSummary match MarketTrendAnalytics exactly. **13 SMS snapshots, 0 foreign descriptions**, 10 freshly activated. The GlobalSetting remained active without switch or reapplication on raids 2 and 3.
+
+**Warning handling:** Four intentionally insufficient 8h metrics correctly unavailable, asset-only ATRP rejected in a global trigger, explicit disabled PriceTrend rejected, and FILTERED_1h uncalculated-value warning requires diagnostic trigger attribution. No confirmed source defect.
+
+**Status:** Unified migration's Binance Futures TestMode portion **VERIFIED**; overall three-exchange acceptance **PARTIAL (1/3)**. Binance Spot and Binance US TestMode, browser Monitor rendering, Fiat conversion parity, and positive OffTrigger deactivation are **NOT VERIFIED**. Phase1D not started by this follow-up. [Full evidence](updates/2026-11-04-unified-pricetrend-futures-testmode.md) · [New handoff](handoffs/2026-11-04-unified-pricetrend-validation-handoff.md).
+
+
 **As of:** 2026-11-04 — **PHASE 1C DONE** (build + 58/58 deterministic tests + deployed TestMode + Monitor content + fresh SMS isolation confirmed); **Phase 1D NEXT**. D-016 timeframe rule applies.
 **Source:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), `phase1/market-data-foundation`.
 **Latest application code HEAD verified:** [`0e8ab7056d32f16d1095a519ac4a1e87a29a4188`](https://github.com/HojouFotytu/PTMagic/commit/0e8ab7056d32f16d1095a519ac4a1e87a29a4188) on `phase1/market-data-foundation` (2026-11-04; recheck before development).

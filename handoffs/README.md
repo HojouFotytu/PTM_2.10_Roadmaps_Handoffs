@@ -1,3 +1,4 @@
+- **[2026-11-04 — Unified PriceTrend Binance Futures TestMode handoff](2026-11-04-unified-pricetrend-validation-handoff.md)** (**CURRENT validation**; Futures verified, Spot/US and positive OffTrigger checks pending)
 - **[2026-11-04 — Phase 1D correlation implementation handoff](2026-11-04-phase1d-correlation-ready.md)** (**CURRENT**; Phase 1C DONE, 1D NEXT)
 - **[2026-11-04 — Phase 1C implementation verification handoff](2026-11-04-phase1c-implementation-verification.md)** (newest; 1C source committed, tests pending)
 # PTMagic 2.10 — Development Handoffs
