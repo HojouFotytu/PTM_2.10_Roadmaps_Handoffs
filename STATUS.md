@@ -1,53 +1,46 @@
 # PTMagic 2.10 — Current Development Status
 
-**As-of:** 2026-11-04 initial tracking import. **Evidence:** the user-supplied revised roadmap and diagnostic summary. These labels are historical reported results; current HEAD and runtime must be checked again after any code change.
+**As of:** 2026-11-04 — Phase 1A accepted as DONE (containment); Phase 1C NEXT.
+**Source:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), `phase1/market-data-foundation`.
+**Last code HEAD verified for this update:** `89324bc5c8c5ea19ceb543b6ab5130899f2675dc` (merge commit; recheck before development).
 
-| Stable ID | Phase / deliverable | Status | Next action or evidence |
+| ID | Deliverable | Status | Evidence / next step |
 |---|---|---|---|
-| P0-AUDIT | Phase 0 architecture audit | DONE | [Phase 0 audit](audits/phase-0-architecture-audit.txt) |
-| P1A-STORE | Normalized 5m Binance Futures OHLCV store, refresh and universe integration | DONE (reported) | Reverify interfaces before extending |
-| P1A-READY | Cold-start cross-sectional completeness / readiness | **ISSUE — BLOCKING** | [Investigation](issues/001-cold-start-readiness.md) |
-| P1B-RET | Normalized PriceTrend / MedianPriceTrend / MeanMedianSpread | DONE (reported) | Keep independent arithmetic tests |
-| P1B-BREADTH | Positive-return Breadth and Dispersion | DONE (reported) | Coverage gate is separate from arithmetic |
-| P1B-RS | RelativeStrengthMarket / RelativeStrengthBTC | DONE (reported) | Scope and pp units preserved |
-| P1B-CONC | Top10 *return* Concentration | DONE (reported) | Do not confuse with volume share |
-| P1C-01 | Per-asset ATRP | NEXT after P1A-READY | Finalize TR/ATR definition, interval, length, smoothing, denominator |
-| P1C-02 | Market median ATRP | NEXT after P1C-01 | Same resolved Phase 0 universe, explicit coverage |
-| P1C-03 | Volatility breadth | PLANNED | Specify ATRP threshold/denominator/config |
-| P1C-04 | Quote-volume expansion | PLANNED | Closed windows, comparable prior periods, zero baseline |
-| P1C-05 | Volume-expansion breadth | PLANNED | Valid/eligible counts and thresholds |
-| P1C-06 | Volume concentration | PLANNED | Volume shares; independent of existing Concentration |
-| P1C-07 | Metric registration, Monitor export and testing | PLANNED | Extend existing path, no parallel architecture |
-| P1D-CORR | Synchronized BTC correlation / market cohesion | PLANNED | First generation O(n), evaluate pairwise later |
-| P1E-INSPECT | UI, independent validation, negative TestMode checks | PARTIAL | Continue as metrics are added |
-| P2-RAW | Futures OI, funding, positioning, taker flow | PLANNED | Verify API scope/availability before implementation |
-| P2B-AGG | Futures cross-sectional aggregation | PLANNED | Requires P2 |
-| P3-STATE | Deterministic higher-order futures states | PLANNED | Transparent component measures |
-| P4-TRIG | GlobalSetting/SMS/OffTrigger metric routing | PARTIAL | First-generation resolver reportedly works; extend per metric |
-| P5-LIQ | Bid/ask liquidity, depth and market stress | PLANNED | Later expensive endpoint family |
-| P6-HIST | Time-series persistence and validation | PLANNED | Later, separate from cold-start correctness |
+| P0-AUDIT | Architecture audit | DONE | [Audit](audits/phase-0-architecture-audit.txt) |
+| P1A-STORE | Shared normalized 5m OHLCV, incremental ingestion and Phase 0 universe | DONE | Cold-start, cleanup and idle raids verified |
+| P1A-READY | Cold-start coverage, fail-closed normalized metrics and settings safeguard | **DONE — CONTAINED** | [Issue 001](issues/001-cold-start-readiness.md) closed; root cause not proven |
+| P1B-RET | PriceTrend / MedianPriceTrend / MeanMedianSpread | DONE | Runtime exercised |
+| P1B-BREADTH | Breadth / Dispersion | DONE | Coverage gated |
+| P1B-RS | RelativeStrengthMarket / RelativeStrengthBTC | DONE | Scope preserved |
+| P1B-CONC | Top10 return advantage Concentration | DONE | 100% ranked population required |
+| P1C-01 | Per-asset ATRP5m | **NEXT** | Finalize ATR(14) TR, Wilder smoothing, seed, lookback/validity |
+| P1C-02 | MedianATRP5m | NEXT after P1C-01 | Exact Phase 0 global universe, 90% coverage |
+| P1C-03 | Volatility breadth | PLANNED | Explicit threshold and coverage |
+| P1C-04 | Recent quote-volume expansion | PLANNED | Comparable closed windows and zero baseline |
+| P1C-05 | Volume-expansion breadth | PLANNED | Ratio thresholds and population |
+| P1C-06 | Volume concentration | PLANNED | Volume share, distinct from existing return Concentration |
+| P1C-07 | Registry/Monitor/trigger/test integration | PLANNED | Reuse existing infrastructure |
+| P1D-CORR | Synchronized return correlation | PLANNED | Later Phase 1 |
+| P1E-INSPECT | Inspection and additional fault tests | PARTIAL | Carry non-blocking checks below |
+| P2-RAW | Futures funding/OI/positioning/flow ingestion | PLANNED | Later |
+| P2B-AGG | Futures market-wide aggregation | PLANNED | Later |
+| P3-STATE | Deterministic higher-order states | PLANNED | Later |
+| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | PARTIAL | First-generation routing works; extend per new metric |
+| P5-LIQ | Liquidity/depth/stress | PLANNED | Later |
+| P6-HIST | Feature history and validation | PLANNED | Later |
 
-## Current blocking investigation — P1A-READY
+## Phase 1A closeout
 
-- First raid: 756/756 normalized series reported successfully fetched, 654,696 candles, 717 eligible symbols, **259/1,434 valid 4h asset metrics**.
-- Second raid: 557/756 series refreshed and **1,434/1,434** valid.
-- Third raid: zero kline requests; approximately 1-second raid runtime reported.
-- Cause is **unknown**. Time boundary crossing / mixed endpoints is only a hypothesis.
-- **Do not** repair by substituting zero, weakening exact endpoint alignment, assuming initial success means readiness or silently widening retention.
-- Required result: clear common-endpoint readiness diagnosis, explicit cross-sectional coverage gates, fail-closed dependent normalized triggers, TestMode verification.
+**Code commits:** `3a2ba02` (90% global gate, 100% Concentration exception, coverage metadata and diagnostics); `c038a11` (unavailable normalized triggers fail closed, active GlobalSetting held on indeterminate fallback, SMS negation protection); `e002801` (four deterministic tests); `11d6e28` (raid summary distinguishes GlobalSetting switch from same-setting reapplication). All appear in the latest inspected branch.
 
-## Exact metric names in implemented set
+**User-run tests:** `dotnet build` succeeded for Core/PTMagic/Monitor on .NET 10. `dotnet run --project Tests/Phase1AReadiness/Phase1AReadiness.csproj`: **4 tests passed**.
 
-Global: `PriceTrend`, `MedianPriceTrend`, `MeanMedianSpread`, `Breadth`, `Dispersion`, `Concentration`.
+**User-supplied Binance Futures TestMode:** First raid fetched 756/756 normalized series (654,696 candles), but 4h global coverage was 32/250 (12.8%), with 218 MissingEndpoint; all dependent global features were unavailable and GlobalSetting triggers rejected. Second raid incrementally fetched 2,115 candles for 705 markets, recovered global coverage 249/249 and asset metrics 1,434/1,434. Third raid required **zero** normalized kline requests. After flood protection, `Default` switched to `DIAG_Global_AllMetrics` at 13:33 KST, with subsequent stable operation. Five-minute boundary raids downloaded ~2,268 incremental candles. TestMode sent no settings to PT.
 
-Asset: `RelativeStrengthMarket`, `RelativeStrengthBTC`.
+**Policy:** Exact eligible GlobalSetting trend population is denominator; required valid count `ceil(0.9 * eligible)`, nonempty population. Existing `Concentration` requires 100% quote-volume-ranked population. Invalid, missing and stale metrics never substitute zero. Independent valid and legacy triggers may still operate; no forced cleanup raid, ingestion redesign or trading suspension.
 
-The current `Concentration` means Top10 return advantage in percentage points, not volume share.
+**Root cause distinction:** A long cold-start fetch crossing 5m candle boundaries is plausible, **not proved**. The defect's *consequences* are contained and normal scheduled refresh repairs incompleteness. This is why P1A-READY is closed; it is not a claim that the first raid always has full data.
 
-## Version distinction
+**Non-blocking follow-ups (P1E):** Verify retention of an already-active non-default GlobalSetting when coverage later falls below 90%; validate the revised raid summary wording in a new build/runtime; further partial-coverage, stale, sparse and boundary fault tests. The logs preceding the summary patch still say `Global setting changed`. Tested executable reported 2.9.1, whereas active product roadmap is 2.10.
 
-2.9 = completed modernization release. **2.10** = active Phase 0–6 market-analysis development. The historical diagnostic binary identified itself as 2.9.1; do not relabel those logs.
-
-## Next review
-
-After inspecting current code and the recorded diagnostic context: document the verified initial-raid failure mechanism, the smallest safe fix, the test plan, and its actual commit/test evidence. Only then change P1A-READY to DONE or explicitly CONTAINED.
+**Next:** [Phase 1C-ready handoff](handoffs/2026-11-04-phase-1c-ready.md), starting with ATRP5m and then MedianATRP5m.
