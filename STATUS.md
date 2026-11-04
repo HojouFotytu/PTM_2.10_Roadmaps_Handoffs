@@ -1,5 +1,23 @@
 # PTMagic 2.10 — Current Development Status
 
+
+## 2026-11-05 — Normalized PriceTrend migration static audit: compatibility gaps OPEN
+
+**Application audited:** [`0c31e58`](https://github.com/HojouFotytu/PTMagic/commit/0c31e58451a563406c214dee3438f0812e980ae6) on `phase1/market-data-foundation`. Compared current normalized calculation, resolver, selection and summary paths with historical application `master` and 12 dedicated migration tests. **No application code changes or new tests were executed in this audit.**
+
+- **P1 — Confirmed: SMS Relative population changed.** Historical SMS activation/OffTrigger code uses the average of all computed single-market PriceTrend values (applying TrendThreshold), independent of `MaxMarkets`. New `TryResolveSingleWithRelation` subtracts `TryResolveGlobal`, which uses `MaxMarkets`-capped MarketTrend global symbols. Thus existing SMS thresholds can change whenever `MaxMarkets` truncates the asset population. Must restore a distinct uncapped SMS-relative reference aggregate with appropriate readiness handling and tests.
+- **P1 — Confirmed: `TrendCurrency=Fiat` ignored.** Historical `BaseAnalyzer.GetMarketTrendChanges` multiplies historical/current quote prices by their corresponding `MainCurrencyPriceUSD` for Fiat trends. New `MarketTrendAnalyticsEngine.CalculateReturn` computes directly on quote-denominated close candles with no Fiat conversion. BTC/other non-fiat quoted markets can have different triggers. Must restore aligned conversion support or fail closed with explicit diagnostic until supported.
+- **P2 — Review metric population policy.** `MarketTrendPopulationSelector.Select` removes `TrendThreshold` outliers from shared `GlobalSymbols` for *all* global metrics, including breadth, volume shares, concentration and medians. Original threshold was applied to the mean PriceTrend, not to all such measures; current config comment still describes it as an average-only outlier rule. Decide intended semantics, then test separately.
+- **P2 — Backward compatibility boundary.** `TrendMinutes` values not divisible by 5 (e.g., a legacy 1m/3m trend) cannot produce an exact normalized reference endpoint; accepted D-016 architecture requires a multiple of the 5m source, but settings should be validated with an explicit explanation. This is a deliberate restriction rather than a proven regression under the accepted contract.
+- **P2 — Output/operational follow-up.** Existing historical `LastRuntimeSummary.MarketTrendChanges` may mix older legacy and new normalized values with unchanged names; old Market Analyzer chart browser parity is unverified. Cold refresh pin prevents false coverage failures but can choose an as-of older than decision time if refresh spans a close; next raid catches up. Remaining legacy historical reconstruction takes ~12 minutes at cold start. Review separate from the core PriceTrend migration.
+- **P3 — Stale descriptions.** Monitor Market Metrics tooltip still says blank `Metrics` retains the legacy PriceTrend (current code uses normalized); `StoreDataMaxHours<=0` warning also claims legacy PriceTrend continues. Correct wording when addressing migration follow-ups.
+- **Test-evidence limitation:** Previous 3,116 per-asset numerical matches compare two *new normalized outputs* (MarketTrendAnalytics and LastRuntimeSummary), not normalized values against the original legacy calculation. **82/82 tests and Futures TestMode remain valid**, but none covers uncapped SMS Relative parity or Fiat conversion.
+- **Move-to-Phase1D recommendation:** resolve the two P1 defects first, or explicitly document a breaking compatibility decision. Do not label unified PriceTrend migration fully backward compatible until these are addressed.
+
+[Detailed reproducible audit](issues/002-pricetrend-migration-compatibility.md).
+
+
+
 ## 2026-11-05 — Cross-boundary cold-start fix VERIFIED in live Binance Futures TestMode
 
 **Application commit tested:** [`0c31e58`](https://github.com/HojouFotytu/PTMagic/commit/0c31e58451a563406c214dee3438f0812e980ae6), `phase1/market-data-foundation`. User supplied a complete two-raid local TestMode log after previously passing **82/82** .NET 10 regression tests.
