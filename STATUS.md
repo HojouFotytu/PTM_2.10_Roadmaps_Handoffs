@@ -1,5 +1,15 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-04 — Option C natural-language metric warnings implemented (local validation pending)
+
+**Application commit:** [`e652b04`](https://github.com/HojouFotytu/PTMagic/commit/e652b04cb8b18d88f13f6b8400fb77c2cce44617) on `phase1/market-data-foundation`.
+
+- `RaidMetricWarnings` now emits **one clear, actionable sentence per MarketTrend/metric group** instead of repeated raw resolver errors. Messages identify requesting GlobalSetting/SMS/OffTrigger, affected symbol, specific cause and a possible remedy, including exclusions, metric scope, disabled explicit metrics, missing candle/volume history and global coverage thresholds.
+- Multiple callers remain grouped with bounded setting/market/trigger examples and counts. Reporting-only change; no intended change to normalized calculations, metric availability, three-valued trigger logic or ProfitTrailer writes.
+- Added six deterministic natural-language tests (18 in warning harness; **81 expected across six harnesses**). **Not run**; local build, regressions and Futures/Spot/US TestMode remain user-owned per D-021. Previous Futures verification concerned the earlier verbose warning implementation, not this new formatting.
+- [Implementation and local verification guidance](updates/2026-11-04-option-c-natural-metric-warnings.md).
+
+
 ## 2026-11-04 — Verbose metric warnings: four-raid Binance Futures TestMode verified
 
 **Application source branch HEAD inspected:** [`efa7b5f`](https://github.com/HojouFotytu/PTMagic/commit/efa7b5ff1a99606395c1b1b9636c828600a55353). Uploaded runtime identifies version 2.10.0 but not Git SHA; new diagnostic strings confirm the implementation is running.
