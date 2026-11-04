@@ -1,5 +1,20 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-05 — Cross-boundary cold-start fix VERIFIED in live Binance Futures TestMode
+
+**Application commit tested:** [`0c31e58`](https://github.com/HojouFotytu/PTMagic/commit/0c31e58451a563406c214dee3438f0812e980ae6), `phase1/market-data-foundation`. User supplied a complete two-raid local TestMode log after previously passing **82/82** .NET 10 regression tests.
+
+- **First raid: PASS despite crossing a five-minute boundary.** Normalized refresh began **00:43:58 KST**, after lengthy legacy market-data recreation, and finished **00:46:02 KST**. The runtime logged `normalized MarketTrends evaluate as of 2026-11-04T15:43:58.0709779+00:00 (pinned to kline refresh start)`. Every configured trend used the latest closed endpoint as of that pinned time, **15:39:59.999 UTC**, not the newer candle that closed during refresh.
+- **No artificial missing endpoints:** all **250/250 global returns** and **519/519 asset returns** were valid in the first raid, across configured return-based trends; `global invalid reasons=none`, `asset invalid reasons=none`. Refreshed **756/756** series, **872,424** candles, **0 failures**. **Seven** warning groups were intentionally invalid diagnostic settings, not the prior cold-start **31**.
+- **Second raid: PASS.** Began **00:46:04 KST**, refreshed **404/756** series (**352 current/skipped**, **1,212** candles, **0 failed**), evaluated against the newer **15:44:59.999 UTC** endpoint, and retained **250/250 global** and **519/519 asset** return coverage; seven intentional metric-warning groups persisted.
+- GlobalSetting **switched** from Default to `DIAG_Global_All15AndImplicit` on the first raid, remained active without reapplication on the second. **TestMode prevented ProfitTrailer writes**.
+- Initial total raid was **13m59s**, mainly driven by **legacy historical market-data recreation** (from ~00:32:22 to ~00:43:58 KST); normalized refresh subsequently took ~2m04s and encountered Binance rate-limiter pauses. Startup-performance optimization is separate from this correctness fix.
+- **Status: DONE for Binance Futures boundary-consistency regression and live cold-start acceptance.** Spot/US runtime parity, positive SMS OffTrigger transition and other Phase 1 work remain separately unverified. No additional PTMagic source change made for this validation.
+
+[Evidence report](updates/2026-11-05-pinned-boundary-fix-futures-verified.md).
+
+
+
 
 ## 2026-11-05 — Pinned-refresh candle-boundary fix: full local regression PASS (82/82)
 
