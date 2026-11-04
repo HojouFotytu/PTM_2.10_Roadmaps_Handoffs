@@ -1,8 +1,8 @@
 # PTMagic 2.10 — Current Development Status
 
-**As of:** 2026-11-04 — Phase 1A DONE (containment); Phase 1C NEXT; user-accepted MarketTrend timeframe rule D-016.
+**As of:** 2026-11-04 — **PHASE 1C DONE** (build + 58/58 deterministic tests + deployed TestMode + Monitor content + fresh SMS isolation confirmed); **Phase 1D NEXT**. D-016 timeframe rule applies.
 **Source:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), `phase1/market-data-foundation`.
-**Last code HEAD verified for this update:** `89324bc5c8c5ea19ceb543b6ab5130899f2675dc` (merge commit; recheck before development).
+**Latest application code HEAD verified:** [`0e8ab7056d32f16d1095a519ac4a1e87a29a4188`](https://github.com/HojouFotytu/PTMagic/commit/0e8ab7056d32f16d1095a519ac4a1e87a29a4188) on `phase1/market-data-foundation` (2026-11-04; recheck before development).
 
 | ID | Deliverable | Status | Evidence / next step |
 |---|---|---|---|
@@ -14,22 +14,32 @@
 | P1B-RS | RelativeStrengthMarket / RelativeStrengthBTC | DONE | Scope preserved |
 | P1B-CONC | Top10 return advantage Concentration | DONE | Current ranking uses fixed trailing 24h quote volume; 100% required |
 | P1B-CONC-WINDOW | Align existing concentration-ranking window with MarketTrend.TrendMinutes | FOLLOW-UP | Known current 24h fixed-window exception; separate compatible code change/test |
-| P1C-01 | Per-asset ATRP on MarketTrend.TrendMinutes candles | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-02 | MedianATRP on the same configured MarketTrend timeframe | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-03 | Volatility breadth | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-04 | Recent quote-volume expansion | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-05 | Volume-expansion breadth | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-06 | Volume concentration | **BUILD/TEST VERIFIED — TESTMODE PENDING** | Source commit 64d063c; 53/53 deterministic tests passed; TestMode and Monitor checks pending |
-| P1C-07 | Registry/Monitor/trigger/test integration | **BUILD + 58/58 TESTS VERIFIED; SMS EXPORT TESTMODE PENDING** | SMS snapshot-isolation fix `0e8ab70` compiled; 5 new tests and 53 existing tests passed; focused TestMode persisted JSON check pending |
+| P1C-01 | Per-asset ATRP on MarketTrend.TrendMinutes candles | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
+| P1C-02 | MedianATRP on the same configured MarketTrend timeframe | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
+| P1C-03 | Volatility breadth | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
+| P1C-04 | Recent quote-volume expansion | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
+| P1C-05 | Volume-expansion breadth | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
+| P1C-06 | Volume concentration | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
+| P1C-07 | Registry/Monitor/trigger/test integration | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified; SMS snapshot fix `0e8ab70` live-confirmed |
 | P1-PERF-SNAPSHOT | Reuse unchanged historical snapshots between raids | **OPTION / PLANNED** | Avoid redundant full-series copy/sort/gap validation; preserve invalidation, staleness and thread safety; benchmark before/after (roadmap §12.7) |
-| P1D-CORR | Synchronized return correlation | PLANNED | TrendMinutes-based return cadence, not independent 5m/15m |
+| P1D-CORR | Synchronized return correlation | **NEXT — NOT STARTED** | Use synchronized complete MarketTrend.TrendMinutes return vectors; define invalidity, minimum sample count, statistics and test plan in Phase1D handoff |
 | P1E-INSPECT | Inspection and additional fault tests | PARTIAL | Carry non-blocking checks below |
 | P2-RAW | Futures funding/OI/positioning/flow ingestion | PLANNED | Later |
 | P2B-AGG | Futures market-wide aggregation | PLANNED | Later |
 | P3-STATE | Deterministic higher-order states | PLANNED | Later |
-| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | **BUILD + DETERMINISTIC TESTS PASSED** | D-017: Core/PTMagic/Monitor build passed; tri-state 29/29 and Phase1A 4/4 passed at `c66b9f3`; TestMode integration remains pending |
+| P4-TRIG | GlobalSetting / SMS / OffTrigger normalized metric routing | **PHASE 1B/1C TRIGGER ROUTING VERIFIED** | 29/29 tri-state tests; deployed GlobalSetting and BTC/ETH/SOL diagnostic SMS/OffTrigger TestMode checks; later phase integration remains scheduled |
 | P5-LIQ | Liquidity/depth/stress | PLANNED | Later |
 | P6-HIST | Feature history and validation | PLANNED | Later |
+
+## CURRENT: Phase 1C accepted and closed — 2026-11-04
+
+**Acceptance:** All Phase1C tasks P1C-01–P1C-07 **DONE**. Source `64d063c`, SMS snapshot-list isolation fix `0e8ab70`, user-run .NET 10 build passed, all five test suites **58/58**, Binance Futures Phase1C TestMode analytics/triggers, Monitor Market Metrics content, and final fresh SMS export isolation.
+
+**Final uploaded evidence (19:10–19:33 KST):** `2026-11-04(3).txt`, `LastRuntimeSummary(4).json`, `MarketTrendAnalytics(4).json`, `SingleMarketSettingSummary(4).json`. The latter contains **8 fresh SMS summaries**, activation timestamps **19:25:12–19:26:09 KST**, across BTCUSDT (4), ETHUSDT (2), SOLUSDT (2). Every snapshot's `MatchedTriggersContent` contains **zero descriptions from other settings**: **0/8 contaminated**. New snapshots were created after the fix, rather than simply reserializing the 18:32 historical data. This closes **P1C-SMS-SNAPSHOT-ALIAS**. Multiple active settings per market remain supported.
+
+**10 RAID SUMMARY checkpoints:** First cold-start raid took 14m21s with transient readiness warnings (39 distinct) as historical observations were still being recovered. Second raid had only the **two expected 8h MedianATRP and MedianVolumeExpansion** insufficient-history warnings with `StoreDataMaxHours=96`. Subsequent raids retained exactly those two warnings; later steady-state raids took 1s. No ERROR/FATAL exceptions found in the supplied log. GlobalSetting `DIAG_Global_P1C_All15Global` became active after flood-protection conditions cleared; later raids showed no reapplication. `TESTMODE` prevented outbound PT configuration updates.
+
+**Scope distinction:** This completes the agreed Phase1C functionality and live acceptance, not every optional feature from Phase1E or later phases. Previous notes below are historical observations superseded by this status. **Phase 1D is next**, not yet implemented. [Final evidence](updates/2026-11-04-phase1c-final-closeout.md) · [Phase1D handoff](handoffs/2026-11-04-phase1d-correlation-ready.md).
 
 ## Phase 1A closeout
 
@@ -47,9 +57,9 @@
 
 ## Accepted metric timeframe rule (D-016)
 
-All derived metric analysis timeframes come from the configured `MarketTrend.TrendMinutes`. Normalized 5m is the source-data resolution only. P1C-01 `ATRP` and P1C-02 `MedianATRP` use complete, UTC-aligned trend-sized candles; 5m-fixed ATR/15m-fixed participation metrics are not valid Phase 1C designs. ATR(14) needs at least 15 complete trend candles; if `StoreDataMaxHours` is too short, metric is unavailable. This is an accepted **design requirement, not an implemented code change**. Existing return `Concentration` still uses fixed trailing 24h ranking and is recorded as a separate follow-up.
+All derived metric analysis timeframes come from the configured `MarketTrend.TrendMinutes`. Normalized 5m is the source-data resolution only. P1C-01 `ATRP` and P1C-02 `MedianATRP` use complete, UTC-aligned trend-sized candles; 5m-fixed ATR/15m-fixed participation metrics are not valid Phase 1C designs. ATR(14) needs at least 15 complete trend candles; if `StoreDataMaxHours` is too short, metric is unavailable. This decision is **implemented in the Phase 1C metrics**; the text above records the original design rationale. Existing return `Concentration` still uses fixed trailing 24h ranking and is recorded as a separate follow-up.
 
-**Next:** [Corrected Phase 1C handoff](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md), starting with dynamic `ATRP` then `MedianATRP`.
+**Current next phase:** [Phase 1D correlation handoff](handoffs/2026-11-04-phase1d-correlation-ready.md). The earlier Phase 1C handoff is retained as historical context.
 
 ## 2026-11-04 trigger-logic refinement: code committed, not yet tested
 

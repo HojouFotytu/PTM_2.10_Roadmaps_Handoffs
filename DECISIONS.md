@@ -29,7 +29,7 @@ Accepted decisions are not inferred from a merely proposed feature. Add a dated 
 
 | ID | Decision | State |
 |---|---|---|
-| D-016 | **All derived MarketTrend metrics inherit their analytical timeframe from user-defined `MarketTrend.TrendMinutes`.** Normalized 5m candles are source resolution only. Window-based ATR, quote-volume metrics and correlation must use complete trend-duration periods built from closed input observations. Never hardcode a separate 5m/15m/1h metric timeframe or silently fall back; an N-period lookback counts trend-sized periods. No application code update is implied by this decision. | **Accepted / documentation corrected; implementation pending** |
+| D-016 | **All derived MarketTrend metrics inherit their analytical timeframe from user-defined `MarketTrend.TrendMinutes`.** Normalized 5m candles are source resolution only. Window-based ATR, quote-volume metrics and correlation must use complete trend-duration periods built from closed input observations. Never hardcode a separate 5m/15m/1h metric timeframe or silently fall back; an N-period lookback counts trend-sized periods. No application code update is implied by this decision. | **Accepted; Phase 1C implementation and TestMode verified** |
 
 **Known current exception:** already implemented return `Concentration` ranks Top10 by trailing 24h quote volume, even for other configured TrendMinutes. Its existing runtime and 100% coverage behavior remain unchanged until a separately tested correction is made (P1B-CONC-WINDOW). The universal policy is the target; this exception is **not** claimed fixed.
 
@@ -47,7 +47,7 @@ Do not treat open decisions as already configured in application code.
 
 | ID | Decision | State |
 |---|---|---|
-| D-017 | Evaluate configured GlobalSetting, SMS activation and SMS OffTrigger expressions using **three-valued logic**: true, false, unavailable. `true OR unavailable=true`; `false OR unavailable=unavailable`; `false AND unavailable=false`; `true AND unavailable=unavailable`; `NOT unavailable=unavailable`. A conclusively true complete expression may match even if an unused branch is unavailable. An indeterminate result may not activate a setting or trigger SMS removal. Existing active-setting retention applies when GlobalSetting selection remains indeterminate; existing SMS long-term OffTrigger persistence is preserved. | Accepted / build + 29/29 tri-state tests passed; runtime TestMode pending |
+| D-017 | Evaluate configured GlobalSetting, SMS activation and SMS OffTrigger expressions using **three-valued logic**: true, false, unavailable. `true OR unavailable=true`; `false OR unavailable=unavailable`; `false AND unavailable=false`; `true AND unavailable=unavailable`; `NOT unavailable=unavailable`. A conclusively true complete expression may match even if an unused branch is unavailable. An indeterminate result may not activate a setting or trigger SMS removal. Existing active-setting retention applies when GlobalSetting selection remains indeterminate; existing SMS long-term OffTrigger persistence is preserved. | **Accepted; 29/29 tests and GlobalSetting/SMS live TestMode verified** |
 
 D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activate on an indeterminate final expression**, not “discard the whole setting whenever any input is unknown.” D-016 (metric timeframe inheritance) is unchanged.
 
@@ -55,7 +55,7 @@ D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activ
 
 | ID | Decision | State |
 |---|---|---|
-| D-018 | Put a **short, deduplicated Metric warnings section** in the analyzer raid summary, grouping unavailable normalized metrics by MarketTrend/metric with all distinct grouped warnings displayed (no limit). Include indeterminate GlobalSetting retention information. Eliminate repetitive per-pair normalized trigger warnings, but do not change tri-state semantics or legacy setting behavior. A Monitor notification may be considered separately. | Accepted / .NET 10 build + 7/7 warning tests passed; TestMode raid pending |
+| D-018 | Put a **short, deduplicated Metric warnings section** in the analyzer raid summary, grouping unavailable normalized metrics by MarketTrend/metric with all distinct grouped warnings displayed (no limit). Include indeterminate GlobalSetting retention information. Eliminate repetitive per-pair normalized trigger warnings, but do not change tri-state semantics or legacy setting behavior. A Monitor notification may be considered separately. | **Accepted; 7/7 tests and full grouped RAID SUMMARY verified live** |
 
 **2026-11-04 D-018 amendment:** The user superseded the earlier five-detail display limit. List **all distinct grouped metric warnings** in the raid summary; do not truncate with `... and N more`. Duplicate grouping remains, with no change to trigger logic. Application commit `64e05e7`; re-verification pending.
 
@@ -65,8 +65,14 @@ D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activ
 
 | ID | Decision | State |
 |---|---|---|
-| D-019 | Implement ATRP and volume metrics exclusively on complete `MarketTrend.TrendMinutes` periods assembled from 5m source OHLCV. Per-trend parameters default ATRPeriod=14, VolumeExpansionLookback=20, ATRPBreadthThreshold=0.5%, VolumeExpansionBreadthThreshold=1.0x, StrongVolumeExpansionThreshold=1.5x, TopNVolumeCount=10. Global medians and breadth require 90% coverage. `VolumeConcentration` is HHI ×100 (*index*), while TopN/BTC/BTC+ETH are volume **percentage shares** requiring 100% complete eligible volume population. No short-data fallback or extra exchange calls. | Implemented in source; numerical regression and TestMode pending |
+| D-019 | Implement ATRP and volume metrics exclusively on complete `MarketTrend.TrendMinutes` periods assembled from 5m source OHLCV. Per-trend parameters default ATRPeriod=14, VolumeExpansionLookback=20, ATRPBreadthThreshold=0.5%, VolumeExpansionBreadthThreshold=1.0x, StrongVolumeExpansionThreshold=1.5x, TopNVolumeCount=10. Global medians and breadth require 90% coverage. `VolumeConcentration` is HHI ×100 (*index*), while TopN/BTC/BTC+ETH are volume **percentage shares** requiring 100% complete eligible volume population. No short-data fallback or extra exchange calls. | **Accepted; source, numerical fixtures, and live TestMode verified** |
 
 D-019 instantiates D-016's universal trend-duration rule. Defaults are configurable; no legacy setting changes merely because metrics remain disabled. Existing return `Concentration` remains a separately tracked fixed-24h ranking exception, P1B-CONC-WINDOW.
 
 **2026-11-04 D-019 verification:** User-run .NET 10 build passed at `64d063c`, with 53/53 deterministic checks passing (13 Phase1C). This verifies source fixtures, not Binance Futures TestMode behavior or Monitor presentation. No calculation-contract change.
+
+## Phase 1C final acceptance — 2026-11-04
+
+The D-016/D-017/D-018/D-019 contracts used in Phase 1C were confirmed by the user-run **58/58 deterministic tests** and deployed TestMode. An isolated `MatchedTriggersContent` defect in the per-SMS JSON summary was corrected at application `0e8ab70`, and the 19:10–19:33 KST final run produced **8 newly activated BTC/ETH/SOL snapshots with zero foreign descriptions**, closing `P1C-SMS-SNAPSHOT-ALIAS`. Phase 1C is **DONE** and Phase 1D is **NEXT (not implemented)**. Existing return `Concentration` fixed trailing 24h rank window remains a separate P1B follow-up; no changes to D-016 for new features.
+
+Correlation Phase1D decisions remain open: Pearson vs alternatives (Pearson intended first), simple versus log returns, synchronized bar count/window, treatment of missing candles and zero variance, 90% market coverage, and optional pairwise measures. No new independent 5m/15m analysis cadence is permitted; use `MarketTrend.TrendMinutes` (D-016).

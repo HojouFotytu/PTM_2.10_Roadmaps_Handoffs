@@ -516,9 +516,9 @@ I-9. AGREED DEVELOPMENT ORDER FROM THIS CHECKPOINT
 
 COMPLETED: Phase 1A readiness/coverage containment (I-6).
 
-PHASE 1C SOURCE IMPLEMENTED (2026-11-04); .NET build, deterministic tests
-and TestMode integration STILL PENDING. Follow the originally specified
-implementation order below, retained as design history.
+PHASE 1C DONE (2026-11-04): .NET 10 build, all 58 deterministic tests,
+live Binance Futures TestMode, Monitor content and fresh SMS snapshots
+verified. Follow the original implementation order below as history.
 Recommended implementation order:
 
   1C-1 Per-asset ATRP + global MedianATRP.
@@ -1403,13 +1403,13 @@ These should be measured over a defined period, preferably recent volume rather 
 5.9 Correlation / market cohesion
 ----------------------------------------------------------------------
 
-STATUS: PHASE 1D PLANNED. The normalized store and common endpoint provide a foundation, but rolling synchronized return vectors and correlation calculations are NOT yet implemented.
+STATUS: PHASE 1D NEXT after verified Phase1C closeout. The normalized store and common endpoint are available, but rolling synchronized return vectors and correlation calculations are NOT implemented.
 
 Correlation should be calculated from synchronized return series, not raw prices.
 
 Recommended first generation:
 
-- Use 5m or 15m log/simple returns.
+- Use complete, UTC-aligned MarketTrend.TrendMinutes log/simple returns (D-016); normalized 5m data is ingestion resolution only, not an independent correlation timeframe.
 - Use a rolling sample window.
 - Calculate per-asset correlation to BTC.
 
@@ -2593,7 +2593,7 @@ PHASE 1B - Price-derived analysis [DONE]
 [x] All eight metrics built and exercised in TestMode runtime.
 [~] Full synthetic/reference regression matrix still part of Phase 1E.
 
-PHASE 1C - OHLC/volume derived analysis [SOURCE IMPLEMENTED; TESTS PENDING]
+PHASE 1C - OHLC/volume derived analysis [DONE — VERIFIED 2026-11-04]
 ---------------------------------------------
 [x] Accepted policy D-016: every derived metric analysis timeframe is
     MarketTrend.TrendMinutes; 5m is input data resolution only.
@@ -2609,13 +2609,17 @@ PHASE 1C - OHLC/volume derived analysis [SOURCE IMPLEMENTED; TESTS PENDING]
 [x] Source: normalized OHLCV reused with no new Binance API calls.
 [x] Source: 13 deterministic fixture cases authored for numerical values,
     history, readiness, units, aggregation and shared snapshot integration.
-[ ] Verify .NET 10 application build and execute all 13 Phase1COhlcv tests.
-[ ] Rerun existing Phase1MetricWarnings, Phase1TriggerLogic and
-    Phase1AReadiness regression harnesses.
-[ ] TestMode: validate GlobalSetting, SMS, OffTrigger and Monitor exports.
-[ ] Mark Phase 1C DONE only after build/tests/TestMode are accepted.
+[x] .NET 10 application build passed; all 13 Phase1COhlcv tests passed.
+[x] Regression suites passed: Phase1MetricWarnings 7/7,
+    Phase1TriggerLogic 29/29, Phase1AReadiness 4/4 and new
+    Phase1SmsSummaryIsolation 5/5 (58/58 tests total).
+[x] Deployed TestMode verified GlobalSetting, SMS, OffTrigger,
+    normalized metric exports and Monitor Market Metrics data.
+[x] Fresh generated BTC/ETH/SOL SMS snapshots isolated correctly,
+    8/8 snapshots with zero cross-setting trigger descriptions.
+[x] Phase 1C DONE, verified and accepted 2026-11-04.
 
-PHASE 1D - Correlation / market cohesion [PLANNED]
+PHASE 1D - Correlation / market cohesion [NEXT — NOT STARTED]
 --------------------------------------------------
 [x] Common-endpoint closed-candle alignment foundation exists for returns.
 [ ] Construct synchronized return sequences at MarketTrend.TrendMinutes;
@@ -2944,3 +2948,36 @@ EVIDENCE LIMIT: Authoring session has no .NET SDK; no build, test
 execution, exchange runtime or Monitor visual check was performed.
 Do not advance to Phase1D DONE or mark Phase1C verified until
 user/CI evidence is supplied.
+
+
+======================================================================
+2026-11-04 PHASE 1C FINAL CLOSEOUT — LIVE SMS SNAPSHOT FIX VERIFIED
+======================================================================
+
+Application source branch: phase1/market-data-foundation, commit 0e8ab7056d32f16d1095a519ac4a1e87a29a4188.
+Original Phase1C metrics commit: 64d063c. SMS isolation commit: 0e8ab70.
+
+Final user-provided 19:10–19:33 KST TestMode run:
+- Fresh generated SMS summaries at 19:25:12–19:26:09 KST (UTC 10:25/10:26):
+  BTCUSDT 4, ETHUSDT 2, SOLUSDT 2; 8/8 snapshots have only their own
+  setting's trigger descriptions, zero foreign messages. Historical
+  18:32 contaminated snapshots have been superseded in supplied export.
+- 10 raid summaries: initial 14m21s cold start with incomplete historic
+  readiness warnings; after refresh, two expected 8h metric warnings
+  only with StoreDataMaxHours=96 (ATRP(14) requires 120h minimum,
+  VolumeExpansion(20) requires 168h minimum plus alignment margin).
+- In later raids, GlobalSetting DIAG_Global_P1C_All15Global is stable,
+  no same-setting reapply; TESTMODE prevented PT configuration updates.
+- No application ERROR or FATAL lines in the supplied log. Latest
+  LastRuntimeSeconds=1 and analytics timestamp 2026-11-04T10:33:51Z.
+- Previous TestMode and Market Metrics page confirmed Phase1C numerical
+  features, units, population coverage and Monitor content.
+- User-run .NET 10 build passed; deterministic harnesses passed 58/58
+  (Phase1SmsSummaryIsolation 5, Phase1COhlcv 13,
+  Phase1MetricWarnings 7, Phase1TriggerLogic 29, Phase1AReadiness 4).
+
+P1C-01 through P1C-07: DONE. P1C-SMS-SNAPSHOT-ALIAS: CLOSED.
+P1D-CORR: NEXT / NOT STARTED; follow handoffs/2026-11-04-phase1d-correlation-ready.md.
+Keep P1B-CONC-WINDOW, optional cross-raid snapshot reuse, cold-start
+fetch performance and Phase1E inspection tasks separate; this closeout
+makes no assertion that those later tasks have been implemented.

@@ -5,7 +5,7 @@
 - Product version: **2.10** (2.9 modernization release is finished).
 - Application repository: [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic).
 - Active development branch: `phase1/market-data-foundation`.
-- Latest code HEAD reviewed for Phase 1A closeout: `89324bc5c8c5ea19ceb543b6ab5130899f2675dc` (2026-11-04; recheck before coding). Original roadmap baseline `9e00a1f` remains historical.
+- Latest application source HEAD checked: [`0e8ab7056d32f16d1095a519ac4a1e87a29a4188`](https://github.com/HojouFotytu/PTMagic/commit/0e8ab7056d32f16d1095a519ac4a1e87a29a4188) on 2026-11-04. Original roadmap baseline `9e00a1f` remains historical.
 - Framework: .NET 10; normalized analytics target: Binance Futures USDT perpetuals.
 
 ## Canonical technical plan and historical sources
@@ -23,7 +23,9 @@
 | [Dated updates](updates/README.md) | Evidence-oriented implementation and roadmap update notes |
 | [Handoffs](handoffs/README.md) | Dated session handoffs, starting with Phase 1C |
 | [Closed Phase 1A readiness issue](issues/001-cold-start-readiness.md) | DONE by verified correctness containment; non-blocking follow-ups recorded |
-| [Latest corrected Phase 1C handoff](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md) | **Current starting point: all derived metric timeframes from MarketTrend.TrendMinutes** |
+| [Phase 1D-ready handoff](handoffs/2026-11-04-phase1d-correlation-ready.md) | **Current starting point: Phase 1C DONE, synchronized TrendMinutes return correlation NEXT** |
+| [Latest Phase 1C closeout evidence](updates/2026-11-04-phase1c-final-closeout.md) | Verified TestMode and isolated SMS snapshots |
+| [Corrected Phase 1C handoff (historical)](handoffs/2026-11-04-phase-1c-markettrend-timeframe-correction.md) | D-016 timeframe decision and Phase 1C planning, now complete |
 | [Earlier Phase 1C-ready handoff](handoffs/2026-11-04-phase-1c-ready.md) | Historical; proposed fixed ATRP5m incorrectly |
 
 ## Precedence
@@ -68,3 +70,5 @@ GlobalSetting, SMS and OffTrigger now have a source-code implementation of compl
 **D-018 amendment (2026-11-04):** The five-line RAID SUMMARY metric-warning cap was removed at application commit [`64e05e7`](https://github.com/HojouFotytu/PTMagic/commit/64e05e7e2a93aa23828890ef5e4708f002c696b8). All distinct grouped warnings now appear; build/test re-verification pending. [Update](updates/2026-11-04-all-metric-warnings.md).
 
 **Phase 1C implementation checkpoint (2026-11-04):** P1C-01 through P1C-07 source was committed at [`64d063c`](https://github.com/HojouFotytu/PTMagic/commit/64d063c1c9bc8886fb456cae97921780449f5cce) with 13 synthetic tests. **Do not treat Phase 1C as verified or complete yet**: a new .NET 10 build, test suite, TestMode run and Monitor inspection are required. [Latest handoff](handoffs/2026-11-04-phase1c-implementation-verification.md).
+
+**Phase 1C closeout (2026-11-04):** Source and post-fix snapshot tests passed **58/58**; deployed TestMode and Monitor content verified; final fresh BTC/ETH/SOL export had **8/8 isolated SMS snapshots**. **Phase 1D is the next development task.** [Closeout](updates/2026-11-04-phase1c-final-closeout.md) · [Handoff](handoffs/2026-11-04-phase1d-correlation-ready.md).
