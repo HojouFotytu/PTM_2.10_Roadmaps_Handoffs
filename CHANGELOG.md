@@ -2,6 +2,13 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Fix regression harness compilation ambiguity
+
+- User-run `dotnet build`: Core/PTMagic/Monitor succeeded; separate `Tests/Phase1TriggerLogic` compilation failed with 13 CS0121 ambiguous constructor overloads. Existing Phase1AReadiness tests passed (4/4).
+- Fixed the 13 ambiguous target-typed `new()` dictionary arguments with explicit `new Dictionary<string, TriggerTruthValue>`.
+- Application commit [`c66b9f3`](https://github.com/HojouFotytu/PTMagic/commit/c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953).
+- Trigger tests and TestMode verification still pending: the assistant has no local .NET SDK.
+
 ## 2026-11-04 — Tri-state trigger evaluation refinement (D-017)
 
 - Accepted complete-expression semantics for unavailable normalized metrics: `true OR unavailable` activates; a final indeterminate expression does not.

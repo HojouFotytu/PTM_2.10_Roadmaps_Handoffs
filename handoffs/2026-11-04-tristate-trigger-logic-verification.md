@@ -19,3 +19,5 @@ No Phase 1C ATRP code was implemented in this change. The active roadmap rule D-
 Continue Phase 1C after or alongside these tests, without reopening Phase 1A's already accepted containment decision solely because D-017 runtime verification is outstanding.
 
 **Additional compatibility commit:** [`fbc4b35`](https://github.com/HojouFotytu/PTMagic/commit/fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b) retains the existing AND/OR-only SMS OffTriggerConnection contract. Latest source HEAD is now `fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b`; the earlier HEAD cited above is historical.
+
+**Build follow-up:** User-run `dotnet build` succeeded for Core/PTMagic/Monitor; `Tests/Phase1AReadiness` passed 4 tests. Separate `Tests/Phase1TriggerLogic` failed compilation with 13 CS0121 errors. Application commit [`c66b9f3`](https://github.com/HojouFotytu/PTMagic/commit/c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953) replaced all 13 ambiguous `new()` arguments with explicit dictionaries. Latest code HEAD now `c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953`. **Rerun trigger harness, then TestMode**; neither rerun is yet verified.

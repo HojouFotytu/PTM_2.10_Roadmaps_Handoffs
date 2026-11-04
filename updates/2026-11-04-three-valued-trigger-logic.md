@@ -38,3 +38,5 @@ Also run TestMode with a valid `OR` branch and unavailable metric, a false `AND`
 **Unchanged:** Phase 1C dynamic MarketTrend timeframe D-016; ATRP/MedianATRP remain next.
 
 3. [`fbc4b35`](https://github.com/HojouFotytu/PTMagic/commit/fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b) — preserve legacy `OffTriggerConnection` AND/OR-only semantics; unknown connections cannot deactivate an SMS.
+
+4. [`c66b9f3`](https://github.com/HojouFotytu/PTMagic/commit/c66b9f3a2572b0bd9ebf1c737bd98b4f9f8e6953) — repair 13 CS0121 compile ambiguities in the 29-case regression harness. Reported Core/PTMagic/Monitor build succeeded; Phase1AReadiness passed 4/4. Rerun Phase1TriggerLogic still pending.
