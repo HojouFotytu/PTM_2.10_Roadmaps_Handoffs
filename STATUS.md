@@ -12,7 +12,8 @@
 | P1B-RET | PriceTrend / MedianPriceTrend / MeanMedianSpread | DONE | Runtime exercised |
 | P1B-BREADTH | Breadth / Dispersion | DONE | Coverage gated |
 | P1B-RS | RelativeStrengthMarket / RelativeStrengthBTC | DONE | Scope preserved |
-| P1B-CONC | Top10 return advantage Concentration | DONE | Current ranking uses fixed trailing 24h quote volume; 100% required |\n| P1B-CONC-WINDOW | Align existing concentration-ranking window with MarketTrend.TrendMinutes | FOLLOW-UP | Known current 24h fixed-window exception; separate compatible code change/test |
+| P1B-CONC | Top10 return advantage Concentration | DONE | Current ranking uses fixed trailing 24h quote volume; 100% required |
+| P1B-CONC-WINDOW | Align existing concentration-ranking window with MarketTrend.TrendMinutes | FOLLOW-UP | Known current 24h fixed-window exception; separate compatible code change/test |
 | P1C-01 | Per-asset ATRP on MarketTrend.TrendMinutes candles | **NEXT** | Aggregate closed normalized 5m inputs to complete trend-duration OHLC; ATR(14), seed, history, invalidity |
 | P1C-02 | MedianATRP on the same configured MarketTrend timeframe | NEXT after P1C-01 | Exact Phase 0 global universe, shared trend endpoint, 90% coverage |
 | P1C-03 | Volatility breadth | PLANNED | Explicit threshold and coverage |
