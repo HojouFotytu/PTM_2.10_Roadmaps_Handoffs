@@ -21,6 +21,7 @@
 | P1C-05 | Volume-expansion breadth | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
 | P1C-06 | Volume concentration | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified |
 | P1C-07 | Registry/Monitor/trigger/test integration | **DONE** | Source `64d063c`; .NET 10 build, 58/58 tests, deployed TestMode and Monitor content verified; SMS snapshot fix `0e8ab70` live-confirmed |
+| P1-COMPAT-LEGACY-SELECTIVE | Skip unneeded legacy price-trend calculations for explicit Metrics | **CODE COMMITTED — BUILD/TESTMODE PENDING** | 14 new deterministic fixtures; preserve implicit legacy trigger and market quote volume/price; Phase 1C remains verified at previous baseline |
 | P1-PERF-SNAPSHOT | Reuse unchanged historical snapshots between raids | **OPTION / PLANNED** | Avoid redundant full-series copy/sort/gap validation; preserve invalidation, staleness and thread safety; benchmark before/after (roadmap §12.7) |
 | P1D-CORR | Synchronized return correlation | **NEXT — NOT STARTED** | Use synchronized complete MarketTrend.TrendMinutes return vectors; define invalidity, minimum sample count, statistics and test plan in Phase1D handoff |
 | P1E-INSPECT | Inspection and additional fault tests | PARTIAL | Carry non-blocking checks below |
@@ -128,4 +129,13 @@ User uploaded a 19:05–19:07 KST deployed TestMode log, `LastRuntimeSummary(3).
 - A subsequent re-save or update to `LastRuntimeSummary.json` alone is insufficient: the original snapshots must be regenerated to validate this specific fix.
 
 **Status:** P1C-SMS-SNAPSHOT-ALIAS build+unit-test verified; *fresh deployed SMS snapshot test still pending*. Phase 1C not yet marked DONE.
+
+
+## 2026-11-04 — Selective legacy PriceTrend follow-up: source committed, verification pending
+
+**Task P1-COMPAT-LEGACY-SELECTIVE:** The post-Phase1C cleanup ensures a nonempty `MarketTrend.Metrics` does not automatically calculate the old per-asset PriceTrend or legacy global mean. Existing legacy-only MarketTrends (empty/omitted `Metrics`), legacy GlobalSetting PriceTrend triggers and legacy SMS/OffTriggers retain their required calculations. Non-Binance-Futures and CoinMarketCap behavior remains unchanged. Explicit normalized `PriceTrend` is calculated by the normalized analytics engine, not duplicated by the old engine.
+
+Application source HEAD: [`1a6b9aa401fac74842e4d53ddbbfb2b2a4c5dc11`](https://github.com/HojouFotytu/PTMagic/commit/1a6b9aa401fac74842e4d53ddbbfb2b2a4c5dc11). `LegacyMarketTrendPlanner` identifies legacy dependencies; `BaseAnalyzer.BuildMarketTrends` and `BuildGlobalMarketTrends` accept an optional required-name set; `MarketTrendPopulationSelector` independently selects per-trend eligible normalized metric populations from current market snapshots and frozen Phase0 eligibility, with MaxMarkets/AllowedMarkets/IgnoredMarkets and configured TrendThreshold rules. Current market price and 24h volume used by SMS triggers, SMS activation snapshots, and `LastRuntimeSummary` no longer depend on `SingleMarketTrendChanges.Keys.Last()`. The old Market Analyzer will leave uncalculated legacy trend columns blank; eventual consolidation with the new Market Metrics page remains planned separately.
+
+Added `Tests/Phase1SelectiveLegacy` **14 deterministic cases** (legacy/normalized trigger compatibility, independence of volume-only/age/time triggers, population/cap/filter behavior and no synthetic fallback data). **Build and tests not yet run.** Previous Phase1C 58/58 result predates this refactor; a fresh pass requires `dotnet build`, new 14-case suite and five existing suites (target **72/72 total**). TestMode must compare configured normalized metrics and 1h/2h/4h populations with baseline, legacy-only market/global PriceTrend, global and SMS normalized/legacy triggers, 24h volume/price snapshots, RAID SUMMARY and no PT writes. Until verified, do not claim the selective legacy optimization complete.
 

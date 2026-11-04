@@ -1,3 +1,4 @@
+- **[2026-11-04 — Selective legacy PriceTrend calculations](2026-11-04-selective-legacy-price-trend.md)** (source + 14 tests committed; build/TestMode pending)
 - **[2026-11-04 — Phase 1C final closeout](2026-11-04-phase1c-final-closeout.md)** (**CURRENT**; 8 fresh SMS snapshots isolated, Phase 1C DONE)
 - **[2026-11-04 — Post-fix TestMode reused historical SMS snapshots](2026-11-04-sms-postfix-retained-snapshots.md)** (fresh-snapshot verification pending)
 - **[2026-11-04 — SMS summary isolation build and 58/58 tests verified](2026-11-04-sms-summary-test-verification.md)** (most recent; deployed multi-SMS JSON check pending)

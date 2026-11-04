@@ -1,3 +1,11 @@
+## 2026-11-04 — Selective legacy price-trend calculations (unverified source)
+
+- Application [`1a6b9aa401fac74842e4d53ddbbfb2b2a4c5dc11`](https://github.com/HojouFotytu/PTMagic/commit/1a6b9aa401fac74842e4d53ddbbfb2b2a4c5dc11): only compute legacy asset/global PriceTrend for legacy-only trends or legacy trigger dependencies; normalized Metrics-only trends skip old historical price snapshots and mean.
+- Frozen Phase0 eligible population now feeds normalized market/asset metric selection independently from legacy trend arrays, with current 24h volume ranking and configured MarketTrend selection filters.
+- SMS price/24h-volume triggers and summary fields read current market snapshots even when there is no legacy trend; old Market Analyzer intentionally shows no value where legacy trend was skipped.
+- Added 14-case selective-routing and population regression suite. **.NET build, 72-test full suite and TestMode not run yet.**
+- [Implementation/update](updates/2026-11-04-selective-legacy-price-trend.md).
+
 ## 2026-11-04 — Close Phase 1C and authorize Phase 1D handoff
 
 - Final user-supplied TestMode export has **8 freshly generated SMS snapshots (BTC 4, ETH 2, SOL 2) with 0 cross-setting trigger descriptions**, closing the SMS summary alias defect after code commit `0e8ab70`.
