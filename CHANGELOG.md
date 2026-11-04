@@ -1,3 +1,9 @@
+## 2026-11-04 — D-022: Mandatory copy-paste PowerShell test commands
+
+- Accepted a recurring requirement to include an executable PowerShell script in every PTMagic development/testing handoff requiring local verification.
+- Commands start with `git pull --ff-only` and `dotnet build`, followed by exact `.csproj` paths for relevant regression suites and any new tests; distinguish required versus optional test runs.
+- Separate additional runtime/TestMode checks where applicable, and report pass/fail **only after reviewing the user's local output**.
+- Updated README, handoff template and D-022 decision register. **Documentation-only change; no application code, build or tests run.**
 ## 2026-11-04 — D-021: Local testing and development responsibility policy
 
 - Accepted explicit division of responsibility: assistant implements/reviews code and authors regression tests; user performs local builds, regression runs, and TestMode.

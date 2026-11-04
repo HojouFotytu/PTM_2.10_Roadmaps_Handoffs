@@ -49,6 +49,26 @@ This is the default PTMagic 2.10 workflow for this and all future phases/handoff
 
 This policy is procedural, not evidence that a build or TestMode validation has passed. The previously added `PTMagic/.github/workflows/phase1-regression.yml` still exists and automatically triggers on matching pushes; **documentation changes alone do not disable it**. Remove/disable that workflow separately to enforce the no-automatic-build default.
 
+## Required local PowerShell validation script (D-022; 2026-11-04)
+
+**Every future PTMagic source-change, test, and verification handoff response must include a complete, copy-paste-ready PowerShell script** for the user to execute locally in the VS Code terminal from the root of the **PTMagic application repository**, not this documentation repository.
+
+- Give commands **in execution order**: `git pull --ff-only`, `dotnet build`, then each applicable `dotnet run --project <exact .csproj path>` regression harness. Include newly created tests and tests that could regress because of the change. Clearly separate required tests from optional broader regressions; adapt the list to the actual source change and current repository paths.
+- Include specific TestMode/runtime verification steps after automated commands when behavior cannot be validated by a deterministic harness alone. Note any settings/logs/exports that must be checked.
+- Ask the user to provide terminal output and, where applicable, TestMode logs. **Never claim builds, tests or runtime checks passed until user-supplied execution evidence has been reviewed** (D-021).
+- The following is the current baseline example, **not an immutable test-project inventory**:
+
+```powershell
+git pull --ff-only
+dotnet build
+dotnet run --project Tests/Phase1SelectiveLegacy/Phase1SelectiveLegacy.csproj
+dotnet run --project Tests/Phase1SmsSummaryIsolation/Phase1SmsSummaryIsolation.csproj
+dotnet run --project Tests/Phase1COhlcv/Phase1COhlcv.csproj
+dotnet run --project Tests/Phase1MetricWarnings/Phase1MetricWarnings.csproj
+dotnet run --project Tests/Phase1TriggerLogic/Phase1TriggerLogic.csproj
+dotnet run --project Tests/Phase1AReadiness/Phase1AReadiness.csproj
+```
+
 ## Update protocol
 
 1. Read the actual code-branch HEAD and relevant code before any development claim.

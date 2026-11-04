@@ -92,3 +92,11 @@ D-020 is an optimization/compatibility correction after verified Phase1C and doe
 | D-021 | **Assistant owns source edits, code review, regression-test development and fixes for user-reported failures. User owns local .NET builds, regression harness execution, and live PTMagic TestMode.** The assistant reviews build output/logs supplied by the user and addresses defects. GitHub is for source control, commits, and roadmap/handoff documentation; no GitHub Actions or remote automatic build/test execution unless the user specifically requests it. A source commit or authored test does not count as executed verification. | **Accepted — apply to all future development sessions and handoffs** |
 
 The existing CI workflow in the application repository was introduced before D-021. This decision does not itself deactivate it; removal/disablement is tracked as a separate implementation action.
+
+## Required local testing commands — D-022 (2026-11-04)
+
+| ID | Decision | State |
+|---|---|---|
+| D-022 | **Every future PTMagic development or testing response requiring local verification must provide a complete, copy-paste-ready PowerShell script** for the user to run from the PTMagic application-repository root in VS Code. Include `git pull --ff-only`, `dotnet build`, all exact `.csproj` paths for applicable existing and new regression harnesses, in order. Distinguish required from optional tests and provide explicit TestMode/runtime instructions where deterministic tests are insufficient. The assistant reviews user-supplied build/test/log outputs and never claims unexecuted tests as passed. | **Accepted — applies to all future phases and handoffs; extends D-021** |
+
+At adoption, the example regression suite comprises `Phase1SelectiveLegacy`, `Phase1SmsSummaryIsolation`, `Phase1COhlcv`, `Phase1MetricWarnings`, `Phase1TriggerLogic` and `Phase1AReadiness`. **The exact executable project list must follow current code and change scope** rather than remain fixed to this historical example.
