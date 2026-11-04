@@ -2,6 +2,13 @@
 
 This log tracks **roadmap and documentation changes**, not software releases. Software implementation claims require evidence in STATUS.md and dated update notes.
 
+## 2026-11-04 — Validate D-018 compact raid warnings
+
+- User-run application `dotnet build` passed in 15.2s at `34c30aa`.
+- Metric warning tests **7/7 passed**, tri-state trigger tests **29/29 passed**, Phase1A readiness tests **4/4 passed** — **40/40 total**.
+- Actual TestMode raid summary output still unverified; the earlier “testing pending” status is historical.
+- [Verification update](updates/2026-11-04-raid-metric-warnings-verification.md).
+
 ## 2026-11-04 — Compact metric-warning section in RAID SUMMARY (D-018)
 
 - Implemented grouped unavailable metric warnings in the existing analyzer RAID SUMMARY (up to five details, then overflow).

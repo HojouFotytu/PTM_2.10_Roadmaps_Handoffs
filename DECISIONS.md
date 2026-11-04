@@ -55,4 +55,4 @@ D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activ
 
 | ID | Decision | State |
 |---|---|---|
-| D-018 | Put a **short, deduplicated Metric warnings section** in the analyzer raid summary, grouping unavailable normalized metrics by MarketTrend/metric with at most five details and an overflow count. Include indeterminate GlobalSetting retention information. Eliminate repetitive per-pair normalized trigger warnings, but do not change tri-state semantics or legacy setting behavior. A Monitor notification may be considered separately. | Accepted / source committed; build and runtime checks pending |
+| D-018 | Put a **short, deduplicated Metric warnings section** in the analyzer raid summary, grouping unavailable normalized metrics by MarketTrend/metric with at most five details and an overflow count. Include indeterminate GlobalSetting retention information. Eliminate repetitive per-pair normalized trigger warnings, but do not change tri-state semantics or legacy setting behavior. A Monitor notification may be considered separately. | Accepted / .NET 10 build + 7/7 warning tests passed; TestMode raid pending |
