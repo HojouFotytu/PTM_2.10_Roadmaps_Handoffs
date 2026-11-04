@@ -5,7 +5,7 @@
 - Product version: **2.10** (2.9 modernization release is finished).
 - Application repository: [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic).
 - Active development branch: `phase1/market-data-foundation`.
-- Last source-code HEAD verified before these documentation commits: `9e00a1f25068ed23c3d64b708e0cc85b5a7eaef4` (2026-11-04). This is a dated reference, not an assertion about current branch HEAD.
+- Latest code HEAD reviewed for Phase 1A closeout: `89324bc5c8c5ea19ceb543b6ab5130899f2675dc` (2026-11-04; recheck before coding). Original roadmap baseline `9e00a1f` remains historical.
 - Framework: .NET 10; normalized analytics target: Binance Futures USDT perpetuals.
 
 ## Canonical technical plan and historical sources
@@ -21,7 +21,8 @@
 | [Decisions](DECISIONS.md) | Accepted decisions and explicit open design choices |
 | [Dated updates](updates/README.md) | Evidence-oriented implementation and roadmap update notes |
 | [Handoffs](handoffs/README.md) | Dated session handoffs, starting with Phase 1C |
-| [Known issue: cold-start readiness](issues/001-cold-start-readiness.md) | First blocking correctness investigation |
+| [Closed Phase 1A readiness issue](issues/001-cold-start-readiness.md) | DONE by verified correctness containment; non-blocking follow-ups recorded |
+| [Latest Phase 1C-ready handoff](handoffs/2026-11-04-phase-1c-ready.md) | **Start the new development chat here** |
 
 ## Precedence
 
@@ -46,6 +47,6 @@ A task marked [DONE] must identify the relevant commit and test evidence when av
 
 ## Current gate
 
-**Phase 1A cold-start metric completeness must be investigated and corrected or explicitly contained before Phase 1C feature implementation.** Initial 4h asset metrics: **259/1,434 valid**, subsequently **1,434/1,434**. Root cause not verified. Preserve existing legacy behavior and fail-closed normalized triggers.
+**Phase 1A: DONE — CONTAINED (2026-11-04).** The 90% cross-sectional readiness gate and GlobalSetting safety behavior were implemented, tested and observed in live TestMode. A first-raid incomplete global population is rejected, the next scheduled incremental raid restores coverage and idle raids make no redundant normalized kline requests. The exact original long-bootstrap cause is not proven. See [dated closeout](updates/2026-11-04-phase-1a-closeout.md).
 
-**Next after gate:** Phase 1C-1 ATRP (per asset), Phase 1C-2 median market ATRP, then volatility breadth, quote-volume expansion/breadth and volume concentration.
+**Next:** [Phase 1C P1C-01 `ATRP5m`, then P1C-02 `MedianATRP5m`](handoffs/2026-11-04-phase-1c-ready.md), followed by volatility breadth and quote-volume expansion and concentration.
