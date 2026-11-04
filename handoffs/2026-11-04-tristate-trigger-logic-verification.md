@@ -17,3 +17,5 @@ Commits:
 No Phase 1C ATRP code was implemented in this change. The active roadmap rule D-016 remains: all derived metric analytical timeframes inherit `MarketTrend.TrendMinutes` while normalized 5m OHLCV remains source resolution.
 
 Continue Phase 1C after or alongside these tests, without reopening Phase 1A's already accepted containment decision solely because D-017 runtime verification is outstanding.
+
+**Additional compatibility commit:** [`fbc4b35`](https://github.com/HojouFotytu/PTMagic/commit/fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b) retains the existing AND/OR-only SMS OffTriggerConnection contract. Latest source HEAD is now `fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b`; the earlier HEAD cited above is historical.

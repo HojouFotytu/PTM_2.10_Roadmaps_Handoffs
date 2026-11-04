@@ -49,7 +49,7 @@ A task marked [DONE] must identify the relevant commit and test evidence when av
 
 ## D-017 trigger semantics update (2026-11-04)
 
-GlobalSetting, SMS and OffTrigger now have a source-code implementation of complete-expression three-valued evaluation. `true OR unavailable` is true; a final unknown remains ineligible. See [update](updates/2026-11-04-three-valued-trigger-logic.md) and [verification handoff](handoffs/2026-11-04-tristate-trigger-logic-verification.md). **Build/tests/TestMode are pending**, not claimed completed. Source branch HEAD for this code change: `9f180952db853659cd94c7b2a26341f972b47fca`.
+GlobalSetting, SMS and OffTrigger now have a source-code implementation of complete-expression three-valued evaluation. `true OR unavailable` is true; a final unknown remains ineligible. See [update](updates/2026-11-04-three-valued-trigger-logic.md) and [verification handoff](handoffs/2026-11-04-tristate-trigger-logic-verification.md). **Build/tests/TestMode are pending**, not claimed completed. Source branch HEAD for this code change: `fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b` (compatibility follow-up after initial two commits).
 
 ## Current gate
 

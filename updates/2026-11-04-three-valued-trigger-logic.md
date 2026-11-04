@@ -36,3 +36,5 @@ Also run TestMode with a valid `OR` branch and unavailable metric, a false `AND`
 **Status:** Application code committed; syntax/source sanity checks performed. No SDK available here; no C# build, automated test execution or TestMode verification claimed. This is not a completed tested correctness closeout.
 
 **Unchanged:** Phase 1C dynamic MarketTrend timeframe D-016; ATRP/MedianATRP remain next.
+
+3. [`fbc4b35`](https://github.com/HojouFotytu/PTMagic/commit/fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b) — preserve legacy `OffTriggerConnection` AND/OR-only semantics; unknown connections cannot deactivate an SMS.

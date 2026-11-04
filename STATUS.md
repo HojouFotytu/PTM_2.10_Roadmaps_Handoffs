@@ -57,3 +57,5 @@ The user clarified that an unavailable normalized metric must be **unknown**, no
 Source commits: [`eeffc05`](https://github.com/HojouFotytu/PTMagic/commit/eeffc05d0146ac31f355db31881250d9f93cfbc5) (new shared evaluator and 29-case harness), [`9f18095`](https://github.com/HojouFotytu/PTMagic/commit/9f180952db853659cd94c7b2a26341f972b47fca) (global/SMS/off-trigger integration).
 
 **Evidence level:** Code inspected / committed. No C# build or executable tests performed by the assistant: `.NET` SDK unavailable in execution environment. User or CI must run `dotnet build`, `dotnet run --project Tests/Phase1TriggerLogic/Phase1TriggerLogic.csproj`, existing `Tests/Phase1AReadiness`, and TestMode raids before declaring runtime completion. Phase 1C ATRP remains unimplemented.
+
+**Compatibility follow-up commit:** [`fbc4b35`](https://github.com/HojouFotytu/PTMagic/commit/fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b) preserves the existing AND/OR-only `OffTriggerConnection` contract (unsupported connection strings do not deactivate SMS). Latest application HEAD: `fbc4b35bdd65abcf1252cbcf99e7d2aa8c10ac3b`. Build and runtime tests still pending.
