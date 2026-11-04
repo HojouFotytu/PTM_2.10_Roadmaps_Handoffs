@@ -1,5 +1,21 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-05 — Cold-start cross-boundary candle consistency fix COMMITTED (local verification pending)
+
+Application commit: [`0c31e58`](https://github.com/HojouFotytu/PTMagic/commit/0c31e58451a563406c214dee3438f0812e980ae6), branch `phase1/market-data-foundation`.
+
+**Cause:** A 756-market cold refresh could span a five-minute candle close. Some series were fetched before the close, but `EvaluateConfiguredMarketTrends` used a new `DateTimeOffset.UtcNow` after all requests. Earlier markets consequently failed the exact closed-endpoint requirement, temporarily suppressing normalized market-wide metrics despite successful kline downloads.
+
+**Changes:** `BinanceFuturesAnalyticsRuntime.RefreshObservationDataAsync` captures one UTC as-of timestamp before the asynchronous refresh and passes it to `MarketDataService.RefreshAsync` (new optional `refreshAsOfUtc` parameter). The runtime stores it per raid and reuses it during `MarketTrendPopulationSelector.Select` and `MarketTrendAnalyticsEngine.Calculate`. The metric evaluator now logs the pinned reference time. Exchange switch/reset clears the previous timestamp. This applies to the shared Binance Futures/Spot/US normalized runtime.
+
+**Deterministic regression added:** `Tests/Phase1AReadiness` now simulates two symbols fetched on opposite sides of a five-minute close. A pinned endpoint must yield complete valid returns, the incorrectly advanced clock must reproduce MissingEndpoint, and the next refresh must advance the endpoint successfully. Phase 1A expected 5 tests; total expected **82 across six harnesses**.
+
+**Verification:** Source changes and tests committed. **No build, regression suite, or live TestMode run has been executed for this commit** (D-021: user runs locally). Previous 81/81 pass and Option C Futures TestMode refer to earlier commit `9f88315`, not this fix. **Cold-start inconsistency remains pending closure until local results are supplied.** Subsequent Futures/Spot/US production checks remain important.
+
+[Implementation and test instructions](updates/2026-11-05-pinned-refresh-boundary-fix.md).
+
+
+
 
 ## 2026-11-05 — Option C natural-language warnings VERIFIED in Binance Futures TestMode
 
