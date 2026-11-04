@@ -1,5 +1,20 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-04 — Diagnostic expansion for all normalized metric warnings (unverified source)
+
+Application commit: [`efa7b5f`](https://github.com/HojouFotytu/PTMagic/commit/efa7b5ff1a99606395c1b1b9636c828600a55353), branch `phase1/market-data-foundation`.
+
+- Expanded the end-of-raid grouped metric-warning collector. Each trend/metric group now retains total failed requests, distinct requested markets, source counts and reason categories, plus up to five concrete trigger examples with setting name, market, tag/index, relation, implicit/explicit metric and resolver reason.
+- Invalid global metric snapshots now include validation flags, sample/eligible counts, coverage, endpoint and invalid reason. Asset-wide failures report grouped reasons, counts and example markets; expected endpoint and global/asset population sizes are included.
+- A missing per-asset value distinguishes intentionally ignored markets, markets outside AllowedMarkets, markets absent from the eligible selection and missing published metric values. The `FILTERED_1h / PriceTrend` warning should identify the requesting SMS/market on the next local TestMode run.
+- Coverage now includes Binance Futures, Binance Spot and Binance US; metrics and trigger truth logic were not intentionally changed.
+- Added **five** deterministic warning tests, raising expected test count from **70 to 75** across the existing six harnesses. **NO new local build/tests/TestMode run yet**. Do not mark this change verified until user supplies results.
+- Removed the previously added automatic GitHub Actions workflow under accepted D-021 local-testing responsibilities.
+- Prior Binance Futures three-raid acceptance still applies to prior source, not this new diagnostics commit.
+
+[Detailed implementation record](updates/2026-11-04-verbose-metric-warning-diagnostics.md). Phase 1D remains unstarted.
+
+
 ## 2026-11-04 — Unified normalized PriceTrend migration: Binance Futures TestMode verified
 
 **Latest application branch HEAD checked:** [`8ff8c87`](https://github.com/HojouFotytu/PTMagic/commit/8ff8c87900aa6f56c8721444dd11f0885c99ac3d). Latest uploaded running binary says version 2.10.0 but does not embed git SHA.
