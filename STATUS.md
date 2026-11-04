@@ -1,5 +1,18 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-04 — Option C local build and metric-warning regression PASS
+
+User executed `git pull --ff-only`, `dotnet build`, and `dotnet run --project Tests/Phase1MetricWarnings/Phase1MetricWarnings.csproj` on Windows/.NET 10 at application commit [`9f88315`](https://github.com/HojouFotytu/PTMagic/commit/9f88315e018db940d9816fdc991e8c444a47d02f). The user supplied the actual terminal output:
+
+- **Build passed**: Core net10.0, PTMagic net10.0, Monitor net10.0 (10.4s total).
+- **Metric-warning regression passed: 18/18.** This verifies the Option C natural-language warning harness after the coverage fallback fix.
+- **Other five regression harnesses: NOT RUN in this evidence** (81/81 across six suites remains an expected target, not a claimed result).
+- **New Option C live TestMode: NOT RUN in this evidence**. Binance Futures, Binance Spot and Binance US runtime confirmation remains pending for the newly formatted warnings.
+- Separate cold-refresh candle-boundary issue remains unresolved; do not conflate this formatter validation with that issue.
+
+Under D-021 all builds, regression execution and TestMode are user-local; no automatic GitHub Actions builds requested.
+
+
 ## 2026-11-04 — Option C natural-language metric warnings implemented (local validation pending)
 
 **Application commit:** [`e652b04`](https://github.com/HojouFotytu/PTMagic/commit/e652b04cb8b18d88f13f6b8400fb77c2cce44617) on `phase1/market-data-foundation`.
