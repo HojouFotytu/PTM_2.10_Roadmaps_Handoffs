@@ -1,12 +1,12 @@
 # P1B/Unified PriceTrend — Migration compatibility audit
 
-**State:** OPEN — confirmed source-level compatibility discrepancies (not fixed)
+**State:** FIXES COMMITTED on d0b0b87 — user-local build, regressions and live TestMode still pending
 **Date:** 2026-11-05
 **App branch/commit:** HojouFotytu/PTMagic `phase1/market-data-foundation`, `0c31e58451a563406c214dee3438f0812e980ae6`
 **Compared legacy source:** HojouFotytu/PTMagic `master` at time of audit
 **Evidence scope:** code review + user's earlier local 82/82 passing tests and Futures TestMode. These results predate this audit and do NOT validate legacy parity in the following edge cases.
 
-## P1: SMS Relative uses a capped global mean instead of uncapped SMS reference mean
+## P1: SMS Relative uses a capped global mean instead of uncapped SMS reference mean — CODE FIX COMMITTED
 
 **Legacy:** `Core/Main/PTMagic.cs` on master, SMS activation near lines 1875–1917 and OffTrigger near 1688–1718: load the `SingleMarketTrendChanges[MarketTrendName]` for all selected assets, compute the arithmetic mean after excluding trend outliers (`TrendThreshold`), then `Relative = assetTrendChange - averageMarketTrendChange`. The `MaxMarkets` cap is applied to *global* trends in `BuildGlobalMarketTrends`, not the SMS relative average.
 
@@ -16,7 +16,7 @@
 
 **Remedy:** calculate/carry an uncapped, appropriate threshold-filtered SMS relative mean over the same normalized asset PriceTrend data; do not reintroduce legacy history ingestion. Document whether the 90% readiness rule must apply to this separate aggregate. Test both activation and OffTrigger; cover MaxMarkets=1, outlier threshold, missing/stale assets, and unbounded MaxMarkets.
 
-## P1: TrendCurrency=Fiat silently becomes Market
+## P1: TrendCurrency=Fiat silently becomes Market — CODE FIX COMMITTED
 
 **Legacy:** `Core/MarketAnalyzer/BaseAnalyzer.cs` on master, `GetMarketTrendChanges` near lines 374–380: if `TrendCurrency=Fiat` and the USD value of main currency was available at both endpoints, multiply each quote-denominated price by its time-specific main-currency USD value. This is also described in the default settings.analyzer.json.
 
@@ -24,7 +24,7 @@
 
 **Remedy:** either implement coherent as-of-aligned fiat conversions for each supported quote and exchange, or reject unsupported Fiat PriceTrend with clear metric-warning diagnostics. Do not silently substitute Market returns. Add Market-vs-Fiat parity tests with changing quote/USD conversion prices and missing conversion series. USDT-only live tests do not establish this behavior.
 
-## P2: TrendThreshold influences every metric via shared global population
+## P2: TrendThreshold influences every metric via shared global population — CODE FIX COMMITTED
 
 `MarketTrendPopulationSelector.Select` applies `TrendThreshold` filtering to the global symbol list before `MarketTrendAnalyticsEngine.Calculate`, which reuses the same list for Breadth, MedianPriceTrend, Dispersion, Concentration, Phase1C quote-volume metrics and PriceTrend. Historical `TrendThreshold` affected the arithmetic PriceTrend mean; current default settings still say 'outlier ... not used when calculating market average'. The Phase1 design also emphasizes sharing the exact selected population. **Resolve the policy explicitly** rather than assuming the original or new behavior wins, then test representative high-return symbols for both price and volume metrics.
 
@@ -52,3 +52,17 @@
 3. Review and decide TrendThreshold's applicability to non-PriceTrend global metrics.
 4. Re-run local .NET 10 build and all six existing regression harnesses plus any newly created tests (D-021/D-022), then TestMode.
 5. Mark compatible only for the actually supported exchanges/configurations; remaining cases stay documented as limitations.
+
+
+## Implementation update — 2026-11-05
+
+User explicitly decided to **retain TrendThreshold for PriceTrend means only**, not remove it. The P2 recommendation to eliminate the setting is superseded.
+
+Application commit [d0b0b87](https://github.com/HojouFotytu/PTMagic/commit/d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc):
+- Uncapped `SmsRelativePriceTrend` feature with threshold-adjusted reference and 90% coverage policy; used for SMS Relative activation and OffTrigger.
+- Aligned Fiat conversion via `MarketTrendFiatConversion`, requiring quote/USDT candle series except for USD/USDT quotes; absence fails closed.
+- `TrendThreshold` filters only PriceTrend arithmetic mean calculations, not global population or the other metrics.
+- `MarketTrendTimeframe` validates positive five-minute multiples before exchange history ingestion and within analytics.
+- Added six tests, making the migration harness 18 and six-harness expected total 88; updated Monitor/defaults guidance.
+
+**Status:** No .NET build/test or live-run result has been supplied for this commit. A PASS for the prior 82 tests does not establish that the new 88 pass. Further parity acceptance remains necessary.

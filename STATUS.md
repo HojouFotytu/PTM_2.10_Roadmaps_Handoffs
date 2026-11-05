@@ -1,5 +1,22 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-05 — Unified PriceTrend compatibility corrections COMMITTED (local validation pending)
+
+Application commit: [`d0b0b87`](https://github.com/HojouFotytu/PTMagic/commit/d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc) on `phase1/market-data-foundation`.
+
+**User-confirmed decision:** Preserve backward-compatible `TrendThreshold`, but **only for arithmetic PriceTrend means** (both GlobalSetting PriceTrend and SMS Relative reference). Keep all markets in the selected population for median, breadth, dispersion, MeanMedianSpread, volume, concentration, and other metrics. The threshold does not suppress per-asset PriceTrend observations. An earlier suggestion to remove TrendThreshold was superseded.
+
+- **SMS Relative:** restored an independently calculated, **uncapped** asset-population PriceTrend reference mean. Applies `TrendThreshold` only to this mean; GlobalSetting PriceTrend remains based on its `MaxMarkets`-capped population. SMS activation and OffTrigger share the same normalized resolver. Missing reference returns fail closed under the normalized 90% coverage policy.
+- **Fiat mode:** normalized `TrendCurrency=Fiat` multiplies synchronized asset/quote and quote/USDT return factors. The quote/USDT conversion series is fetched on the same exchange as a dependency, without adding it to the eligible global or asset market population. USD and USDT quotes use the legacy USD-unit convention. Missing/invalid aligned conversion data fails closed rather than silently falling back to `Market`.
+- **TrendThreshold:** moved out of `MarketTrendPopulationSelector` and into PriceTrend mean calculations only; `MeanMedianSpread` and `Dispersion` use unfiltered returns. Legacy `TrendThreshold` property remains in the configuration.
+- **TrendMinutes:** positive multiples of five are now required for Exchange MarketTrends. Validation occurs before exchange data acquisition and again at direct calculation; invalid horizons include the trend name and correction instructions.
+- Updated Monitor help text/default settings comments and expanded `Tests/NormalizedPriceTrendMigration` from **12 to 18** deterministic cases. **Expected six-harness total = 88** (previously validated total 82).
+- **Verification status: source committed; NOT YET BUILT OR TESTED LOCALLY**. D-021 requires user-local .NET 10 build, all six regression harnesses, and live TestMode (especially non-USDT Fiat, SMS Relative/OffTrigger, Spot/US). Previous **82/82 PASS** pertains to the preceding commit, not these fixes. Reported numerical behavior of new Fiat and Relative paths is based on code inspection and deterministic test expectations, not executed results.
+
+[Implementation and local validation handoff](updates/2026-11-05-pricetrend-compatibility-restoration.md).
+
+
+
 
 ## 2026-11-05 — Normalized PriceTrend migration static audit: compatibility gaps OPEN
 
