@@ -1,5 +1,18 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-05 — PriceTrend compatibility restoration: .NET 10 build and 88/88 local regressions PASS
+
+**User-provided PowerShell results**, after `git pull --ff-only` returned `Already up to date`, for the PriceTrend compatibility restoration published as app commit [`d0b0b87`](https://github.com/HojouFotytu/PTMagic/commit/d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc). The terminal output does not independently print `git rev-parse HEAD`; the source version is inferred from the stated workflow and upstream branch.
+
+- **Build PASS** (.NET 10): Core, PTMagic, Monitor, total 16.8 seconds.
+- **Six regression harnesses PASS: 88/88**, specifically Phase1AReadiness **5**, Phase1COhlcv **13**, Phase1SmsSummaryIsolation **5**, Phase1TriggerLogic **29**, NormalizedPriceTrendMigration **18** (six new scenarios), and Phase1MetricWarnings **18**.
+- Changes covered by the new deterministic migration tests: uncapped SMS Relative PriceTrend reference; threshold-only PriceTrend means while other metrics retain full populations; synchronized Fiat quote conversion and fail-closed missing conversion; five-minute divisibility of TrendMinutes.
+- **Eight compiler warnings, all nonfatal and confined to test programs**: Phase1SmsSummaryIsolation `CS8600`, `CS8602`; NormalizedPriceTrendMigration `CS8625` ×3, `CS8629` ×2, `CS8602`. No test failures or build errors.
+- **Runtime TestMode acceptance still pending on this revision**: exercise SMS Relative and OffTrigger with `MaxMarkets` cap, non-USDT Fiat mode (including conversion-pair availability), Binance Futures/Spot/US parity, and configuration rejection of an invalid `TrendMinutes`. The earlier Futures cold-start TestMode PASS relates to the preceding commit `0c31e58`.
+- Mark **deterministic regression acceptance complete; end-to-end migration acceptance still open**. No further source changes made as a result of these supplied passing results.
+
+
+
 ## 2026-11-05 — Unified PriceTrend compatibility corrections COMMITTED (local validation pending)
 
 Application commit: [`d0b0b87`](https://github.com/HojouFotytu/PTMagic/commit/d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc) on `phase1/market-data-foundation`.

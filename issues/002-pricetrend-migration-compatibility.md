@@ -1,6 +1,6 @@
 # P1B/Unified PriceTrend — Migration compatibility audit
 
-**State:** FIXES COMMITTED on d0b0b87 — user-local build, regressions and live TestMode still pending
+**State:** FIXES COMMITTED on d0b0b87 — user-local .NET 10 build and 88/88 regression tests PASSED; live TestMode still pending
 **Date:** 2026-11-05
 **App branch/commit:** HojouFotytu/PTMagic `phase1/market-data-foundation`, `0c31e58451a563406c214dee3438f0812e980ae6`
 **Compared legacy source:** HojouFotytu/PTMagic `master` at time of audit
@@ -66,3 +66,8 @@ Application commit [d0b0b87](https://github.com/HojouFotytu/PTMagic/commit/d0b0b
 - Added six tests, making the migration harness 18 and six-harness expected total 88; updated Monitor/defaults guidance.
 
 **Status:** No .NET build/test or live-run result has been supplied for this commit. A PASS for the prior 82 tests does not establish that the new 88 pass. Further parity acceptance remains necessary.
+
+
+## Verification update — 2026-11-05
+
+User's `dotnet build` succeeded for Core, PTMagic and Monitor (.NET 10). The six deterministic test suites passed **88/88**: 5 + 13 + 5 + 29 + 18 + 18. Only eight nonfatal nullable-reference warnings remain in two test projects. This verifies the newly added deterministic compatibility test cases but does not replace non-USDT Fiat and actual SMS Relative/OffTrigger live TestMode acceptance on all three Binance exchanges. No source changes are needed to record this test outcome.
