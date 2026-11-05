@@ -1,3 +1,10 @@
+## 2026-11-05 — Publish a concise user-facing PTMagic 2.10 roadmap
+
+- Added [ROADMAP.md](ROADMAP.md): accessible summary of completed Phase 0/1A/1B/1C changes, unified PriceTrend/exchange cleanup still under validation, and upcoming Phase 1D–6 work.
+- Separated implemented and locally/runtime-tested functionality from pending cross-exchange checks and longer-term planned features; no release date asserted.
+- Linked the overview from the repository README. The technical roadmap, accepted decisions and STATUS remain authoritative.
+- Documentation-only commit; no PTMagic source changes, builds or tests.
+
 ## 2026-11-04 — D-022: Mandatory copy-paste PowerShell test commands
 
 - Accepted a recurring requirement to include an executable PowerShell script in every PTMagic development/testing handoff requiring local verification.

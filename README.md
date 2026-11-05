@@ -8,6 +8,8 @@
 - Latest application source HEAD checked: [`0e8ab7056d32f16d1095a519ac4a1e87a29a4188`](https://github.com/HojouFotytu/PTMagic/commit/0e8ab7056d32f16d1095a519ac4a1e87a29a4188) on 2026-11-04. Original roadmap baseline `9e00a1f` remains historical.
 - Framework: .NET 10; normalized analytics target: Binance Futures USDT perpetuals.
 
+**[Read the user-friendly PTMagic 2.10 roadmap](ROADMAP.md)** — a concise overview of completed work, current validation and planned improvements.
+
 ## Canonical technical plan and historical sources
 
 | Document | Role |
