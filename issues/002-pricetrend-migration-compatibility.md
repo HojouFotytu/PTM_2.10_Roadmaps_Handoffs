@@ -1,6 +1,6 @@
 # P1B/Unified PriceTrend — Migration compatibility audit
 
-**State:** FIXES COMMITTED on d0b0b87 — user-local .NET 10 build and 88/88 regression tests PASSED; live TestMode still pending
+**State:** FIXES COMMITTED on d0b0b87 — local build and 88/88 tests PASS; nine-raid Binance Futures USDT live TestMode PASS; cross-quote Fiat/Spot/US/persistent OffTrigger still pending
 **Date:** 2026-11-05
 **App branch/commit:** HojouFotytu/PTMagic `phase1/market-data-foundation`, `0c31e58451a563406c214dee3438f0812e980ae6`
 **Compared legacy source:** HojouFotytu/PTMagic `master` at time of audit
@@ -71,3 +71,8 @@ Application commit [d0b0b87](https://github.com/HojouFotytu/PTMagic/commit/d0b0b
 ## Verification update — 2026-11-05
 
 User's `dotnet build` succeeded for Core, PTMagic and Monitor (.NET 10). The six deterministic test suites passed **88/88**: 5 + 13 + 5 + 29 + 18 + 18. Only eight nonfatal nullable-reference warnings remain in two test projects. This verifies the newly added deterministic compatibility test cases but does not replace non-USDT Fiat and actual SMS Relative/OffTrigger live TestMode acceptance on all three Binance exchanges. No source changes are needed to record this test outcome.
+
+
+## Live validation — 2026-11-05
+
+Nine completed Binance Futures TestMode raids plus independent exported snapshot checks support the SMS Relative uncapped benchmark, PriceTrend-only threshold, normalized snapshot parity, USDT-quote Fiat identity, and working true OffTrigger path with immediate reactivation. Details: [2026-11-05 nine-raid test report](../updates/2026-11-05-price-compatibility-nine-raid-testmode.md). Non-USDT Fiat and sustained OffTrigger deactivation remain unverified; do not close those acceptance items.

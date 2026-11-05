@@ -1,5 +1,23 @@
 # PTMagic 2.10 — Current Development Status
 
+## 2026-11-05 — PriceTrend restoration: nine-raid Binance Futures TestMode + snapshots reviewed
+
+**Evidence:** User-supplied `2026-11-05.txt` (196,738 lines), `MarketTrendAnalytics(7).json`, `LastRuntimeSummary(7).json`, `SingleMarketSettingSummary(7).json`. Successful 2.10.0 TestMode started **12:05:37 KST** and completed **nine raids** through **12:27:39 KST**. Application commit assumed from immediately preceding 88/88 user-local regression validation: [`d0b0b87`](https://github.com/HojouFotytu/PTMagic/commit/d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc); log itself only advertises version 2.10.0 and does not print git SHA.
+
+**Live results PASS for supported USDT-quoted Futures cases:** first normalized fetch 756/756 series, 872,424 candles, zero exchange refresh failures; globally 250/250 and assets 519/519 valid returns on all requested price-return trends. Analyzer pinned to refresh-start time; metric-warning groups **7 each raid**, all deliberately diagnostic. GlobalSetting switched on first successful raid and was not switched/reapplied again; TestMode sent zero PT configuration changes. The two subsequent reported normal refreshes also had zero failures.
+
+**Cross-snapshot verification:** independently compared **5,192 matching per-asset PriceTrend values** between final normalized analytics export and `LastRuntimeSummary.MarketSummary[].MarketTrendChanges`; **zero numeric differences**. CAP_1h global=10 assets=519, LARGE_1h global=250 assets=519. Both ETH SMS relative variants (`MaxMarkets=10` and `250`) activated with identical `-0.4819078268%` values, while `TrendThreshold=5` reference produced `-0.3848233908%`. Final 1h global mean unfiltered `+0.69303649%` vs PriceTrend-only thresholded `+0.46370677%`, with breadth `77.6`, dispersion `2.51580977`, median `0.47477688%` and MeanMedianSpread `0.21825961%` unaffected by threshold. Fiat and Market 1h values matched exactly for USDT quotes (identity-case expected).
+
+**OffTrigger positive check:** at **12:20:55.280 KST**, `DIAG_SMS_BTC_ActivationPriceExit` logged `off triggered!`, then the same configuration logged `triggered!` and saved summary in the same raid due to its still-true activation condition. A real OffTrigger true branch executed; **persistent inactive state not validated**. ETH `DIAG_SMS_ETH_Relative_CrossExit` did not positively exit in this window.
+
+**Not yet evidenced:** genuinely non-USDT fiat quote conversion using quote/USDT historical candles; end-to-end Binance Spot and Binance US parity; invalid TrendMinutes rejection in a live startup; a lasting activation-to-off SMS transition; original legacy engine numerical parity. These do not negate observed USDT-mode correctness.
+
+**Operational, separate from correctness:** unsuccessful earlier launches at 11:56–12:03 KST reported invalid Bittrex setting, missing server API token/unreachable PT Monitor, then missing default PAIRS.properties. All resolved before successful run. First raid `14m28s`, with legacy history reconstruction from 12:05:55 to 12:17:54 (11m59s), normalized 5m refresh finishing 12:20:04. Heavy DEBUG messages (~196k lines / 19 MB) are a log-noise/performance concern.
+
+[Detailed evidence and limitations](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
+
+
+
 ## 2026-11-05 — PriceTrend compatibility restoration: .NET 10 build and 88/88 local regressions PASS
 
 **User-provided PowerShell results**, after `git pull --ff-only` returned `Already up to date`, for the PriceTrend compatibility restoration published as app commit [`d0b0b87`](https://github.com/HojouFotytu/PTMagic/commit/d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc). The terminal output does not independently print `git rev-parse HEAD`; the source version is inferred from the stated workflow and upstream branch.
