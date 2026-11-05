@@ -1,48 +1,38 @@
 # PTMagic 2.10 — User Roadmap
 
-**Updated:** November 5, 2026  
-**Status:** In active development — this is not a final-release announcement.  
-**Application:** [PTMagic](https://github.com/HojouFotytu/PTMagic) · **Detailed plan:** [Technical roadmap](roadmaps/revised-2.10-2026-11-04-markettrend-timeframe.txt) · **Live tracker:** [Development status](STATUS.md)
+**Updated:** November 5, 2026 · **Status:** In development  
+[PTMagic source](https://github.com/HojouFotytu/PTMagic) · [Development status](STATUS.md) · [Full technical roadmap](roadmaps/revised-2.10-2026-11-04-markettrend-timeframe.txt)
 
-## The goal
+PTMagic 2.10 expands market analysis beyond price trends, adding **market breadth, volatility, volume, relative strength, correlation and eventually futures positioning and liquidity analysis** — without an external AI service.
 
-PTMagic 2.10 expands market analysis beyond average price changes. It adds clearer measures of **market direction, breadth, volatility, trading activity and relative strength**, followed by correlation, futures positioning, liquidity and historical evaluation. These measurements can help drive existing Global Settings and Single Market Settings (SMS). The roadmap uses transparent calculations, **not an external AI service**.
+## Completed and tested — Phases 0–1C
 
-## Built and tested — Phases 0, 1A, 1B and 1C
+- **Market-data foundation:** Shared 5-minute OHLCV history, incremental updates and safeguards against incomplete data; indicators use each MarketTrend's configured timeframe.
+- **Price and market strength:** Average/median returns, market breadth, dispersion, relative strength versus the market or BTC, and top-volume market outperformance.
+- **Volatility and volume:** ATR-based volatility, volatility breadth, volume expansion, participation breadth, and volume concentration/shares.
+- **Trading rules:** Supported metrics can drive Global Settings and SMS entry/exit triggers. Unavailable metrics cannot generate false signals, and diagnostic warnings explain failures.
+- **Monitor:** Dedicated Market Metrics page and exported snapshots.
 
-- **Better market data:** Shared five-minute price-and-volume candles, incremental updates, configurable history, and safeguards against incomplete or out-of-date market data. Calculations use each configured MarketTrend timeframe rather than assuming a fixed indicator timeframe.
-- **Market direction and breadth:** Average and median price changes, percentage of markets rising, market-wide dispersion, and the difference between average and median performance.
-- **Relative performance:** Compare individual markets with the broader market or BTC; identify whether the highest-volume markets are outperforming.
-- **Volatility:** Individual and market-wide ATR-based volatility, plus the proportion of markets experiencing elevated volatility.
-- **Trading volume:** Volume expansion, the share of markets seeing stronger activity, and how volume is concentrated among leading markets or BTC/ETH.
-- **Actionable analytics:** Select the measurements needed for each MarketTrend; reference supported measurements in Global Settings, SMS entry conditions and SMS exit conditions. Missing data cannot be treated as a valid signal. More readable warnings explain why a metric or condition is unavailable.
-- **Visibility:** A dedicated **Market Metrics** Monitor page and saved analysis snapshots make the new measurements inspectable.
+Core Phase 1 features passed regression tests and Binance Futures TestMode.
 
-These core features have passed development tests and Binance Futures TestMode checks. They are **not** a claim that the full 2.10 release is finished.
+## Implemented — further testing pending
 
-## Implemented, with additional verification outstanding
+- **Unified PriceTrend:** Replaced the legacy calculator while retaining implicit PriceTrend settings; restored relative SMS, `TrendThreshold` and fiat-conversion compatibility in code.
+- **Exchange cleanup:** Binance Futures, Spot and US remain; removed CoinMarketCap, Bittrex and Poloniex.
+- **Reliability:** Fixed candle-boundary inconsistencies during long refreshes (verified on Futures). Latest PriceTrend changes passed a .NET 10 build and **88/88 local regression tests**.
 
-- **One PriceTrend calculation system:** The legacy PriceTrend calculator was removed in favor of the normalized system. Existing settings that omit a metric continue to select PriceTrend by default; compatibility behavior for relative SMS comparisons, outlier thresholds and fiat conversion has been restored in code.
-- **Simpler exchange support:** Binance Futures, Binance Spot and Binance US remain supported. CoinMarketCap, Bittrex and Poloniex analysis sources were removed.
-- **Compatibility and reliability:** The latest PriceTrend changes passed a local .NET 10 build and **88/88 regression checks**. A cold-start fix that keeps markets aligned when a candle closes during a long refresh was also verified on Binance Futures.
+**Outstanding:** Live acceptance of the latest compatibility changes, Spot/US runtime checks, fiat conversion, selected SMS exits and Monitor behavior.
 
-**Still to validate:** The latest PriceTrend compatibility changes in live TestMode, Binance Spot and Binance US behavior, fiat conversion with non-USDT quotes, and selected SMS exit/Monitor scenarios. These checks are separate from the completed regression suite.
+## Upcoming development
 
-## What comes next
-
-| Stage | Planned improvement | Benefit |
+| Phase | Focus | Status |
 |---|---|---|
-| **1D — Next** | Market correlation and BTC co-movement | Identify markets moving together, independently or in opposite directions. |
-| **1E — Partly complete** | More Monitor inspection, independent checks and performance testing | Make indicators easier to interpret and trust. |
-| **2 + 2B — Planned** | Futures open interest, funding, trader positioning and buy/sell flow, with market-wide summaries | See whether participation and positioning support price moves. |
-| **3 — Planned** | Leverage expansion, crowding, deleveraging and price/flow divergence | Recognize potentially fragile or one-sided market conditions. |
-| **4 — Partly complete** | Extend existing Global Setting / SMS trigger support to future measurements | Use additional indicators in the same rule system as they become available. |
-| **5 — Planned** | Bid/ask spread, order-book depth, imbalance and liquidity stress | Detect worsening trading conditions and thin liquidity. |
-| **6 — Planned** | Historical metric storage and outcome analysis | Review how market conditions and settings behaved over time, without hindsight bias. |
+| **1D** | Correlation and BTC co-movement | **Next** |
+| **1E** | Monitor improvements, validation and performance | Partly complete |
+| **2 / 2B** | Futures open interest, funding, positioning, trading flow and market summaries | Planned |
+| **3** | Crowding, leverage, deleveraging and price/flow divergence | Planned |
+| **4** | Extend metric-based Global Setting and SMS triggers | Partly complete |
+| **5** | Spreads, order-book depth and liquidity stress | Planned |
+| **6** | Historical metrics, backtesting evidence and outcome analysis | Planned |
 
-## Scope and release notes
-
-- **No release date is committed.** Completed phases are development-branch milestones, not a production-release guarantee.
-- Future metrics are dependent on suitable exchange data, accuracy checks and acceptable resource use. They will be optional where appropriate.
-- PTMagic 2.10's market-analysis expansion is separate from the completed **2.9 modernization and CPU-efficiency release**.
-- For exact implementation details, acceptance evidence and open issues, use [STATUS.md](STATUS.md) and the [technical roadmap](roadmaps/revised-2.10-2026-11-04-markettrend-timeframe.txt). Those sources take precedence over this simplified overview.
+**Release status:** No 2.10 release date has been set. This roadmap covers development milestones, not a finished production release. The completed 2.9 modernization is separate. See [STATUS.md](STATUS.md) for the latest verification and outstanding issues.

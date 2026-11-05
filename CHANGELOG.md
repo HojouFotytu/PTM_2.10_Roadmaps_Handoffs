@@ -1,3 +1,9 @@
+## 2026-11-05 — Shorten the public 2.10 roadmap
+
+- Condensed [ROADMAP.md](ROADMAP.md) without changing phase scope or implementation status.
+- Retained completed features, pending compatibility/runtime verification, and planned Phase 1D–6 work.
+- Documentation only; application code and test status unchanged.
+
 ## 2026-11-05 — Publish a concise user-facing PTMagic 2.10 roadmap
 
 - Added [ROADMAP.md](ROADMAP.md): accessible summary of completed Phase 0/1A/1B/1C changes, unified PriceTrend/exchange cleanup still under validation, and upcoming Phase 1D–6 work.
