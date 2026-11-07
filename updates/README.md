@@ -1,29 +1,61 @@
-- **[2026-11-04 — Selective legacy PriceTrend calculations](2026-11-04-selective-legacy-price-trend.md)** (source + 14 tests committed; build/TestMode pending)
-- **[2026-11-04 — Phase 1C final closeout](2026-11-04-phase1c-final-closeout.md)** (**CURRENT**; 8 fresh SMS snapshots isolated, Phase 1C DONE)
-- **[2026-11-04 — Post-fix TestMode reused historical SMS snapshots](2026-11-04-sms-postfix-retained-snapshots.md)** (fresh-snapshot verification pending)
-- **[2026-11-04 — SMS summary isolation build and 58/58 tests verified](2026-11-04-sms-summary-test-verification.md)** (most recent; deployed multi-SMS JSON check pending)
-- **[2026-11-04 — SMS trigger snapshot alias fix](2026-11-04-sms-summary-alias-fix.md)** (source committed; build and TestMode verification pending)
-- **[2026-11-04 — Phase 1C deployed TestMode results](2026-11-04-phase1c-live-testmode-validation.md)** (new metrics and triggers pass; SMS summary aliasing and visual Monitor check open)
-- **[2026-11-04 — Phase 1C source implementation](2026-11-04-phase1c-source-implementation.md)** (newest; code committed, tests pending)
-# PTMagic 2.10 — Dated Roadmap and Development Updates
+# PTMagic 2.10 — Dated implementation and evidence updates
 
-- **[2026-11-04 — All metric warnings build/test verified](2026-11-04-all-metric-warnings-verified.md)** (latest: build + 7/7 passed; TestMode pending)
-- [2026-11-04 — Display all metric warnings](2026-11-04-all-metric-warnings.md)** (latest: cap removed; testing pending)
+## Current implementation checkpoint
 
-- **[2026-11-04 — Optional cross-raid snapshot reuse optimization](2026-11-04-snapshot-reuse-optimization.md)** (roadmap-only; planned)
+**[November 7 — Stabilization, correlation, and documentation reconciliation](2026-11-07-stabilization-correlation-implementation.md)**
 
-- **[2026-11-04 — Raid metric-warning test verification](2026-11-04-raid-metric-warnings-verification.md)** (latest: build + 40/40 tests passed; TestMode pending)
+Source implemented and tests authored; new local build, harness execution, and relevant runtime acceptance are pending. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for verification commands and the [current status](../STATUS.md) for the consolidated evidence boundary.
 
-- **[2026-11-04 — Tri-state trigger test verification](2026-11-04-tristate-test-results.md)** (latest: build + 29/29 + 4/4 passed; TestMode still pending)
-- [2026-11-04 — Three-valued trigger logic implementation](2026-11-04-three-valued-trigger-logic.md)** (latest; source committed, C# tests pending)
+The current checkpoint incorporates the user's direct global SOM API revision. The earlier full-preset startup overlay is superseded by [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay); no prior acceptance is claimed for either startup mechanism.
 
-- **[2026-11-04 — Compact raid metric warnings](2026-11-04-raid-metric-warnings.md)** (latest: source committed; build/tests pending)
+## Last accepted pre-change runtime evidence
 
-Record each material update in its own dated Markdown file. Keep the [change log](../CHANGELOG.md), [status tracker](../STATUS.md), [decision register](../DECISIONS.md) and any relevant issue in sync.
+[November 5 — Nine-raid Futures USDT TestMode](2026-11-05-price-compatibility-nine-raid-testmode.md) records the latest pre-change runtime evidence associated with the 88-check baseline. Source provenance was inferred from the preceding workflow. TestMode sent no PT writes; non-USDT, Spot/US, sustained SMS removal, and specific browser/PT checks remain separately open.
 
-- **[2026-11-04 — Phase 1C MarketTrend timeframe correction](2026-11-04-phase-1c-timeframe-correction.md)** (latest D-016 design decision)
-- [2026-11-04 — Phase 1A closeout and Phase 1C authorization](2026-11-04-phase-1a-closeout.md)**
-- [2026-11-04 — Initial import and 2.10 version boundary](2026-11-04-initial-import.md)
-- [Update template](TEMPLATE.md)
+## Historical November 5 records
 
-Update records are append-only historical snapshots. Do not retrospectively change a claimed observation; add a correction dated when discovered and link the earlier entry.
+These records preserve the state at their date. Later acceptance resolves earlier pending statements only within the tested scope.
+
+- [PTMagic 2.10 — PriceTrend compatibility restoration handoff](2026-11-05-pricetrend-compatibility-restoration.md)
+- [PTMagic 2.10 — PriceTrend compatibility live Binance Futures evidence](2026-11-05-price-compatibility-nine-raid-testmode.md)
+- [PTMagic 2.10 — Pinned refresh time for normalized candles](2026-11-05-pinned-refresh-boundary-fix.md)
+- [PTMagic 2.10 — Pinned candle boundary fix verified on Binance Futures](2026-11-05-pinned-boundary-fix-futures-verified.md)
+- [PTMagic 2.10 — Option C warning live TestMode validation](2026-11-05-option-c-testmode-validation.md)
+
+## Historical November 4 records
+
+The earlier architectural stages, validation results, and optional optimization proposal remain historical. Current decisions supersede legacy-path and performance-order instructions.
+
+- [PTMagic 2.10 — Local verbose metric warning TestMode verification](2026-11-04-verbose-warning-four-raid-testmode.md)
+- [PTMagic 2.10 — Verbose normalized metric-warning diagnostics](2026-11-04-verbose-metric-warning-diagnostics.md)
+- [PTMagic 2.10 — Unified normalized PriceTrend: Binance Futures TestMode evidence](2026-11-04-unified-pricetrend-futures-testmode.md)
+- [2026-11-04 — D-017 build and deterministic test verification](2026-11-04-tristate-test-results.md)
+- [2026-11-04 — Three-valued normalized trigger logic](2026-11-04-three-valued-trigger-logic.md)
+- [2026-11-04 — Optional cross-raid historical snapshot reuse](2026-11-04-snapshot-reuse-optimization.md)
+- [2026-11-04 — SMS summary list-isolation regression verification](2026-11-04-sms-summary-test-verification.md)
+- [2026-11-04 — SMS summary list-sharing defect corrected in source](2026-11-04-sms-summary-alias-fix.md)
+- [2026-11-04 — Deployed post-fix SMS TestMode reused historical snapshots](2026-11-04-sms-postfix-retained-snapshots.md)
+- [2026-11-04 — Selective legacy PriceTrend calculation refactor](2026-11-04-selective-legacy-price-trend.md)
+- [2026-11-04 — Compact RAID SUMMARY metric warnings](2026-11-04-raid-metric-warnings.md)
+- [2026-11-04 — D-018 raid warning verification](2026-11-04-raid-metric-warnings-verification.md)
+- [2026-11-04 — Phase 1C source implementation checkpoint](2026-11-04-phase1c-source-implementation.md)
+- [2026-11-04 — Phase 1C Monitor metric content verified](2026-11-04-phase1c-monitor-verified.md)
+- [2026-11-04 — Phase 1C live TestMode results](2026-11-04-phase1c-live-testmode-validation.md)
+- [2026-11-04 — Phase 1C DONE: verified live SMS list isolation](2026-11-04-phase1c-final-closeout.md)
+- [2026-11-04 — Phase 1C timeframe design correction](2026-11-04-phase-1c-timeframe-correction.md)
+- [2026-11-04 — Phase 1A closeout and Phase 1C start gate](2026-11-04-phase-1a-closeout.md)
+- [PTMagic 2.10 — Option C natural-language metric warnings](2026-11-04-option-c-natural-metric-warnings.md)
+- [2026-11-04 — Tracker setup and authoritative version boundary](2026-11-04-initial-import.md)
+- [PTMagic 2.10 — CoinMarketCap and legacy PriceTrend cleanup](2026-11-04-cmc-legacy-pricetrend-cleanup.md)
+- [PTMagic 2.10 — Build/regression verification attempt](2026-11-04-build-regression-attempt.md)
+- [PTMagic 2.10 — Release build and regression verification SUCCESS](2026-11-04-build-regression-70-passed.md)
+- [2026-11-04 — Display all distinct RAID SUMMARY metric warnings](2026-11-04-all-metric-warnings.md)
+- [2026-11-04 — D-018 all-warnings display verification](2026-11-04-all-metric-warnings-verified.md)
+
+## Recordkeeping
+
+Dated update files are historical snapshots. Add a later correction or acceptance record instead of rewriting a prior observation. Update README, STATUS, DECISIONS, and the sole current handoff when new evidence changes the present state.
+
+A source commit and an authored test are not passing execution evidence. Report the actual source/binary identity, environment, check, and observed result. Personal strategy work remains outside this index.
+
+[Update template](TEMPLATE.md) · [Pre-reconciliation index snapshot](../history/2026-11-07-pre-reconciliation/updates-README.md)

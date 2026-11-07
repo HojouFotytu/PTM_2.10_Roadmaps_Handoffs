@@ -1,50 +1,54 @@
-# PTMagic 2.10 — YYYY-MM-DD Development Handoff
+# PTMagic 2.10 — Handoff: <checkpoint>
 
-**Application repo:** HojouFotytu/PTMagic  
-**Branch:**  
-**Last verified SHA:**  
-**Source files reviewed:**  
-**Target phase/task IDs:**
+**Date:** <YYYY-MM-DD; record the timezone of runtime evidence separately>
 
-## Current state (verified versus reported)
+**Application repository / branch:** HojouFotytu/PTMagic / phase1/market-data-foundation
 
-## Work completed and commits
+**Source HEAD:** <exact SHA, verified from source>
 
-## Development and validation ownership (D-021 — required)
+**Execution provenance:** <exact tested SHA, or clearly state inferred/not run>
 
-- **Assistant:** Source changes, code review, regression-test authoring and fixes for user-reported errors.
-- **User:** Local .NET build, regression-harness runs and end-to-end PTMagic TestMode.
-- **Joint review:** User supplies actual command output/logs; assistant diagnoses issues and commits fixes.
-- **GitHub:** Source control, commits and roadmap/handoff documentation. Do not create or trigger GitHub Actions builds/tests without explicit user request.
-- **Verification evidence:** State separately whether build, each harness, and each exchange TestMode was **passed**, **failed**, or **not run**. Never assume an authored test has been executed.
+**Current roadmap:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
-## Local PowerShell verification commands (D-022 — required in every future testing handoff)
+**Current decisions / status:** [DECISIONS](../DECISIONS.md) · [STATUS](../STATUS.md)
 
-Provide a **complete, copy-paste-ready PowerShell script** for the user to run in VS Code at the **PTMagic application repository root**. Always include `git pull --ff-only` followed by `dotnet build`, the **exact project paths** for all change-relevant test harnesses, and any new regression tests. Clearly identify required versus optional tests; update the commands to match the source at hand. Baseline example:
+## User-approved scope and constraints
 
-```powershell
-git pull --ff-only
-dotnet build
-dotnet run --project Tests/Phase1SelectiveLegacy/Phase1SelectiveLegacy.csproj
-dotnet run --project Tests/Phase1SmsSummaryIsolation/Phase1SmsSummaryIsolation.csproj
-dotnet run --project Tests/Phase1COhlcv/Phase1COhlcv.csproj
-dotnet run --project Tests/Phase1MetricWarnings/Phase1MetricWarnings.csproj
-dotnet run --project Tests/Phase1TriggerLogic/Phase1TriggerLogic.csproj
-dotnet run --project Tests/Phase1AReadiness/Phase1AReadiness.csproj
-```
+Record the requested changes and any deferrals. PTMagic application development is independent of personal trading-strategy projects. Performance work remains after all approved new metric additions unless the user explicitly changes that order.
 
-List additional TestMode/runtime steps, settings, snapshots or logs to inspect separately. Do not claim success before reviewing the actual user-run results.
+## What changed and why
 
-## Test results / diagnostic files
+Describe resulting behavior and relevant public settings. Include migration or default-behavior changes. Link source commits and implementation records.
 
-## Known unresolved issues and hypotheses
+## Evidence
 
-## Architectural constraints / backwards compatibility
+| Layer | Status | Evidence |
+|---|---|---|
+| Source implementation/review | <state> | <commit/files> |
+| .NET application build | Not run / Passed / Failed | <actual output> |
+| Deterministic harnesses | Not run / Passed / Failed | <exact projects and results> |
+| Configured runtime | Not run / Passed / Failed | <exchange, quote, TestMode, binary identity, log window> |
+| Actual PT delivery/application | Not run / Passed / Failed | <acknowledgement and readback evidence; distinguish simulation> |
+| Monitor/browser | Not run / Passed / Failed | <specific page/action> |
 
-## Decisions made and still open
+A previous accepted baseline does not validate a subsequent code change. State any inference about deployed SHA. Do not infer financial or strategy outcomes from engine tests.
 
-## Next exact steps, in order
+## Complete local PowerShell
 
-## Validation gates before continuing
+Run from the PTMagic application-repository root. Include branch check, `git pull --ff-only`, exact `git rev-parse HEAD`, `dotnet build`, and all relevant existing/new `dotnet run --project` paths, with exit-code checks after each command.
 
-## Links to roadmap, status, issues and update notes
+Replace this instruction with the complete actual script before publishing the handoff. Do not retain removed historical test project names.
+
+## Runtime verification
+
+Specify required configuration shape, deliberate input/failure conditions, expected state transitions, logs/exports, and what remains unproven. TestMode suppresses PT writes and cannot prove actual application of properties. Use local fake transports for deterministic delivery failures; actual endpoint checks remain user-owned.
+
+## Remaining issues and next action
+
+List blockers separately from later feature work. Identify the next task only once and link the current status table.
+
+## Ownership
+
+D-021: assistant owns source review, implementation, regression authorship, and fixes. User owns builds, harness execution, and configured runtime checks. No automatic CI without explicit request.
+
+D-022: each verification handoff includes complete local PowerShell and explicit runtime instructions.

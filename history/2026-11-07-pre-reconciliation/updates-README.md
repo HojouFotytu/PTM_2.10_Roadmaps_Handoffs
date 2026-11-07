@@ -1,0 +1,29 @@
+- **[2026-11-04 — Selective legacy PriceTrend calculations](2026-11-04-selective-legacy-price-trend.md)** (source + 14 tests committed; build/TestMode pending)
+- **[2026-11-04 — Phase 1C final closeout](2026-11-04-phase1c-final-closeout.md)** (**CURRENT**; 8 fresh SMS snapshots isolated, Phase 1C DONE)
+- **[2026-11-04 — Post-fix TestMode reused historical SMS snapshots](2026-11-04-sms-postfix-retained-snapshots.md)** (fresh-snapshot verification pending)
+- **[2026-11-04 — SMS summary isolation build and 58/58 tests verified](2026-11-04-sms-summary-test-verification.md)** (most recent; deployed multi-SMS JSON check pending)
+- **[2026-11-04 — SMS trigger snapshot alias fix](2026-11-04-sms-summary-alias-fix.md)** (source committed; build and TestMode verification pending)
+- **[2026-11-04 — Phase 1C deployed TestMode results](2026-11-04-phase1c-live-testmode-validation.md)** (new metrics and triggers pass; SMS summary aliasing and visual Monitor check open)
+- **[2026-11-04 — Phase 1C source implementation](2026-11-04-phase1c-source-implementation.md)** (newest; code committed, tests pending)
+# PTMagic 2.10 — Dated Roadmap and Development Updates
+
+- **[2026-11-04 — All metric warnings build/test verified](2026-11-04-all-metric-warnings-verified.md)** (latest: build + 7/7 passed; TestMode pending)
+- [2026-11-04 — Display all metric warnings](2026-11-04-all-metric-warnings.md)** (latest: cap removed; testing pending)
+
+- **[2026-11-04 — Optional cross-raid snapshot reuse optimization](2026-11-04-snapshot-reuse-optimization.md)** (roadmap-only; planned)
+
+- **[2026-11-04 — Raid metric-warning test verification](2026-11-04-raid-metric-warnings-verification.md)** (latest: build + 40/40 tests passed; TestMode pending)
+
+- **[2026-11-04 — Tri-state trigger test verification](2026-11-04-tristate-test-results.md)** (latest: build + 29/29 + 4/4 passed; TestMode still pending)
+- [2026-11-04 — Three-valued trigger logic implementation](2026-11-04-three-valued-trigger-logic.md)** (latest; source committed, C# tests pending)
+
+- **[2026-11-04 — Compact raid metric warnings](2026-11-04-raid-metric-warnings.md)** (latest: source committed; build/tests pending)
+
+Record each material update in its own dated Markdown file. Keep the [change log](../CHANGELOG.md), [status tracker](../STATUS.md), [decision register](../DECISIONS.md) and any relevant issue in sync.
+
+- **[2026-11-04 — Phase 1C MarketTrend timeframe correction](2026-11-04-phase-1c-timeframe-correction.md)** (latest D-016 design decision)
+- [2026-11-04 — Phase 1A closeout and Phase 1C authorization](2026-11-04-phase-1a-closeout.md)**
+- [2026-11-04 — Initial import and 2.10 version boundary](2026-11-04-initial-import.md)
+- [Update template](TEMPLATE.md)
+
+Update records are append-only historical snapshots. Do not retrospectively change a claimed observation; add a correction dated when discovered and link the earlier entry.

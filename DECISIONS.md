@@ -1,102 +1,282 @@
-# PTMagic 2.10 — Decision Register
+# PTMagic 2.10 — Current Decision Register
 
-Accepted decisions are not inferred from a merely proposed feature. Add a dated entry whenever an actual design decision is made.
+**Reconciled:** November 7, 2026
 
-| ID | Date | Decision | State |
-|---|---|---|---|
-| D-001 | 2026-11-04 | All Phase 0–6 market-analysis work is for **PTMagic 2.10**; 2.9 modernization is finished. | Accepted |
-| D-002 | Phase 0 | Keep the legacy `MarketData_*.json` and legacy trend/settings pipeline intact; normalized 5m OHLCV is a parallel new layer. | Accepted |
-| D-003 | 2026-11-04 | Each normalized metric uses the *actual* Phase 0-resolved per-trend universe; do not independently rebuild its own universe. | Accepted |
-| D-004 | 2026-11-04 | Omitted `Trigger.Metric` uses legacy trigger behavior; optional normalized metrics are enabled by comma-separated `MarketTrend.Metrics`. | Accepted |
-| D-005 | 2026-11-04 | Missing/invalid/stale normalized metrics fail closed, never substitute zero. | Accepted |
-| D-006 | 2026-11-04 | `Concentration` remains Top10 **return advantage** (pp); volume share gets a separate metric name. | Accepted |
-| D-007 | 2026-11-04 | Phase 4 = trigger integration, Phase 5 = liquidity, correcting earlier conflicting numbering. | Accepted |
-| D-008 | 2026-11-04 | Cold-start completeness must be resolved or explicitly contained before new Phase 1C metrics. Disk warm-start cache is a separate optional performance project. | Accepted |
-| D-009 | 2026-11-04 | Preserve historical roadmap revisions and handoff messages; edit current status/update log rather than overwriting source history. | Accepted |
+**Source checkpoint:** `839dc9afe785523ddc7e551cb610b47a6a8acc34`
 
-## Phase 1A closeout decisions (2026-11-04)
+**Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
-| ID | Decision | State |
-|---|---|---|
-| D-010 | Enforce global normalized cross-sectional readiness at **90%** of exact eligible Phase 0 trend population; require `ceil(0.90 * N)` valid markets, with nonempty population; do not remove missing samples from denominator. | Accepted / implemented |
-| D-011 | Existing return-based `Concentration` requires **100%** of eligible ranked assets with valid complete trailing quote-volume data. This is stricter than the general 90% policy. | Accepted / implemented |
-| D-012 | Do not force a cleanup raid or redesign ingestion. Let the next normally scheduled incremental refresh repair incomplete closed-candle alignment; dependent normalized metrics must fail closed, independent/legacy metrics remain available. | Accepted / verified |
-| D-013 | When normalized GlobalSetting selection is indeterminate and no fully evaluated independent setting matches, retain the active setting rather than switching to `default`. Prevent unavailable metrics from satisfying negated custom trigger expressions. | Accepted / implemented |
-| D-014 | No automatic trading suspension for transient insufficient coverage. Reapplying the same GlobalSetting is permitted; distinguish setting *switched* from *reapplied* in raid logging. | Accepted / code committed, new logging untested |
-| D-015 | Close Phase 1A as **DONE — CONTAINED**, not a proven root-cause ingestion repair; record non-default-setting retention and updated logging runtime checks as non-blocking Phase 1E items. Phase 1C may start. | Accepted |
+This register governs current intent. “Accepted” identifies a design or user decision, not successful execution. [STATUS.md](STATUS.md) records implementation and evidence separately. The previous register is preserved in [history](history/2026-11-07-pre-reconciliation/DECISIONS.md); dated implementation records remain unchanged.
 
-## Phase 1C timeframe correction (2026-11-04)
+## Existing decisions and their present disposition
 
-| ID | Decision | State |
-|---|---|---|
-| D-016 | **All derived MarketTrend metrics inherit their analytical timeframe from user-defined `MarketTrend.TrendMinutes`.** Normalized 5m candles are source resolution only. Window-based ATR, quote-volume metrics and correlation must use complete trend-duration periods built from closed input observations. Never hardcode a separate 5m/15m/1h metric timeframe or silently fall back; an N-period lookback counts trend-sized periods. No application code update is implied by this decision. | **Accepted; Phase 1C implementation and TestMode verified** |
+| ID | Current disposition |
+|---|---|
+| D-001 | **Active.** The market-analysis expansion belongs to PTMagic 2.10. The completed 2.9 modernization is separate historical work. |
+| D-002 | **Superseded by D-023.** The original parallel legacy/normalized PriceTrend architecture was replaced. Remaining legacy snapshot/reconstruction code is an operational dependency to audit later, not authority to restore a legacy calculator. |
+| D-003 | **Active, clarified by D-024.** Metrics use explicitly selected per-trend populations and record eligible versus valid samples. Global and asset populations can differ by the documented MaxMarkets contract. |
+| D-004 | **Superseded by D-023.** Omitted trigger Metric now resolves normalized PriceTrend. |
+| D-005 | **Active.** Missing, invalid, nonfinite, stale, or insufficient measurements are unavailable. Numeric zero is a valid value, never a missing-data substitute. |
+| D-006 | **Active, window amended by D-031.** Concentration means Top10 return advantage in percentage points. Volume distribution has separate names. |
+| D-007 | **Active.** Phase 4 is metric-trigger integration; Phase 5 is liquidity/depth/stress. |
+| D-008 | **Historical prerequisite fulfilled.** Phase 1A readiness was contained and later a specific boundary defect was repaired. The performance follow-ups now follow D-032. |
+| D-009 | **Active.** Preserve dated historical roadmaps, handoffs, and evidence. Snapshot materially replaced current documents and keep one current authority. |
+| D-010 | **Active.** General cross-sectional readiness requires a nonempty eligible population and at least ceil(0.90 × eligible count) valid markets. Missing markets stay in the denominator. |
+| D-011 | **Active, window amended by D-031.** Return Concentration requires the complete eligible ranking population, with valid returns and complete volume inputs. Volume-share families retain their documented 100% requirements. |
+| D-012 | **Historical containment policy, refined by D-029.** Scheduled refresh recovery remains valid; pinning now prevents requesting a newer analytical endpoint during a long raid. Do not treat the original boundary diagnosis as still wholly unknown. |
+| D-013 | **Active for continuous operation; startup extended by D-025.** When selection is indeterminate and no conclusively matching independent setting exists, retain the confirmed state rather than interpret unavailable as evidence for DEFAULT. |
+| D-014 | **Active for ordinary warm operation; startup amended by D-025.** A transient incomplete warm raid does not itself mandate a new SOM transition. Same-setting reapplication is permitted when needed. Logs distinguish selection, application, reapplication, acknowledgement, and simulation. |
+| D-015 | **Historical acceptance retained.** Phase 1A was closed as DONE—CONTAINED. The later Futures boundary-fix acceptance strengthens that record without rewriting it. |
+| D-016 | **Active.** Analytical duration comes from MarketTrend.TrendMinutes, with explicit endpoint contracts per metric. Five-minute OHLCV is source resolution. Lookback N counts trend-sized periods. |
+| D-017 | **Active, caller validation strengthened by D-028.** GlobalSetting, SMS activation, and SMS OffTrigger logic use true/false/unavailable. A conclusively true expression can match despite an unused unavailable branch. |
+| D-018 | **Active.** Display all distinct grouped metric warnings in the raid summary. Group duplicates; do not reintroduce the superseded five-group truncation. |
+| D-019 | **Active.** Phase 1C uses complete UTC trend-sized periods. Defaults: ATRPeriod=14, VolumeExpansionLookback=20, ATRPBreadthThreshold=0.5%, VolumeExpansionBreadthThreshold=1.0x, StrongVolumeExpansionThreshold=1.5x, TopNVolumeCount=10. Medians/breadth use 90% coverage; volume HHI/shares require their complete eligible volume population. |
+| D-020 | **Superseded by D-023/D-024.** The selective legacy PriceTrend optimization was an intermediate architecture. Its removed test project and CMC/legacy behavior are not current requirements. |
+| D-021 | **Active.** Assistant owns source review, implementation, regression authorship, and fixes. User owns local .NET builds, harness execution, and configured runtime checks. Automatic GitHub Actions/remote execution is opt-in. |
+| D-022 | **Active.** Every verification handoff supplies complete fail-fast PowerShell, git pull, exact source SHA, dotnet build, exact current harness paths, and runtime acceptance instructions. |
 
-**Known current exception:** already implemented return `Concentration` ranks Top10 by trailing 24h quote volume, even for other configured TrendMinutes. Its existing runtime and 100% coverage behavior remain unchanged until a separately tested correction is made (P1B-CONC-WINDOW). The universal policy is the target; this exception is **not** claimed fixed.
+## D-023 — Unified normalized PriceTrend and supported exchange scope
 
-## Open decisions for Phase 1C
+**Decision origin:** November 4, 2026 user instruction; consolidated November 7.
 
-- OD-001: **Resolved for phase progression by D-010–D-015.** Original ingestion cause remains an unproven hypothesis; sparse listings and further fault injection remain non-blocking validation.
-- OD-002: ATRP: TR formula, Wilder vs alternative smoothing, ATR seed/warm-up, period (initial proposal 14) and closing-price denominator, calculated from complete MarketTrend-sized bars aggregated from normalized 5m source candles.
-- OD-003: **Resolved by D-016:** the ATR, volume and correlation analytical timeframe is `MarketTrend.TrendMinutes`. Lookback counts can differ by metric, but each counted period has the configured trend duration. Exact UTC aggregation/endpoint and sufficient retention are Phase 1C implementation checks.
-- OD-004: Exact metric names and registration/config schema for volatility breadth and volume families.
-- OD-005: Quote-volume expansion baseline count N (each interval equals `MarketTrend.TrendMinutes`), zero baseline and minimum-history policy.
+All supported Exchange MarketTrends use the normalized engine. Supported application exchanges are Binance Futures, Binance Spot, and Binance US. CoinMarketCap and the obsolete Bittrex/Poloniex paths are removed.
 
-Do not treat open decisions as already configured in application code.
+- Omitted or blank MarketTrend.Metrics enables normalized PriceTrend.
+- A nonempty Metrics value explicitly selects published metrics.
+- An omitted Trigger.Metric or OffTrigger.Metric requires normalized PriceTrend through the dependency mechanism.
+- An explicitly named metric must be enabled on its referenced trend.
+- A calculation may use internal dependencies without publishing them as selected outputs.
+- Exchange TrendMinutes must be positive and exactly representable by the five-minute source.
+- Runtime support in source does not establish identical acceptance on all exchanges or quote currencies.
 
-## Phase 1A trigger refinement — D-017 (2026-11-04)
+[Original migration record](updates/2026-11-04-cmc-legacy-pricetrend-cleanup.md).
 
-| ID | Decision | State |
-|---|---|---|
-| D-017 | Evaluate configured GlobalSetting, SMS activation and SMS OffTrigger expressions using **three-valued logic**: true, false, unavailable. `true OR unavailable=true`; `false OR unavailable=unavailable`; `false AND unavailable=false`; `true AND unavailable=unavailable`; `NOT unavailable=unavailable`. A conclusively true complete expression may match even if an unused branch is unavailable. An indeterminate result may not activate a setting or trigger SMS removal. Existing active-setting retention applies when GlobalSetting selection remains indeterminate; existing SMS long-term OffTrigger persistence is preserved. | **Accepted; 29/29 tests and GlobalSetting/SMS live TestMode verified** |
+## D-024 — PriceTrend compatibility semantics
 
-D-017 refines earlier D-013 fail-closed policy. Fail-closed means **do not activate on an indeterminate final expression**, not “discard the whole setting whenever any input is unknown.” D-016 (metric timeframe inheritance) is unchanged.
+**Decision origin:** November 5, 2026; consolidated November 7.
 
-## Raid metric diagnostics — D-018 (2026-11-04)
+- Global arithmetic PriceTrend uses the configured global population, including MaxMarkets.
+- SMS Relative PriceTrend uses a separately computed uncapped asset-population reference.
+- TrendThreshold filters the arithmetic PriceTrend means only. It does not suppress per-asset observations or remove markets from breadth, median, dispersion, MeanMedianSpread, volume, or concentration calculations.
+- RelativeStrengthMarket retains its own documented market-median comparison; it is not the SMS Relative reference.
+- Fiat PriceTrend combines synchronized asset/quote and quote/USDT return factors on the same exchange. USD/USDT use the existing identity convention. Missing conversion inputs remain unavailable.
+- USDT identity-case tests do not establish non-USDT conversion acceptance.
 
-| ID | Decision | State |
-|---|---|---|
-| D-018 | Put a **short, deduplicated Metric warnings section** in the analyzer raid summary, grouping unavailable normalized metrics by MarketTrend/metric with all distinct grouped warnings displayed (no limit). Include indeterminate GlobalSetting retention information. Eliminate repetitive per-pair normalized trigger warnings, but do not change tri-state semantics or legacy setting behavior. A Monitor notification may be considered separately. | **Accepted; 7/7 tests and full grouped RAID SUMMARY verified live** |
+[Compatibility restoration](updates/2026-11-05-pricetrend-compatibility-restoration.md) · [Recorded Futures validation](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
 
-**2026-11-04 D-018 amendment:** The user superseded the earlier five-detail display limit. List **all distinct grouped metric warnings** in the raid summary; do not truncate with `... and N more`. Duplicate grouping remains, with no change to trigger logic. Application commit `64e05e7`; re-verification pending.
+## D-025 — Startup SOM goal and release condition
 
-**2026-11-04 D-018 amended-policy verification:** User-run .NET 10 Core/PTMagic/Monitor build succeeded (14.1s) and Phase1MetricWarnings regression passed **7/7** at application HEAD `64e05e7`. TestMode raid presentation remains pending. The decision-row wording above now reflects the final accepted no-truncation policy; earlier dated records retain the superseded limit for history.
+**User instruction:** November 7, 2026, assessment item 2D.
 
-## Phase 1C metric calculation contracts — D-019 (2026-11-04)
+Application.StartupSellOnlyMode defaults to true. The startup goal is to establish sell-only protection before lengthy exchange bootstrap and retain it until a fresh raid reaches a conclusive decision under D-017 and PT acknowledges the resulting normal configuration.
 
-| ID | Decision | State |
-|---|---|---|
-| D-019 | Implement ATRP and volume metrics exclusively on complete `MarketTrend.TrendMinutes` periods assembled from 5m source OHLCV. Per-trend parameters default ATRPeriod=14, VolumeExpansionLookback=20, ATRPBreadthThreshold=0.5%, VolumeExpansionBreadthThreshold=1.0x, StrongVolumeExpansionThreshold=1.5x, TopNVolumeCount=10. Global medians and breadth require 90% coverage. `VolumeConcentration` is HHI ×100 (*index*), while TopN/BTC/BTC+ETH are volume **percentage shares** requiring 100% complete eligible volume population. No short-data fallback or extra exchange calls. | **Accepted; source, numerical fixtures, and live TestMode verified** |
+The user subsequently rejected the initial unpublished implementation that submitted a full preset with pair SOM properties forced to true. [D-037](#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay) replaces that mechanism with the direct global SOM API. No startup shadow preset or startup PAIRS/DCA/INDICATORS submission is part of the current design.
 
-D-019 instantiates D-016's universal trend-duration rule. Defaults are configurable; no legacy setting changes merely because metrics remain disabled. Existing return `Concentration` remains a separately tracked fixed-24h ranking exception, P1B-CONC-WINDOW.
+- Initial guard failure is not reported as successful protection. The raid stops before slow bootstrap and retries at the next interval.
+- An indeterminate, stale, or failed raid cannot authorize releasing the guard.
+- A failed normal-configuration delivery leaves pending work explicit; it does not authorize global SOM disablement.
+- Normal configuration acknowledgement is a prerequisite for release, not evidence that the separate release API call succeeded.
+- TestMode records simulation and sends no state-changing guard or configuration requests.
+- StartupSellOnlyMode=false prevents acquiring a new API guard. Previously recorded pending PTM-owned guard work is still reconciled. Indeterminate or stale startup still cannot force DEFAULT as a fabricated prior state; retain a known confirmed state or defer publication while prior state is unknown.
+- The guard uses PT's global SOM control. As clarified by the user, it stops new buys and DCA buys while allowing sells. It does not rewrite pair SOM properties, DCA, indicators, or sell settings.
 
-**2026-11-04 D-019 verification:** User-run .NET 10 build passed at `64d063c`, with 53/53 deterministic checks passing (13 Phase1C). This verifies source fixtures, not Binance Futures TestMode behavior or Monitor presentation. No calculation-contract change.
+This amends the startup portion of D-013/D-014. It does not add automatic SOM transitions to every incomplete warm raid.
 
-## Phase 1C final acceptance — 2026-11-04
+## D-026 — Desired, pending, and confirmed delivery state
 
-The D-016/D-017/D-018/D-019 contracts used in Phase 1C were confirmed by the user-run **58/58 deterministic tests** and deployed TestMode. An isolated `MatchedTriggersContent` defect in the per-SMS JSON summary was corrected at application `0e8ab70`, and the 19:10–19:33 KST final run produced **8 newly activated BTC/ETH/SOL snapshots with zero foreign descriptions**, closing `P1C-SMS-SNAPSHOT-ALIAS`. Phase 1C is **DONE** and Phase 1D is **NEXT (not implemented)**. Existing return `Concentration` fixed trailing 24h rank window remains a separate P1B follow-up; no changes to D-016 for new features.
+**User instruction:** November 7, assessment item 2B.
 
-Correlation Phase1D decisions remain open: Pearson vs alternatives (Pearson intended first), simple versus log returns, synchronized bar count/window, treatment of missing candles and zero variance, 90% market coverage, and optional pairwise measures. No new independent 5m/15m analysis cadence is permitted; use `MarketTrend.TrendMinutes` (D-016).
+Configuration selection is distinct from confirmed application. PT delivery returns an explicit result. Failed or incomplete transfer remains pending and is retried even when the selected configuration has not changed.
 
-## Selective legacy trend calculation — D-020 (2026-11-04)
+Recompile from the current setting definition and preset contents even when the setting name is unchanged. A partial multi-target failure requires replay to every target; returning to an earlier confirmed payload does not clear that pending uncertainty.
 
-| ID | Decision | State |
-|---|---|---|
-| D-020 | For Binance Futures Exchange MarketTrends: omitted/blank `Metrics` retains all original legacy price-trend behavior; nonempty `Metrics` enables only listed normalized analytics and their internal dependencies. Legacy per-asset PriceTrend is computed only if an existing SMS activation or OffTrigger actually requires an implicit legacy metric. Legacy global mean PriceTrend is computed only for a blank-metric MarketTrend or a legacy GlobalSetting trigger dependency. Non-Futures exchanges and CMC retain behavior. SMS current price/24h volume is taken from current market snapshots, not a legacy price-return record. Normalized eligible populations are independent of the legacy return arrays. Uncomputed trend columns in old Market Analyzer may be blank pending future page merge. | Code committed at `1a6b9aa`, full build/tests/TestMode pending |
+Only acknowledged non-TestMode application advances the confirmed configuration checkpoint, stored in `_data/ConfigurationDeliveryState.json`. The checkpoint records configuration identity and payload hash, not raw properties, credentials, or license values. TestMode does not overwrite this checkpoint.
 
-D-020 is an optimization/compatibility correction after verified Phase1C and does not alter D-016 Metric timeframe inheritance, D-017 tri-state logic or existing conditional trigger routing. Do not remove a required legacy trigger dependency or fabricate average=0 when skipped. When `TrendThreshold` requires a return for filtering a normalized population, calculate the needed normalized return as an *internal dependency*, without publishing PriceTrend unless selected.
+Logs and summaries must not claim that PT was updated solely because a configuration was compiled or a call returned after swallowing an error. Do not clear pending delivery state during ordinary raid cleanup.
 
-## Development and validation responsibilities — D-021 (2026-11-04)
+## D-027 — SMS removal is a configuration transition
 
-| ID | Decision | State |
-|---|---|---|
-| D-021 | **Assistant owns source edits, code review, regression-test development and fixes for user-reported failures. User owns local .NET builds, regression harness execution, and live PTMagic TestMode.** The assistant reviews build output/logs supplied by the user and addresses defects. GitHub is for source control, commits, and roadmap/handoff documentation; no GitHub Actions or remote automatic build/test execution unless the user specifically requests it. A source commit or authored test does not count as executed verification. | **Accepted — apply to all future development sessions and handoffs** |
+**User instruction:** November 7, assessment item 2A.
 
-The existing CI workflow in the application repository was introduced before D-021. This decision does not itself deactivate it; removal/disablement is tracked as a separate implementation action.
+A transition from an applied nonempty SMS set to an empty set must generate the clean global configuration and require delivery, even if the GlobalSetting remains unchanged. Comparing only already-clean in-memory property lists cannot establish whether PT still has previous SMS overrides.
 
-## Required local testing commands — D-022 (2026-11-04)
+The remembered SMS set must follow the correct lifecycle, including empty transitions and failed delivery. Repeating an acknowledged unchanged configuration should not cause unnecessary retransmission.
 
-| ID | Decision | State |
-|---|---|---|
-| D-022 | **Every future PTMagic development or testing response requiring local verification must provide a complete, copy-paste-ready PowerShell script** for the user to run from the PTMagic application-repository root in VS Code. Include `git pull --ff-only`, `dotnet build`, all exact `.csproj` paths for applicable existing and new regression harnesses, in order. Distinguish required from optional tests and provide explicit TestMode/runtime instructions where deterministic tests are insufficient. The assistant reviews user-supplied build/test/log outputs and never claims unexecuted tests as passed. | **Accepted — applies to all future phases and handoffs; extends D-021** |
+## D-028 — Trigger identity, references, and editor preservation
 
-At adoption, the example regression suite comprises `Phase1SelectiveLegacy`, `Phase1SmsSummaryIsolation`, `Phase1COhlcv`, `Phase1MetricWarnings`, `Phase1TriggerLogic` and `Phase1AReadiness`. **The exact executable project list must follow current code and change scope** rather than remain fixed to this historical example.
+**User instruction:** November 7, assessment items 2C/2E.
+
+- Distinct triggers on the same MarketTrend retain separate identities, Metric, Tag, thresholds, relations, and other fields through Monitor load/save.
+- A no-edit save must preserve configuration meaning, including full numeric precision.
+- Global, SMS activation, and SMS OffTrigger references are validated consistently; missing or ambiguous reference identity must not silently become false or disappear from an AND expression.
+- Custom expressions require the declared, unambiguous tags they use. AND/OR connections retain their supported untagged form.
+- Runtime data availability still uses D-017. Intentional unavailable-metric diagnostics must remain distinguishable from structurally invalid references.
+- No validation change may turn NOT unavailable into true or discard an unavailable condition from AND.
+
+The current structural validator rejects missing MarketTrend references; blank or duplicate case-insensitive trend/setting names; duplicate nonblank tags; undeclared tags or malformed custom Boolean expressions; unsupported OffTriggerConnection values outside AND/OR; and invalid active metric parameter ranges. Unknown, disabled, or wrong-scope metric references remain accepted diagnostic configurations whose values are unavailable with warnings. This preserves the deliberate diagnostic fixtures used in prior validation.
+
+The Monitor applies edits to detached ordered rows by original row index and verifies a SHA256 revision token before saving. New rows receive unique identities. Interleaved metric, age, volume, and time rows, omitted fields, inactive fields, native property values, and invariant numeric precision must survive the round trip.
+
+The Monitor is part of the supported configuration lifecycle, not merely a viewer.
+
+Unavailable SMS activation or OffTrigger expressions keep initial selection indeterminate; an already active ordinary SMS is retained when its activation becomes unavailable. Missing/sentinel/future age or activation-time observations and nonfinite/negative volume are unavailable rather than fabricated false or zero values. Conclusive three-valued expressions retain the normal AND/OR masking rules.
+
+## D-029 — Pinned acquisition and bounded decision age
+
+**User instruction:** November 7, assessment item 3.
+
+Use one pinned UTC analysis boundary for normalized acquisition and evaluation. Per-symbol network requests must preserve the complete historical window required at that boundary, including tight retention when the fetch spans a new candle close.
+
+Application.MaxAnalysisAgeSeconds defaults to 300 and accepts 1–86400 seconds. Decision freshness compares actual decision time with the pinned raid time. A missing, future, or expired pin prevents new normal configuration decisions from being published and keeps the startup guard where applicable.
+
+Every normal configuration requires a completed raid analysis and a fresh runtime pin, including configurations whose conditions use only volume, age, or time. Omitting analytical trends does not bypass freshness or startup-release requirements.
+
+This is separate from a metric's legitimate latest completed four-hour/daily endpoint. Do not apply a universal five-minute source-age rule to every analytical duration.
+
+The previous boundary-fix acceptance remains valid for its tested case; the November 7 extension requires fresh validation.
+
+## D-030 — Explicit history requirements
+
+**User instruction:** November 7, assessment item 5.
+
+Each enabled metric and internal dependency reports the history it requires. Retention is configured explicitly; the application does not silently increase StoreDataMaxHours or calculate shortened metrics.
+
+Required complete-period lower bounds include:
+
+- PriceTrend: two exact closes separated by TrendMinutes.
+- ATR(P): P+1 complete trend bars, default 15 bars.
+- VolumeExpansion(N): current complete bar plus N preceding complete bars, default 21.
+- Correlation(N): N synchronized returns from N+1 trend-duration endpoints, with complete required source observations.
+- Return Concentration ranking: the configured TrendMinutes volume window under D-031.
+
+The exported HistoryRequirements report distinguishes minimum complete-source history, current-raid required stored slots (including the forming source candle and partial UTC trend period), the current-raid minimum StoreDataMaxHours, and conservative retention sufficient at every UTC alignment. It also reports configured capacity and insufficiency warnings. Capacity follows the production store's ceiling(hours / source interval) + 2 rule.
+
+At a 24-hour trend duration with the default parameters, conservative StoreDataMaxHours guidance is 384 hours for ATR(14), 528 hours for VolumeExpansion(20), and 744 hours for Correlation(30). These are different from the complete-period lower bounds above. Do not describe 360 hours of complete ATR periods as sufficient at every point in a UTC day.
+
+Insufficient configured history produces an explicit requirement warning and unavailable dependent values; it does not itself reject the entire configuration or silently resize retention. Unrelated valid metrics remain usable.
+
+## D-031 — Return Concentration ranking window
+
+**User instruction:** November 7, assessment item 5; resolves P1B-CONC-WINDOW in source.
+
+Concentration keeps its established Top10 return-advantage meaning and percentage-point units. Rank the eligible population by complete quote volume over MarketTrend.TrendMinutes ending at the same normalized five-minute endpoint as the relevant return, replacing the fixed trailing 24-hour ranking window.
+
+Keep the 100% eligible ranking/return coverage requirement. The calculation remains the mean return of the ten highest-volume eligible markets minus the mean return of the remaining eligible markets, requiring at least eleven markets. This is a deliberate semantic correction for non-24-hour trends and requires numerical/runtime revalidation; it is not covered by the prior 88-check baseline.
+
+## D-032 — Performance work after all new metrics
+
+**User instruction:** November 7, assessment item 4.
+
+Defer the dedicated performance program until completion of **all approved new metric additions**, including derivatives ingestion/aggregation, higher-order measurements, and liquidity/depth families.
+
+Deferred work includes legacy cold-start reconstruction optimization, shared or cross-raid snapshot caching, broader stateful incremental calculation, logging-volume optimization, allocation/GC work, and comparative CPU/network benchmarking.
+
+Correctness, bounded storage, clear diagnostics, and respecting endpoint limits remain necessary during metric implementation. This does not authorize reopening a performance project before the agreed gate.
+
+D-032 supersedes earlier Phase 1D handoff requirements to establish snapshot reuse as part of correlation, earlier optional-performance priority wording, and the November 7 assessment's suggested early optimization sequence.
+
+## D-033 — Phase 1D correlation contract
+
+**Authorized:** November 7, assessment item 8. Implementation choices below are part of the approved work; execution acceptance remains pending.
+
+- Asset metric: CorrelationToBTC.
+- Global metrics: MeanCorrelationToBTC and MedianCorrelationToBTC.
+- Statistic: Pearson correlation of simple returns, coefficient in [-1,+1], unitless.
+- MarketTrend.CorrelationLookback defaults to 30, valid range 3–1000.
+- Use N returns and N+1 exact UTC-aligned complete TrendMinutes close endpoints.
+- Require all observations in the declared vector; no zero fill, forward fill, shifted index matching, or reduced-overlap substitute.
+- Missing source history, timestamp mismatch, nonfinite values, or zero variance produce unavailable values.
+- BTC self-correlation is +1 only when its full vector is valid with nonzero variance.
+- Global aggregates use the exact selected global population and 90% coverage. BTC is included only if it belongs to that selected population; no hidden denominator adjustment.
+- Reuse normalized inputs; no new exchange endpoint solely for correlation.
+- Full pairwise correlation remains an optional later feature requiring a separate value/cost decision.
+
+## D-034 — Minimal native decision history
+
+**Authorized:** November 7, assessment item 8.
+
+Application defaults:
+
+| Property | Default |
+|---|---:|
+| DecisionHistoryEnabled | true |
+| DecisionHistoryRetentionDays | 30 |
+| DecisionHistoryMaxMegabytes | 256 |
+
+Retention accepts 1–3650 days; the quota accepts 16–102400 MiB. Oversized individual records are rejected rather than violating the segment bound.
+
+Append JSONL records under `_data/DecisionHistory/YYYY-MM-DD-NNNNNN.jsonl`, rotating at 16 MiB and pruning complete oldest files by age and total quota.
+
+Records identify the source/version, configuration and desired/confirmed payload hashes, analysis/decision times, evaluated metric inputs and validity, selection/SMS state, startup guard, and delivery outcome. Failed/pre-bootstrap raids record safe status/error categories when configuration and history services are ready.
+
+Do not persist license values, tokens, raw general settings, raw PT payloads, or raw exception strings that may contain secrets. This is a bounded audit trail, not the complete Phase 6 backtest system or a persistent normalized candle cache.
+
+## D-035 — Application scope is independent of personal strategy development
+
+**User instruction:** November 7, assessment item 7.
+
+Personal strategy design, strategy repositories, long/short preset development, and strategy profitability are not PTMagic 2.10 deliverables, acceptance gates, or documentation dependencies. Use application-owned neutral fixtures to verify the engine.
+
+Native analysis history and optional later interfaces to outcome data remain application capabilities; they do not absorb a personal trading-strategy project into this roadmap.
+
+## D-036 — Acceptance and provenance
+
+**Consolidated:** November 7.
+
+Distinguish:
+
+1. Source implemented.
+2. Source inspected.
+3. Deterministic tests authored.
+4. Build/tests actually executed.
+5. Configured TestMode behavior observed.
+6. Actual PT acknowledgement/application observed.
+7. Monitor/browser behavior observed.
+
+A previous successful run does not validate later source. TestMode deliberately suppresses PT writes, so it cannot establish actual guard or configuration delivery. Record exact source/binary identity where available and label inferred provenance explicitly.
+
+The latest accepted pre-change execution baseline is the November 5 build, 88 checks, and nine Futures USDT TestMode raids associated with d0b0b87. The November 7 source checkpoint requires new execution evidence.
+
+## D-037 — Direct global SOM API supersedes the startup preset overlay
+
+**User instruction:** November 7, 2026, after inspection of the initial startup implementation.
+
+Use the ProfitTrailer control endpoint supplied in the user's Swagger excerpt:
+
+```text
+POST /api/v2/globalSellOnlyMode
+query: token=<configured API token>&enabled=true|false
+```
+
+The initial unpublished full-preset overlay was rejected because it could reapply local preset changes and remove existing SMS/manual overrides before analysis. Startup protection now sends the global SOM control request without any PAIRS, DCA, or INDICATORS payload. The endpoint is resolved beneath each configured PT Monitor base URL, including any path prefix. Private instance addresses and real tokens do not belong in repository examples or logs.
+
+The user clarified the native endpoint's behavior: global SOM stops new buys and DCA buys while allowing sells. The startup request therefore protects both kinds of buying without uploading a configuration preset.
+
+Before slow market-data bootstrap, establish global SOM with `enabled=true` on every configured PT target and record its outcome separately from the configuration-delivery checkpoint. After a fresh conclusive raid, deliver the fully computed normal global/SMS configuration while protection remains enabled. Only then request `enabled=false`; that release requires its own acknowledgement and retry state.
+
+`StartupSellOnlyMode=true` explicitly assigns control of the global SOM flag to PTMagic for this startup cycle. The verified input contract is a setter; the implementation does not read or restore an unknown prior global flag. Even if global SOM was already enabled before startup, PTMagic requests `enabled=false` after the release prerequisites are satisfied. Do not describe this as preserving an independently managed global SOM state.
+
+Use `Application.ProfitTrailerServerAPIToken` for the primary PT target. `Application.ProfitTrailerServerAPITokenXtra` supplies comma-separated tokens aligned with the additional configured PT Monitor URLs. Its default empty value explicitly reuses the primary token for those additional targets. The base URL's path prefix must be retained.
+
+Persist guard metadata separately in `_data/StartupSellOnlyModeState.json`; it contains no token, license, or raw properties. Guard enable acknowledgement must not mark a preset as applied. A successful normal configuration upload alone must never be recorded as successful global SOM release. Enable failure prevents slow bootstrap; release failure preserves the acknowledged normal configuration and leaves guard release pending for a fresh conclusive retry.
+
+Persist the pending intent before sending enabled=true. If that intent cannot be recorded, defer the command and bootstrap rather than leave an unrecorded owned guard. If saving metadata fails after a command acknowledgement, retain the actual acknowledgement and report the I/O error; the earlier pending intent supports conservative recovery.
+
+Acknowledgement is the command response; it is not a subsequent readback of PT's live global flag. Partial target failure or timeout leaves remote state uncertain. Reassert the owned guard before the next load and retry eligible release after fresh conclusive analysis; never present one target's acknowledgement as complete multi-target success.
+
+Summary and decision history expose StartupSellOnlyModeActive, StartupSellOnlyModePending, and StartupSellOnlyModeStatus separately from ConfigurationDeliveryStatus. The Monitor's general settings page exposes the startup global SOM option and additional-target API tokens. The active flag alone must not hide pending or unconfirmed delivery.
+
+TestMode makes no SOM API calls and writes neither live acknowledgement checkpoint. Disabling the startup option prevents a new guard; it does not automatically clear an untracked existing global SOM flag. A matching checkpoint with pending PTM-owned release still resumes recovery, even after opt-out, so the earlier owned guard is not stranded. Neither the user-supplied endpoint contract nor source implementation is evidence that the new code has passed native PT acceptance; record that separately under D-021/D-036.
+
+This decision replaces the transport and payload design originally drafted for D-025. The conclusive/fresh/acknowledged normal-configuration prerequisite remains active. Dedicated performance ordering and independent strategy scope are unchanged.
+
+## Remaining open design decisions
+
+- Phase 2 endpoint availability, supported exchange/contract scope, units, history limits, cadence, and retention must be verified against current official API documentation before implementation.
+- Derivatives weighting and aggregation coverage are defined per metric family, not inherited blindly from raw notional size.
+- Higher-order state formulas and any component weights require explicit transparent contracts.
+- Liquidity sampling, book freshness, notional sizes, and depth aggregation remain planned.
+- Full Phase 6 history schema/query engine and independent chronological validation remain planned.
+- Pairwise correlation has not been approved for first-release implementation.
+
+The previously open Phase 1C formula choices were resolved by its implemented and accepted contract; do not reopen them as if ATRP and volume expansion had not been developed.

@@ -1,29 +1,35 @@
-- **[2026-11-04 — Unified PriceTrend Binance Futures TestMode handoff](2026-11-04-unified-pricetrend-validation-handoff.md)** (**CURRENT validation**; Futures verified, Spot/US and positive OffTrigger checks pending)
-- **[2026-11-04 — Phase 1D correlation implementation handoff](2026-11-04-phase1d-correlation-ready.md)** (**CURRENT**; Phase 1C DONE, 1D NEXT)
-- **[2026-11-04 — Phase 1C implementation verification handoff](2026-11-04-phase1c-implementation-verification.md)** (newest; 1C source committed, tests pending)
 # PTMagic 2.10 — Development Handoffs
 
-**[2026-11-04 — Tri-state trigger evaluation verification handoff](2026-11-04-tristate-trigger-logic-verification.md)** (latest source commits; testing pending). Continue with the [timeframe-corrected Phase 1C handoff](2026-11-04-phase-1c-markettrend-timeframe-correction.md) after accounting for these changes.
+## Current handoff
 
-Date-stamped handoffs preserve what was known, done and planned **at the time of writing**. They are not automatically authoritative over later code or accepted decisions.
+**[2026-11-07 — Stabilization, correlation, and decision-history validation](2026-11-07-stabilization-correlation-validation.md)**
 
-- **[2026-11-04 — Corrected Phase 1C: all metric timeframes from MarketTrend](2026-11-04-phase-1c-markettrend-timeframe-correction.md)** (**latest; use this handoff**)
-- [2026-11-04 — Phase 1C-ready handoff after Phase 1A closeout](2026-11-04-phase-1c-ready.md) (historical; incorrect fixed ATRP5m timeframe superseded by D-016)
-- [2026-11-04 — Original Phase 1C development handoff](2026-11-04-phase-1c.md) (archived; readiness was then blocking)
-- [Handoff template](TEMPLATE.md)
+This is the sole current starting point. It records the current source checkpoint, new implementation, validation ownership, exact local command sequence, remaining runtime acceptance, and subsequent metric roadmap.
 
-## Handoff procedure
+## Historical handoffs
 
-At the end of a working session: add a dated handoff file, reference current branch HEAD and implemented commits, state evidence separately from hypotheses, update [STATUS.md](../STATUS.md), and link any new issues and [updates](../updates/README.md). In the next session: read current HEAD and latest status first, then consult prior handoff. Never assume a handoff snapshot is still current.
+The following dated files are retained unchanged. Their “current,” “next,” and “pending” statements describe the date on which they were written.
 
-## Required development and validation workflow (D-021)
+| Handoff | Historical context |
+|---|---|
+| [2026-11-04 unified PriceTrend validation](2026-11-04-unified-pricetrend-validation-handoff.md) | Initial normalized migration runtime checks |
+| [2026-11-04 Phase 1D correlation design](2026-11-04-phase1d-correlation-ready.md) | Pre-implementation design brief, based on the 58-test Phase 1C baseline |
+| [2026-11-04 Phase 1C implementation verification](2026-11-04-phase1c-implementation-verification.md) | Phase 1C source awaiting its first validation |
+| [2026-11-04 tri-state verification](2026-11-04-tristate-trigger-logic-verification.md) | Three-valued expression integration |
+| [2026-11-04 Phase 1C timeframe correction](2026-11-04-phase-1c-markettrend-timeframe-correction.md) | Adoption of the TrendMinutes analytical-period contract |
+| [2026-11-04 Phase 1C ready](2026-11-04-phase-1c-ready.md) | Earlier planning with subsequently corrected timeframe assumptions |
+| [2026-11-04 original Phase 1C handoff](2026-11-04-phase-1c.md) | Earlier readiness-dependent planning |
 
-Every new development handoff must preserve this ownership contract:
+## Handoff rules
 
-- **Assistant:** source implementation, code review, regression-test development, and fixes for user-reported errors.
-- **User:** local builds, regression harness execution, and PTMagic TestMode for Binance Futures, Binance Spot, and Binance US as applicable.
-- **Review together:** user provides actual logs, build/test outputs, and runtime summaries; assistant investigates failures and makes fixes.
-- **GitHub:** source control and roadmap/handoff documentation only; automatic CI/GitHub Actions build or testing is **opt-in by explicit user request**.
+- Recheck the application branch and HEAD at the start of a session.
+- Record source implementation, source inspection, deterministic execution, and runtime acceptance separately.
+- Preserve user decisions, scope exclusions, and known limits.
+- Link the new dated handoff here as the sole current starting point.
+- Update [STATUS](../STATUS.md), [DECISIONS](../DECISIONS.md), and current roadmap when the contract or sequence changes.
+- Preserve previous dated handoffs. Do not revise their historical evidence to make it match later outcomes.
+- Follow D-021: assistant authors and fixes; user runs local builds, harnesses, and configured runtime checks. Automatic GitHub Actions are opt-in.
+- Follow D-022: supply fail-fast PowerShell with exact existing and new project paths; include runtime checks for behavior the deterministic tests do not establish.
+- Personal trading-strategy development is outside the PTMagic 2.10 handoff.
 
-Mark build, deterministic test and live TestMode results individually as *passed*, *failed*, or *not run*. Never infer a run from test code or a commit. Use the [handoff template](TEMPLATE.md) so this agreement carries into every new chat.
-
+Use [TEMPLATE.md](TEMPLATE.md) for subsequent sessions.

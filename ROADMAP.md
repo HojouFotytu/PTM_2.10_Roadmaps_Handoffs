@@ -1,38 +1,47 @@
 # PTMagic 2.10 — User Roadmap
 
-**Updated:** November 5, 2026 · **Status:** In development  
-[PTMagic source](https://github.com/HojouFotytu/PTMagic) · [Development status](STATUS.md) · [Full technical roadmap](roadmaps/revised-2.10-2026-11-04-markettrend-timeframe.txt)
+**Updated:** November 7, 2026 · **Status:** In development
 
-PTMagic 2.10 expands market analysis beyond price trends, adding **market breadth, volatility, volume, relative strength, correlation and eventually futures positioning and liquidity analysis** — without an external AI service.
+[Current technical plan](roadmaps/CURRENT.md) · [Acceptance status](STATUS.md) · [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
-## Completed and tested — Phases 0–1C
+PTMagic 2.10 expands native market analysis beyond price trends. It adds breadth, volatility, volume, relative strength, correlation, and later futures positioning and liquidity measurements, using transparent calculations and existing GlobalSetting/SMS controls.
 
-- **Market-data foundation:** Shared 5-minute OHLCV history, incremental updates and safeguards against incomplete data; indicators use each MarketTrend's configured timeframe.
-- **Price and market strength:** Average/median returns, market breadth, dispersion, relative strength versus the market or BTC, and top-volume market outperformance.
-- **Volatility and volume:** ATR-based volatility, volatility breadth, volume expansion, participation breadth, and volume concentration/shares.
-- **Trading rules:** Supported metrics can drive Global Settings and SMS entry/exit triggers. Unavailable metrics cannot generate false signals, and diagnostic warnings explain failures.
-- **Monitor:** Dedicated Market Metrics page and exported snapshots.
+## Accepted foundation
 
-Core Phase 1 features passed regression tests and Binance Futures TestMode.
+- Shared normalized five-minute OHLCV history with incremental refresh and incomplete-data safeguards.
+- Price returns, breadth, dispersion, relative strength, and return concentration.
+- Trend-duration ATR and quote-volume measurements.
+- Metric-based GlobalSetting, SMS activation, and SMS OffTrigger evaluation.
+- Market Metrics inspection, exported snapshots, and grouped diagnostics.
+- Unified normalized PriceTrend on Binance Futures, Binance Spot, and Binance US in source; the strongest recorded runtime evidence is for Futures USDT.
 
-## Implemented — further testing pending
+The accepted baseline passed a local .NET 10 build, 88 regression checks, and recorded Futures TestMode runs. Those results precede the changes below.
 
-- **Unified PriceTrend:** Replaced the legacy calculator while retaining implicit PriceTrend settings; restored relative SMS, `TrendThreshold` and fiat-conversion compatibility in code.
-- **Exchange cleanup:** Binance Futures, Spot and US remain; removed CoinMarketCap, Bittrex and Poloniex.
-- **Reliability:** Fixed candle-boundary inconsistencies during long refreshes (verified on Futures). Latest PriceTrend changes passed a .NET 10 build and **88/88 local regression tests**.
+## Implemented in the current checkpoint — validation pending
 
-**Outstanding:** Live acceptance of the latest compatibility changes, Spot/US runtime checks, fiat conversion, selected SMS exits and Monitor behavior.
+- Reliable delivery state and retries for ProfitTrailer configuration updates.
+- Correct removal of the final active SMS.
+- Startup global SOM through PT's API: stop new buys and DCA buys, allow sells, and release after a fresh, conclusive configuration is acknowledged.
+- Monitor editing that preserves distinct metric and tag trigger rows.
+- Invalid-reference safeguards, request-boundary and decision-age checks, and explicit history requirements.
+- Trend-duration ranking for return Concentration.
+- Per-market BTC correlation and market mean/median correlation.
+- Bounded native decision-history records with configuration/source identity and delivery outcomes.
 
-## Upcoming development
+A fresh build, regression execution, and relevant runtime checks are required before these additions are marked accepted.
 
-| Phase | Focus | Status |
-|---|---|---|
-| **1D** | Correlation and BTC co-movement | **Next** |
-| **1E** | Monitor improvements, validation and performance | Partly complete |
-| **2 / 2B** | Futures open interest, funding, positioning, trading flow and market summaries | Planned |
-| **3** | Crowding, leverage, deleveraging and price/flow divergence | Planned |
-| **4** | Extend metric-based Global Setting and SMS triggers | Partly complete |
-| **5** | Spreads, order-book depth and liquidity stress | Planned |
-| **6** | Historical metrics, backtesting evidence and outcome analysis | Planned |
+## Remaining work
 
-**Release status:** No 2.10 release date has been set. This roadmap covers development milestones, not a finished production release. The completed 2.9 modernization is separate. See [STATUS.md](STATUS.md) for the latest verification and outstanding issues.
+| Stage | Work |
+|---|---|
+| Current acceptance | Validate lifecycle, startup protection, correlation, history, Monitor, and remaining exchange/quote cases |
+| Phase 2 / 2B | Open interest, funding, positioning, taker flow, and market-wide summaries |
+| Phase 3 | Transparent leverage expansion, crowding, deleveraging, and flow-divergence measurements |
+| Phase 4 | Integrate and validate each added metric family in GlobalSettings, SMS, exports, and Monitor |
+| Phase 5 | Spreads, depth, slippage estimates, and liquidity stress |
+| Phase 6 | Extend the initial decision history into reproducible native historical analysis |
+| After all new metrics | Profile and optimize startup, historical reconstruction, snapshot reuse, calculations, logging, network and allocation costs |
+
+**Performance optimization is explicitly scheduled after completion of all approved new metrics.** It is not a prerequisite for continuing the metric roadmap.
+
+PTMagic 2.10 is an application-development project. Personal trading-strategy development is outside this roadmap. No release date or trading-performance claim is implied.
