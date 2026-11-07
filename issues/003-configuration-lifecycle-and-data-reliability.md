@@ -4,19 +4,19 @@
 
 **Source reviewed before changes:** PTMagic `d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc`
 
-**Implementation checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
+**Implementation checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
 
-**Status:** Build and ten harnesses passed 193 checks at `86c2ea3`; ConfigurationLifecycle failed compilation, DecisionHistory did not run, and complete regression/runtime acceptance remains open.
+**Status:** Deterministic acceptance complete: 193 checks at `86c2ea3` plus 66 lifecycle and 13 history checks at `d331fbd`, totaling 272 across twelve harnesses. Configured runtime, actual PT API, and browser acceptance remain open.
 
 This issue records the actionable findings from the November 7 review and their current disposition. It does not claim that every defect was introduced by 2.10. Several findings concern long-standing configuration lifecycle code that new metrics make more consequential.
 
 ## Latest execution evidence
 
-The user-local build at exact source `86c2ea3ff430b62e654f929a222935ec53ea8fa6` passed for Core, PTMagic, and Monitor with SDK 10.0.403 in 15.8 seconds. Ten harnesses completed with 193 passing checks, including all 40 TriggerConfigurationValidation and 28 MonitorSettingsRoundTrip checks. ConfigurationLifecycle failed compilation with CS0118 at Program.cs line 686, before any cases executed; DecisionHistory did not run. [Latest exact-source evidence](../updates/2026-11-07-193-check-validation.md).
+The latest user-local build at exact source `d331fbd059041241069646c3bb82ac6549423a70` passed for Core, PTMagic, and Monitor with SDK 10.0.403 in 10.9 seconds. ConfigurationLifecycle passed all 66 checks and DecisionHistory passed all 13. Together with 193 passing checks in ten harnesses at `86c2ea3ff430b62e654f929a222935ec53ea8fa6`, the current 272-check inventory is complete. This combines two recorded runs; production code and assertions were unchanged between them. [Latest exact-source evidence](../updates/2026-11-07-completed-harness-validation.md).
 
-A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, blank MainMarket, and an aborted raid. Its stack locations match the older `d0b0b87` baseline and it lacks the current Source revision line, suggesting an older running binary without identifying its exact SHA. [The dated evidence record](../updates/2026-11-07-build-and-partial-harness-validation.md) preserves this inference and the incomplete regression results.
+A later runtime log repeats the bare `symbol=USDT` request and blank MainMarket after a first completed raid selects a non-default setting. The failing raid loads only 13/12/11 property lines. Both raids lack the current unconditional Source revision and Analysis main market logs and follow the older Core code path. This establishes execution of pre-fix Core behavior; the exact running SHA and loaded DLL path remain unknown. Its separate runtime working directory alone does not identify the assembly. The reported PT update and absent TestMode banner are not acceptance of the new startup API lifecycle. The next check explicitly launches the rebuilt DLL with that existing runtime directory and TestMode configuration, then verifies source identity. [Current evidence](../updates/2026-11-07-completed-harness-validation.md) preserves this distinction without publishing the raw private runtime log.
 
-The earlier volume-cap fixture defect is resolved by the 40/40 validator result. The new compiler failure came from an unqualified `Telegram` constructor; source review found the same reference in the still-unrun DecisionHistory harness. Both now name `Core.Main.DataObjects.PTMagicData.Telegram` explicitly, with no production behavior or case-count change. The current authored inventory remains 272 groups across twelve projects: 193 passed at `86c2ea3`, while 66 lifecycle and 13 history groups remain unexecuted. The focused continuation runs those two harnesses at the corrected source. Bootstrap production corrections have built but still need lifecycle and configured runtime evidence from a restarted instance with its Source revision recorded. [Publication status](../STATUS.md#publication-status).
+The earlier volume-cap fixture defect is resolved by the 40/40 validator result. Both qualified Telegram fixture references are now verified by native execution. Passing lifecycle cases establish exact main-market parsing/inheritance, invalid-input boundaries, fake-transport guard/configuration ordering, acknowledgement/retry behavior, freshness, SMS transitions, and TestMode isolation. Passing history cases establish bounded file behavior and production capture/checkpoint handling in their fixtures. Configured runtime still needs to show the intended market, a completed raid, actual PT acknowledgement and native SOM behavior, and browser integration. [Publication status](../STATUS.md#publication-status).
 
 ## Findings and acceptance
 
@@ -68,7 +68,7 @@ Phase 1D adds CorrelationToBTC, MeanCorrelationToBTC, and MedianCorrelationToBTC
 
 Minimal decision history defaults to enabled, 30-day retention, and 256 MiB total quota. JSONL segments rotate at 16 MiB; pruning removes whole oldest files. No license, token, raw general configuration, raw PT payload, or raw exception strings are part of the audit record.
 
-These additions have their own new acceptance cases; they are not implicitly validated by the old 88-check baseline.
+These additions have explicit passing deterministic evidence: 21 correlation checks at `86c2ea3` and 13 decision-history checks at `d331fbd`. Configured data, export/Monitor integration, and runtime provenance remain separate acceptance work.
 
 ## Deferred and excluded work
 

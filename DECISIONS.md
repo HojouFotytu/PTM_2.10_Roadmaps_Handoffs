@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
+**Source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -177,7 +177,7 @@ D-032 supersedes earlier Phase 1D handoff requirements to establish snapshot reu
 
 ## D-033 — Phase 1D correlation contract
 
-**Authorized:** November 7, assessment item 8. Implementation choices below are part of the approved work; execution acceptance remains pending.
+**Authorized:** November 7, assessment item 8. Implementation choices below are part of the approved work. All 21 correlation harness checks passed at `86c2ea3`; configured runtime acceptance remains pending.
 
 - Asset metric: CorrelationToBTC.
 - Global metrics: MeanCorrelationToBTC and MedianCorrelationToBTC.
@@ -211,6 +211,8 @@ Records identify the source/version, configuration and desired/confirmed payload
 
 Do not persist license values, tokens, raw general settings, raw PT payloads, or raw exception strings that may contain secrets. This is a bounded audit trail, not the complete Phase 6 backtest system or a persistent normalized candle cache.
 
+All 13 decision-history harness checks passed at `d331fbd`, including bounded files, acknowledgement isolation, and production capture paths. Configured runtime integration remains separate from this deterministic evidence.
+
 ## D-035 — Application scope is independent of personal strategy development
 
 **User instruction:** November 7, assessment item 7.
@@ -235,7 +237,7 @@ Distinguish:
 
 A previous successful run does not validate later source. TestMode deliberately suppresses PT writes, so it cannot establish actual guard or configuration delivery. Record exact source/binary identity where available and label inferred provenance explicitly.
 
-The latest accepted pre-change execution baseline is the November 5 build, 88 checks, and nine Futures USDT TestMode raids associated with d0b0b87. The November 7 source checkpoint requires new execution evidence.
+The accepted pre-change runtime baseline remains the November 5 build, 88 checks, and nine Futures USDT TestMode raids associated with d0b0b87. The November 7 deterministic inventory is now complete across two recorded revisions: ten harnesses passed 193 checks at `86c2ea3`, and the two-harness continuation passed 66 lifecycle plus 13 history checks at `d331fbd`. Only the fixture type qualifications and README evidence changed between those runs; production code and assertions were unchanged. Record the combined 272 passes with both source identities, not as a single twelve-project run at `d331fbd`. Subsequent documentation-only evidence updates do not require repeating those checks. Configured runtime, actual PT acknowledgement, and browser acceptance remain open.
 
 ## D-037 — Direct global SOM API supersedes the startup preset overlay
 

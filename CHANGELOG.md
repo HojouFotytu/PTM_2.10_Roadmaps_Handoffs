@@ -1,6 +1,15 @@
 # PTMagic 2.10 — Change log
 
-**Current application source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
+**Current application source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
+
+## 2026-11-07 — Complete deterministic validation and advance to configured runtime
+
+- The user built Core, PTMagic, and Monitor at exact source `d331fbd059041241069646c3bb82ac6549423a70` with SDK 10.0.403 in 10.9 seconds. ConfigurationLifecycle passed all 66 checks, and DecisionHistory passed all 13.
+- Combined with the earlier 193 passes in ten harnesses at `86c2ea3`, all 272 current checks now have passing results across twelve projects. The record preserves both execution revisions; it is not a claim of one complete twelve-project run at `d331fbd`.
+- The two Telegram fixture corrections are verified. Production source and assertions were unchanged between the runs. Published `fac346c88b2c634439083e7515193d756ac3d186` updates five application harness READMEs to record these results without new executable changes or additional test requirements.
+- The current handoff advances to a configured TestMode run. Real PT API acknowledgement/native SOM behavior, browser integration, and remaining exchange/quote cases retain their separate acceptance requirements.
+- A subsequent runtime log repeats the old bare-USDT failure and lacks the current source/main-market logs, establishing pre-fix Core behavior. Exact running SHA and loaded DLL path remain unknown; its runtime working directory is separate from the checkout. The next handoff explicitly launches the built DLL with that existing directory and TestMode configuration, then verifies identity. This selects current binaries for validation without claiming a permanent installed-launcher update. Passing checkout tests retain their recorded evidence.
+- [Completed validation evidence](updates/2026-11-07-completed-harness-validation.md) · [Current verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
 
 ## 2026-11-07 — Record 193 passing checks and correct two fixture type references
 

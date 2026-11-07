@@ -4,13 +4,13 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
+**Source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
-Implementation and execution evidence are different states. The latest November 7 run built the application and passed ten harnesses; the remaining lifecycle/history harnesses and configured runtime acceptance are still open. Earlier passing results retain their actual source identities.
+Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
 
 ## 1. Purpose and scope
 
@@ -68,9 +68,9 @@ The current work adds:
 9. Bounded native decision-history records.
 10. Main-market bootstrap validation and preservation of inherited default-file assignments when a property group is null.
 
-**Execution status at `86c2ea3`: Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 15.8 seconds, and ten harnesses passed 193 checks. ConfigurationLifecycle failed compilation before any cases executed; DecisionHistory did not run.** TriggerConfigurationValidation now passes all 40 checks, including the sentinel correction and new boundaries, and MonitorSettingsRoundTrip passes all 28. Full regression and configured runtime acceptance remain open. [Detailed evidence](../updates/2026-11-07-193-check-validation.md).
+**Deterministic execution is complete across two recorded revisions: ten harnesses passed 193 checks at `86c2ea3`, and the continuation at `d331fbd` passed all 66 ConfigurationLifecycle and 13 DecisionHistory checks.** The latest solution build succeeded with SDK 10.0.403 in 10.9 seconds. The total is 272 passing checks across twelve projects, not a single full-suite execution at one revision. [Detailed evidence](../updates/2026-11-07-completed-harness-validation.md).
 
-The follow-up source fully qualifies `Core.Main.DataObjects.PTMagicData.Telegram` in both remaining harness fixtures, correcting the observed lifecycle collision and the same defect found by source review in DecisionHistory. Production behavior and test expectations are unchanged. The inventory remains 272 authored groups across twelve projects; 66 lifecycle and 13 history groups still require execution. The main-market production corrections have built but remain subject to those lifecycle checks and a configured runtime check with recorded Source revision. The earlier bootstrap failure lacks an exact runtime source SHA. Use the focused continuation in the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md); the full twelve-project sequence is retained there as well.
+The qualified Telegram fixture references are now verified by native execution; production source and test expectations were unchanged between the two tested revisions. Main-market parsing/inheritance, startup SOM orchestration, delivery retry, freshness, SMS transitions, and bounded history now have passing deterministic coverage. A later runtime log reproduces the old bare-USDT request and omits the current source/main-market logs. It executes pre-fix Core behavior with a runtime working directory separate from the checkout; its exact SHA and loaded DLL path are unknown. The next step explicitly selects the freshly built DLL with the existing runtime configuration and verifies identity in TestMode. This validation run does not permanently update the installed launcher, which needs a coherent application-bundle update before reuse. Actual PT and browser checks follow separately. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md); its full twelve-project sequence remains a reference, with no rerun required for documentation-only updates.
 
 ### Phase map
 
@@ -81,13 +81,13 @@ The follow-up source fully qualifies `Core.Main.DataObjects.PTMagicData.Telegram
 | Phase 1B — return-derived metrics | Implemented baseline; Concentration-window change requires new acceptance |
 | Phase 1C — OHLC/volume metrics | Accepted baseline; new requirement reporting requires validation |
 | Phase 1D — correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
-| Phase 1E — inspection and robustness | Partly complete; lifecycle, editor, cross-exchange and failure-path acceptance remain |
+| Phase 1E — inspection and robustness | Deterministic lifecycle/editor/history checks passed; configured PT, browser, cross-exchange and failure-path acceptance remain |
 | Phase 2 — futures raw observations | Planned |
 | Phase 2B — futures market aggregation | Planned |
 | Phase 3 — higher-order conditions | Planned |
 | Phase 4 — trigger/UI integration | Implemented for current families, extended with each new family |
 | Phase 5 — liquidity/depth/stress | Planned |
-| Phase 6 — native history and historical analysis | Minimal decision audit trail added; full analysis system remains planned |
+| Phase 6 — native history and historical analysis | Minimal decision audit trail has 13/13 passing checks at `d331fbd`; configured integration and the full analysis system remain |
 | Post-metric performance program | Deferred until all approved metric additions are complete |
 
 ## 3. Architectural rules

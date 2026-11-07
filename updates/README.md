@@ -2,19 +2,23 @@
 
 ## Latest user-local verification
 
-**[November 7 — Successful build, 193 passing checks, and a lifecycle harness compiler failure](2026-11-07-193-check-validation.md)**
+**[November 7 — Completed deterministic validation: 272 passing checks across two recorded runs](2026-11-07-completed-harness-validation.md)**
 
-At exact source `86c2ea3`, Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 15.8 seconds. Ten harnesses passed 193 checks, including all 40 validator and 28 Monitor round-trip checks. ConfigurationLifecycle failed compilation before any cases executed; DecisionHistory did not run. The current source corrects the observed lifecycle type reference and the same source-reviewed defect in DecisionHistory. Execution of both remaining harnesses and configured runtime acceptance remain open.
+At exact source `d331fbd`, Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 10.9 seconds. ConfigurationLifecycle passed all 66 checks and DecisionHistory passed all 13. Combined with the earlier 193 passes in ten harnesses at `86c2ea3`, all 272 current checks now have passing results. Production code and assertions were unchanged between those two revisions; this is combined evidence, not a single twelve-project run. Configured runtime, actual PT API, and browser acceptance remain open.
+
+The same record includes the subsequent runtime report: a process using the existing runtime working directory still executes older Core behavior and repeats the bare-USDT failure after a setting transition. Its actual running SHA and loaded DLL path are unknown. Explicitly selecting the freshly built DLL with the existing TestMode configuration is now the immediate next step; a checkout build alone does not establish which binary the installed launcher selects.
 
 ## Current implementation checkpoint
 
 **[November 7 — Stabilization, correlation, and documentation reconciliation](2026-11-07-stabilization-correlation-implementation.md)**
 
-Source implemented and tests authored. The latest user-local run confirms the corrected volume-cap fixture, both sentinel boundary checks, and the Monitor round-trip harness. The inventory remains **272 authored groups across twelve projects**, with 193 passing checks recorded at `86c2ea3` and 79 still unexecuted. The published fixture-only correction requires a build and execution of the two remaining harnesses. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for the focused continuation and full sequence, and the [current status](../STATUS.md) for the publication and evidence boundaries.
+Source implementation and deterministic execution are complete for the current twelve-harness inventory. Main-market/bootstrap, lifecycle, and decision-history checks now join the earlier validator, Monitor round-trip, analytics, and correlation passes. Subsequent application README updates record this evidence without changing executable code. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for the next configured TestMode run and the retained full regression reference, and [current status](../STATUS.md) for the remaining acceptance boundaries. Documentation-only updates do not require repeating the successful harnesses.
 
-The current checkpoint incorporates the user's direct global SOM API revision. The earlier full-preset startup overlay is superseded by [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay); no prior acceptance is claimed for either startup mechanism.
+The current checkpoint incorporates the user's direct global SOM API revision. Its fake-transport lifecycle checks pass; actual PT acknowledgement and native buy/DCA/sell behavior still need configured integration evidence. The earlier full-preset startup overlay is superseded by [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
 
 ## Earlier November 7 verification
+
+[The 193-check run at `86c2ea3`](2026-11-07-193-check-validation.md) preserves the successful build and ten harnesses, observed lifecycle compiler error, and source-reviewed matching history fixture error. The successful `d331fbd` continuation resolves both remaining harnesses without rewriting that prior record.
 
 [Successful build and partial harness validation at `78967a7`](2026-11-07-build-and-partial-harness-validation.md) preserves the earlier build, 125 passes in eight completed harnesses, failed volume-cap fixture, and separate runtime bootstrap abort without an exact source SHA. The latest result resolves that fixture failure; it does not establish successful configured startup, SOM enforcement, or normal delivery.
 

@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
+**Application source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
 
-**Reviewed source tree:** `2adcdc021731236fb071f4f7e4563afabbbf5ab7`
+**Reviewed source tree:** `e302ecdfbceb345a64bf61f476c98745079c305c`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -16,17 +16,21 @@
 
 This is the sole current development handoff. Earlier dated handoffs remain historical. Begin with the actual application branch and source, then use the contracts and verification sequence below.
 
-**Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published; local validation of the follow-up corrections is still required.
+**Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published. Deterministic validation is complete; configured runtime acceptance is next.
 
 ## 1. What is ready, and what is not yet accepted
 
-The latest user run identifies exact source **`86c2ea3ff430b62e654f929a222935ec53ea8fa6`**, using **.NET SDK 10.0.403**. Core, PTMagic, and Monitor built successfully in **15.8 seconds**. The first ten harnesses completed successfully with **193 passing checks**, including all 40 TriggerConfigurationValidation and all 28 MonitorSettingsRoundTrip checks. The earlier volume-cap fixture failure is resolved, and the Razor compilation correction remains confirmed.
+The latest user run identifies exact source **`d331fbd059041241069646c3bb82ac6549423a70`**, using **.NET SDK 10.0.403**. Core, PTMagic, and Monitor built successfully in **10.9 seconds**. ConfigurationLifecycle passed all **66 checks**, and DecisionHistory passed all **13**. The continuation reached its successful completion message.
 
-ConfigurationLifecycle failed compilation at Program.cs line 686 with CS0118: `Telegram` is a namespace but is used like a type. Its cases did not execute, and fail-fast prevented DecisionHistory from running. Source review found the same unqualified constructor in DecisionHistory line 198. The follow-up correction fully qualifies both constructors as `Core.Main.DataObjects.PTMagicData.Telegram`, without changing production source or test expectations. Nullable warnings in Phase1SmsSummaryIsolation and NormalizedPriceTrendMigration did not prevent their passes. **The two remaining harnesses and configured runtime acceptance are still open.** [Latest exact-source evidence](../updates/2026-11-07-193-check-validation.md).
+The preceding run at `86c2ea3ff430b62e654f929a222935ec53ea8fa6` built the solution in 15.8 seconds and passed **193 checks in ten harnesses**, including 40 TriggerConfigurationValidation and 28 MonitorSettingsRoundTrip checks. The two qualified Telegram fixture constructors were the only executable changes before the successful continuation; production source and assertions were unchanged. **All 272 checks across twelve projects now have passing results over these two recorded revisions.** This is not a single full-suite execution at `d331fbd`. [Latest exact-source evidence](../updates/2026-11-07-completed-harness-validation.md).
 
-A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, a blank MainMarket, and an aborted raid. Its stack locations match the earlier `d0b0b87` baseline and it lacks the current `Source revision` line, suggesting an older binary was still running. This is an inference, not an exact runtime source identity. [Detailed evidence](../updates/2026-11-07-build-and-partial-harness-validation.md).
+The current application checkpoint `fac346c` updates five harness READMEs to record the observed results. It changes no executable source, projects, settings, or assertions and requires no additional harness rerun. Configured TestMode behavior, actual PT API acknowledgement/native SOM behavior, and browser integration remain separate acceptance work.
 
-The previous `78967a7` run and its sentinel-fixture failure remain in the earlier evidence record. At `86c2ea3`, the corrected finite cap and both added sentinel boundary checks pass. The main-market production corrections also build: they preserve default-file assignments when property groups are null, resolve and validate the exact market property before exchange I/O, and use a USDT price identity of 1. Their lifecycle cases did not execute because of the compiler error. A successful application solution build compiles Core, PTMagic, and Monitor; it does not compile the separate console harness projects.
+A subsequent runtime log repeats the bare `symbol=USDT` failure while using an existing configured runtime directory separate from the Git checkout. Its first raid completes and reports a non-default setting transition; the next loads only 13/12/11 property lines and fails with an empty main market. Both raids omit the current unconditional `Source revision` and `Analysis main market` lines and follow the older Core code layout. The process therefore executes pre-fix Core behavior; its exact SHA and loaded DLL path are not shown. The runtime working directory alone does not identify the loaded assembly. The log also lacks the TestMode banner and reports a PT update, so it is not configured TestMode evidence for the current code. [Deployment diagnosis](../updates/2026-11-07-completed-harness-validation.md#subsequent-configured-runtime-report-runtime-core-is-still-older).
+
+The immediate task is to select the freshly built application DLL explicitly while retaining the existing runtime working directory and configuration. Section 3A does this without copying or overwriting private settings, presets, or state. Before reusing an installed launcher, update it to use the rebuilt/published binaries and verify runtime identity. Do not change strategy presets or weaken market validation to compensate for the old code path.
+
+The previous `78967a7` run and its sentinel-fixture failure remain in the earlier evidence record. At `86c2ea3`, the corrected finite cap and both added sentinel boundary checks passed. At `d331fbd`, main-market parsing/inheritance, invalid-input boundaries, guard/configuration orchestration, delivery retry, SMS transitions, and history checks also passed. The solution builds Core, PTMagic, and Monitor; each separate harness was compiled and executed by its own recorded `dotnet run` invocation.
 
 The accepted pre-change evidence remains the November 5 .NET 10 build, 88 checks across six harnesses, and nine Futures USDT TestMode raids associated with d0b0b87. Those logs identify version 2.10.0 but not an exact source SHA. The 5,192 matching normalized export/runtime values establish internal consistency, not parity with the removed legacy calculation. Positive BTC OffTrigger followed by immediate reactivation did not establish lasting removal.
 
@@ -61,19 +65,21 @@ The user rejected the initial unpublished full-preset overlay. The current start
 
 The history-requirement export distinguishes complete-period lower bounds from current-raid slots and all-alignments retention. Default 24-hour trends have conservative StoreDataMaxHours guidance of 384h for ATR(14), 528h for VolumeExpansion(20), and 744h for Correlation(30). It warns on insufficiency rather than silently extending retention.
 
-## 3. Local build and regression commands
+## 3. Local commands and deterministic execution record
 
-### A. Required continuation after the 193-check result
+### A. Next step — run the exact built DLL with the existing runtime configuration
 
-This correction changes fixture type references in the two remaining harnesses, with no production behavior change. Run the complete block below in PowerShell to pull the correction, record the source, build the solution, and execute ConfigurationLifecycle followed by DecisionHistory. The ten earlier passes remain evidence for `86c2ea3`; this continuation must be recorded under its actual source rather than described as a new twelve-harness run.
+The deterministic checks are complete. Stop the older PTMagic instance through its normal startup/stop procedure before starting another. Set `$PtmRuntime` below to the **existing configured PTMagic runtime folder**, and first confirm `GeneralSettings.Application.TestMode=true` in that folder's `settings.general.json`. Keep its existing analyzer and preset filenames.
 
-The script does not launch the configured application or change TestMode.
+Run the complete block below in PowerShell to pull the documentation checkpoint, record the source, build, and start the resulting **absolute DLL path** with the existing runtime directory as its working directory. This selects the updated binary directly instead of relying on the installed launcher. The script does not change TestMode, copy deployment files, or overwrite settings/presets/data.
 
 Review the printed working-tree status. Local source changes must be recorded with the build's -dirty identity and cannot be reported as the clean checkpoint. Private configuration/preset differences are identified separately by the recorded configuration and payload hashes.
 
 ```powershell
 & {
     $ErrorActionPreference = "Stop"
+
+    $PtmRuntime = "<existing configured PTMagic runtime folder>"
 
     function Assert-NativeSuccess {
         param([string]$Step)
@@ -99,7 +105,7 @@ Review the printed working-tree status. Local source changes must be recorded wi
 
     $ActualSource = git rev-parse HEAD
     Assert-NativeSuccess "git rev-parse HEAD"
-    $ExpectedSource = "d331fbd059041241069646c3bb82ac6549423a70"
+    $ExpectedSource = "fac346c88b2c634439083e7515193d756ac3d186"
     Write-Host "Application source: $ActualSource"
     if ($ActualSource.Trim() -ne $ExpectedSource) {
         throw "Source differs from this handoff ($ExpectedSource). Record the actual source before continuing."
@@ -111,29 +117,34 @@ Review the printed working-tree status. Local source changes must be recorded wi
     dotnet build ".\PTMagic.sln"
     Assert-NativeSuccess "dotnet build"
 
-    $Projects = @(
-        "Tests/ConfigurationLifecycle/ConfigurationLifecycle.csproj",
-        "Tests/DecisionHistory/DecisionHistory.csproj"
-    )
+    $PtmDll = Join-Path (Get-Location).Path "PTMagic\bin\Debug\net10.0\PTMagic.dll"
+    if (-not (Test-Path -LiteralPath $PtmRuntime -PathType Container)) {
+        throw "Set PtmRuntime to the existing configured PTMagic runtime folder."
+    }
+    $PtmRuntime = (Resolve-Path -LiteralPath $PtmRuntime).Path
 
-    foreach ($Project in $Projects) {
-        if (-not (Test-Path $Project)) {
-            throw "Missing required harness: $Project"
+    foreach ($RequiredFile in @(
+        $PtmDll,
+        (Join-Path $PtmRuntime "settings.general.json"),
+        (Join-Path $PtmRuntime "settings.analyzer.json")
+    )) {
+        if (-not (Test-Path -LiteralPath $RequiredFile -PathType Leaf)) {
+            throw "Required file was not found: $RequiredFile"
         }
-        Write-Host "Running $Project"
-        dotnet run --project $Project
-        Assert-NativeSuccess $Project
     }
 
-    Write-Host "Build and both remaining harness commands completed successfully."
-    Write-Host "Validated continuation source: $ActualSource"
-    Write-Host "Send the complete output for review. Runtime acceptance remains separate."
+    Write-Host "Compiled application: $PtmDll"
+    Write-Host "Runtime configuration folder: $PtmRuntime"
+    Write-Host "Confirm TESTMODE ENABLED in the running application's log."
+    Set-Location -LiteralPath $PtmRuntime
+    dotnet $PtmDll
+    Assert-NativeSuccess "PTMagic runtime"
 }
 ```
 
-### B. Complete twelve-project sequence
+### B. Complete twelve-project sequence — reference for later changes
 
-The full sequence remains available for a subsequent production change or a required full rerun. It is not an additional requirement for the fixture-only continuation above. Run this entire block in **PowerShell from the PTMagic application repository root**, not the documentation repository. It stops on a wrong branch/source, missing project, failed pull, build error, or failed harness. The exact SHA must match this handoff; a later source revision needs its own recorded identity and results.
+The full sequence remains available for a later source change that requires regression execution. It is not an additional requirement for the current documentation-only update. Run this entire block in **PowerShell from the PTMagic application repository root**, not the documentation repository. It stops on a wrong branch/source, missing project, failed pull, build error, or failed harness. The exact SHA must match this handoff; a later source revision needs its own recorded identity and results.
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -163,7 +174,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "d331fbd059041241069646c3bb82ac6549423a70"
+$ExpectedSource = "fac346c88b2c634439083e7515193d756ac3d186"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."
@@ -203,26 +214,26 @@ Write-Host "Build and all listed harness processes completed successfully."
 Write-Host "Provide this output and the source SHA for review; runtime acceptance remains separate."
 ```
 
-### Authored case inventory
+### Completed case inventory and provenance
 
-The expected inventory below describes the current source. The result column records the user's run at `86c2ea3`; it does not certify a later source correction. Preserve each harness's actual output.
+All current authored groups have passing results. The source column preserves the actual revision used for each harness; no all-twelve-project run at one revision is claimed.
 
-| Project | Case groups/checks expected | Latest recorded result at `86c2ea3` |
+| Project | Passing checks/groups | Executed source |
 |---|---:|---|
-| Phase1AReadiness | 5 | 5/5 passed |
-| Phase1COhlcv | 13 | 13/13 passed |
-| Phase1SmsSummaryIsolation | 5 | 5/5 passed |
-| Phase1TriggerLogic | 29 | 29/29 passed |
-| NormalizedPriceTrendMigration | 18 | 18/18 passed |
-| Phase1MetricWarnings | 18 | 18/18 passed |
-| Phase1AnalyticsReliability | 16 | 16/16 passed |
-| Phase1DCorrelation | 21 | 21/21 passed |
-| TriggerConfigurationValidation | 40 | 40/40 passed |
-| MonitorSettingsRoundTrip | 28 | 28/28 passed |
-| ConfigurationLifecycle | 66 | Compilation failed; zero cases executed |
-| DecisionHistory | 13 | Not run; fail-fast sequence stopped |
+| Phase1AReadiness | 5 | `86c2ea3` |
+| Phase1COhlcv | 13 | `86c2ea3` |
+| Phase1SmsSummaryIsolation | 5 | `86c2ea3` |
+| Phase1TriggerLogic | 29 | `86c2ea3` |
+| NormalizedPriceTrendMigration | 18 | `86c2ea3` |
+| Phase1MetricWarnings | 18 | `86c2ea3` |
+| Phase1AnalyticsReliability | 16 | `86c2ea3` |
+| Phase1DCorrelation | 21 | `86c2ea3` |
+| TriggerConfigurationValidation | 40 | `86c2ea3` |
+| MonitorSettingsRoundTrip | 28 | `86c2ea3` |
+| ConfigurationLifecycle | 66 | `d331fbd` |
+| DecisionHistory | 13 | `d331fbd` |
 
-The authored inventory remains **272 checks/groups across twelve projects**: **193 checks passed across ten completed harnesses at `86c2ea3`**; the remaining 79 are unexecuted. The earlier `78967a7` source had 260 authored groups and 125 passes in eight completed harnesses; that evidence is preserved separately. The fixture qualification corrections do not add or remove cases, and they have not yet been validated by execution.
+The completed inventory is **272 checks/groups across twelve projects**: **193 passed at `86c2ea3` and 79 at `d331fbd`**. The earlier `78967a7` partial run is preserved separately. The fixture qualification corrections are verified, and the current `fac346c` checkpoint only updates README evidence. Preserve all results under their executed sources.
 
 The two added validator checks distinguish the adjacent representable volume cap from the exact unbounded sentinel. The ten added lifecycle groups cover exact/non-USDT market parsing; null, missing, blank, prefix-only, and malformed inputs; null PAIRS/DCA/INDICATORS inheritance; fresh-summary bootstrap with and without an acknowledged configuration; retention of an owned guard when the market is missing; and public Spot/Futures/US adapter identity and invalid-input boundaries using already-canceled tokens.
 
@@ -232,15 +243,15 @@ No removed selective-legacy project belongs in this sequence. Do not substitute 
 
 Use a configured deployment built from the exact recorded source. Confirm `GeneralSettings.Application.TestMode=true` before the initial runtime phase. Use application-owned neutral diagnostics; personal strategy presets and results are outside this task.
 
-For a source checkout already configured with its required settings and presets, the application starts from the repository root with:
+Section 3A selects the freshly built DLL and sets the working directory to `$PtmRuntime`. That command loads `$PtmRuntime\settings.general.json` and `$PtmRuntime\settings.analyzer.json`; exported data is under `$PtmRuntime\_data`. Keep the existing configured preset names. For logs, use console output or the active log file: the checked-in NLog path is based on the executable directory, so this Debug DLL normally writes under the checkout's `PTMagic\bin\Debug\net10.0\_logs` even though configuration/data come from the existing runtime directory.
 
-```powershell
-dotnet run --project PTMagic/PTMagic.csproj
-```
+For a permanently installed startup command, publish/update a coherent application bundle from the pinned source while preserving that installation's configuration, presets, data, and logs, then restart through its normal procedure. Do not copy only Core.dll or reuse the unchanged launcher as evidence that the updated application was selected. The direct DLL launch in section 3A is a validation run, not a permanent deployment update. Capture the raid's `Source revision` line and compare it with this handoff. A successful checkout build does not update or restart a separately deployed process; version 2.10.0 alone does not establish source identity.
 
-A configured deployed installation may use its existing startup command instead. Stop the older running instance, update that configured installation from the pinned source, and restart it through the normal deployment procedure. Capture the startup `Source revision` line and compare it with this handoff. A successful checkout build does not update or restart a separately deployed process; version 2.10.0 alone does not establish source identity.
+The alternative `dotnet run --project .\PTMagic\PTMagic.csproj` from the repository root uses the project's RunWorkingDirectory, the checkout's `PTMagic` subdirectory. It therefore reads that subdirectory's settings and state. Use it only when that is the intended configured runtime, rather than assuming it reads a separate installation's settings.
 
-Before accepting a new raid, confirm that the compiled PAIRS settings contain a valid `market` assignment. For the user's USDT configuration, expect `market = USDT` and the new `Analysis main market: USDT` log identifying the selected GlobalSetting. Missing or malformed values must produce a clear configuration error before exchange I/O. Test null property-group inheritance and invalid direct adapter inputs through the deterministic harness; the configured runtime must establish that the updated process resolves the intended market and completes a raid.
+Before accepting a new raid, confirm that the compiled PAIRS settings contain a valid `market` assignment. For the user's USDT configuration, expect `market = USDT` and `Analysis main market: USDT (compiled PAIRS for GlobalSetting '<actual setting>').` Missing or malformed values must produce a clear configuration error before exchange I/O. Null property-group inheritance and invalid direct adapter inputs already passed their deterministic checks; the configured runtime must now establish that the updated process resolves the intended market and completes a raid.
+
+Capture startup and **two consecutive completed raids**, because the reported older-runtime pattern succeeded on its first raid and failed on the next after a setting transition. For both raids, verify the expected `Source revision`, `Analysis main market: USDT`, `Summary: LastRuntimeSummary.json saved.`, and `RAID SUMMARY` with `+ PT Config updated: No - TESTMODE active`; also retain the startup `TESTMODE ENABLED - No PT settings will be changed!` banner. Include any setting transition in the output without changing personal presets to force one. Confirm the former bare `symbol=USDT` invalid-symbol request is absent. If analysis is unavailable or stale, retain its diagnostics; a startup release preview is only expected after fresh conclusive analysis. `TESTMODE: startup global SOM preview; no PT API command was sent.` and the equivalent release preview are simulations, not native PT acknowledgements.
 
 ### A. Normalized data, history, and correlation
 
@@ -266,7 +277,7 @@ Before accepting a new raid, confirm that the compiled PAIRS settings contain a 
 8. Make an existing ordinary SMS activation unavailable, including missing/future age or nonfinite/negative volume observations. It must remain active. Final unavailable SMS activation/OffTrigger expressions must keep initial selection indeterminate; conclusive true/false masking must still work.
 9. Reload a changed setting definition or preset under the same name. The current definition must be compiled and the changed payload delivered/retried according to acknowledgement state.
 
-The deterministic lifecycle harness uses controlled transports and failures. It must cover repeated raids, failed/partial delivery, retry, and checkpoint transitions; the configured runtime confirms that orchestration calls those production paths.
+The passing deterministic lifecycle harness uses controlled transports and failures for repeated raids, failed/partial delivery, retry, and checkpoint transitions. The configured runtime confirms integration with the actual configuration and observed data; real PT acknowledgement remains a separate step.
 
 ### C. Actual PT acknowledgement and failure recovery
 
@@ -310,7 +321,7 @@ Do not treat a JSONL append as a checkpoint acknowledgement or a complete histor
 
 ## 5. Evidence to return and closeout rules
 
-Provide the console output with source SHA and .NET version, actual per-harness results, relevant raid logs, and the matching MarketTrendAnalytics, LastRuntimeSummary, SMS summary, history/checkpoint metadata, and Monitor observations. Remove credentials from any shared deployment files; the history format itself is designed to omit them.
+For the next configured TestMode run, provide startup and both consecutive raids' console/current-instance output, plus the current matching `$PtmRuntime/_data/LastRuntimeSummary.json` and `$PtmRuntime/_data/MarketTrendAnalytics.json`. Include `SingleMarketSettingSummary.TestMode.json` and matching DecisionHistory JSONL records if produced. Retain the source SHA, .NET version, and configuration identity with this evidence; the completed harness results need not be resubmitted. Add relevant checkpoint metadata and Monitor observations when conducting those later scenarios. Remove credentials from any shared deployment files; the history format itself is designed to omit them.
 
 Record each scenario as pass, fail, or not run, with environment and source identity. Avoid one blanket “all validated” label when Spot/US, non-USDT, browser, or actual PT acknowledgement remains untested.
 

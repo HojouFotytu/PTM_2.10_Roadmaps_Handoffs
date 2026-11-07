@@ -17,7 +17,7 @@ PTMagic 2.10 expands native market analysis beyond price trends. It adds breadth
 
 The accepted baseline passed a local .NET 10 build, 88 regression checks, and recorded Futures TestMode runs. Those results precede the changes below.
 
-## Implemented in the current checkpoint — validation pending
+## Implemented — deterministic checks passed, runtime acceptance next
 
 - Reliable delivery state and retries for ProfitTrailer configuration updates.
 - Correct removal of the final active SMS.
@@ -28,13 +28,13 @@ The accepted baseline passed a local .NET 10 build, 88 regression checks, and re
 - Per-market BTC correlation and market mean/median correlation.
 - Bounded native decision-history records with configuration/source identity and delivery outcomes.
 
-The latest November 7 user-local run at `86c2ea3` built Core, PTMagic, and Monitor successfully and passed 193 checks across ten harnesses, including 21 correlation, 40 trigger-validation, and 28 Monitor round-trip checks. ConfigurationLifecycle then failed to compile because its fixture used an ambiguous Telegram type reference; DecisionHistory did not run. That reference and the same source-reviewed defect in DecisionHistory are corrected, with execution still pending for both harnesses. Relevant configured runtime checks also remain required. [Validation evidence](updates/2026-11-07-193-check-validation.md).
+All 272 checks across twelve harnesses have now passed: 193 checks in ten harnesses at `86c2ea3`, followed by 66 lifecycle and 13 history checks at `d331fbd`. The latest build succeeded in 10.9 seconds with .NET SDK 10.0.403. This completes deterministic acceptance across the two recorded revisions; configured TestMode, actual PT API, and browser checks remain. [Validation evidence](updates/2026-11-07-completed-harness-validation.md).
 
 ## Remaining work
 
 | Stage | Work |
 |---|---|
-| Current acceptance | Validate lifecycle, startup protection, correlation, history, Monitor, and remaining exchange/quote cases |
+| Current acceptance | Run the exact built DLL with the existing runtime configuration, verify source identity, then complete TestMode and separate PT/browser/exchange checks |
 | Phase 2 / 2B | Open interest, funding, positioning, taker flow, and market-wide summaries |
 | Phase 3 | Transparent leverage expansion, crowding, deleveraging, and flow-divergence measurements |
 | Phase 4 | Integrate and validate each added metric family in GlobalSettings, SMS, exports, and Monitor |
