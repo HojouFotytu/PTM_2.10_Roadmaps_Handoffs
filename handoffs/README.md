@@ -6,6 +6,8 @@
 
 This is the sole current starting point. It records the current source checkpoint, new implementation, validation ownership, exact local command sequence, remaining runtime acceptance, and subsequent metric roadmap.
 
+After the 193-check run at `86c2ea3`, the next command block builds the corrected source and continues with ConfigurationLifecycle and DecisionHistory. The full twelve-project sequence remains available, and previous passes remain attributed to their tested source.
+
 ## Historical handoffs
 
 The following dated files are retained unchanged. Their “current,” “next,” and “pending” statements describe the date on which they were written.

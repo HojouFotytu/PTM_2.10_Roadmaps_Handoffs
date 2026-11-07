@@ -1,6 +1,14 @@
 # PTMagic 2.10 — Change log
 
-**Current application source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+**Current application source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
+
+## 2026-11-07 — Record 193 passing checks and correct two fixture type references
+
+- The user built Core, PTMagic, and Monitor at exact source `86c2ea3ff430b62e654f929a222935ec53ea8fa6` with SDK 10.0.403 in 15.8 seconds. Ten harnesses passed 193 checks, including all 40 TriggerConfigurationValidation and 28 MonitorSettingsRoundTrip checks.
+- ConfigurationLifecycle failed compilation at Program.cs line 686 with CS0118 because its fixture used `Telegram` as an unqualified type name. No lifecycle cases executed; DecisionHistory did not run because the sequence stopped.
+- Source review found the same constructor reference in the still-unrun DecisionHistory harness. Published `d331fbd059041241069646c3bb82ac6549423a70` fully qualifies both settings types as `Core.Main.DataObjects.PTMagicData.Telegram`; production source and the 272-group authored inventory are unchanged.
+- The next local verification builds the pinned source and runs the two remaining harnesses. The complete twelve-project sequence remains in the handoff for a required full rerun. Earlier passes retain their actual source identity; configured runtime acceptance remains separate.
+- [Exact-source evidence](updates/2026-11-07-193-check-validation.md) · [Current verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
 
 ## 2026-11-07 — Publish the follow-up fixes and record standing authorization
 

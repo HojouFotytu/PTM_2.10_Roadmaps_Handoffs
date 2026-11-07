@@ -4,13 +4,13 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+**Source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
-Implementation and execution evidence are different states. The November 7 source changes described below require new local build, regression, and runtime acceptance. Earlier passing results are retained as historical baselines.
+Implementation and execution evidence are different states. The latest November 7 run built the application and passed ten harnesses; the remaining lifecycle/history harnesses and configured runtime acceptance are still open. Earlier passing results retain their actual source identities.
 
 ## 1. Purpose and scope
 
@@ -68,9 +68,9 @@ The current work adds:
 9. Bounded native decision-history records.
 10. Main-market bootstrap validation and preservation of inherited default-file assignments when a property group is null.
 
-**Execution status at `78967a7`: Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 9.6 seconds, and eight harnesses passed 125 checks. TriggerConfigurationValidation failed case 24 after 23 PASS results; the last three harnesses did not run.** The Razor compilation correction is confirmed. Full regression and runtime acceptance remain open; the separate runtime bootstrap failure has no source SHA. [Detailed evidence](../updates/2026-11-07-build-and-partial-harness-validation.md).
+**Execution status at `86c2ea3`: Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 15.8 seconds, and ten harnesses passed 193 checks. ConfigurationLifecycle failed compilation before any cases executed; DecisionHistory did not run.** TriggerConfigurationValidation now passes all 40 checks, including the sentinel correction and new boundaries, and MonitorSettingsRoundTrip passes all 28. Full regression and configured runtime acceptance remain open. [Detailed evidence](../updates/2026-11-07-193-check-validation.md).
 
-The published follow-up source corrects the faulty volume-cap fixture without changing production validation, preserves inherited preset assignments, validates the main market before exchange I/O, and uses USDT identity pricing. The revised inventory is 272 authored groups across twelve projects. These corrections await a new build, the complete harness run, and configured runtime acceptance. Use the exact-source commands in the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md).
+The follow-up source fully qualifies `Core.Main.DataObjects.PTMagicData.Telegram` in both remaining harness fixtures, correcting the observed lifecycle collision and the same defect found by source review in DecisionHistory. Production behavior and test expectations are unchanged. The inventory remains 272 authored groups across twelve projects; 66 lifecycle and 13 history groups still require execution. The main-market production corrections have built but remain subject to those lifecycle checks and a configured runtime check with recorded Source revision. The earlier bootstrap failure lacks an exact runtime source SHA. Use the focused continuation in the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md); the full twelve-project sequence is retained there as well.
 
 ### Phase map
 
@@ -80,7 +80,7 @@ The published follow-up source corrects the faulty volume-cap fixture without ch
 | Phase 1A — normalized data/readiness | Implemented and accepted baseline; November 7 boundary/freshness/startup extensions require validation |
 | Phase 1B — return-derived metrics | Implemented baseline; Concentration-window change requires new acceptance |
 | Phase 1C — OHLC/volume metrics | Accepted baseline; new requirement reporting requires validation |
-| Phase 1D — correlation | 21/21 deterministic checks passed at `78967a7`; configured runtime acceptance pending |
+| Phase 1D — correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
 | Phase 1E — inspection and robustness | Partly complete; lifecycle, editor, cross-exchange and failure-path acceptance remain |
 | Phase 2 — futures raw observations | Planned |
 | Phase 2B — futures market aggregation | Planned |

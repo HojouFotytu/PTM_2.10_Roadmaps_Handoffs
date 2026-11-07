@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+**Source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 

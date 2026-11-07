@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+**Application source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
 
-**Reviewed source tree:** `68a0c978a531d30276bc269375bcb77ccab85754`
+**Reviewed source tree:** `2adcdc021731236fb071f4f7e4563afabbbf5ab7`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -20,13 +20,13 @@ This is the sole current development handoff. Earlier dated handoffs remain hist
 
 ## 1. What is ready, and what is not yet accepted
 
-The user ran the verification sequence at exact source **`78967a7703ab9f57fece40d488fc538b1caf393b`**, using **.NET SDK 10.0.403**. Core, PTMagic, and Monitor built successfully in **9.6 seconds**, confirming the Razor compilation correction. The first eight harnesses completed successfully with **125 passing checks**.
+The latest user run identifies exact source **`86c2ea3ff430b62e654f929a222935ec53ea8fa6`**, using **.NET SDK 10.0.403**. Core, PTMagic, and Monitor built successfully in **15.8 seconds**. The first ten harnesses completed successfully with **193 passing checks**, including all 40 TriggerConfigurationValidation and all 28 MonitorSettingsRoundTrip checks. The earlier volume-cap fixture failure is resolved, and the Razor compilation correction remains confirmed.
 
-TriggerConfigurationValidation printed 23 PASS results, then failed case 24, “timed and volume off-triggers need no trend,” because OffTrigger #2 was rejected for a missing MarketTrend with an empty name. The fail-fast sequence stopped before MonitorSettingsRoundTrip, ConfigurationLifecycle, and DecisionHistory. Nullable warnings in Phase1SmsSummaryIsolation and NormalizedPriceTrendMigration did not prevent their passes. **The full regression sequence is not accepted.**
+ConfigurationLifecycle failed compilation at Program.cs line 686 with CS0118: `Telegram` is a namespace but is used like a type. Its cases did not execute, and fail-fast prevented DecisionHistory from running. Source review found the same unqualified constructor in DecisionHistory line 198. The follow-up correction fully qualifies both constructors as `Core.Main.DataObjects.PTMagicData.Telegram`, without changing production source or test expectations. Nullable warnings in Phase1SmsSummaryIsolation and NormalizedPriceTrendMigration did not prevent their passes. **The two remaining harnesses and configured runtime acceptance are still open.** [Latest exact-source evidence](../updates/2026-11-07-193-check-validation.md).
 
 A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, a blank MainMarket, and an aborted raid. Its stack locations match the earlier `d0b0b87` baseline and it lacks the current `Source revision` line, suggesting an older binary was still running. This is an inference, not an exact runtime source identity. [Detailed evidence](../updates/2026-11-07-build-and-partial-harness-validation.md).
 
-Source review found that the failing fixture subtracted 1 from double.MaxValue and rounded back to the unbounded sentinel. The fixture now uses a volume cap of 1,000 and adds checks for the adjacent representable value and the exact sentinel. Production validation is unchanged. Follow-up bootstrap corrections preserve default-file assignments when property groups are null, resolve and validate the exact market property before exchange I/O, and use a USDT price identity of 1. These corrections need a complete build/harness rerun and separate configured runtime acceptance.
+The previous `78967a7` run and its sentinel-fixture failure remain in the earlier evidence record. At `86c2ea3`, the corrected finite cap and both added sentinel boundary checks pass. The main-market production corrections also build: they preserve default-file assignments when property groups are null, resolve and validate the exact market property before exchange I/O, and use a USDT price identity of 1. Their lifecycle cases did not execute because of the compiler error. A successful application solution build compiles Core, PTMagic, and Monitor; it does not compile the separate console harness projects.
 
 The accepted pre-change evidence remains the November 5 .NET 10 build, 88 checks across six harnesses, and nine Futures USDT TestMode raids associated with d0b0b87. Those logs identify version 2.10.0 but not an exact source SHA. The 5,192 matching normalized export/runtime values establish internal consistency, not parity with the removed legacy calculation. Positive BTC OffTrigger followed by immediate reactivation did not establish lasting removal.
 
@@ -61,13 +61,79 @@ The user rejected the initial unpublished full-preset overlay. The current start
 
 The history-requirement export distinguishes complete-period lower bounds from current-raid slots and all-alignments retention. Default 24-hour trends have conservative StoreDataMaxHours guidance of 384h for ATR(14), 528h for VolumeExpansion(20), and 744h for Correlation(30). It warns on insufficiency rather than silently extending retention.
 
-## 3. Required local build and regression commands
+## 3. Local build and regression commands
 
-Run this entire block in **PowerShell from the PTMagic application repository root**, not the documentation repository. It stops on a wrong branch/source, missing project, failed pull, build error, or failed harness. The exact SHA must match the published handoff; a later source revision needs its own recorded identity and results.
+### A. Required continuation after the 193-check result
+
+This correction changes fixture type references in the two remaining harnesses, with no production behavior change. Run the complete block below in PowerShell to pull the correction, record the source, build the solution, and execute ConfigurationLifecycle followed by DecisionHistory. The ten earlier passes remain evidence for `86c2ea3`; this continuation must be recorded under its actual source rather than described as a new twelve-harness run.
 
 The script does not launch the configured application or change TestMode.
 
 Review the printed working-tree status. Local source changes must be recorded with the build's -dirty identity and cannot be reported as the clean checkpoint. Private configuration/preset differences are identified separately by the recorded configuration and payload hashes.
+
+```powershell
+& {
+    $ErrorActionPreference = "Stop"
+
+    function Assert-NativeSuccess {
+        param([string]$Step)
+        if ($LASTEXITCODE -ne 0) {
+            throw "$Step failed with exit code $LASTEXITCODE."
+        }
+    }
+
+    Set-Location -LiteralPath "G:\PTM Dev Bot\PTMagic Github Clone\PTMagic"
+
+    if (-not (Test-Path ".\PTMagic.sln")) {
+        throw "PTMagic.sln was not found in the application repository."
+    }
+
+    git status --short
+    Assert-NativeSuccess "git status"
+
+    git switch phase1/market-data-foundation
+    Assert-NativeSuccess "git switch"
+
+    git pull --ff-only
+    Assert-NativeSuccess "git pull"
+
+    $ActualSource = git rev-parse HEAD
+    Assert-NativeSuccess "git rev-parse HEAD"
+    $ExpectedSource = "d331fbd059041241069646c3bb82ac6549423a70"
+    Write-Host "Application source: $ActualSource"
+    if ($ActualSource.Trim() -ne $ExpectedSource) {
+        throw "Source differs from this handoff ($ExpectedSource). Record the actual source before continuing."
+    }
+
+    dotnet --version
+    Assert-NativeSuccess "dotnet --version"
+
+    dotnet build ".\PTMagic.sln"
+    Assert-NativeSuccess "dotnet build"
+
+    $Projects = @(
+        "Tests/ConfigurationLifecycle/ConfigurationLifecycle.csproj",
+        "Tests/DecisionHistory/DecisionHistory.csproj"
+    )
+
+    foreach ($Project in $Projects) {
+        if (-not (Test-Path $Project)) {
+            throw "Missing required harness: $Project"
+        }
+        Write-Host "Running $Project"
+        dotnet run --project $Project
+        Assert-NativeSuccess $Project
+    }
+
+    Write-Host "Build and both remaining harness commands completed successfully."
+    Write-Host "Validated continuation source: $ActualSource"
+    Write-Host "Send the complete output for review. Runtime acceptance remains separate."
+}
+```
+
+### B. Complete twelve-project sequence
+
+The full sequence remains available for a subsequent production change or a required full rerun. It is not an additional requirement for the fixture-only continuation above. Run this entire block in **PowerShell from the PTMagic application repository root**, not the documentation repository. It stops on a wrong branch/source, missing project, failed pull, build error, or failed harness. The exact SHA must match this handoff; a later source revision needs its own recorded identity and results.
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -97,7 +163,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "86c2ea3ff430b62e654f929a222935ec53ea8fa6"
+$ExpectedSource = "d331fbd059041241069646c3bb82ac6549423a70"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."
@@ -139,9 +205,9 @@ Write-Host "Provide this output and the source SHA for review; runtime acceptanc
 
 ### Authored case inventory
 
-The expected inventory below describes the current source. The result column records the user's run at `78967a7`; it does not certify a later source correction. Preserve each harness's actual output.
+The expected inventory below describes the current source. The result column records the user's run at `86c2ea3`; it does not certify a later source correction. Preserve each harness's actual output.
 
-| Project | Case groups/checks expected | Latest recorded result at `78967a7` |
+| Project | Case groups/checks expected | Latest recorded result at `86c2ea3` |
 |---|---:|---|
 | Phase1AReadiness | 5 | 5/5 passed |
 | Phase1COhlcv | 13 | 13/13 passed |
@@ -151,12 +217,12 @@ The expected inventory below describes the current source. The result column rec
 | Phase1MetricWarnings | 18 | 18/18 passed |
 | Phase1AnalyticsReliability | 16 | 16/16 passed |
 | Phase1DCorrelation | 21 | 21/21 passed |
-| TriggerConfigurationValidation | 40 | 23 PASS results, then failure at case 24 |
-| MonitorSettingsRoundTrip | 28 | Not run; fail-fast sequence stopped |
-| ConfigurationLifecycle | 66 | Not run; fail-fast sequence stopped |
+| TriggerConfigurationValidation | 40 | 40/40 passed |
+| MonitorSettingsRoundTrip | 28 | 28/28 passed |
+| ConfigurationLifecycle | 66 | Compilation failed; zero cases executed |
 | DecisionHistory | 13 | Not run; fail-fast sequence stopped |
 
-The current authored inventory is **272 checks/groups across twelve projects**. The earlier `78967a7` source had 260; its partial results above are preserved as execution evidence for that revision. The revised source and added cases have not been executed.
+The authored inventory remains **272 checks/groups across twelve projects**: **193 checks passed across ten completed harnesses at `86c2ea3`**; the remaining 79 are unexecuted. The earlier `78967a7` source had 260 authored groups and 125 passes in eight completed harnesses; that evidence is preserved separately. The fixture qualification corrections do not add or remove cases, and they have not yet been validated by execution.
 
 The two added validator checks distinguish the adjacent representable volume cap from the exact unbounded sentinel. The ten added lifecycle groups cover exact/non-USDT market parsing; null, missing, blank, prefix-only, and malformed inputs; null PAIRS/DCA/INDICATORS inheritance; fresh-summary bootstrap with and without an acknowledged configuration; retention of an owned guard when the market is missing; and public Spot/Futures/US adapter identity and invalid-input boundaries using already-canceled tokens.
 

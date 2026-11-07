@@ -28,7 +28,7 @@ The accepted baseline passed a local .NET 10 build, 88 regression checks, and re
 - Per-market BTC correlation and market mean/median correlation.
 - Bounded native decision-history records with configuration/source identity and delivery outcomes.
 
-The November 7 user-local run at `78967a7` built Core, PTMagic, and Monitor successfully and passed 125 checks across eight harnesses, including 21 correlation checks. The next harness failed, and three later harnesses did not run. The published follow-up corrections require a complete rerun. Full regression and relevant runtime checks remain required before these additions are marked accepted. [Validation evidence](updates/2026-11-07-build-and-partial-harness-validation.md).
+The latest November 7 user-local run at `86c2ea3` built Core, PTMagic, and Monitor successfully and passed 193 checks across ten harnesses, including 21 correlation, 40 trigger-validation, and 28 Monitor round-trip checks. ConfigurationLifecycle then failed to compile because its fixture used an ambiguous Telegram type reference; DecisionHistory did not run. That reference and the same source-reviewed defect in DecisionHistory are corrected, with execution still pending for both harnesses. Relevant configured runtime checks also remain required. [Validation evidence](updates/2026-11-07-193-check-validation.md).
 
 ## Remaining work
 

@@ -2,17 +2,21 @@
 
 ## Latest user-local verification
 
-**[November 7 — Successful build and partial harness validation](2026-11-07-build-and-partial-harness-validation.md)**
+**[November 7 — Successful build, 193 passing checks, and a lifecycle harness compiler failure](2026-11-07-193-check-validation.md)**
 
-At exact source `78967a7`, Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 9.6 seconds. Eight harnesses passed 125 checks; TriggerConfigurationValidation then failed case 24 after 23 PASS results, and the last three harnesses did not run. A separate runtime excerpt showed a bootstrap abort without identifying a source SHA. Full regression and runtime acceptance remain open.
+At exact source `86c2ea3`, Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 15.8 seconds. Ten harnesses passed 193 checks, including all 40 validator and 28 Monitor round-trip checks. ConfigurationLifecycle failed compilation before any cases executed; DecisionHistory did not run. The current source corrects the observed lifecycle type reference and the same source-reviewed defect in DecisionHistory. Execution of both remaining harnesses and configured runtime acceptance remain open.
 
 ## Current implementation checkpoint
 
 **[November 7 — Stabilization, correlation, and documentation reconciliation](2026-11-07-stabilization-correlation-implementation.md)**
 
-Source implemented and tests authored. The latest user-local run confirms the Razor compilation correction and records the partial regression results above. Published follow-up source corrects the volume-cap fixture and main-market bootstrap, with **272 authored groups across twelve projects**. A new build and complete rerun remain required. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for exact-source commands and the [current status](../STATUS.md) for the publication and evidence boundaries.
+Source implemented and tests authored. The latest user-local run confirms the corrected volume-cap fixture, both sentinel boundary checks, and the Monitor round-trip harness. The inventory remains **272 authored groups across twelve projects**, with 193 passing checks recorded at `86c2ea3` and 79 still unexecuted. The published fixture-only correction requires a build and execution of the two remaining harnesses. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for the focused continuation and full sequence, and the [current status](../STATUS.md) for the publication and evidence boundaries.
 
 The current checkpoint incorporates the user's direct global SOM API revision. The earlier full-preset startup overlay is superseded by [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay); no prior acceptance is claimed for either startup mechanism.
+
+## Earlier November 7 verification
+
+[Successful build and partial harness validation at `78967a7`](2026-11-07-build-and-partial-harness-validation.md) preserves the earlier build, 125 passes in eight completed harnesses, failed volume-cap fixture, and separate runtime bootstrap abort without an exact source SHA. The latest result resolves that fixture failure; it does not establish successful configured startup, SOM enforcement, or normal delivery.
 
 ## Last accepted pre-change runtime evidence
 

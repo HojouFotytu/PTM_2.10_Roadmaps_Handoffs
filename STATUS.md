@@ -4,7 +4,7 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+**Current source checkpoint:** `d331fbd059041241069646c3bb82ac6549423a70`
 
 **Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -12,9 +12,9 @@ This file describes the present state. Dated evidence stays in [updates](updates
 
 ## Publication status
 
-The follow-up fixes are published on `phase1/market-data-foundation` at the source checkpoint above. Published source tree `68a0c978a531d30276bc269375bcb77ccab85754` matches the reviewed corrections.
+The follow-up correction is published on `phase1/market-data-foundation` at the source checkpoint above. It fully qualifies the Telegram settings type in the ConfigurationLifecycle and DecisionHistory fixtures; production behavior and the authored case inventory are unchanged.
 
-The user's standing authorization covers publication of PTM 2.10 development changes to the application and documentation branches in [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development), without renewed conversational approval. Actual tool restrictions remain binding. The current handoff pins the published source for the required user-local build and full regression rerun.
+The user's standing authorization covers publication of PTM 2.10 development changes to the application and documentation branches in [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development), without renewed conversational approval. Actual tool restrictions remain binding. The current handoff pins the published source for user-local verification; earlier passes remain attributed to the source actually tested.
 
 ## Present conclusion
 
@@ -22,19 +22,21 @@ The November 7 implementation addresses the assessed configuration lifecycle def
 
 The startup API design supersedes the earlier unpublished full-preset overlay. The guard request carries `enabled=true` and the configured API token; it does not carry a properties payload. Normal configuration delivery and API guard release are separate acknowledged actions. The current contract is [D-037](DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
 
-**Current evidence level: a successful Core/PTMagic/Monitor build and eight completed harnesses with 125 passing checks at `78967a7`. TriggerConfigurationValidation failed at case 24 after 23 PASS results; the final three harnesses did not run. Full regression and configured runtime acceptance remain pending.** [Exact-source evidence](updates/2026-11-07-build-and-partial-harness-validation.md).
+**Current evidence level: a successful Core/PTMagic/Monitor build and ten completed harnesses with 193 passing checks at `86c2ea3`. ConfigurationLifecycle failed compilation before any cases executed; DecisionHistory did not run. Full regression and configured runtime acceptance remain pending.** [Exact-source evidence](updates/2026-11-07-193-check-validation.md).
 
 The source checkpoint identifies the implementation snapshot. Do not infer a new deployment from documentation or from a 2.10.0 version string.
 
 ### Latest reported build and source correction
 
-The latest user-run build identifies source `78967a7703ab9f57fece40d488fc538b1caf393b` and .NET SDK 10.0.403. Core, PTMagic, and Monitor built successfully in 9.6 seconds, confirming the Razor delimiter correction. The earlier report of 27 Monitor errors across nine row-render expressions did not contain a source SHA; its compilation blocker is resolved by this newer exact-source result.
+The latest user-run build identifies source `86c2ea3ff430b62e654f929a222935ec53ea8fa6` and .NET SDK 10.0.403. Core, PTMagic, and Monitor built successfully in 15.8 seconds. The first ten harnesses passed 193 checks, including all 40 TriggerConfigurationValidation cases and all 28 MonitorSettingsRoundTrip cases. The Razor compilation correction remains confirmed.
 
-The failed validation case, “timed and volume off-triggers need no trend,” reported a missing MarketTrend for OffTrigger #2 with an empty name. Source review found a fixture defect: subtracting 1 from the double.MaxValue sentinel produces the same sentinel. The corrected fixture uses a volume cap of 1,000, with additional boundary checks; production validation is unchanged. Nullable warnings in two passing harnesses were not the failure. The tested source's inventory was **260 authored check groups across 12 projects**, not a passing total.
+ConfigurationLifecycle failed to compile at Program.cs line 686 with CS0118: `Telegram` is a namespace but is used like a type. The fixture constructor introduced an unqualified type name that collided with the Telegram namespace. Source review found the same reference in DecisionHistory Program.cs line 198, which the fail-fast run had not reached. Both constructors now use `Core.Main.DataObjects.PTMagicData.Telegram`; no production source or test expectations change. The lifecycle harness executed zero cases, and DecisionHistory did not run. The solution contains only Core, PTMagic, and Monitor, so its successful build did not compile these separate harnesses.
+
+The earlier validation fixture failure at `78967a7` is now resolved by the 40/40 result, including both added sentinel boundary cases. That [earlier evidence](updates/2026-11-07-build-and-partial-harness-validation.md) remains historical. Nullable warnings in Phase1SmsSummaryIsolation and NormalizedPriceTrendMigration did not prevent their passes.
 
 A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, a blank MainMarket, and an aborted raid. Its stack locations match the earlier `d0b0b87` baseline and it lacks the current `Source revision` line, suggesting an older running binary. This is an inference; the excerpt does not establish an exact runtime SHA.
 
-Follow-up source corrections preserve inherited preset assignments for null property groups, resolve and validate the exact `market` value before exchange I/O, and use the USDT price identity without a ticker request. They add an explicit main-market log. A complete rerun and restart of the updated configured instance are still required; capture its `Source revision` and confirm the compiled PAIRS market.
+The main-market corrections at `86c2ea3` preserve inherited preset assignments for null property groups, resolve and validate the exact `market` value before exchange I/O, and use the USDT price identity without a ticker request. They add an explicit main-market log. Their production source has built, but the lifecycle cases have not executed. The corrected harness and a restarted, updated configured instance still require verification; capture the runtime `Source revision` and confirm the compiled PAIRS market.
 
 ## Accepted pre-change evidence
 
@@ -53,7 +55,7 @@ Follow-up source corrections preserve inherited preset assignments for null prop
 
 ## November 7 implementation and acceptance
 
-The build and eight completed harnesses now have execution evidence at `78967a7`. The table below lists source behavior and remaining acceptance; the complete regression sequence and configured runtime checks are still open. Any follow-up source correction needs its own recorded rerun.
+The build and ten completed harnesses have execution evidence at `86c2ea3`. The table below lists source behavior and remaining acceptance; the lifecycle and history harnesses and configured runtime checks are still open. Any follow-up source correction needs its own recorded verification.
 
 | Area | Current source behavior | Acceptance still required |
 |---|---|---|
@@ -64,22 +66,22 @@ The build and eight completed harnesses now have execution evidence at `78967a7`
 | Global SOM behavior and ownership | User clarified: global SOM blocks new buys and DCA buys while allowing sells; no prior-state readback/restoration is implemented | Confirm native behavior and explicit flag ownership in the configured PT environment; distinguish intended contract from observed execution |
 | Guard checkpoint and tokens | Guard metadata uses `_data/StartupSellOnlyModeState.json`; additional-target API tokens may be supplied through ProfitTrailerServerAPITokenXtra, otherwise the primary token is shared | Restart/pending-release recovery, base-path preservation, target/token alignment, redaction and no live checkpoint writes in TestMode |
 | Startup opt-out | `StartupSellOnlyMode=false` prevents a new API guard; recorded pending PTM-owned guard work still resumes. Indeterminate startup retains known confirmed configuration or defers unknown state | New opt-out versus pending recovery, restart with known/unknown configuration, no forced DEFAULT publication |
-| Monitor trigger editing | Rows preserve their MarketTrend/Metric/Tag identity and persisted precision | Serialization/round-trip harness and browser save/reload for multiple metrics on one trend |
-| Reference validation | Broken MarketTrend references are rejected during configuration validation; defensive evaluation treats absent inputs as unavailable; the failing sentinel fixture is corrected without weakening validation | Rerun the revised validation harness, including sentinel boundary cases, and verify actual startup/reload rejection |
+| Monitor trigger editing | Rows preserve their MarketTrend/Metric/Tag identity and persisted precision; 28/28 round-trip checks passed at `86c2ea3` | Browser save/reload for multiple metrics on one trend |
+| Reference validation | Broken MarketTrend references are rejected during configuration validation; defensive evaluation treats absent inputs as unavailable; all 40 validator checks, including sentinel boundaries, passed at `86c2ea3` | Verify actual startup/reload rejection |
 | Main-market bootstrap | Null property groups inherit default-file assignments; the exact market value is normalized and validated before exchange I/O; USDT uses an identity price of 1 | Lifecycle regressions, missing/malformed market rejection, updated configured process identity, and a successful USDT raid |
 | SMS unavailable observations | Unknown activation retains an existing ordinary SMS; final unavailable SMS expressions keep initial selection indeterminate; invalid age/time/volume observations remain unavailable | Missing/future timestamps, nonfinite/negative volume, held SMS, conclusive masked expressions |
 | Pinned normalized acquisition | Network request windows and retained samples honor the raid's pinned analysis boundary | Tight retention while requests cross a five-minute close; next-raid advancement |
 | Decision freshness | `MaxAnalysisAgeSeconds=300` compares decision time with the pinned analysis time; missing/future/expired pins are unavailable | Boundary ages and slow bootstrap; legitimate long-duration bars remain usable |
 | History requirements | Per-metric reports distinguish complete history, current-raid slots, all-alignments retention, and configured capacity | Period/alignment calculations, dependencies, insufficient-store warnings, Monitor export |
 | Return Concentration | Ranking volume uses TrendMinutes at the same normalized endpoint as the return; Top10-minus-remainder meaning and 100% coverage remain | Short/long trend windows, complete ranking population, min eleven markets, deterministic ranking |
-| Phase 1D correlation | Exact synchronized simple-return Pearson vectors; N=30 default; asset plus global mean/median metrics; 21/21 harness checks passed at `78967a7` | Configured history, coverage, export/trigger/Monitor integration, and runtime acceptance |
+| Phase 1D correlation | Exact synchronized simple-return Pearson vectors; N=30 default; asset plus global mean/median metrics; 21/21 harness checks passed at `86c2ea3` | Configured history, coverage, export/trigger/Monitor integration, and runtime acceptance |
 | Decision history | Bounded JSONL records with source/config hashes, evaluated inputs, selection/guard/delivery outcome | Retention, rotation, quotas, error paths, sensitive-data omission, TestMode distinction |
 
 Detailed issue tracking: [configuration lifecycle and analytics reliability](issues/003-configuration-lifecycle-and-data-reliability.md). Implementation checkpoint: [November 7 update](updates/2026-11-07-stabilization-correlation-implementation.md).
 
 ## Execution queue
 
-The current handoff supplies exact PowerShell commands for twelve regression projects. The revised inventory is **272 authored check groups**, including 40 in TriggerConfigurationValidation and 66 in ConfigurationLifecycle; the follow-up corrections and added cases have not been executed. D-021 assigns execution to the user. Record the actual source SHA, .NET version, build output, and per-project results; do not roll expected case counts into a passing total.
+The current handoff supplies a focused continuation: pull the corrected source, verify its identity, build the solution, then run ConfigurationLifecycle and DecisionHistory. It retains the complete twelve-project sequence for a full rerun when required. The inventory is **272 authored check groups**: 193 passed across ten harnesses at `86c2ea3`; the 66 lifecycle groups did not execute because of the compiler error, and the 13 history groups did not run. The fixture qualification corrections require user-local verification under D-021. Record the actual source SHA, .NET version, build output, and per-project results; do not roll the expected 79 remaining checks into a passing total or relabel the earlier 193 passes as a run of the corrected source.
 
 Runtime acceptance remains open for:
 
@@ -107,7 +109,7 @@ Some runtime scenarios require the user's configured exchange/PT installation. S
 | Phase 1B — return and relative-strength metrics | Earlier USDT Futures baseline validated; new Concentration window pending |
 | Phase 1C — trend-duration OHLCV metrics | Implemented and earlier harness/runtime evidence recorded; extended history diagnostics pending |
 | Unified PriceTrend migration | Implemented; Futures USDT evidence accepted with the stated non-USDT/Spot/US/browser gaps |
-| Phase 1D — BTC correlation | 21/21 deterministic checks passed at `78967a7`; configured runtime acceptance pending |
+| Phase 1D — BTC correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
 | Minimal decision history | Implemented; new execution acceptance pending; full Phase 6 remains planned |
 | Phase 2 / 2B — derivatives ingestion and aggregates | Planned |
 | Phase 3 — higher-order market state measurements | Planned |

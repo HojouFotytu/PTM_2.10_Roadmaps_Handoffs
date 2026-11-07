@@ -8,7 +8,7 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Published source checkpoint for this handoff | `86c2ea3ff430b62e654f929a222935ec53ea8fa6` |
+| Published source checkpoint for this handoff | `d331fbd059041241069646c3bb82ac6549423a70` |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
@@ -22,9 +22,9 @@ The November 7 work implements configuration lifecycle corrections, startup glob
 
 The user superseded the initial startup-preset overlay with `POST /api/v2/globalSellOnlyMode`, using query parameters `token` and `enabled`. Startup protection changes that API state without submitting PAIRS, DCA, or INDICATORS. The normal configuration is delivered only after analysis; guard release has its own API acknowledgement. See [D-037](DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
 
-**The user validated source `78967a7` with .NET SDK 10.0.403: Core, PTMagic, and Monitor built in 9.6 seconds, and eight harnesses passed 125 checks. TriggerConfigurationValidation failed at case 24 after 23 PASS results; the final three harnesses did not run.** The Razor compilation fix is confirmed. Full regression and runtime acceptance remain pending; a separate runtime excerpt shows a bootstrap abort without identifying its source SHA. See [current evidence](updates/2026-11-07-build-and-partial-harness-validation.md).
+**The latest user run validated source `86c2ea3` with .NET SDK 10.0.403: Core, PTMagic, and Monitor built in 15.8 seconds, and ten harnesses passed 193 checks. ConfigurationLifecycle then failed compilation because its fixture used the namespace name `Telegram` as a type; none of its cases executed, and DecisionHistory did not run.** TriggerConfigurationValidation now passes all 40 checks and MonitorSettingsRoundTrip passes all 28. Full regression and configured runtime acceptance remain pending. See [current evidence](updates/2026-11-07-193-check-validation.md).
 
-The published follow-up source corrects the volume-cap test fixture, preserves inherited preset assignments, and validates the main market before exchange I/O. The revised inventory is **272 authored check groups across twelve projects**, awaiting a new build and complete rerun. Runtime verification must use a restarted, updated configured instance with its Source revision recorded. [Publication status](STATUS.md#publication-status).
+The follow-up correction fully qualifies the Telegram settings type in both remaining harnesses. Source review found the same unqualified constructor in the still-unrun DecisionHistory harness; this is not a claim that it was executed. These changes make no production behavior change. The inventory remains **272 authored check groups across twelve projects**, with 193 passing checks recorded at `86c2ea3` and the remaining two harnesses still requiring execution. The inherited-preset and main-market corrections have built, but their lifecycle cases and configured runtime acceptance remain pending. Runtime verification must use a restarted, updated configured instance with its Source revision recorded. [Publication status](STATUS.md#publication-status).
 
 The earlier pre-change `d0b0b87` baseline remains historical evidence: a user-run application build, 88 checks across six harnesses, and nine Binance Futures USDT TestMode raids. The deployed SHA was inferred from the workflow because those logs printed version 2.10.0 rather than a Git SHA. [Evidence](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
 
