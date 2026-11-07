@@ -28,7 +28,7 @@ The accepted baseline passed a local .NET 10 build, 88 regression checks, and re
 - Per-market BTC correlation and market mean/median correlation.
 - Bounded native decision-history records with configuration/source identity and delivery outcomes.
 
-A fresh build, regression execution, and relevant runtime checks are required before these additions are marked accepted.
+The November 7 user-local run at `78967a7` built Core, PTMagic, and Monitor successfully and passed 125 checks across eight harnesses, including 21 correlation checks. The next harness failed, and three later harnesses did not run. The published follow-up corrections require a complete rerun. Full regression and relevant runtime checks remain required before these additions are marked accepted. [Validation evidence](updates/2026-11-07-build-and-partial-harness-validation.md).
 
 ## Remaining work
 

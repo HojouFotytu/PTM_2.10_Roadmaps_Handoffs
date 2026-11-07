@@ -6,7 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
+**Application source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+
+**Reviewed source tree:** `68a0c978a531d30276bc269375bcb77ccab85754`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -14,11 +16,17 @@
 
 This is the sole current development handoff. Earlier dated handoffs remain historical. Begin with the actual application branch and source, then use the contracts and verification sequence below.
 
+**Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published; local validation of the follow-up corrections is still required.
+
 ## 1. What is ready, and what is not yet accepted
 
-The source implements the November 7 fixes and additions. The user's submitted .NET 10 build output shows **Core net10.0 succeeded and Monitor failed with 27 Razor compile errors** across nine row-render expressions in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml`. The log did not include an exact source SHA; these results cannot be assigned to a pinned revision.
+The user ran the verification sequence at exact source **`78967a7703ab9f57fece40d488fc538b1caf393b`**, using **.NET SDK 10.0.403**. Core, PTMagic, and Monitor built successfully in **9.6 seconds**, confirming the Razor compilation correction. The first eight harnesses completed successfully with **125 passing checks**.
 
-The correction explicitly bounds the nine Razor expressions as `@(Html.Raw(...))`, keeping the following `.map(...)` and `.join(...)` chains in JavaScript. **A build of the corrected source, full harness execution, configured runtime, actual PT delivery, and Monitor browser checks remain pending.** Run the complete sequence below at the pinned source revision. This delimiter correction adds no harness cases; the inventory remains 260 authored check groups across 12 projects.
+TriggerConfigurationValidation printed 23 PASS results, then failed case 24, “timed and volume off-triggers need no trend,” because OffTrigger #2 was rejected for a missing MarketTrend with an empty name. The fail-fast sequence stopped before MonitorSettingsRoundTrip, ConfigurationLifecycle, and DecisionHistory. Nullable warnings in Phase1SmsSummaryIsolation and NormalizedPriceTrendMigration did not prevent their passes. **The full regression sequence is not accepted.**
+
+A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, a blank MainMarket, and an aborted raid. Its stack locations match the earlier `d0b0b87` baseline and it lacks the current `Source revision` line, suggesting an older binary was still running. This is an inference, not an exact runtime source identity. [Detailed evidence](../updates/2026-11-07-build-and-partial-harness-validation.md).
+
+Source review found that the failing fixture subtracted 1 from double.MaxValue and rounded back to the unbounded sentinel. The fixture now uses a volume cap of 1,000 and adds checks for the adjacent representable value and the exact sentinel. Production validation is unchanged. Follow-up bootstrap corrections preserve default-file assignments when property groups are null, resolve and validate the exact market property before exchange I/O, and use a USDT price identity of 1. These corrections need a complete build/harness rerun and separate configured runtime acceptance.
 
 The accepted pre-change evidence remains the November 5 .NET 10 build, 88 checks across six harnesses, and nine Futures USDT TestMode raids associated with d0b0b87. Those logs identify version 2.10.0 but not an exact source SHA. The 5,192 matching normalized export/runtime values establish internal consistency, not parity with the removed legacy calculation. Positive BTC OffTrigger followed by immediate reactivation did not establish lasting removal.
 
@@ -41,6 +49,7 @@ D-021 assigns local execution to the user. The assistant implements, inspects, a
 | Decision age | `MaxAnalysisAgeSeconds=300`, range 1–86400 seconds, compares decision time with the pinned analysis time; missing/future/expired pins unavailable |
 | Acquisition | Request bounds and stored observations preserve the same pinned analytical window across candle closes |
 | Trigger references | Missing/ambiguous identities and malformed expressions are fatal configuration errors; defensive evaluation remains unavailable |
+| Main-market bootstrap | Preserve inherited assignments for null property groups; read and normalize the exact market property; reject missing/malformed values before exchange I/O; USDT identity conversion needs no ticker call |
 | Diagnostic metrics | Unknown/disabled/wrong-scope metrics remain accepted warning-producing diagnostic inputs, not valid observations |
 | Monitor | Ordered distinct rows, Metric/Tag, inactive fields, property types, and full precision survive save; stale revision refuses overwrite |
 | Concentration | Top10 mean return minus remaining eligible mean return in percentage points; rank using the same TrendMinutes trailing volume window; min eleven and 100% coverage |
@@ -88,7 +97,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "78967a7703ab9f57fece40d488fc538b1caf393b"
+$ExpectedSource = "86c2ea3ff430b62e654f929a222935ec53ea8fa6"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."
@@ -130,24 +139,26 @@ Write-Host "Provide this output and the source SHA for review; runtime acceptanc
 
 ### Authored case inventory
 
-These are expected source counts, not reported passes. Preserve each harness's actual output.
+The expected inventory below describes the current source. The result column records the user's run at `78967a7`; it does not certify a later source correction. Preserve each harness's actual output.
 
-| Project | Case groups/checks expected | Current execution status |
+| Project | Case groups/checks expected | Latest recorded result at `78967a7` |
 |---|---:|---|
-| Phase1AReadiness | 5 | New source rerun pending |
-| Phase1COhlcv | 13 | New source rerun pending |
-| Phase1SmsSummaryIsolation | 5 | New source rerun pending |
-| Phase1TriggerLogic | 29 | New source rerun pending |
-| NormalizedPriceTrendMigration | 18 | New source rerun pending |
-| Phase1MetricWarnings | 18 | New source rerun pending |
-| Phase1AnalyticsReliability | 16 | Authored; unexecuted |
-| Phase1DCorrelation | 21 | Authored; unexecuted |
-| TriggerConfigurationValidation | 38 | Authored; unexecuted |
-| MonitorSettingsRoundTrip | 28 | Authored; unexecuted |
-| ConfigurationLifecycle | 56 | Authored; unexecuted |
-| DecisionHistory | 13 | Authored; unexecuted |
+| Phase1AReadiness | 5 | 5/5 passed |
+| Phase1COhlcv | 13 | 13/13 passed |
+| Phase1SmsSummaryIsolation | 5 | 5/5 passed |
+| Phase1TriggerLogic | 29 | 29/29 passed |
+| NormalizedPriceTrendMigration | 18 | 18/18 passed |
+| Phase1MetricWarnings | 18 | 18/18 passed |
+| Phase1AnalyticsReliability | 16 | 16/16 passed |
+| Phase1DCorrelation | 21 | 21/21 passed |
+| TriggerConfigurationValidation | 40 | 23 PASS results, then failure at case 24 |
+| MonitorSettingsRoundTrip | 28 | Not run; fail-fast sequence stopped |
+| ConfigurationLifecycle | 66 | Not run; fail-fast sequence stopped |
+| DecisionHistory | 13 | Not run; fail-fast sequence stopped |
 
-The authored inventory is 260 checks/groups across twelve projects. This is an expected inventory, not a passing total.
+The current authored inventory is **272 checks/groups across twelve projects**. The earlier `78967a7` source had 260; its partial results above are preserved as execution evidence for that revision. The revised source and added cases have not been executed.
+
+The two added validator checks distinguish the adjacent representable volume cap from the exact unbounded sentinel. The ten added lifecycle groups cover exact/non-USDT market parsing; null, missing, blank, prefix-only, and malformed inputs; null PAIRS/DCA/INDICATORS inheritance; fresh-summary bootstrap with and without an acknowledged configuration; retention of an owned guard when the market is missing; and public Spot/Futures/US adapter identity and invalid-input boundaries using already-canceled tokens.
 
 No removed selective-legacy project belongs in this sequence. Do not substitute an old total for the output of these current projects. Existing warning counts may change; capture warnings and failures accurately.
 
@@ -161,7 +172,9 @@ For a source checkout already configured with its required settings and presets,
 dotnet run --project PTMagic/PTMagic.csproj
 ```
 
-A configured deployed installation may use its existing startup command instead. Record which binary/source was actually launched. Do not assume that building a checkout replaced a separately deployed binary.
+A configured deployed installation may use its existing startup command instead. Stop the older running instance, update that configured installation from the pinned source, and restart it through the normal deployment procedure. Capture the startup `Source revision` line and compare it with this handoff. A successful checkout build does not update or restart a separately deployed process; version 2.10.0 alone does not establish source identity.
+
+Before accepting a new raid, confirm that the compiled PAIRS settings contain a valid `market` assignment. For the user's USDT configuration, expect `market = USDT` and the new `Analysis main market: USDT` log identifying the selected GlobalSetting. Missing or malformed values must produce a clear configuration error before exchange I/O. Test null property-group inheritance and invalid direct adapter inputs through the deterministic harness; the configured runtime must establish that the updated process resolves the intended market and completes a raid.
 
 ### A. Normalized data, history, and correlation
 

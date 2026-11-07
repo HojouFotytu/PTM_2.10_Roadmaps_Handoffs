@@ -4,13 +4,13 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
+**Application source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
 
 **Documentation baseline before reconciliation:** `a074fea56f33033c1a99db78df12099ea230a88a`
 
 ## Evidence level
 
-This is an implementation checkpoint with a reported build failure, not full-build acceptance. Source changes and regression cases were authored and reviewed. The latest user-submitted output shows Core net10.0 compiled and Monitor failed; the corrected build, complete harness execution, configured runtime checks, and real PT/Monitor browser verification remain pending under D-021.
+Source changes and regression cases were authored and reviewed. The user's subsequent exact-source run at `78967a7` built Core, PTMagic, and Monitor successfully, then completed eight harnesses with 125 passing checks before TriggerConfigurationValidation failed at case 24. The last three harnesses did not run. [The dated validation record](2026-11-07-build-and-partial-harness-validation.md) separates these results from the unpinned runtime excerpt showing a bootstrap abort. Full regression and configured runtime acceptance remain open under D-021.
 
 The accepted pre-change baseline is the November 5 build and 88 checks associated with d0b0b87, followed by nine Futures USDT TestMode raids. The exact deployed SHA was inferred from the workflow; the logs printed application version 2.10.0. Those results remain valid for their recorded scope and do not validate the new source.
 
@@ -18,9 +18,17 @@ The accepted pre-change baseline is the November 5 build and 88 checks associate
 
 The user reported a .NET 10 build in which Core succeeded and Monitor failed with **27 Razor compile errors across nine row-render expressions** in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml`. The submitted log did not include an exact source SHA, so the report does not establish acceptance of a specific revision.
 
-The correction encloses each server-side expression as `@(Html.Raw(...))`. This ends Razor's C# expression before the following JavaScript `.map(...)` and `.join(...)` chain, preserving the serialized row data and client-side rendering behavior. The corrected source awaits a user-local build and regression rerun using the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md).
+The correction encloses each server-side expression as `@(Html.Raw(...))`. This ends Razor's C# expression before the following JavaScript `.map(...)` and `.join(...)` chain, preserving the serialized row data and client-side rendering behavior. The user subsequently confirmed the compilation correction at `78967a7`: Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 9.6 seconds. Browser behavior and the complete regression sequence still require acceptance through the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md).
 
-No harness cases were added for this delimiter correction. The required inventory remains **260 authored check groups across 12 projects**; no new passing test count is claimed.
+No harness cases were added for the delimiter correction. Its validated source contained **260 authored check groups across 12 projects**. The eight completed harnesses passed 125 checks; another 23 PASS results preceded the failure in the ninth harness. This is partial execution, not a 260-check pass.
+
+## Follow-up fixture and main-market corrections
+
+The reported validator failure was caused by a fixture that subtracted 1 from the double.MaxValue sentinel and therefore retained the same value. The fixture now uses a finite volume cap of 1,000; two added cases test the adjacent representable value and exact sentinel. Production validation remains unchanged.
+
+The bootstrap corrections retain default-file assignments for null property groups, resolve the exact market property, normalize and validate its asset code before exchange I/O, and return the USDT identity price without a ticker request. A new log records the resolved main market and selected setting. The separate runtime excerpt likely came from an older running binary, inferred from baseline stack locations and the missing Source revision line; it does not identify an exact runtime SHA.
+
+The revised inventory is **272 authored check groups across twelve projects**, including 40 validator and 66 lifecycle groups. The twelve added groups have not been executed. The corrections are published at the source checkpoint above. A complete build/harness rerun and a restarted configured instance with its Source revision and compiled market verified remain required. The [dated evidence record](2026-11-07-build-and-partial-harness-validation.md) retains the earlier validated source and counts; [publication status](../STATUS.md#publication-status) records the current source and standing authorization.
 
 ## User-directed scope
 
@@ -60,7 +68,7 @@ At a 24-hour trend duration, the default conservative all-alignments history gui
 
 New projects cover correlation, analytics reliability, configuration lifecycle, Monitor settings round trips, and decision history. The existing six projects remain part of the required regression set. Exact project paths and current expected case counts are in the [verification handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md).
 
-No new test execution count is claimed here. Environment-specific checks remain necessary for acknowledged PT updates, failed sends, global SOM enable/configuration/release ordering and native enforcement, lasting last-SMS removal, Monitor browser preservation, Spot/US behavior, and non-USDT conversion. The user's endpoint and native-behavior clarification do not establish that the new client/lifecycle has been run successfully.
+The recorded execution is limited to the successful build, eight completed harnesses, and partial output from the failed ninth harness. Environment-specific checks remain necessary for acknowledged PT updates, failed sends, global SOM enable/configuration/release ordering and native enforcement, lasting last-SMS removal, Monitor browser preservation, Spot/US behavior, and non-USDT conversion. The user's endpoint and native-behavior clarification do not establish that the new client/lifecycle has been run successfully.
 
 ## Documentation reconciliation
 

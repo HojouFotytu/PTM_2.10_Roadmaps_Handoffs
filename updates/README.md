@@ -1,10 +1,16 @@
 # PTMagic 2.10 — Dated implementation and evidence updates
 
+## Latest user-local verification
+
+**[November 7 — Successful build and partial harness validation](2026-11-07-build-and-partial-harness-validation.md)**
+
+At exact source `78967a7`, Core, PTMagic, and Monitor built successfully with SDK 10.0.403 in 9.6 seconds. Eight harnesses passed 125 checks; TriggerConfigurationValidation then failed case 24 after 23 PASS results, and the last three harnesses did not run. A separate runtime excerpt showed a bootstrap abort without identifying a source SHA. Full regression and runtime acceptance remain open.
+
 ## Current implementation checkpoint
 
 **[November 7 — Stabilization, correlation, and documentation reconciliation](2026-11-07-stabilization-correlation-implementation.md)**
 
-Source implemented and tests authored. The latest user-reported build compiled Core net10.0 and failed Monitor with 27 Razor errors; its exact source SHA was not supplied. The Razor correction awaits a build rerun, complete harness execution, and relevant runtime acceptance. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for verification commands and the [current status](../STATUS.md) for the consolidated evidence boundary.
+Source implemented and tests authored. The latest user-local run confirms the Razor compilation correction and records the partial regression results above. Published follow-up source corrects the volume-cap fixture and main-market bootstrap, with **272 authored groups across twelve projects**. A new build and complete rerun remain required. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for exact-source commands and the [current status](../STATUS.md) for the publication and evidence boundaries.
 
 The current checkpoint incorporates the user's direct global SOM API revision. The earlier full-preset startup overlay is superseded by [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay); no prior acceptance is claimed for either startup mechanism.
 

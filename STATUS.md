@@ -4,11 +4,17 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
+**Current source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
 
 **Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
+
+## Publication status
+
+The follow-up fixes are published on `phase1/market-data-foundation` at the source checkpoint above. Published source tree `68a0c978a531d30276bc269375bcb77ccab85754` matches the reviewed corrections.
+
+The user's standing authorization covers publication of PTM 2.10 development changes to the application and documentation branches in [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development), without renewed conversational approval. Actual tool restrictions remain binding. The current handoff pins the published source for the required user-local build and full regression rerun.
 
 ## Present conclusion
 
@@ -16,15 +22,19 @@ The November 7 implementation addresses the assessed configuration lifecycle def
 
 The startup API design supersedes the earlier unpublished full-preset overlay. The guard request carries `enabled=true` and the configured API token; it does not carry a properties payload. Normal configuration delivery and API guard release are separate acknowledged actions. The current contract is [D-037](DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
 
-**Current evidence level: source changes, authored regression cases, and a reported build attempt. Core compiled for net10.0; Monitor failed with 27 Razor errors. The corrected application build, harness execution, deployed TestMode checks, actual ProfitTrailer delivery, and browser checks remain pending.** A previous passing test count does not validate these changes.
+**Current evidence level: a successful Core/PTMagic/Monitor build and eight completed harnesses with 125 passing checks at `78967a7`. TriggerConfigurationValidation failed at case 24 after 23 PASS results; the final three harnesses did not run. Full regression and configured runtime acceptance remain pending.** [Exact-source evidence](updates/2026-11-07-build-and-partial-harness-validation.md).
 
 The source checkpoint identifies the implementation snapshot. Do not infer a new deployment from documentation or from a 2.10.0 version string.
 
 ### Latest reported build and source correction
 
-The submitted build log did not include an exact source SHA. It establishes the reported Core success and Monitor failure, not acceptance of a pinned source revision. The 27 Monitor errors came from nine row-render expressions in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml`.
+The latest user-run build identifies source `78967a7703ab9f57fece40d488fc538b1caf393b` and .NET SDK 10.0.403. Core, PTMagic, and Monitor built successfully in 9.6 seconds, confirming the Razor delimiter correction. The earlier report of 27 Monitor errors across nine row-render expressions did not contain a source SHA; its compilation blocker is resolved by this newer exact-source result.
 
-The source correction explicitly delimits each Razor `Html.Raw` expression as `@(Html.Raw(...))`, leaving the following `.map(...)` and `.join(...)` operations in JavaScript. The correction awaits the user's build rerun. No harness cases were added for this delimiter change; the inventory remains **260 authored check groups across 12 projects**, with execution against the corrected source pending.
+The failed validation case, “timed and volume off-triggers need no trend,” reported a missing MarketTrend for OffTrigger #2 with an empty name. Source review found a fixture defect: subtracting 1 from the double.MaxValue sentinel produces the same sentinel. The corrected fixture uses a volume cap of 1,000, with additional boundary checks; production validation is unchanged. Nullable warnings in two passing harnesses were not the failure. The tested source's inventory was **260 authored check groups across 12 projects**, not a passing total.
+
+A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, a blank MainMarket, and an aborted raid. Its stack locations match the earlier `d0b0b87` baseline and it lacks the current `Source revision` line, suggesting an older running binary. This is an inference; the excerpt does not establish an exact runtime SHA.
+
+Follow-up source corrections preserve inherited preset assignments for null property groups, resolve and validate the exact `market` value before exchange I/O, and use the USDT price identity without a ticker request. They add an explicit main-market log. A complete rerun and restart of the updated configured instance are still required; capture its `Source revision` and confirm the compiled PAIRS market.
 
 ## Accepted pre-change evidence
 
@@ -43,7 +53,7 @@ The source correction explicitly delimits each Razor `Html.Raw` expression as `@
 
 ## November 7 implementation and acceptance
 
-All rows below require new execution evidence. “Implemented” means the current source contains the change; it does not mean a harness or runtime scenario has passed.
+The build and eight completed harnesses now have execution evidence at `78967a7`. The table below lists source behavior and remaining acceptance; the complete regression sequence and configured runtime checks are still open. Any follow-up source correction needs its own recorded rerun.
 
 | Area | Current source behavior | Acceptance still required |
 |---|---|---|
@@ -55,23 +65,25 @@ All rows below require new execution evidence. “Implemented” means the curre
 | Guard checkpoint and tokens | Guard metadata uses `_data/StartupSellOnlyModeState.json`; additional-target API tokens may be supplied through ProfitTrailerServerAPITokenXtra, otherwise the primary token is shared | Restart/pending-release recovery, base-path preservation, target/token alignment, redaction and no live checkpoint writes in TestMode |
 | Startup opt-out | `StartupSellOnlyMode=false` prevents a new API guard; recorded pending PTM-owned guard work still resumes. Indeterminate startup retains known confirmed configuration or defers unknown state | New opt-out versus pending recovery, restart with known/unknown configuration, no forced DEFAULT publication |
 | Monitor trigger editing | Rows preserve their MarketTrend/Metric/Tag identity and persisted precision | Serialization/round-trip harness and browser save/reload for multiple metrics on one trend |
-| Reference validation | Broken MarketTrend references are rejected during configuration validation; defensive evaluation treats absent inputs as unavailable | Activation, OffTrigger, global, negation, AND/OR, diagnostics compatibility |
+| Reference validation | Broken MarketTrend references are rejected during configuration validation; defensive evaluation treats absent inputs as unavailable; the failing sentinel fixture is corrected without weakening validation | Rerun the revised validation harness, including sentinel boundary cases, and verify actual startup/reload rejection |
+| Main-market bootstrap | Null property groups inherit default-file assignments; the exact market value is normalized and validated before exchange I/O; USDT uses an identity price of 1 | Lifecycle regressions, missing/malformed market rejection, updated configured process identity, and a successful USDT raid |
 | SMS unavailable observations | Unknown activation retains an existing ordinary SMS; final unavailable SMS expressions keep initial selection indeterminate; invalid age/time/volume observations remain unavailable | Missing/future timestamps, nonfinite/negative volume, held SMS, conclusive masked expressions |
 | Pinned normalized acquisition | Network request windows and retained samples honor the raid's pinned analysis boundary | Tight retention while requests cross a five-minute close; next-raid advancement |
 | Decision freshness | `MaxAnalysisAgeSeconds=300` compares decision time with the pinned analysis time; missing/future/expired pins are unavailable | Boundary ages and slow bootstrap; legitimate long-duration bars remain usable |
 | History requirements | Per-metric reports distinguish complete history, current-raid slots, all-alignments retention, and configured capacity | Period/alignment calculations, dependencies, insufficient-store warnings, Monitor export |
 | Return Concentration | Ranking volume uses TrendMinutes at the same normalized endpoint as the return; Top10-minus-remainder meaning and 100% coverage remain | Short/long trend windows, complete ranking population, min eleven markets, deterministic ranking |
-| Phase 1D correlation | Exact synchronized simple-return Pearson vectors; N=30 default; asset plus global mean/median metrics | Numerical cases, missing source bars, variance, coverage boundaries, export/trigger/Monitor integration |
+| Phase 1D correlation | Exact synchronized simple-return Pearson vectors; N=30 default; asset plus global mean/median metrics; 21/21 harness checks passed at `78967a7` | Configured history, coverage, export/trigger/Monitor integration, and runtime acceptance |
 | Decision history | Bounded JSONL records with source/config hashes, evaluated inputs, selection/guard/delivery outcome | Retention, rotation, quotas, error paths, sensitive-data omission, TestMode distinction |
 
 Detailed issue tracking: [configuration lifecycle and analytics reliability](issues/003-configuration-lifecycle-and-data-reliability.md). Implementation checkpoint: [November 7 update](updates/2026-11-07-stabilization-correlation-implementation.md).
 
 ## Execution queue
 
-The current handoff supplies exact PowerShell commands for the existing regression projects and the new correlation, analytics reliability, Monitor round-trip, configuration lifecycle, and decision-history projects. D-021 assigns execution to the user. Record the actual source SHA, .NET version, build output, and per-project results; do not roll expected case counts into a passing total.
+The current handoff supplies exact PowerShell commands for twelve regression projects. The revised inventory is **272 authored check groups**, including 40 in TriggerConfigurationValidation and 66 in ConfigurationLifecycle; the follow-up corrections and added cases have not been executed. D-021 assigns execution to the user. Record the actual source SHA, .NET version, build output, and per-project results; do not roll expected case counts into a passing total.
 
 Runtime acceptance remains open for:
 
+- Restart of the updated configured instance, recorded Source revision, valid compiled PAIRS market, and a successful raid after the bootstrap corrections.
 - Direct global SOM startup API behavior, explicit PTM flag ownership, and conclusive/fresh configuration delivery before release acknowledgement.
 - Last-SMS removal that stays removed, including delivery failure followed by retry.
 - Real PT acknowledgement and failed delivery; TestMode cannot establish either.
@@ -95,7 +107,7 @@ Some runtime scenarios require the user's configured exchange/PT installation. S
 | Phase 1B — return and relative-strength metrics | Earlier USDT Futures baseline validated; new Concentration window pending |
 | Phase 1C — trend-duration OHLCV metrics | Implemented and earlier harness/runtime evidence recorded; extended history diagnostics pending |
 | Unified PriceTrend migration | Implemented; Futures USDT evidence accepted with the stated non-USDT/Spot/US/browser gaps |
-| Phase 1D — BTC correlation | Implemented; new execution acceptance pending |
+| Phase 1D — BTC correlation | 21/21 deterministic checks passed at `78967a7`; configured runtime acceptance pending |
 | Minimal decision history | Implemented; new execution acceptance pending; full Phase 6 remains planned |
 | Phase 2 / 2B — derivatives ingestion and aggregates | Planned |
 | Phase 3 — higher-order market state measurements | Planned |

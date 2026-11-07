@@ -1,5 +1,30 @@
 # PTMagic 2.10 — Change log
 
+**Current application source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
+
+## 2026-11-07 — Publish the follow-up fixes and record standing authorization
+
+- Published the reviewed fixture and main-market corrections on `phase1/market-data-foundation`; the current handoff pins the published source. Native build, full harness execution, and configured runtime acceptance of these corrections remain pending.
+- Recorded [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development): the user authorizes continued publication of PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding; personal strategy and live PT actions remain outside this authorization.
+
+## 2026-11-07 — Correct the volume-cap fixture and main-market bootstrap
+
+- Replaced the invalid `double.MaxValue - 1` volume-cap fixture with 1,000 and added checks for the adjacent representable value and the exact sentinel. Production trigger validation is unchanged; the revised validator harness has 40 authored checks.
+- Preserved default-file assignments when PAIRS/DCA/INDICATORS property groups are null. Main-market resolution now reads the exact property key, normalizes its asset code, and produces a clear configuration error before exchange I/O for missing or malformed values.
+- Validated direct adapter inputs before network access, retained USDT identity pricing at 1 without a ticker call, and added the resolved main market and selected GlobalSetting to startup logging.
+- Added ten lifecycle groups for property inheritance, main-market parsing, bootstrap/acknowledgement boundaries, owned-guard retention on invalid bootstrap, and adapter identity/invalid-input behavior. ConfigurationLifecycle now has 66 authored groups; the current total is **272 across twelve projects**.
+- A new user-local build and complete regression run remain required for the published follow-up source. Runtime acceptance also requires restarting the updated configured instance and capturing its Source revision. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
+
+## 2026-11-07 — Confirm the build and record partial regression results
+
+- User-local validation identifies exact source `78967a7703ab9f57fece40d488fc538b1caf393b` and .NET SDK 10.0.403. Core, PTMagic, and Monitor built successfully in 9.6 seconds, confirming the Razor compilation correction.
+- Eight harnesses completed with 125 passing checks. TriggerConfigurationValidation printed 23 PASS results, then failed case 24, “timed and volume off-triggers need no trend,” for OffTrigger #2 with an empty MarketTrend name.
+- The fail-fast sequence stopped before MonitorSettingsRoundTrip, ConfigurationLifecycle, and DecisionHistory. Nullable warnings in two passing harnesses did not cause the failure. Full regression acceptance remains open.
+- A separate runtime excerpt showed a Binance Futures ticker request with `symbol=USDT`, blank MainMarket, and an aborted raid. Its version 2.10.0 banner did not identify a source SHA; the runtime failure cannot be assigned to the exact-source build.
+- [Build and partial regression evidence](updates/2026-11-07-build-and-partial-harness-validation.md) records the results and their limits. Follow-up fixes and a complete rerun remain required.
+
+The two preparation entries below describe earlier checkpoints. This user-local run resolves their build-pending statements and records partial regression progress, while configured runtime acceptance remains open.
+
 ## 2026-11-07 — Correct Monitor Razor rendering after a reported build failure
 
 - User-supplied build output shows Core net10.0 succeeded and Monitor failed with 27 Razor compile errors across nine row-render expressions. The log did not include an exact source SHA, so it is not exact-revision acceptance.
@@ -12,7 +37,7 @@
 - Recorded source corrections for final SMS removal, desired/pending/confirmed delivery with retry, startup global SOM, Monitor row preservation, and structural reference validation.
 - Replaced the initial unpublished startup-preset overlay at the user's direction with `POST /api/v2/globalSellOnlyMode` (`token`, `enabled` query parameters). Startup protection no longer sends PAIRS/DCA/INDICATORS; normal configuration delivery and global SOM release have separate acknowledgements.
 - Added pinned acquisition-window and decision-age contracts, per-metric history requirements, the TrendMinutes Concentration ranking window, Phase 1D BTC correlation, and bounded native decision history.
-- Current application source checkpoint: `78967a7703ab9f57fece40d488fc538b1caf393b`. **The corrected application build, harness execution, and configured runtime acceptance remain pending; see the reported build failure and correction above.**
+- At this preparation checkpoint, the corrected application build, harness execution, and configured runtime acceptance were pending. Later results are recorded above.
 - Consolidated one [current technical roadmap](roadmaps/CURRENT.md), [status](STATUS.md), [decision register](DECISIONS.md), and [verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md), retaining the full future derivatives, market-state, liquidity, and historical-analysis scope.
 - Explicitly superseded the legacy/selective PriceTrend architecture, stale “next phase” instructions, removed harness instructions, and early-performance ordering. Dedicated performance work follows completion of **all approved new metrics**.
 - Excluded independent personal strategy development from application scope and acceptance.

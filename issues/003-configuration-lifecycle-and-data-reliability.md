@@ -4,11 +4,19 @@
 
 **Source reviewed before changes:** PTMagic `d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc`
 
-**Implementation checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
+**Implementation checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
 
-**Status:** Source corrections and regression cases authored; execution and runtime acceptance pending.
+**Status:** Build and eight harnesses passed at `78967a7`; the next harness failed, and complete regression/runtime acceptance remains open.
 
 This issue records the actionable findings from the November 7 review and their current disposition. It does not claim that every defect was introduced by 2.10. Several findings concern long-standing configuration lifecycle code that new metrics make more consequential.
+
+## Latest execution evidence
+
+The user-local build at exact source `78967a7703ab9f57fece40d488fc538b1caf393b` passed for Core, PTMagic, and Monitor with SDK 10.0.403 in 9.6 seconds. Eight harnesses completed with 125 passing checks. TriggerConfigurationValidation printed 23 PASS results, then failed case 24, “timed and volume off-triggers need no trend,” for OffTrigger #2 with an empty MarketTrend name. The three remaining harnesses did not run. The Razor compilation correction is confirmed; this issue remains open.
+
+A separate runtime excerpt shows a Binance Futures ticker request with `symbol=USDT`, blank MainMarket, and an aborted raid. Its stack locations match the older `d0b0b87` baseline and it lacks the current Source revision line, suggesting an older running binary without identifying its exact SHA. [The dated evidence record](../updates/2026-11-07-build-and-partial-harness-validation.md) preserves this inference and the incomplete regression results.
+
+The failing validator case was a fixture defect: double.MaxValue minus 1 rounds back to the unbounded sentinel. The corrected fixture uses a finite cap and adds boundary controls; production validation is unchanged. Bootstrap source corrections preserve default-file assignments when property groups are null, require the exact valid market property before exchange I/O, and use the USDT price identity. The current authored inventory is 272 groups across twelve projects, including 40 validator and 66 lifecycle groups. These corrections are published and require the user-local rerun and restart of the updated configured instance. [Publication status](../STATUS.md#publication-status).
 
 ## Findings and acceptance
 
@@ -21,6 +29,7 @@ This issue records the actionable findings from the November 7 review and their 
 | CFG-05 / assessment 2E | Missing MarketTrend references can be converted to false or omitted from composed expressions | Validate references and preserve unavailable state defensively instead of deleting operands | Missing global/SMS/OffTrigger reference tests, negation and AND/OR behavior, actual configuration rejection |
 | DATA-01 / assessment 3 | A raid pin can be used for evaluation while requests made later in the refresh select/retain a newer window, losing the earliest required reference under tight retention | Carry the pinned boundary into acquisition/request bounds and retained-window semantics | Regression crossing a source close with minimally sufficient capacity, then successful advancement next raid |
 | DATA-02 / assessment 3 | A complete pinned snapshot can be too old when the configuration decision is finally made | Enforce MaxAnalysisAgeSeconds against the raid pin, independently of a metric's bar duration | Missing/future/expired pins, inclusive freshness boundary, slow bootstrap, valid completed multi-hour bar |
+| DATA-03 / reported bootstrap failure | A runtime excerpt has a blank MainMarket; source review found null property groups discard inherited default assignments, and quote extraction can accept market-prefixed keys | Preserve inherited assignments, resolve and normalize the exact market property, reject invalid input before exchange I/O, and apply USDT price identity | Lifecycle regressions plus a configured run from the recorded new Source revision that resolves the intended market and completes a raid |
 | METRIC-01 / assessment 5 | History settings do not explain actual ATR/volume/correlation and UTC-alignment requirements | Export per-metric current-raid and all-alignments requirements, capacity, and warnings | Exact period/slot expectations at multiple UTC alignments, dependency reporting, insufficient retention without fabricated values |
 | METRIC-02 / assessment 5 | Return Concentration ranks by fixed 24-hour volume while the compared return uses TrendMinutes | Rank on the same trailing TrendMinutes endpoint/window; keep Top10-minus-remainder percentage-point meaning | Window-sensitive fixtures, minimum eleven markets, complete eligible ranking/returns and deterministic tie ordering |
 | DOC-01 / assessment 6 | Current documentation exposes incompatible legacy contracts and several stale “latest” handoffs | One current roadmap/status/handoff, explicit supersession, preserved historical snapshots | Relative-link/static review and source-contract cross-check |

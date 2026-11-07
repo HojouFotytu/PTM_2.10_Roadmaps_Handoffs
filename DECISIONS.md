@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
+**Source checkpoint:** `86c2ea3ff430b62e654f929a222935ec53ea8fa6`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -269,6 +269,21 @@ Summary and decision history expose StartupSellOnlyModeActive, StartupSellOnlyMo
 TestMode makes no SOM API calls and writes neither live acknowledgement checkpoint. Disabling the startup option prevents a new guard; it does not automatically clear an untracked existing global SOM flag. A matching checkpoint with pending PTM-owned release still resumes recovery, even after opt-out, so the earlier owned guard is not stranded. Neither the user-supplied endpoint contract nor source implementation is evidence that the new code has passed native PT acceptance; record that separately under D-021/D-036.
 
 This decision replaces the transport and payload design originally drafted for D-025. The conclusive/fresh/acknowledged normal-configuration prerequisite remains active. Dedicated performance ordering and independent strategy scope are unchanged.
+
+## D-038 — Standing authorization to publish PTM 2.10 development
+
+**User instruction:** November 7, 2026. The user explicitly approved publication and instructed the assistant to stop asking again.
+
+The assistant is authorized to commit and publish PTM 2.10 application development changes and their roadmap, handoff, and evidence updates to these destinations:
+
+| Repository | Branch |
+|---|---|
+| HojouFotytu/PTMagic | `phase1/market-data-foundation` |
+| HojouFotytu/PTM_2.10_Roadmaps_Handoffs | `main` |
+
+This authorization persists across subsequent development work in the agreed PTM 2.10 scope. Continue publication to these branches without renewed conversational approval. Actual tool-level restrictions still apply; if a tool blocks an action, report the specific restriction without treating the user's existing authorization as missing or asking for the same consent again.
+
+This decision covers application and documentation development. It does not extend to the user's independent personal strategy work or authorize live ProfitTrailer/API/trading actions. D-021 and D-022 remain active: the user runs local builds, harnesses, and configured runtime checks, and handoffs retain exact source pins and verification commands. Publication does not establish execution acceptance.
 
 ## Remaining open design decisions
 
