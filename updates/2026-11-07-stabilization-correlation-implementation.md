@@ -4,15 +4,23 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `839dc9afe785523ddc7e551cb610b47a6a8acc34`
+**Application source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
 
 **Documentation baseline before reconciliation:** `a074fea56f33033c1a99db78df12099ea230a88a`
 
 ## Evidence level
 
-This is an implementation checkpoint, not a passing execution report. Source changes and regression cases were authored and reviewed. The user-local .NET build, complete harness execution, configured runtime checks, and real PT/Monitor browser verification remain pending under D-021.
+This is an implementation checkpoint with a reported build failure, not full-build acceptance. Source changes and regression cases were authored and reviewed. The latest user-submitted output shows Core net10.0 compiled and Monitor failed; the corrected build, complete harness execution, configured runtime checks, and real PT/Monitor browser verification remain pending under D-021.
 
 The accepted pre-change baseline is the November 5 build and 88 checks associated with d0b0b87, followed by nine Futures USDT TestMode raids. The exact deployed SHA was inferred from the workflow; the logs printed application version 2.10.0. Those results remain valid for their recorded scope and do not validate the new source.
+
+## Reported Monitor build failure and correction
+
+The user reported a .NET 10 build in which Core succeeded and Monitor failed with **27 Razor compile errors across nine row-render expressions** in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml`. The submitted log did not include an exact source SHA, so the report does not establish acceptance of a specific revision.
+
+The correction encloses each server-side expression as `@(Html.Raw(...))`. This ends Razor's C# expression before the following JavaScript `.map(...)` and `.join(...)` chain, preserving the serialized row data and client-side rendering behavior. The corrected source awaits a user-local build and regression rerun using the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md).
+
+No harness cases were added for this delimiter correction. The required inventory remains **260 authored check groups across 12 projects**; no new passing test count is claimed.
 
 ## User-directed scope
 

@@ -6,7 +6,7 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `839dc9afe785523ddc7e551cb610b47a6a8acc34`
+**Application source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -16,7 +16,9 @@ This is the sole current development handoff. Earlier dated handoffs remain hist
 
 ## 1. What is ready, and what is not yet accepted
 
-The source implements the November 7 fixes and additions. Regression cases are authored. **The new build, harness execution, configured runtime, actual PT delivery, and Monitor browser checks have not been run in this session.**
+The source implements the November 7 fixes and additions. The user's submitted .NET 10 build output shows **Core net10.0 succeeded and Monitor failed with 27 Razor compile errors** across nine row-render expressions in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml`. The log did not include an exact source SHA; these results cannot be assigned to a pinned revision.
+
+The correction explicitly bounds the nine Razor expressions as `@(Html.Raw(...))`, keeping the following `.map(...)` and `.join(...)` chains in JavaScript. **A build of the corrected source, full harness execution, configured runtime, actual PT delivery, and Monitor browser checks remain pending.** Run the complete sequence below at the pinned source revision. This delimiter correction adds no harness cases; the inventory remains 260 authored check groups across 12 projects.
 
 The accepted pre-change evidence remains the November 5 .NET 10 build, 88 checks across six harnesses, and nine Futures USDT TestMode raids associated with d0b0b87. Those logs identify version 2.10.0 but not an exact source SHA. The 5,192 matching normalized export/runtime values establish internal consistency, not parity with the removed legacy calculation. Positive BTC OffTrigger followed by immediate reactivation did not establish lasting removal.
 
@@ -86,7 +88,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "839dc9afe785523ddc7e551cb610b47a6a8acc34"
+$ExpectedSource = "78967a7703ab9f57fece40d488fc538b1caf393b"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."

@@ -4,7 +4,7 @@
 
 **[November 7 — Stabilization, correlation, and documentation reconciliation](2026-11-07-stabilization-correlation-implementation.md)**
 
-Source implemented and tests authored; new local build, harness execution, and relevant runtime acceptance are pending. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for verification commands and the [current status](../STATUS.md) for the consolidated evidence boundary.
+Source implemented and tests authored. The latest user-reported build compiled Core net10.0 and failed Monitor with 27 Razor errors; its exact source SHA was not supplied. The Razor correction awaits a build rerun, complete harness execution, and relevant runtime acceptance. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md) for verification commands and the [current status](../STATUS.md) for the consolidated evidence boundary.
 
 The current checkpoint incorporates the user's direct global SOM API revision. The earlier full-preset startup overlay is superseded by [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay); no prior acceptance is claimed for either startup mechanism.
 

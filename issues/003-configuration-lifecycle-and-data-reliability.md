@@ -4,7 +4,7 @@
 
 **Source reviewed before changes:** PTMagic `d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc`
 
-**Implementation checkpoint:** `839dc9afe785523ddc7e551cb610b47a6a8acc34`
+**Implementation checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
 
 **Status:** Source corrections and regression cases authored; execution and runtime acceptance pending.
 

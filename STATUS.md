@@ -4,7 +4,7 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `839dc9afe785523ddc7e551cb610b47a6a8acc34`
+**Current source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
 
 **Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -16,9 +16,15 @@ The November 7 implementation addresses the assessed configuration lifecycle def
 
 The startup API design supersedes the earlier unpublished full-preset overlay. The guard request carries `enabled=true` and the configured API token; it does not carry a properties payload. Normal configuration delivery and API guard release are separate acknowledged actions. The current contract is [D-037](DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
 
-**Current evidence level: source changes and authored regression cases. The new application build, harness execution, deployed TestMode checks, actual ProfitTrailer delivery, and browser checks remain pending.** A previous passing test count does not validate these changes.
+**Current evidence level: source changes, authored regression cases, and a reported build attempt. Core compiled for net10.0; Monitor failed with 27 Razor errors. The corrected application build, harness execution, deployed TestMode checks, actual ProfitTrailer delivery, and browser checks remain pending.** A previous passing test count does not validate these changes.
 
 The source checkpoint identifies the implementation snapshot. Do not infer a new deployment from documentation or from a 2.10.0 version string.
+
+### Latest reported build and source correction
+
+The submitted build log did not include an exact source SHA. It establishes the reported Core success and Monitor failure, not acceptance of a pinned source revision. The 27 Monitor errors came from nine row-render expressions in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml`.
+
+The source correction explicitly delimits each Razor `Html.Raw` expression as `@(Html.Raw(...))`, leaving the following `.map(...)` and `.join(...)` operations in JavaScript. The correction awaits the user's build rerun. No harness cases were added for this delimiter change; the inventory remains **260 authored check groups across 12 projects**, with execution against the corrected source pending.
 
 ## Accepted pre-change evidence
 

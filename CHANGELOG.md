@@ -1,11 +1,18 @@
 # PTMagic 2.10 — Change log
 
+## 2026-11-07 — Correct Monitor Razor rendering after a reported build failure
+
+- User-supplied build output shows Core net10.0 succeeded and Monitor failed with 27 Razor compile errors across nine row-render expressions. The log did not include an exact source SHA, so it is not exact-revision acceptance.
+- Explicitly delimited `Html.Raw` expressions in `Monitor/Pages/_get/SettingsGlobalSettings.cshtml` and `Monitor/Pages/_get/SettingsSingleMarketSettings.cshtml` as `@(Html.Raw(...))`; the following `.map(...)` and `.join(...)` remain JavaScript.
+- The corrected build and full regression rerun remain pending under D-021. No harness cases were added; the inventory remains 260 authored check groups across 12 projects.
+- Updated the [current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md) and [implementation evidence](updates/2026-11-07-stabilization-correlation-implementation.md) for the correction and required rerun.
+
 ## 2026-11-07 — Stabilization, correlation, history, and current-contract reconciliation
 
 - Recorded source corrections for final SMS removal, desired/pending/confirmed delivery with retry, startup global SOM, Monitor row preservation, and structural reference validation.
 - Replaced the initial unpublished startup-preset overlay at the user's direction with `POST /api/v2/globalSellOnlyMode` (`token`, `enabled` query parameters). Startup protection no longer sends PAIRS/DCA/INDICATORS; normal configuration delivery and global SOM release have separate acknowledgements.
 - Added pinned acquisition-window and decision-age contracts, per-metric history requirements, the TrendMinutes Concentration ranking window, Phase 1D BTC correlation, and bounded native decision history.
-- Current application source checkpoint: `839dc9afe785523ddc7e551cb610b47a6a8acc34`. **New source and regression cases are authored; local .NET build, harness execution, and configured runtime acceptance remain pending.**
+- Current application source checkpoint: `78967a7703ab9f57fece40d488fc538b1caf393b`. **The corrected application build, harness execution, and configured runtime acceptance remain pending; see the reported build failure and correction above.**
 - Consolidated one [current technical roadmap](roadmaps/CURRENT.md), [status](STATUS.md), [decision register](DECISIONS.md), and [verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md), retaining the full future derivatives, market-state, liquidity, and historical-analysis scope.
 - Explicitly superseded the legacy/selective PriceTrend architecture, stale “next phase” instructions, removed harness instructions, and early-performance ordering. Dedicated performance work follows completion of **all approved new metrics**.
 - Excluded independent personal strategy development from application scope and acceptance.

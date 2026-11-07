@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `839dc9afe785523ddc7e551cb610b47a6a8acc34`
+**Source checkpoint:** `78967a7703ab9f57fece40d488fc538b1caf393b`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -67,7 +67,7 @@ The current work adds:
 8. Three Phase 1D correlation metrics.
 9. Bounded native decision-history records.
 
-**Execution status: new build, harness results, and relevant runtime checks pending.** The prior 88 checks are not a passing result for this checkpoint.
+**Execution status: the user reported Core net10.0 compilation succeeded and Monitor failed with 27 Razor errors; no source SHA was supplied. The Razor correction is implemented, with a new build, harness results, and relevant runtime checks pending.** See [current build evidence](../STATUS.md#latest-reported-build-and-source-correction). The prior 88 checks are not a passing result for this checkpoint.
 
 ### Phase map
 
