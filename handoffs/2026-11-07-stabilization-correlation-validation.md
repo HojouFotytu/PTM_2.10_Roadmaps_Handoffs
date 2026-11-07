@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
+**Application source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
 
-**Reviewed source tree:** `e302ecdfbceb345a64bf61f476c98745079c305c`
+**Reviewed source tree:** `f92a07535f3f2255f23ab5d8ed17648658724650`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -24,11 +24,11 @@ The latest user run identifies exact source **`d331fbd059041241069646c3bb82ac654
 
 The preceding run at `86c2ea3ff430b62e654f929a222935ec53ea8fa6` built the solution in 15.8 seconds and passed **193 checks in ten harnesses**, including 40 TriggerConfigurationValidation and 28 MonitorSettingsRoundTrip checks. The two qualified Telegram fixture constructors were the only executable changes before the successful continuation; production source and assertions were unchanged. **All 272 checks across twelve projects now have passing results over these two recorded revisions.** This is not a single full-suite execution at `d331fbd`. [Latest exact-source evidence](../updates/2026-11-07-completed-harness-validation.md).
 
-The current application checkpoint `fac346c` updates five harness READMEs to record the observed results. It changes no executable source, projects, settings, or assertions and requires no additional harness rerun. Configured TestMode behavior, actual PT API acknowledgement/native SOM behavior, and browser integration remain separate acceptance work.
+The current application checkpoint `a0b375c` adds [the cumulative effective-change record](../CHANGELOG-2.10.md) and its PR/merge maintenance requirement, makes StartupSellOnlyMode=true explicit in the development general-settings template (the packaged template already contained it), and clarifies the existing Monitor APPLICATION toggle with visible TestMode help. Engine code, projects, test cases and assertions are unchanged; no harness rerun is required solely for these documentation/template/static-view edits. The source was reviewed and the templates parsed; no new .NET build or browser result is claimed. Configured TestMode behavior, actual PT API acknowledgement/native SOM behavior, and browser integration remain separate acceptance work.
 
 A subsequent runtime log repeats the bare `symbol=USDT` failure while using an existing configured runtime directory separate from the Git checkout. Its first raid completes and reports a non-default setting transition; the next loads only 13/12/11 property lines and fails with an empty main market. Both raids omit the current unconditional `Source revision` and `Analysis main market` lines and follow the older Core code layout. The process therefore executes pre-fix Core behavior; its exact SHA and loaded DLL path are not shown. The runtime working directory alone does not identify the loaded assembly. The log also lacks the TestMode banner and reports a PT update, so it is not configured TestMode evidence for the current code. [Deployment diagnosis](../updates/2026-11-07-completed-harness-validation.md#subsequent-configured-runtime-report-runtime-core-is-still-older).
 
-The immediate task is to select the freshly built application DLL explicitly while retaining the existing runtime working directory and configuration. Section 3A does this without copying or overwriting private settings, presets, or state. Before reusing an installed launcher, update it to use the rebuilt/published binaries and verify runtime identity. Do not change strategy presets or weaken market validation to compensate for the old code path.
+A later explicit compiled-DLL launch reached preset validation and stopped on a missing file referenced by the Default setting. That is configuration-file resolution, before SOM enable and exchange loading. The user subsequently reported a long initial run underway and asked why SOM had not activated with TestMode enabled; no completed-raid output or remote SOM acknowledgement has been supplied for that run. Collect its result and source identity before requesting a repeat. TestMode deliberately simulates SOM and cannot establish the remote flag. Section 3A remains the complete launch procedure if another run is needed; it preserves the existing runtime folder and private files. The default-template and help-text update does not require interrupting the ongoing analysis.
 
 The previous `78967a7` run and its sentinel-fixture failure remain in the earlier evidence record. At `86c2ea3`, the corrected finite cap and both added sentinel boundary checks passed. At `d331fbd`, main-market parsing/inheritance, invalid-input boundaries, guard/configuration orchestration, delivery retry, SMS transitions, and history checks also passed. The solution builds Core, PTMagic, and Monitor; each separate harness was compiled and executed by its own recorded `dotnet run` invocation.
 
@@ -67,9 +67,9 @@ The history-requirement export distinguishes complete-period lower bounds from c
 
 ## 3. Local commands and deterministic execution record
 
-### A. Next step — run the exact built DLL with the existing runtime configuration
+### A. When another run is needed — select the built DLL with the existing runtime configuration
 
-The deterministic checks are complete. Stop the older PTMagic instance through its normal startup/stop procedure before starting another. Set `$PtmRuntime` below to the **existing configured PTMagic runtime folder**, and first confirm `GeneralSettings.Application.TestMode=true` in that folder's `settings.general.json`. Keep its existing analyzer and preset filenames.
+The deterministic checks are complete. First collect the already-reported long run rather than interrupting it for this template/help update. If another run is needed, stop the previous PTMagic instance through its normal startup/stop procedure before starting another. Set `$PtmRuntime` below to the **existing configured PTMagic runtime folder**, and first confirm `GeneralSettings.Application.TestMode=true` in that folder's `settings.general.json`. Keep its existing analyzer and preset filenames.
 
 Run the complete block below in PowerShell to pull the documentation checkpoint, record the source, build, and start the resulting **absolute DLL path** with the existing runtime directory as its working directory. This selects the updated binary directly instead of relying on the installed launcher. The script does not change TestMode, copy deployment files, or overwrite settings/presets/data.
 
@@ -105,7 +105,7 @@ Review the printed working-tree status. Local source changes must be recorded wi
 
     $ActualSource = git rev-parse HEAD
     Assert-NativeSuccess "git rev-parse HEAD"
-    $ExpectedSource = "fac346c88b2c634439083e7515193d756ac3d186"
+    $ExpectedSource = "a0b375cc9b2db469a48a31b713385f35500cc763"
     Write-Host "Application source: $ActualSource"
     if ($ActualSource.Trim() -ne $ExpectedSource) {
         throw "Source differs from this handoff ($ExpectedSource). Record the actual source before continuing."
@@ -174,7 +174,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "fac346c88b2c634439083e7515193d756ac3d186"
+$ExpectedSource = "a0b375cc9b2db469a48a31b713385f35500cc763"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."
@@ -233,7 +233,7 @@ All current authored groups have passing results. The source column preserves th
 | ConfigurationLifecycle | 66 | `d331fbd` |
 | DecisionHistory | 13 | `d331fbd` |
 
-The completed inventory is **272 checks/groups across twelve projects**: **193 passed at `86c2ea3` and 79 at `d331fbd`**. The earlier `78967a7` partial run is preserved separately. The fixture qualification corrections are verified, and the current `fac346c` checkpoint only updates README evidence. Preserve all results under their executed sources.
+The completed inventory is **272 checks/groups across twelve projects**: **193 passed at `86c2ea3` and 79 at `d331fbd`**. The earlier `78967a7` partial run is preserved separately. The fixture qualification corrections are verified. The current `a0b375c` checkpoint adds the cumulative documentation, an explicit development-template default and static Monitor help; it changes no engine code or test assertions. Preserve all results under their executed sources.
 
 The two added validator checks distinguish the adjacent representable volume cap from the exact unbounded sentinel. The ten added lifecycle groups cover exact/non-USDT market parsing; null, missing, blank, prefix-only, and malformed inputs; null PAIRS/DCA/INDICATORS inheritance; fresh-summary bootstrap with and without an acknowledged configuration; retention of an owned guard when the market is missing; and public Spot/Futures/US adapter identity and invalid-input boundaries using already-canceled tokens.
 

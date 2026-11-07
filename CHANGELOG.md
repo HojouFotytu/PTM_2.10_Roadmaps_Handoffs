@@ -1,6 +1,15 @@
 # PTMagic 2.10 — Change log
 
-**Current application source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
+For the cumulative changes that remain in effect and must accompany PRs/merges, use [CHANGELOG-2.10.md](CHANGELOG-2.10.md). This file retains chronological project history.
+
+**Current application source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
+
+## 2026-11-07 — Establish the cumulative release record and surface startup SOM
+
+- Published application `a0b375cc9b2db469a48a31b713385f35500cc763` with [CHANGELOG-2.10.md](CHANGELOG-2.10.md), mirrored in this repository, covering only surviving 2.10 changes from the November 2 foundation. README, contributor rules, the handoff template and D-039 require maintenance with PRs and merges.
+- Both supplied general-settings templates explicitly contain StartupSellOnlyMode=true; only the development template needed the field added. The existing General Settings APPLICATION toggle already saved on/off values and now has associated label/help text explaining TestMode.
+- Reviewed source, parsed the existing comment/trailing-comma settings format, checked preservation of other values, verified source references and synchronized the two release records. No .NET build, harness, live API or browser execution was performed. Existing 272-check evidence remains attached to its actual sources.
+- Updated current source pins and launch commands. Preserve the user-reported ongoing long run; collect its result before requesting another launch. TestMode does not activate native SOM.
 
 ## 2026-11-07 — Complete deterministic validation and advance to configured runtime
 

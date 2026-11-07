@@ -12,13 +12,15 @@
 
 **Current decisions / status:** [DECISIONS](../DECISIONS.md) · [STATUS](../STATUS.md)
 
+**Cumulative release changes:** [CHANGELOG-2.10.md](../CHANGELOG-2.10.md) — synchronize the application and documentation copies and cite the relevant sections in PR/merge descriptions.
+
 ## User-approved scope and constraints
 
 Record the requested changes and any deferrals. PTMagic application development is independent of personal trading-strategy projects. Performance work remains after all approved new metric additions unless the user explicitly changes that order.
 
 ## What changed and why
 
-Describe resulting behavior and relevant public settings. Include migration or default-behavior changes. Link source commits and implementation records.
+Describe resulting behavior and relevant public settings. Include migration or default-behavior changes. Link source commits and implementation records. Update the cumulative release-change record with only behavior that remains in effect; consolidate superseded entries and keep future work and interim history outside that record.
 
 ## Evidence
 

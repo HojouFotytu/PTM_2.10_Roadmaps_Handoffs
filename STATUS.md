@@ -4,7 +4,7 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
+**Current source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
 
 **Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -12,7 +12,7 @@ This file describes the present state. Dated evidence stays in [updates](updates
 
 ## Publication status
 
-The current source is published on `phase1/market-data-foundation` at `fac346c`. The two Telegram fixture corrections were executed successfully at `d331fbd`; the subsequent application README updates record that evidence without changing executable code or the case inventory. Build and harness evidence retain their executed source identities; the next runtime should identify the current published source.
+The current source is published on `phase1/market-data-foundation` at `a0b375c`. It adds [the cumulative effective-change record](CHANGELOG-2.10.md) with PR/merge guidance, completes the explicit startup SOM default in the development general-settings template, and clarifies the existing Monitor APPLICATION toggle with visible TestMode help. The packaged default already contained StartupSellOnlyMode=true. Engine code and test cases are unchanged. The two Telegram fixture corrections were executed successfully at `d331fbd`; build and harness evidence retain their actual execution revisions. No new .NET build or browser result is claimed for the documentation/template/static-view update.
 
 The user's standing authorization covers publication of PTM 2.10 development changes to the application and documentation branches in [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development), without renewed conversational approval. Actual tool restrictions remain binding. The current handoff pins the published source for user-local verification; earlier passes remain attributed to the source actually tested.
 
@@ -38,7 +38,7 @@ The user subsequently supplied another log using a configured runtime directory 
 
 The log lacks the TestMode banner and reports `PT Config updated: Yes` after the first raid. It is not TestMode acceptance of the current implementation, and that reported update does not validate the new guard/acknowledgement logic. The next validation selects the freshly built DLL by absolute path while retaining the existing runtime working directory and TestMode configuration. This makes binary selection explicit without copying or overwriting private files. A permanent installed-launcher update must deploy a coherent application bundle, not Core.dll alone, and preserve settings, presets, data, and logs.
 
-The main-market corrections preserve inherited preset assignments for null property groups, resolve and validate the exact `market` value before exchange I/O, and use the USDT price identity without a ticker request. Their lifecycle regressions now pass, including invalid-input rejection before exchange collection. Current normalization rejects an empty quote before the bare-USDT request seen in the log. The explicit updated-DLL run still needs to resolve the intended market and complete a raid; capture its runtime `Source revision` and `Analysis main market` lines.
+The main-market corrections preserve inherited preset assignments for null property groups, resolve and validate the exact `market` value before exchange I/O, and use the USDT price identity without a ticker request. Their lifecycle regressions now pass, including invalid-input rejection before exchange collection. Current normalization rejects an empty quote before the bare-USDT request seen in the log. The later explicit compiled-DLL launch reached preset validation, then stopped because the Default setting referenced a missing preset file. This occurs before guard enable or exchange loading. The user subsequently reported a long initial run underway and asked about SOM while TestMode was enabled. No completed result or exact running source was supplied for that run. Collect its `Source revision`, `Analysis main market` and completed-raid output; TestMode cannot establish native PT SOM activation. The current template/help changes do not require interrupting that run.
 
 ## Accepted pre-change evidence
 
@@ -83,7 +83,7 @@ Detailed issue tracking: [configuration lifecycle and analytics reliability](iss
 
 ## Execution queue
 
-The completed deterministic inventory is **272 passing check groups across twelve projects**, with each result attributed to its actual source: 193 at `86c2ea3`, then 66 lifecycle and 13 history at `d331fbd`. The current handoff now starts by explicitly selecting the freshly built DLL with the existing runtime configuration and verifying the running source. It retains the complete twelve-project sequence as a reference for a later change that requires regression execution; documentation-only status updates do not require repeating the completed checks.
+The completed deterministic inventory is **272 passing check groups across twelve projects**, with each result attributed to its actual source: 193 at `86c2ea3`, then 66 lifecycle and 13 history at `d331fbd`. Collect the reported ongoing run before requesting another launch. The current handoff retains the explicit built-DLL procedure and the complete twelve-project sequence for later work that requires them; the documentation/template/static-view update does not require repeating the completed harness checks.
 
 Runtime acceptance remains open for:
 
@@ -130,6 +130,6 @@ The old 2.9 performance results and November 5 cold-start timings are historical
 
 ## Next action
 
-Use the explicit-DLL procedure in the [current verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md) with the existing runtime directory and TestMode configuration. Record startup, the source and resolved main market in two consecutive completed raids, and the current exported summaries; the reported failure occurred only after the first raid had succeeded. Update the installed launcher with a coherent current application bundle before reusing it, then complete the applicable PT/browser checks before continuing the remaining metric families in [the current technical roadmap](roadmaps/CURRENT.md).
+Collect the user-reported long run and its source/main-market/completion evidence. If another run is needed, use the explicit-DLL procedure in the [current verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md) with the existing runtime configuration. Native SOM and normal PT delivery require separate live acceptance because TestMode sends neither. The Monitor control is General Settings → APPLICATION → Startup Global SOM, immediately below Test Mode. Continue the applicable runtime/PT/browser checks before the remaining metric families in [the current technical roadmap](roadmaps/CURRENT.md).
 
 Earlier files that instructed a restart of Phase 1C, preservation of a separate legacy PriceTrend path, use of the removed selective-legacy harness, or optimization before correlation are historical and superseded.

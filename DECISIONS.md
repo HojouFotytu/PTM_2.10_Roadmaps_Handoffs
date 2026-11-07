@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
+**Source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -286,6 +286,16 @@ The assistant is authorized to commit and publish PTM 2.10 application developme
 This authorization persists across subsequent development work in the agreed PTM 2.10 scope. Continue publication to these branches without renewed conversational approval. Actual tool-level restrictions still apply; if a tool blocks an action, report the specific restriction without treating the user's existing authorization as missing or asking for the same consent again.
 
 This decision covers application and documentation development. It does not extend to the user's independent personal strategy work or authorize live ProfitTrailer/API/trading actions. D-021 and D-022 remain active: the user runs local builds, harnesses, and configured runtime checks, and handoffs retain exact source pins and verification commands. Publication does not establish execution acceptance.
+
+## D-039 — Cumulative effective-change record for PRs and merges
+
+**User instruction:** November 7, 2026. Create a record from the beginning of 2.10 through the current implementation, including only changes that remain in effect.
+
+Maintain [CHANGELOG-2.10.md](CHANGELOG-2.10.md) in this repository and an identical application-repository copy that is included in 2.10 code merges. Update the applicable sections whenever a PR changes behavior, metrics, settings, compatibility, diagnostics or validation, and reference those sections in PR, merge and release descriptions. Synchronize both copies as part of the same development handoff.
+
+The record describes the cumulative resulting release, beginning with the normalized foundation on November 2, rather than a sequence of interim implementations. Consolidate or remove an entry when it is replaced or reversed. Keep planned work in the roadmap, chronological provenance in dated records/source control, and personal strategy development outside application scope. Retain exact tested-source identities and acceptance limits when describing validation.
+
+The initial record includes the native startup global SOM setting, both supplied general-settings templates and the Monitor General Settings APPLICATION toggle. The packaged template already declared the true default; the development template now declares it explicitly too. Monitor already has on/off persistence; visible help now states that TestMode leaves the remote SOM flag unchanged.
 
 ## Remaining open design decisions
 

@@ -4,7 +4,7 @@
 
 **Source reviewed before changes:** PTMagic `d0b0b877d6157b0db44cc4d1d2ac4b0cb0799abc`
 
-**Implementation checkpoint:** `fac346c88b2c634439083e7515193d756ac3d186`
+**Implementation checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
 
 **Status:** Deterministic acceptance complete: 193 checks at `86c2ea3` plus 66 lifecycle and 13 history checks at `d331fbd`, totaling 272 across twelve harnesses. Configured runtime, actual PT API, and browser acceptance remain open.
 

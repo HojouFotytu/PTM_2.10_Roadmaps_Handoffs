@@ -8,10 +8,11 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Published source checkpoint for this handoff | `fac346c88b2c634439083e7515193d756ac3d186` |
+| Published source checkpoint for this handoff | `a0b375cc9b2db469a48a31b713385f35500cc763` |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
+| Cumulative effective 2.10 changes for PRs and merges | [CHANGELOG-2.10.md](CHANGELOG-2.10.md) |
 | Current decisions and supersession register | [DECISIONS.md](DECISIONS.md) |
 | Current handoff | [November 7 stabilization and correlation validation](handoffs/2026-11-07-stabilization-correlation-validation.md) |
 | Concise user roadmap | [ROADMAP.md](ROADMAP.md) |
@@ -24,7 +25,7 @@ The user superseded the initial startup-preset overlay with `POST /api/v2/global
 
 **All 272 checks across twelve harnesses now have passing user-local results: 193 checks in ten harnesses at `86c2ea3`, followed by 66 ConfigurationLifecycle and 13 DecisionHistory checks at `d331fbd`.** The latest continuation used .NET SDK 10.0.403 and built Core, PTMagic, and Monitor in 10.9 seconds. These are two recorded runs, not a single twelve-harness run at one revision. See [current evidence](updates/2026-11-07-completed-harness-validation.md).
 
-The two Telegram fixture corrections are now verified by native execution. Production code and assertions were unchanged between the two tested revisions. The passing lifecycle cases cover main-market parsing and inherited presets, startup SOM orchestration with fake transports, acknowledgement/retry handling, freshness, SMS transitions, and TestMode isolation; the history cases cover bounded files, provenance, and sensitive-data exclusion. A later runtime log still executes pre-fix Core behavior while using a configured runtime directory separate from the Git checkout; its loaded DLL path is not shown. The next step explicitly launches the freshly built DLL with that existing runtime directory and TestMode configuration, then verifies Source revision. This does not update the installed launcher permanently. Actual PT API acknowledgement and browser integration remain separate acceptance work. No harness rerun is required for the documentation-only status updates. [Publication status](STATUS.md#publication-status).
+The two Telegram fixture corrections are verified by native execution. Production code and assertions were unchanged between the tested revisions. The current `a0b375c` publication adds [the cumulative effective-change record](CHANGELOG-2.10.md), makes startup SOM explicit in both supplied general-settings templates, and clarifies the existing Monitor Application toggle with visible TestMode help. Engine code and test cases are unchanged. No new build or browser result is claimed, and this update alone requires no harness rerun. An explicit compiled-DLL launch reached a missing-preset validation error, and the user later reported a long initial run underway. Collect that result and source identity before requesting a repeat. TestMode simulates SOM, so actual PT acknowledgement and browser integration remain separate acceptance work. [Publication status](STATUS.md#publication-status).
 
 The earlier pre-change `d0b0b87` baseline remains historical evidence: a user-run application build, 88 checks across six harnesses, and nine Binance Futures USDT TestMode raids. The deployed SHA was inferred from the workflow because those logs printed version 2.10.0 rather than a Git SHA. [Evidence](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
 
@@ -62,6 +63,10 @@ The current commands and acceptance matrix are in the [November 7 handoff](hando
 Local deterministic acceptance of the November 7 changes is complete. Finish the configured runtime, PT integration, and browser checks, then continue the remaining metric families. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
 
 Correctness work, bounded retention, and dependency validation continue as part of feature delivery. Do not use that exception to reintroduce a separate performance project ahead of the agreed gate.
+
+## Release-change record for PRs and merges
+
+[CHANGELOG-2.10.md](CHANGELOG-2.10.md) records only the resulting 2.10 changes that remain in effect, from the November 2 foundation through the current implementation. It is mirrored in the application repository so the file travels with code merges. Update both copies in the same development handoff, consolidate or remove superseded entries, and reference the relevant sections in PR, merge and release descriptions. Keep future work in the roadmap and preserve exact execution provenance. [D-039](DECISIONS.md#d-039--cumulative-effective-change-record-for-prs-and-merges) defines maintenance.
 
 ## Historical records
 
