@@ -1,6 +1,6 @@
 # November 9, 2026 — Persistent normalized OHLCV warm-start cache
 
-**Application source published:** `bb6dc59d14c2abd76aed62b420127660489e2782`
+**Application source published:** `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`
 
 **Branch:** `HojouFotytu/PTMagic:phase1/market-data-foundation`
 
@@ -16,7 +16,7 @@ The earlier decision D-032 deferred broad performance optimization until all met
 
 - Production normalized runtime uses `MarketDataWarmStartCache` under `_data/NormalizedOhlcvCache`.
 - Closed five-minute candle histories are written to separate per-exchange/per-symbol compressed files with versioning, hash-based safe filenames, UTC interval identity, OHLCV validation, complete-file checking, bounded reads, throttled writes and atomic replacement.
-- At the next process startup, the normal `MarketDataService` restores valid cached histories before its anchored refresh. If the cache covers the required window, it requests only the latest missing periods plus two overlap candles. If gaps, missing depth, invalid/stale input or corrupt files are found, it requests an appropriate full/missing backfill.
+- At the next process startup, the normal `MarketDataService` restores valid cached histories before its anchored refresh. If a validated restored cache covers the required window, it requests only the latest missing periods plus two overlap candles. Ordinary incomplete in-memory series retain conservative full backfill. If gaps, missing depth, invalid/stale input or corrupt files are found, it requests an appropriate full/missing backfill.
 - Cache read/write problems do not bypass metric availability or readiness, and do not alter PT configuration acknowledgements, TestMode isolation or global startup SOM state.
 - The existing separate legacy one-minute tick-reconstruction and first-seen-date paths were not modified. Those may still have their own startup work.
 
@@ -26,7 +26,7 @@ The earlier decision D-032 deferred broad performance optimization until all met
 - `Core/MarketAnalyzer/MarketData/MarketDataService.cs` — restore before pinned refresh and incremental backfill decisions.
 - `Core/MarketAnalyzer/MarketData/MarketDataStore.cs` — expose shared validation to the disk reader.
 - `Core/MarketAnalyzer/MarketData/BinanceFuturesAnalyticsRuntime.cs` — enable persistence for all three Binance exchange modes.
-- `Tests/NormalizedWarmStartCache/` — new seven-group offline harness, project and README.
+- `Tests/NormalizedWarmStartCache/` — new eight-group offline harness, project and README.
 - `CHANGELOG-2.10.md` — surviving release behavior, synchronized into this documentation repository.
 
 ## Verification and limits

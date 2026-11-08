@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
+**Application source checkpoint:** `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`
 
-**Reviewed source tree:** `85070696a8cb2c617e6526d328ba238d915302ee`
+**Reviewed source tree:** `f501db7992f323b0a4da5847357d5cfa6384bd71`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -20,9 +20,9 @@ This is the sole current development handoff. Earlier dated handoffs remain hist
 
 ## November 9 focused validation — normalized OHLCV warm start
 
-The new source `bb6dc59d14c2abd76aed62b420127660489e2782` is published with a versioned, per-exchange/market compressed five-minute candle cache. It restores validated closed history before the pinned refresh, and only gaps/missing periods trigger additional fetches. Cache data is not an acknowledgement and cannot override completeness/freshness rules. The separate legacy one-minute MarketData reconstruction remains unchanged.
+The new source `925db7c153ee4d53cfe3b7bf736318e7a30bccf1` is published with a versioned, per-exchange/market compressed five-minute candle cache. It restores validated closed history before the pinned refresh, and only gaps/missing periods trigger additional fetches. Cache data is not an acknowledgement and cannot override completeness/freshness rules. The separate legacy one-minute MarketData reconstruction remains unchanged.
 
-**New acceptance pending:** 7 newly authored cache test groups. Earlier 272 passing checks were executed on previous revisions; do not label them as run on the current commit.
+**New acceptance pending:** 8 newly authored cache test groups. Earlier 272 passing checks were executed on previous revisions; do not label them as run on the current commit.
 
 Run this exact PowerShell from any initial directory to validate the source and the focused tests:
 
@@ -45,7 +45,7 @@ Run this exact PowerShell from any initial directory to validate the source and 
   Assert-NativeSuccess "git pull"
   $ActualSource = git rev-parse HEAD
   Assert-NativeSuccess "git rev-parse HEAD"
-  $ExpectedSource = "bb6dc59d14c2abd76aed62b420127660489e2782"
+  $ExpectedSource = "925db7c153ee4d53cfe3b7bf736318e7a30bccf1"
   if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Expected $ExpectedSource but got $ActualSource"
   }
@@ -69,7 +69,7 @@ Run this exact PowerShell from any initial directory to validate the source and 
 }
 ```
 
-Expected focused groups if every project runs: 7 new warm-start + 16 analytics reliability + 13 OHLCV = **36**. The new tests have not been executed yet, and no new build pass is claimed.
+Expected focused groups if every project runs: 8 new warm-start + 16 analytics reliability + 13 OHLCV = **37**. The new tests have not been executed yet, and no new build pass is claimed.
 
 **Configured runtime acceptance:** With the same exchange, settings, symbol population and `StoreDataMaxHours`, run a cold startup to populate `_data/NormalizedOhlcvCache`; then shut down normally, restart shortly afterward, and compare the `Normalized warm-start restored ...` line and normalized kline counts. Warm restart should request only the gap/overlap when the retained history is complete. Verify no cross-exchange reuse and that missing/corrupted snapshots trigger full backfill without fabricated values. TestMode is suitable for the network/readiness check and continues to suppress PT configuration/SOM writes. Preserve the live instance's configuration and any running process; never start a second concurrent instance or delete its data files to force cold testing.
 
@@ -160,7 +160,7 @@ Review the printed working-tree status. Local source changes must be recorded wi
 
     $ActualSource = git rev-parse HEAD
     Assert-NativeSuccess "git rev-parse HEAD"
-    $ExpectedSource = "bb6dc59d14c2abd76aed62b420127660489e2782"
+    $ExpectedSource = "925db7c153ee4d53cfe3b7bf736318e7a30bccf1"
     Write-Host "Application source: $ActualSource"
     if ($ActualSource.Trim() -ne $ExpectedSource) {
         throw "Source differs from this handoff ($ExpectedSource). Record the actual source before continuing."
@@ -229,7 +229,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "bb6dc59d14c2abd76aed62b420127660489e2782"
+$ExpectedSource = "925db7c153ee4d53cfe3b7bf736318e7a30bccf1"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."

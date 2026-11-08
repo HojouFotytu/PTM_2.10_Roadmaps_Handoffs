@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
+**Source checkpoint:** `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -16,7 +16,7 @@ Implementation and execution evidence are different states. All twelve harnesses
 
 At the user's November 9 instruction, the persistent normalized OHLCV warm-start cache was implemented ahead of the broad performance program. Complete validated five-minute candles are saved under `_data/NormalizedOhlcvCache`, restored by exchange/symbol, and refreshed with the same pinned bounds; corrupt/incomplete caches fall back to full exchange fetching. File writes are throttled and atomic. The existing metric validity gates remain authoritative.
 
-**Implementation published at `bb6dc59d14c2abd76aed62b420127660489e2782`. Seven focused tests authored; local build, harness execution and two-startup evidence are pending.** Previously recorded 272 passes belong to earlier revisions. This improvement does not alter legacy minute-tick reconstruction. Broader performance work stays deferred under D-032.
+**Implementation published at `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Seven focused tests authored; local build, harness execution and two-startup evidence are pending.** Previously recorded 272 passes belong to earlier revisions. This improvement does not alter legacy minute-tick reconstruction. Broader performance work stays deferred under D-032.
 
 ## 1. Purpose and scope
 

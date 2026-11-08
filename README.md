@@ -8,7 +8,7 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Published source checkpoint for this handoff | `bb6dc59d14c2abd76aed62b420127660489e2782` |
+| Published source checkpoint for this handoff | `925db7c153ee4d53cfe3b7bf736318e7a30bccf1` |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
@@ -33,7 +33,7 @@ The earlier pre-change `d0b0b87` baseline remains historical evidence: a user-ru
 
 PTMagic now has a disk-backed normalized five-minute candle cache under `_data/NormalizedOhlcvCache`. It restores validated closed bars before fetching missing history and is isolated by exchange/symbol. The expected benefit is avoiding a full normalized OHLCV redownload after a short restart. This targeted optimization was authorized under [D-040](DECISIONS.md#d-040--targeted-persistent-ohlcv-warm-start-now).
 
-**Source published; native verification pending:** seven new cache test groups have not been run. The 272 previously passing checks remain evidence for their earlier source revisions, not for `bb6dc59`. Legacy tick rebuilding is separate. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
+**Source published; native verification pending:** eight new cache test groups have not been run. The 272 previously passing checks remain evidence for their earlier source revisions, not for `925db7c`. Legacy tick rebuilding is separate. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
 
 ## Scope boundary
 

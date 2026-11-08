@@ -34,7 +34,7 @@ All 272 checks across twelve harnesses have now passed: 193 checks in ten harnes
 
 The normalized five-minute OHLCV cache now persists closed candles and reuses them after a restart, rather than automatically downloading the full window. This feature is an explicit exception to the later performance-program ordering; other optimization work remains deferred.
 
-**Status:** published at `bb6dc59`, seven new regression groups authored, native validation pending. It does not eliminate older tick-data reconstruction or first-seen checks.
+**Status:** published at `925db7c`, seven new regression groups authored, native validation pending. It does not eliminate older tick-data reconstruction or first-seen checks.
 
 ## Remaining work
 
