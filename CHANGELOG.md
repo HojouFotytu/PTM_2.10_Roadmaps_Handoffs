@@ -2,7 +2,15 @@
 
 For the cumulative changes that remain in effect and must accompany PRs/merges, use [CHANGELOG-2.10.md](CHANGELOG-2.10.md). This file retains chronological project history.
 
-**Current application source checkpoint:** `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`
+**Current application source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
+
+## 2026-11-09 — Native focused cache validation passed
+
+- User reported exact `925db7c153ee4d53cfe3b7bf736318e7a30bccf1` after `git pull --ff-only` and .NET SDK 10.0.403.
+- `dotnet build .\\PTMagic.sln` succeeded for Core/PTMagic/Monitor in 18.3 seconds.
+- New NormalizedWarmStartCache harness **8/8 PASS**; Phase1AnalyticsReliability **16/16 PASS**; Phase1COhlcv **13/13 PASS**. **37/37 focused checks** completed.
+- No native exchange restart/cold-vs-warm traffic or metric-parity results supplied yet. Those remain open.
+- Published application `86c7d2b213bd979173a453a4c602c2777f3def7c` records the evidence in the test README and cumulative release record; executable files unchanged.
 
 ## 2026-11-09 — Persistent normalized OHLCV warm-start cache
 

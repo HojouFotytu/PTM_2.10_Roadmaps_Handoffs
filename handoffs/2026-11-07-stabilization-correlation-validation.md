@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`
+**Application source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
 
-**Reviewed source tree:** `f501db7992f323b0a4da5847357d5cfa6384bd71`
+**Reviewed source tree:** `882dca7478fdcf19a9c74a3aea5c82f019bf2d1b`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -22,7 +22,7 @@ This is the sole current development handoff. Earlier dated handoffs remain hist
 
 The new source `925db7c153ee4d53cfe3b7bf736318e7a30bccf1` is published with a versioned, per-exchange/market compressed five-minute candle cache. It restores validated closed history before the pinned refresh, and only gaps/missing periods trigger additional fetches. Cache data is not an acknowledgement and cannot override completeness/freshness rules. The separate legacy one-minute MarketData reconstruction remains unchanged.
 
-**New acceptance pending:** 8 newly authored cache test groups. Earlier 272 passing checks were executed on previous revisions; do not label them as run on the current commit.
+**Focused acceptance completed:** 8 warm-start checks, 16 analytics-reliability checks and 13 Phase 1C OHLCV checks passed (37/37) at `925db7c` with a successful 18.3-second solution build using .NET SDK 10.0.403. Earlier 272 passing checks were executed on previous revisions; do not label them as run on the current commit.
 
 Run this exact PowerShell from any initial directory to validate the source and the focused tests:
 
@@ -45,7 +45,7 @@ Run this exact PowerShell from any initial directory to validate the source and 
   Assert-NativeSuccess "git pull"
   $ActualSource = git rev-parse HEAD
   Assert-NativeSuccess "git rev-parse HEAD"
-  $ExpectedSource = "925db7c153ee4d53cfe3b7bf736318e7a30bccf1"
+  $ExpectedSource = "86c7d2b213bd979173a453a4c602c2777f3def7c"
   if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Expected $ExpectedSource but got $ActualSource"
   }
@@ -69,7 +69,7 @@ Run this exact PowerShell from any initial directory to validate the source and 
 }
 ```
 
-Expected focused groups if every project runs: 8 new warm-start + 16 analytics reliability + 13 OHLCV = **37**. The new tests have not been executed yet, and no new build pass is claimed.
+Expected focused groups if every project runs: 8 new warm-start + 16 analytics reliability + 13 OHLCV = **37**. All 37 focused checks were executed and passed at `925db7c`; the subsequent `86c7d2` documentation update changes no executables. Configured cold/restart comparison remains open.
 
 **Configured runtime acceptance:** With the same exchange, settings, symbol population and `StoreDataMaxHours`, run a cold startup to populate `_data/NormalizedOhlcvCache`; then shut down normally, restart shortly afterward, and compare the `Normalized warm-start restored ...` line and normalized kline counts. Warm restart should request only the gap/overlap when the retained history is complete. Verify no cross-exchange reuse and that missing/corrupted snapshots trigger full backfill without fabricated values. TestMode is suitable for the network/readiness check and continues to suppress PT configuration/SOM writes. Preserve the live instance's configuration and any running process; never start a second concurrent instance or delete its data files to force cold testing.
 

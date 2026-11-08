@@ -4,7 +4,7 @@
 
 **Branch:** `HojouFotytu/PTMagic:phase1/market-data-foundation`
 
-**Status:** implementation and new regression fixture published; local .NET compilation and runtime validation pending under D-021.
+**Status:** .NET 10.0.403 solution build and focused regression tests passed on the user's machine at `925db7c`; configured cold/warm runtime validation pending under D-021.
 
 ## Motivation and observed evidence
 
@@ -31,7 +31,7 @@ The earlier decision D-032 deferred broad performance optimization until all met
 
 ## Verification and limits
 
-**Not yet executed:** a user-local .NET 10 build, `Tests/NormalizedWarmStartCache` (seven authored groups), and affected analytics/OHLCV regressions. The existing 272-group accepted deterministic evidence is from older source revisions and is not evidence that this new commit has passed.
+**Executed at `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`:** .NET SDK 10.0.403, `dotnet build .\\PTMagic.sln` succeeded in 18.3 seconds for Core, PTMagic and Monitor. `Tests/NormalizedWarmStartCache` 8/8 PASS, `Tests/Phase1AnalyticsReliability` 16/16 PASS, `Tests/Phase1COhlcv` 13/13 PASS: **37/37 focused checks passed**. The existing 272-group accepted deterministic evidence is from older source revisions and is not evidence that this new commit has passed.
 
 A configured cold/restart comparison should record:
 - identical exchange, market population, retention and TestMode configuration;

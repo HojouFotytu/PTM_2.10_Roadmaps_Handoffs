@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`
+**Source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -307,7 +307,7 @@ Keep exchange identity isolation, bounded history, strict validation, fail-open 
 
 This **specific warm-start optimization** is an accepted exception to D-032. The dedicated wider performance program (legacy reconstruction redesign, cross-raid vector reuse, allocation profiling, etc.) is still deferred until all approved metrics are complete.
 
-Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Seven focused tests are authored; native build, harness execution and configured cold/restart acceptance are **pending** under D-021. Existing 272 passed checks from prior commits remain valid only for their executed revisions. Cache does not yet eliminate legacy tick reconstruction or first-seen-date acquisition.
+Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Eight focused tests **passed** at `925db7c` on November 9; the .NET solution build and two existing relevant harnesses passed in the same 37/37-check run; configured cold/restart acceptance is **pending** under D-021. Existing 272 passed checks from prior commits remain valid only for their executed revisions. Cache does not yet eliminate legacy tick reconstruction or first-seen-date acquisition.
 
 ## Remaining open design decisions
 

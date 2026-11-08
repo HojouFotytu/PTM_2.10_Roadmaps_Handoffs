@@ -1,6 +1,6 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
-**Current documentation checkpoint: November 7, 2026.**
+**Current documentation checkpoint: November 9, 2026.**
 
 PTMagic 2.10 expands deterministic market analysis and the configuration-management layer around ProfitTrailer. Its scope includes normalized market data, price and volume measurements, correlation, future derivatives and liquidity measurements, GlobalSetting/SMS integration, and native inspection and validation. It has no external AI layer.
 
@@ -33,7 +33,7 @@ The earlier pre-change `d0b0b87` baseline remains historical evidence: a user-ru
 
 PTMagic now has a disk-backed normalized five-minute candle cache under `_data/NormalizedOhlcvCache`. It restores validated closed bars before fetching missing history and is isolated by exchange/symbol. The expected benefit is avoiding a full normalized OHLCV redownload after a short restart. This targeted optimization was authorized under [D-040](DECISIONS.md#d-040--targeted-persistent-ohlcv-warm-start-now).
 
-**Source published; native verification pending:** eight new cache test groups have not been run. The 272 previously passing checks remain evidence for their earlier source revisions, not for `925db7c`. Legacy tick rebuilding is separate. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
+**Native verification passed:** eight new cache test groups passed at `925db7c`, alongside 16 analytics-reliability and 13 Phase 1C OHLCV checks (37/37); .NET SDK 10.0.403 solution build passed in 18.3 seconds. The 272 previously passing checks remain evidence for their earlier source revisions, not for `925db7c`. Legacy tick rebuilding is separate. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
 
 ## Scope boundary
 
