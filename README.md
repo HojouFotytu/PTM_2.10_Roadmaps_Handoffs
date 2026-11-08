@@ -37,7 +37,7 @@ PTMagic now has a disk-backed normalized five-minute candle cache under `_data/N
 
 ## TestMode console visibility
 
-The November 9 NLog presentation update colors all `TestMode`-identified console messages purple/magenta, matching the startup warning. Three application/Monitor/default logging configuration files are updated; severity and file-log content are unchanged. Build and visible Windows console acceptance are pending at `87b9eaa`. A deployed existing `nlog.config` must be updated for the change to appear.
+The November 9 NLog presentation update colors all `TestMode`-identified console messages purple/magenta, matching the startup warning. Three application/Monitor/default logging configuration files are updated; severity and file-log content are unchanged. The user-local .NET 10 build passed in **15.1 seconds** and all **three NLog XML/rule checks passed** on November 9. **Visible Windows console color rendering remains unverified**. The test output did not print an exact `git rev-parse HEAD`. A deployed existing `nlog.config` must be updated for the change to appear.
 
 ## Scope boundary
 

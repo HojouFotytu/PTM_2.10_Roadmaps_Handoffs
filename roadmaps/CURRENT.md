@@ -14,7 +14,7 @@ Implementation and execution evidence are different states. All twelve harnesses
 
 ## Uniform TestMode console diagnostics (D-041)
 
-At the user's November 9 instruction, the `ColoredConsole` rules in PTMagic, Monitor and packaged default logging configuration now highlight case-insensitive `TestMode` text in purple/magenta at any severity. Normal file logs and severity classifications do not change. Source published as `87b9eaa1c865e39d8fff6a657e1b332012be8c16`; native build and visible runtime acceptance pending. Updating the deployed `nlog.config` is necessary if the running instance uses an older copy.
+At the user's November 9 instruction, the `ColoredConsole` rules in PTMagic, Monitor and packaged default logging configuration now highlight case-insensitive `TestMode` text in purple/magenta at any severity. Normal file logs and severity classifications do not change. Source published as `87b9eaa1c865e39d8fff6a657e1b332012be8c16`; the user-local .NET build passed in 15.1s, and all three XML/rule checks passed on November 9. Visible Windows console color acceptance and installed-config deployment remain pending. Updating the deployed `nlog.config` is necessary if the running instance uses an older copy.
 
 ## Immediate targeted warm-start enhancement (D-040)
 

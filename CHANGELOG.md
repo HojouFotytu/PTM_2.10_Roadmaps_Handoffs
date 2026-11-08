@@ -8,7 +8,7 @@ For the cumulative changes that remain in effect and must accompany PRs/merges, 
 
 - Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` configures the same NLog `ColoredConsole` `highlight-row` for case-insensitive `TestMode` text in PTMagic, Monitor and packaged default `nlog.config` files.
 - This matches the purple startup TESTMODE WARN display for subsequent INFO-level preview and RAID SUMMARY messages without changing severity or file-log contents.
-- Config/source review completed; user-local build and visual runtime confirmation pending. Existing installed copies of `nlog.config` must be updated to see the effect.
+- **User-local validation PASS November 9:** .NET SDK 10 `dotnet build` succeeded for Core/PTMagic/Monitor in 15.1s. The three XML/rule checks each printed `PASS`. The user's `git pull --ff-only` reported `Already up to date` but did not print HEAD. The actual console color, live `nlog.config` deployment, and NLog runtime interpretation of the rule remain unverified.
 
 ## 2026-11-09 — Native focused cache validation passed
 

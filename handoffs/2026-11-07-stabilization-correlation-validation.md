@@ -22,7 +22,7 @@ This is the sole current development handoff. Earlier dated handoffs remain hist
 
 Published application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` updates the three NLog console configurations to use the startup warning's purple/magenta color for any message containing `TestMode` (case-insensitive), including startup global SOM previews, configuration previews and RAID SUMMARY. Severity and file-log text remain unchanged.
 
-**Source reviewed; local build and console acceptance not yet run.** Use the existing correct runtime directory when deploying `nlog.config`; recompiling the binary alone does not update an installed external config. Do not disturb a running instance solely to test this cosmetic change.
+**Local build and static config checks passed November 9:** the user's `git pull --ff-only` reported *Already up to date*, .NET 10 `dotnet build` passed in **15.1s** (Core, PTMagic and Monitor), and all three `nlog.config` XML/`highlight-row` assertions printed **PASS**. The supplied command did **not** print a Git HEAD SHA. **Visible console colors and live configuration deployment remain unverified.** Use the existing correct runtime directory when deploying `nlog.config`; recompiling the binary alone does not update an installed external config. Do not disturb a running instance solely to test this cosmetic change.
 
 Focused verification (PowerShell, from the application repository after pulling the pinned branch):
 

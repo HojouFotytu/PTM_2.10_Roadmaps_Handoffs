@@ -12,7 +12,7 @@ This file describes the present state. Dated evidence stays in [updates](updates
 
 ## November 9 — Uniform TestMode console styling
 
-Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` adds the same `Magenta` NLog `ColoredConsole` highlighting condition for every case-insensitive `TestMode` message in `PTMagic/nlog.config`, `Monitor/nlog.config` and the packaged default PTMagic `nlog.config`. INFO/WARN levels and file output are unchanged. Source/configuration inspection completed; user-local build and console rendering remain **not run**. Existing installed `nlog.config` requires deployment or copying the new config into the correct runtime folder.
+Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` adds the same `Magenta` NLog `ColoredConsole` highlighting condition for every case-insensitive `TestMode` message in `PTMagic/nlog.config`, `Monitor/nlog.config` and the packaged default PTMagic `nlog.config`. INFO/WARN levels and file output are unchanged. **User-local validation PASS (November 9):** `dotnet build` succeeded for Core (4.0s), PTMagic (0.7s) and Monitor (9.1s) in **15.1s** overall; all three logging config XML and `highlight-row` checks printed **PASS**. `git pull --ff-only` reported *Already up to date*. The command did not print the checked-out commit SHA. **Console color rendering and deployment to the live runtime remain unverified.** Existing installed `nlog.config` requires deployment or copying the new config into the correct runtime folder.
 
 ## November 9 addition — warm-start normalized OHLCV
 
