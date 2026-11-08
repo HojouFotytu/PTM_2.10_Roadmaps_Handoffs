@@ -1,16 +1,22 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
-**Current authority:** November 7, 2026
+**Current authority:** November 9, 2026
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
+**Source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
+
+## Immediate targeted warm-start enhancement (D-040)
+
+At the user's November 9 instruction, the persistent normalized OHLCV warm-start cache was implemented ahead of the broad performance program. Complete validated five-minute candles are saved under `_data/NormalizedOhlcvCache`, restored by exchange/symbol, and refreshed with the same pinned bounds; corrupt/incomplete caches fall back to full exchange fetching. File writes are throttled and atomic. The existing metric validity gates remain authoritative.
+
+**Implementation published at `bb6dc59d14c2abd76aed62b420127660489e2782`. Seven focused tests authored; local build, harness execution and two-startup evidence are pending.** Previously recorded 272 passes belong to earlier revisions. This improvement does not alter legacy minute-tick reconstruction. Broader performance work stays deferred under D-032.
 
 ## 1. Purpose and scope
 
@@ -629,7 +635,7 @@ No personal strategy implementation is part of Phase 6.
 
 ## 17. Post-metric performance program — explicitly deferred
 
-**Gate: all approved new metric additions are complete, including derivatives, aggregation, higher-order conditions, and liquidity/depth.**
+**Gate for the broader performance program: all approved new metric additions are complete, including derivatives, aggregation, higher-order conditions, and liquidity/depth.** The narrowly approved normalized-candle warm-start cache was implemented earlier under D-040.
 
 This ordering is the November 7 user decision and supersedes earlier recommendations to optimize before correlation. Preserve required correctness and bounded storage during implementation; keep this separate optimization stage deferred.
 

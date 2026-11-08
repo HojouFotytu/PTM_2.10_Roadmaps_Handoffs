@@ -2,7 +2,14 @@
 
 For the cumulative changes that remain in effect and must accompany PRs/merges, use [CHANGELOG-2.10.md](CHANGELOG-2.10.md). This file retains chronological project history.
 
-**Current application source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
+**Current application source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
+
+## 2026-11-09 — Persistent normalized OHLCV warm-start cache
+
+- Published PTMagic `bb6dc59d14c2abd76aed62b420127660489e2782`: a versioned compressed per-market/per-exchange cache under `_data/NormalizedOhlcvCache`, restored before the pinned normal kline refresh. The cache is data only; gaps, missing history and stale observations still require exchange backfill.
+- Added seven offline regression groups at `Tests/NormalizedWarmStartCache`. **Tests authored but not yet executed; old 272 passing results remain attached to their previous exact revisions.**
+- This targeted restart optimization is authorized now, notwithstanding the earlier deferral of the broader performance program. It does not alter legacy one-minute market reconstruction or first-seen-date collection.
+- Updated cumulative effective-change record, decision D-040, roadmap/status and handoff with fail-fast local commands and two-startup acceptance.
 
 ## 2026-11-07 — Establish the cumulative release record and surface startup SOM
 

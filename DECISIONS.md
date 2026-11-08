@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
+**Source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -296,6 +296,18 @@ Maintain [CHANGELOG-2.10.md](CHANGELOG-2.10.md) in this repository and an identi
 The record describes the cumulative resulting release, beginning with the normalized foundation on November 2, rather than a sequence of interim implementations. Consolidate or remove an entry when it is replaced or reversed. Keep planned work in the roadmap, chronological provenance in dated records/source control, and personal strategy development outside application scope. Retain exact tested-source identities and acceptance limits when describing validation.
 
 The initial record includes the native startup global SOM setting, both supplied general-settings templates and the Monitor General Settings APPLICATION toggle. The packaged template already declared the true default; the development template now declares it explicitly too. Monitor already has on/off persistence; visible help now states that TestMode leaves the remote SOM flag unchanged.
+
+## D-040 — Targeted persistent OHLCV warm start now
+
+**User instruction:** November 9, 2026, following repeated short-restart full downloads.
+
+Implement a persistent cache now for **normalized five-minute OHLCV candles**. Save validated complete candle histories locally, reload the cache on startup, and use the existing pinned refresh and coverage gates to fetch only missing/overlapping candles or repair incomplete history.
+
+Keep exchange identity isolation, bounded history, strict validation, fail-open corrupt/missing-cache behavior, atomic file replacement, and cache-write throttling. Cache content must never establish a metric as available without passing the existing completeness, source-timestamp, freshness and population checks. Cache I/O failure must not change ProfitTrailer delivery or SOM acknowledgement.
+
+This **specific warm-start optimization** is an accepted exception to D-032. The dedicated wider performance program (legacy reconstruction redesign, cross-raid vector reuse, allocation profiling, etc.) is still deferred until all approved metrics are complete.
+
+Published implementation source: `bb6dc59d14c2abd76aed62b420127660489e2782`. Seven focused tests are authored; native build, harness execution and configured cold/restart acceptance are **pending** under D-021. Existing 272 passed checks from prior commits remain valid only for their executed revisions. Cache does not yet eliminate legacy tick reconstruction or first-seen-date acquisition.
 
 ## Remaining open design decisions
 

@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
+**Application source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
 
-**Reviewed source tree:** `f92a07535f3f2255f23ab5d8ed17648658724650`
+**Reviewed source tree:** `85070696a8cb2c617e6526d328ba238d915302ee`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -17,6 +17,61 @@
 This is the sole current development handoff. Earlier dated handoffs remain historical. Begin with the actual application branch and source, then use the contracts and verification sequence below.
 
 **Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published. Deterministic validation is complete; configured runtime acceptance is next.
+
+## November 9 focused validation — normalized OHLCV warm start
+
+The new source `bb6dc59d14c2abd76aed62b420127660489e2782` is published with a versioned, per-exchange/market compressed five-minute candle cache. It restores validated closed history before the pinned refresh, and only gaps/missing periods trigger additional fetches. Cache data is not an acknowledgement and cannot override completeness/freshness rules. The separate legacy one-minute MarketData reconstruction remains unchanged.
+
+**New acceptance pending:** 7 newly authored cache test groups. Earlier 272 passing checks were executed on previous revisions; do not label them as run on the current commit.
+
+Run this exact PowerShell from any initial directory to validate the source and the focused tests:
+
+```powershell
+& {
+  $ErrorActionPreference = "Stop"
+  function Assert-NativeSuccess {
+    param([string]$Step)
+    if ($LASTEXITCODE -ne 0) { throw "$Step failed with exit code $LASTEXITCODE." }
+  }
+
+  Set-Location -LiteralPath "G:\PTM Dev Bot\PTMagic Github Clone\PTMagic"
+  if (-not (Test-Path ".\PTMagic.sln")) { throw "PTMagic.sln not found." }
+
+  git status --short
+  Assert-NativeSuccess "git status"
+  git switch phase1/market-data-foundation
+  Assert-NativeSuccess "git switch"
+  git pull --ff-only
+  Assert-NativeSuccess "git pull"
+  $ActualSource = git rev-parse HEAD
+  Assert-NativeSuccess "git rev-parse HEAD"
+  $ExpectedSource = "bb6dc59d14c2abd76aed62b420127660489e2782"
+  if ($ActualSource.Trim() -ne $ExpectedSource) {
+    throw "Expected $ExpectedSource but got $ActualSource"
+  }
+
+  dotnet --version
+  Assert-NativeSuccess "dotnet --version"
+  dotnet build ".\PTMagic.sln"
+  Assert-NativeSuccess "dotnet build"
+
+  foreach ($Project in @(
+    "Tests/NormalizedWarmStartCache/NormalizedWarmStartCache.csproj",
+    "Tests/Phase1AnalyticsReliability/Phase1AnalyticsReliability.csproj",
+    "Tests/Phase1COhlcv/Phase1COhlcv.csproj"
+  )) {
+    if (-not (Test-Path $Project)) { throw "Missing harness: $Project" }
+    Write-Host "Running $Project"
+    dotnet run --project $Project
+    Assert-NativeSuccess $Project
+  }
+  Write-Host "Focused warm-start validation commands completed for $ActualSource"
+}
+```
+
+Expected focused groups if every project runs: 7 new warm-start + 16 analytics reliability + 13 OHLCV = **36**. The new tests have not been executed yet, and no new build pass is claimed.
+
+**Configured runtime acceptance:** With the same exchange, settings, symbol population and `StoreDataMaxHours`, run a cold startup to populate `_data/NormalizedOhlcvCache`; then shut down normally, restart shortly afterward, and compare the `Normalized warm-start restored ...` line and normalized kline counts. Warm restart should request only the gap/overlap when the retained history is complete. Verify no cross-exchange reuse and that missing/corrupted snapshots trigger full backfill without fabricated values. TestMode is suitable for the network/readiness check and continues to suppress PT configuration/SOM writes. Preserve the live instance's configuration and any running process; never start a second concurrent instance or delete its data files to force cold testing.
 
 ## 1. What is ready, and what is not yet accepted
 
@@ -105,7 +160,7 @@ Review the printed working-tree status. Local source changes must be recorded wi
 
     $ActualSource = git rev-parse HEAD
     Assert-NativeSuccess "git rev-parse HEAD"
-    $ExpectedSource = "a0b375cc9b2db469a48a31b713385f35500cc763"
+    $ExpectedSource = "bb6dc59d14c2abd76aed62b420127660489e2782"
     Write-Host "Application source: $ActualSource"
     if ($ActualSource.Trim() -ne $ExpectedSource) {
         throw "Source differs from this handoff ($ExpectedSource). Record the actual source before continuing."
@@ -174,7 +229,7 @@ Assert-NativeSuccess "git pull"
 
 $ActualSource = git rev-parse HEAD
 Assert-NativeSuccess "git rev-parse HEAD"
-$ExpectedSource = "a0b375cc9b2db469a48a31b713385f35500cc763"
+$ExpectedSource = "bb6dc59d14c2abd76aed62b420127660489e2782"
 Write-Host "Application source: $ActualSource"
 if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Source differs from this handoff ($ExpectedSource). Record the actual source and reconcile before validation."

@@ -1,18 +1,24 @@
 # PTMagic 2.10 — Current Development Status
 
-**Updated:** November 7, 2026
+**Updated:** November 9, 2026
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `a0b375cc9b2db469a48a31b713385f35500cc763`
+**Current source checkpoint:** `bb6dc59d14c2abd76aed62b420127660489e2782`
 
 **Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
 
+## November 9 addition — warm-start normalized OHLCV
+
+**Published, not yet native validated:** `bb6dc59d14c2abd76aed62b420127660489e2782` adds compressed, versioned, atomic per-exchange/symbol normalized candle checkpoints under `_data/NormalizedOhlcvCache`. The regular anchored refresh is still required to verify gaps, history capacity and freshness; invalid files are ignored and recovered through the exchange. Cache writes are throttled.
+
+Seven test groups were authored in `Tests/NormalizedWarmStartCache`, bringing the authored inventory to **279** groups. The earlier **272 passing groups** remain evidence across `86c2ea3` and `d331fbd`; this new code has **not** yet passed the user's .NET build, focused tests or two-startup runtime check. The cache does not replace the separate legacy minute-tick data reconstruction. [Decision D-040](DECISIONS.md#d-040--targeted-persistent-ohlcv-warm-start-now).
+
 ## Publication status
 
-The current source is published on `phase1/market-data-foundation` at `a0b375c`. It adds [the cumulative effective-change record](CHANGELOG-2.10.md) with PR/merge guidance, completes the explicit startup SOM default in the development general-settings template, and clarifies the existing Monitor APPLICATION toggle with visible TestMode help. The packaged default already contained StartupSellOnlyMode=true. Engine code and test cases are unchanged. The two Telegram fixture corrections were executed successfully at `d331fbd`; build and harness evidence retain their actual execution revisions. No new .NET build or browser result is claimed for the documentation/template/static-view update.
+The earlier settings/Monitor-help source was published at `a0b375c`. The current source checkpoint is `bb6dc59`. It adds [the cumulative effective-change record](CHANGELOG-2.10.md) with PR/merge guidance, completes the explicit startup SOM default in the development general-settings template, and clarifies the existing Monitor APPLICATION toggle with visible TestMode help. The packaged default already contained StartupSellOnlyMode=true. Engine code and test cases are unchanged. The two Telegram fixture corrections were executed successfully at `d331fbd`; build and harness evidence retain their actual execution revisions. No new .NET build or browser result is claimed for the documentation/template/static-view update.
 
 The user's standing authorization covers publication of PTM 2.10 development changes to the application and documentation branches in [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development), without renewed conversational approval. Actual tool restrictions remain binding. The current handoff pins the published source for user-local verification; earlier passes remain attributed to the source actually tested.
 

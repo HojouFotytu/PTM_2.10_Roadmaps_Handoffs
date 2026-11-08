@@ -8,7 +8,7 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Published source checkpoint for this handoff | `a0b375cc9b2db469a48a31b713385f35500cc763` |
+| Published source checkpoint for this handoff | `bb6dc59d14c2abd76aed62b420127660489e2782` |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
@@ -28,6 +28,12 @@ The user superseded the initial startup-preset overlay with `POST /api/v2/global
 The two Telegram fixture corrections are verified by native execution. Production code and assertions were unchanged between the tested revisions. The current `a0b375c` publication adds [the cumulative effective-change record](CHANGELOG-2.10.md), makes startup SOM explicit in both supplied general-settings templates, and clarifies the existing Monitor Application toggle with visible TestMode help. Engine code and test cases are unchanged. No new build or browser result is claimed, and this update alone requires no harness rerun. An explicit compiled-DLL launch reached a missing-preset validation error, and the user later reported a long initial run underway. Collect that result and source identity before requesting a repeat. TestMode simulates SOM, so actual PT acknowledgement and browser integration remain separate acceptance work. [Publication status](STATUS.md#publication-status).
 
 The earlier pre-change `d0b0b87` baseline remains historical evidence: a user-run application build, 88 checks across six harnesses, and nine Binance Futures USDT TestMode raids. The deployed SHA was inferred from the workflow because those logs printed version 2.10.0 rather than a Git SHA. [Evidence](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
+
+## November 9 normalized OHLCV warm-start addition
+
+PTMagic now has a disk-backed normalized five-minute candle cache under `_data/NormalizedOhlcvCache`. It restores validated closed bars before fetching missing history and is isolated by exchange/symbol. The expected benefit is avoiding a full normalized OHLCV redownload after a short restart. This targeted optimization was authorized under [D-040](DECISIONS.md#d-040--targeted-persistent-ohlcv-warm-start-now).
+
+**Source published; native verification pending:** seven new cache test groups have not been run. The 272 previously passing checks remain evidence for their earlier source revisions, not for `bb6dc59`. Legacy tick rebuilding is separate. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
 
 ## Scope boundary
 

@@ -1,6 +1,6 @@
 # PTMagic 2.10 — User Roadmap
 
-**Updated:** November 7, 2026 · **Status:** In development
+**Updated:** November 9, 2026 · **Status:** In development
 
 [Current technical plan](roadmaps/CURRENT.md) · [Acceptance status](STATUS.md) · [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -29,6 +29,12 @@ The accepted baseline passed a local .NET 10 build, 88 regression checks, and re
 - Bounded native decision-history records with configuration/source identity and delivery outcomes.
 
 All 272 checks across twelve harnesses have now passed: 193 checks in ten harnesses at `86c2ea3`, followed by 66 lifecycle and 13 history checks at `d331fbd`. The latest build succeeded in 10.9 seconds with .NET SDK 10.0.403. This completes deterministic acceptance across the two recorded revisions; configured TestMode, actual PT API, and browser checks remain. [Validation evidence](updates/2026-11-07-completed-harness-validation.md).
+
+## Targeted warm-start improvement — source published
+
+The normalized five-minute OHLCV cache now persists closed candles and reuses them after a restart, rather than automatically downloading the full window. This feature is an explicit exception to the later performance-program ordering; other optimization work remains deferred.
+
+**Status:** published at `bb6dc59`, seven new regression groups authored, native validation pending. It does not eliminate older tick-data reconstruction or first-seen checks.
 
 ## Remaining work
 
