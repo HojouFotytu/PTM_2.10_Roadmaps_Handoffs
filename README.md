@@ -35,6 +35,10 @@ PTMagic now has a disk-backed normalized five-minute candle cache under `_data/N
 
 **Native verification passed:** eight new cache test groups passed at `925db7c`, alongside 16 analytics-reliability and 13 Phase 1C OHLCV checks (37/37); .NET SDK 10.0.403 solution build passed in 18.3 seconds. The 272 previously passing checks remain evidence for their earlier source revisions, not for `925db7c`. Legacy tick rebuilding is separate. [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md).
 
+## TestMode console visibility
+
+The November 9 NLog presentation update colors all `TestMode`-identified console messages purple/magenta, matching the startup warning. Three application/Monitor/default logging configuration files are updated; severity and file-log content are unchanged. Build and visible Windows console acceptance are pending at `87b9eaa`. A deployed existing `nlog.config` must be updated for the change to appear.
+
 ## Scope boundary
 
 This repository governs the PTMagic 2.10 application and its public capabilities. Personal trading strategies, strategy presets, long/short strategy roadmaps, and their trading results are independent projects. They are neither deliverables nor release gates for PTMagic 2.10.

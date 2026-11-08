@@ -2,7 +2,7 @@
 
 **Reconciled:** November 7, 2026
 
-**Source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
+**Source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -308,6 +308,14 @@ Keep exchange identity isolation, bounded history, strict validation, fail-open 
 This **specific warm-start optimization** is an accepted exception to D-032. The dedicated wider performance program (legacy reconstruction redesign, cross-raid vector reuse, allocation profiling, etc.) is still deferred until all approved metrics are complete.
 
 Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Eight focused tests **passed** at `925db7c` on November 9; the .NET solution build and two existing relevant harnesses passed in the same 37/37-check run; configured cold/restart acceptance is **pending** under D-021. Existing 272 passed checks from prior commits remain valid only for their executed revisions. Cache does not yet eliminate legacy tick reconstruction or first-seen-date acquisition.
+
+## D-041 — Uniform TestMode console color
+
+**User instruction:** November 9, 2026.
+
+All TestMode-related PTMagic and Monitor console lines should use the same purple/magenta color as the startup `TESTMODE ENABLED` warning. Use NLog `ColoredConsole` message-based highlighting (case-insensitive), not a changed log level. Preserve INFO/WARN meaning, normal unrelated colors and uncolored file logs. Keep the application, Monitor and packaged default logging configs aligned.
+
+Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
 
 ## Remaining open design decisions
 

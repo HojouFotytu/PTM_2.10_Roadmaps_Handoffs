@@ -6,9 +6,9 @@
 
 **Branch:** `phase1/market-data-foundation`
 
-**Application source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
+**Application source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
 
-**Reviewed source tree:** `882dca7478fdcf19a9c74a3aea5c82f019bf2d1b`
+**Reviewed source tree:** `078de36bae9f9fcc2e439c8080feec548c8a0ec9`
 
 **Current plan:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md)
 
@@ -17,6 +17,51 @@
 This is the sole current development handoff. Earlier dated handoffs remain historical. Begin with the actual application branch and source, then use the contracts and verification sequence below.
 
 **Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published. Deterministic validation is complete; configured runtime acceptance is next.
+
+## November 9 presentation change — TestMode console highlighting
+
+Published application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` updates the three NLog console configurations to use the startup warning's purple/magenta color for any message containing `TestMode` (case-insensitive), including startup global SOM previews, configuration previews and RAID SUMMARY. Severity and file-log text remain unchanged.
+
+**Source reviewed; local build and console acceptance not yet run.** Use the existing correct runtime directory when deploying `nlog.config`; recompiling the binary alone does not update an installed external config. Do not disturb a running instance solely to test this cosmetic change.
+
+Focused verification (PowerShell, from the application repository after pulling the pinned branch):
+
+```powershell
+& {
+  $ErrorActionPreference = "Stop"
+  Set-Location -LiteralPath "G:\PTM Dev Bot\PTMagic Github Clone\PTMagic"
+  git switch phase1/market-data-foundation
+  if ($LASTEXITCODE -ne 0) { throw "Branch switch failed" }
+  git pull --ff-only
+  if ($LASTEXITCODE -ne 0) { throw "Git pull failed" }
+  $Actual = (git rev-parse HEAD).Trim()
+  if ($LASTEXITCODE -ne 0) { throw "Source identity failed" }
+  if ($Actual -ne "87b9eaa1c865e39d8fff6a657e1b332012be8c16") { throw "Wrong source: $Actual" }
+  dotnet build .\PTMagic.sln
+  if ($LASTEXITCODE -ne 0) { throw "Build failed" }
+  foreach ($path in @(
+    "PTMagic/nlog.config",
+    "Monitor/nlog.config",
+    "PTMagic/_defaults/_default_settings_PT_2.x/nlog.config"
+  )) {
+    [xml]$doc = Get-Content -LiteralPath $path -Raw
+    $ns = [System.Xml.XmlNamespaceManager]::new($doc.NameTable)
+    $ns.AddNamespace("n", "http://www.nlog-project.org/schemas/NLog.xsd")
+    $node = $doc.SelectSingleNode("//n:target[@name='Console']", $ns)
+    if ($null -eq $node -or $node.GetAttribute("type", "http://www.w3.org/2001/XMLSchema-instance") -ne "ColoredConsole") {
+      throw "Missing ColoredConsole target in $path"
+    }
+    $rules = $node.SelectNodes("n:highlight-row", $ns)
+    if ($rules.Count -ne 1 -or $rules[0].GetAttribute("foregroundColor") -ne "Magenta" -or
+      $rules[0].GetAttribute("condition") -ne "regex-matches('${message}', 'testmode', 'ignorecase')") {
+      throw "Missing TestMode highlight rule in $path"
+    }
+    Write-Host "PASS: TestMode purple console rule - $path"
+  }
+}
+```
+
+Visual acceptance: after deploying the correct `nlog.config` and restarting normally, verify that the startup `TESTMODE ENABLED` warning, `TESTMODE: startup global SOM preview`, `TESTMODE: configuration evaluated`, and RAID SUMMARY entries containing `TestMode` all show the same magenta/purple color. Regular INFO and WARN log colors must remain unchanged, and plain-text `_logs` must remain uncolored.
 
 ## November 9 focused validation — normalized OHLCV warm start
 
@@ -45,7 +90,7 @@ Run this exact PowerShell from any initial directory to validate the source and 
   Assert-NativeSuccess "git pull"
   $ActualSource = git rev-parse HEAD
   Assert-NativeSuccess "git rev-parse HEAD"
-  $ExpectedSource = "86c7d2b213bd979173a453a4c602c2777f3def7c"
+  $ExpectedSource = "87b9eaa1c865e39d8fff6a657e1b332012be8c16"
   if ($ActualSource.Trim() -ne $ExpectedSource) {
     throw "Expected $ExpectedSource but got $ActualSource"
   }

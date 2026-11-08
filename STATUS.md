@@ -4,11 +4,15 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
+**Current source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
 
 **Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
+
+## November 9 — Uniform TestMode console styling
+
+Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` adds the same `Magenta` NLog `ColoredConsole` highlighting condition for every case-insensitive `TestMode` message in `PTMagic/nlog.config`, `Monitor/nlog.config` and the packaged default PTMagic `nlog.config`. INFO/WARN levels and file output are unchanged. Source/configuration inspection completed; user-local build and console rendering remain **not run**. Existing installed `nlog.config` requires deployment or copying the new config into the correct runtime folder.
 
 ## November 9 addition — warm-start normalized OHLCV
 

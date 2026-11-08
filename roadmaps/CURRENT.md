@@ -4,13 +4,17 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
+**Source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
+
+## Uniform TestMode console diagnostics (D-041)
+
+At the user's November 9 instruction, the `ColoredConsole` rules in PTMagic, Monitor and packaged default logging configuration now highlight case-insensitive `TestMode` text in purple/magenta at any severity. Normal file logs and severity classifications do not change. Source published as `87b9eaa1c865e39d8fff6a657e1b332012be8c16`; native build and visible runtime acceptance pending. Updating the deployed `nlog.config` is necessary if the running instance uses an older copy.
 
 ## Immediate targeted warm-start enhancement (D-040)
 

@@ -2,7 +2,13 @@
 
 For the cumulative changes that remain in effect and must accompany PRs/merges, use [CHANGELOG-2.10.md](CHANGELOG-2.10.md). This file retains chronological project history.
 
-**Current application source checkpoint:** `86c7d2b213bd979173a453a4c602c2777f3def7c`
+**Current application source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
+
+## 2026-11-09 — Highlight all TestMode console messages in magenta
+
+- Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` configures the same NLog `ColoredConsole` `highlight-row` for case-insensitive `TestMode` text in PTMagic, Monitor and packaged default `nlog.config` files.
+- This matches the purple startup TESTMODE WARN display for subsequent INFO-level preview and RAID SUMMARY messages without changing severity or file-log contents.
+- Config/source review completed; user-local build and visual runtime confirmation pending. Existing installed copies of `nlog.config` must be updated to see the effect.
 
 ## 2026-11-09 — Native focused cache validation passed
 
@@ -10,7 +16,7 @@ For the cumulative changes that remain in effect and must accompany PRs/merges, 
 - `dotnet build .\\PTMagic.sln` succeeded for Core/PTMagic/Monitor in 18.3 seconds.
 - New NormalizedWarmStartCache harness **8/8 PASS**; Phase1AnalyticsReliability **16/16 PASS**; Phase1COhlcv **13/13 PASS**. **37/37 focused checks** completed.
 - No native exchange restart/cold-vs-warm traffic or metric-parity results supplied yet. Those remain open.
-- Published application `86c7d2b213bd979173a453a4c602c2777f3def7c` records the evidence in the test README and cumulative release record; executable files unchanged.
+- Published application `87b9eaa1c865e39d8fff6a657e1b332012be8c16` records the evidence in the test README and cumulative release record; executable files unchanged.
 
 ## 2026-11-09 — Persistent normalized OHLCV warm-start cache
 
