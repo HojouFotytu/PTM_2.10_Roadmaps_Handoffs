@@ -2,12 +2,16 @@
 
 **Date:** November 10, 2026  
 **Application:** `HojouFotytu/PTMagic`, branch `phase1/market-data-foundation`  
-**Source checkpoint:** `0ae76f4c7886397a06ad346b42a375f6aa06be00`  
-**Status:** source published; normal Phase 2 build and regression tests are required and pending. Only the separate remaining Phase 1 configured integration tests were deferred.
+**Latest deterministic-tested source:** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`  
+**Status:** source build and **315/315 offline regression groups PASSED** at the exact tested SHA; live Binance acquisition and other configured integration acceptance remain pending. Only the specific remaining Phase 1 configured integration checks were deferred.
+
+## November 10 — Executed verification PASS
+
+The owner ran the full fail-fast offline validation on Windows with .NET SDK 10.0.403 at source `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`. Core, PTMagic and Monitor built in **11.3s**. **15/15 harnesses and 315/315 case groups passed**, including **18 raw OI + 17 incremental OI**. Eight nonfatal nullable-analysis warnings were emitted by two pre-existing test projects. See [full evidence](../updates/2026-11-10-phase2-oi-offline-validation.md). This completes deterministic OI development acceptance at the tested SHA; it does not establish live Binance, PT API, or Monitor/browser acceptance.
 
 ## Mandatory Phase 2 build and regressions (D-045)
 
-Only the specific remaining Phase 1 configured PT/API/Monitor/browser acceptance was deferred. The Phase 2 .NET build, raw OI and incremental OI offline tests and affected regression harnesses remain **required now**. Their results are still pending; the new source must not be labelled compiled or accepted.
+Only the specific remaining Phase 1 configured PT/API/Monitor/browser acceptance was deferred. The Phase 2 .NET build, raw OI and incremental OI offline tests and affected regression harnesses remain **required now**. **Completed November 10:** their results are PASS at `5f51faa`; future source changes require new evidence.
 
 Run the repository's `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` or the complete PowerShell block below. This runner performs ordinary offline build/harness work only; it does not start PTMagic against configured PT or write settings. Record the exact Git source SHA and the results. Do not resume the separately deferred Phase 1 integration cases as part of this test.
 
@@ -29,7 +33,7 @@ Updated registry, analyzer configuration model/default templates, source-indepen
 
 The independent `OpenInterestRetentionHours` setting and 672-hour cap have been **removed**. Enabled OI MarketTrends determine the required history: each needs its exact `TrendMinutes` interval, a reference observation, and a small overlapping repair window. The collector holds the longest duration required across configured OI-enabled Exchange MarketTrends, including different per-MarketTrend values. `StoreDataMaxHours` still applies to OHLCV, not OI. Provider history may have a shorter availability window: in that case OI is unavailable and the application does not shorten the requested trend.
 
-Monitor History Requirements shows the user's trend-derived requirement separately from OHLCV capacity. The 72-hour/672-hour limits described in the superseded implementation have no effect. The retained `OpenInterestMaxRequestsPerRaid` budget controls request volume, not retention. Source-only validation has been extended, but **not executed**.
+Monitor History Requirements shows the user's trend-derived requirement separately from OHLCV capacity. The 72-hour/672-hour limits described in the superseded implementation have no effect. The retained `OpenInterestMaxRequestsPerRaid` budget controls request volume, not retention. Source validation was subsequently **executed and passed** at `5f51faa`.
 
 ## Configuration
 
@@ -53,11 +57,11 @@ The first metric is the percentage change of native `sumOpenInterest`. The secon
 
 ## Acceptance status, limits, and upcoming phase
 
-All 15 new incremental test groups plus the previous 18 raw-data groups are authored, but **have not been executed**. No build, live exchange run, PT API action, Monitor browser exercise, or performance benchmark is claimed. The existing Phase 1 acceptance and operational runtime testing remain deferred as directed.
+The incremental suite has 17 groups (expanded from the original 15), and the raw suite has 18. **Both passed: 35/35 new Phase 2 groups.** The full 15-harness deterministic run passed **315/315**, and the .NET build succeeded at exact source `5f51faa`. No live exchange run, actual PT API action, Monitor browser acceptance or configured performance benchmark is claimed. The existing Phase 1 acceptance and operational runtime testing remain deferred as directed.
 
 The next feature batch should add the separate raw funding rate family and then distinct account/position ratio data, maintaining documented provider history and sampling contracts. Phase 2B market-wide aggregation follows raw family verification, and Phase 4 exposure through the existing metric/trigger/export pipeline is continuous. Keep general performance work deferred.
 
-## Full local PowerShell verification (when testing resumes)
+## Full local PowerShell verification (for future source revisions)
 
 Run from the PTMagic application repository, not the roadmap repository:
 
@@ -87,6 +91,6 @@ foreach ($check in $checks) {
 }
 ```
 
-The script is a retained local acceptance instruction, not a request to perform the deferred testing immediately. When tests do run, record source SHA and actual outcomes before promoting acceptance.
+The full 15-harness offline runner has already executed successfully at `5f51faa`. This command block remains for future source changes; do not rerun solely to reconfirm that recorded result. Configured Phase 1 integration testing is deferred separately.
 
 [Current technical roadmap](../roadmaps/CURRENT.md) · [current status](../STATUS.md) · [decision register](../DECISIONS.md).

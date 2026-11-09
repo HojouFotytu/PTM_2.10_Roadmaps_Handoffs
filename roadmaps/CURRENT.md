@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `0ae76f4c7886397a06ad346b42a375f6aa06be00`
+**Current tested source checkpoint:** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -12,11 +12,17 @@ This is the standalone current plan for PTMagic 2.10. It replaces the active gui
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
 
+## November 10 — Phase 2 offline build and full regression suite PASS
+
+**User-run acceptance evidence:** exact source `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`, .NET SDK **10.0.403**, solution build **11.3 seconds** (Core, PTMagic, Monitor), followed by **15/15 offline harnesses and 315/315 test groups passing**. Phase 2 OI raw mapping passed **18/18** and incremental cache/metric integration passed **17/17**. The preceding `CS4008` test fixture error was corrected at this source. Older nullable-reference warnings remain nonfatal (two in Phase1SmsSummaryIsolation; six in NormalizedPriceTrendMigration).
+
+**Status:** Phase 2 open-interest **deterministic development acceptance complete** at the exact tested source; configured live Binance data acquisition, native PT integration and Monitor/browser acceptance remain unverified. The specific outstanding Phase 1 integration scenarios remain deferred under D-042/D-045, **not** the Phase 2 offline tests. [Full 315-group evidence](../updates/2026-11-10-phase2-oi-offline-validation.md).
+
 ## November 10 — Testing scope clarified (D-045)
 
 The owner deferred only the specific remaining Phase 1 configured-runtime / PT API / Monitor-browser integration acceptance checks discussed before moving to Phase 2. Phase 2 compilation, deterministic feature tests and affected regressions were **never deferred**. New source must be built and relevant harnesses executed before marking a development batch validated.
 
-The Phase 2 OI implementation, including MarketTrend-derived retention, is published but still **unverified by a .NET build or execution of its offline harnesses**. Those checks are required now. The fail-fast PowerShell runner is available at `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` in the application repository. The Phase 1 configured integration checks remain separately pending, not waived.
+The source was subsequently built and tested: 315/315 deterministic groups passed at `5f51faa` on November 10. This older section preserves the mandatory testing policy rather than current status. The fail-fast PowerShell runner is available at `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` in the application repository. The Phase 1 configured integration checks remain separately pending, not waived.
 
 ## November 10 — OI retention corrected to MarketTrend-derived history
 
@@ -26,7 +32,7 @@ The previously introduced independent `OpenInterestRetentionHours=72` setting an
 
 `OpenInterestMaxRequestsPerRaid` remains an independent **request budget**, not a history duration (default 60, 0 disables acquisition). The provider's roughly one-month historical data availability remains an external source limitation: if the requested horizon or exact observation is not obtainable, the metric remains **UNAVAILABLE** rather than being silently shortened. Requests, memory and disk cache storage remain bounded for safety, but their caps are not a substitute for user-specified analytical history requirements. OHLCV `StoreDataMaxHours` continues to govern the existing OHLCV store separately.
 
-The Monitor History Requirements view now distinguishes OI-derived duration and provider availability from OHLCV retention; OI no longer displays misleading `0 h` retention/capacity sufficient labels. Offline regression cases were extended for dynamically selected horizons, greater-than-72-hour history, and per-source independence. **Source is published, but a native .NET build/harness execution has not been run or claimed**. Other runtime/browser/actual PT acceptance remains deferred under D-042.
+The Monitor History Requirements view now distinguishes OI-derived duration and provider availability from OHLCV retention; OI no longer displays misleading `0 h` retention/capacity sufficient labels. Offline regression cases were extended for dynamically selected horizons, greater-than-72-hour history, and per-source independence. **Superseded result:** the subsequent November 10 build and 315/315 offline tests passed at `5f51faa`. Other runtime/browser/actual PT acceptance remains deferred under D-042.
 
 ## November 10 — Phase 2 incremental open-interest integration
 
@@ -40,7 +46,7 @@ The Monitor History Requirements view now distinguishes OI-derived duration and 
 
 **Validation status:** 15 additional incremental offline case groups were authored alongside the original 18 raw OI groups. Source review was performed, but **no .NET build or C# harness execution occurred** in this turn. Therefore compile and runtime acceptance remain **UNVERIFIED**. The owner's deferral of further runtime testing remains in force; it is not a claim that the new code has passed.
 
-**Remaining Phase 2:** verify these source changes when testing resumes; expand into funding, distinct account/position ratios, and taker-flow adapters, then Phase 2B market-wide derivatives aggregates. The full Phase 1 PT API/browser checks remain deferred.
+**Remaining Phase 2:** OI deterministic tests are accepted at `5f51faa`; next develop funding, distinct account/position ratios, and taker-flow adapters, then Phase 2B market-wide derivatives aggregates. Live provider/runtime acceptance remains separate. The full Phase 1 PT API/browser checks remain deferred.
 
 ## November 10 — Phase 2 active (D-042)
 
