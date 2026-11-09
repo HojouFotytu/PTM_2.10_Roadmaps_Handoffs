@@ -4,9 +4,11 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current tested source checkpoint:** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`
+**Current application source (funding tests pending):** `6430bab1afa262fadd4ae31199c11084508b28c7`
 
-**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
+**Last verified source (OI 315/315):** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`
+
+**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-10-phase2-funding.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 

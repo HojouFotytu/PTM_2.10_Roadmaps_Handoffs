@@ -2,7 +2,7 @@
 
 **Updated:** November 10, 2026 · **Status:** In development
 
-[Current technical plan](roadmaps/CURRENT.md) · [Acceptance status](STATUS.md) · [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md)
+[Current technical plan](roadmaps/CURRENT.md) · [Acceptance status](STATUS.md) · [Current handoff](handoffs/2026-11-10-phase2-funding.md)
 
 PTMagic 2.10 expands native market analysis beyond price trends. It adds breadth, volatility, volume, relative strength, correlation, and later futures positioning and liquidity measurements, using transparent calculations and existing GlobalSetting/SMS controls.
 
@@ -72,7 +72,7 @@ Initial raw OI models/client were followed by opt-in, bounded incremental histor
 | Stage | Work |
 |---|---|
 | Deferred Phase 1 acceptance | Existing configured runtime, PT API, Monitor and cross-exchange checks remain open; no repeat testing now |
-| Phase 2 / 2B | OI raw source, opt-in bounded acquisition and metric integration implemented and 35/35 new offline groups passed; next funding, positioning, taker flow and aggregates |
+| Phase 2 / 2B | OI 35/35 offline checks passed; funding source and 17 new offline checks published, funding execution pending; next account/position ratios, taker flow and market-wide aggregates |
 | Phase 3 | Transparent leverage expansion, crowding, deleveraging, and flow-divergence measurements |
 | Phase 4 | Integrate and validate each added metric family in GlobalSettings, SMS, exports, and Monitor |
 | Phase 5 | Spreads, depth, slippage estimates, and liquidity stress |

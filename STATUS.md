@@ -4,9 +4,11 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current tested source checkpoint:** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`
+**Current application source (funding untested):** `6430bab1afa262fadd4ae31199c11084508b28c7`
 
-**Current handoff:** [Phase 2 incremental OI integration](handoffs/2026-11-10-phase2-open-interest-incremental.md)
+**Latest deterministically tested source (OI):** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`
+
+**Current handoff:** [Phase 2 funding-rate implementation](handoffs/2026-11-10-phase2-funding.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
 
