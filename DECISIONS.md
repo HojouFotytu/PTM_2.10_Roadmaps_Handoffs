@@ -1,8 +1,8 @@
 # PTMagic 2.10 — Current Decision Register
 
-**Reconciled:** November 7, 2026
+**Reconciled:** November 10, 2026
 
-**Source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
+**Source checkpoint:** `314214b1a20bcddd1643b8fa8df032db5463b04d`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -316,6 +316,16 @@ Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Eig
 All TestMode-related PTMagic and Monitor console lines should use the same purple/magenta color as the startup `TESTMODE ENABLED` warning. Use NLog `ColoredConsole` message-based highlighting (case-insensitive), not a changed log level. Preserve INFO/WARN meaning, normal unrelated colors and uncolored file logs. Keep the application, Monitor and packaged default logging configs aligned.
 
 Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
+
+## D-042 — Start Phase 2 and defer remaining Phase 1 testing
+
+**Owner instruction:** November 10, 2026.
+
+Continue PTMagic 2.10 **application** development from Phase 2 futures raw observations without waiting for further Phase 1 runtime, native PT API, Monitor/browser or two-startup cache testing. These are explicitly deferred, not passed or waived; retain their evidence and release-acceptance obligations. Do not request repeat tests of previously reviewed captures. Continue source implementation and clearly label authored versus executed tests.
+
+Phase 2 concerns data acquisition, normalization, calculations, registry/trigger/Monitor integration and diagnostics **inside PTMagic**. Personal LONG/SHORT strategy settings and PT property trios are outside scope.
+
+Published first source slice: `314214b1a20bcddd1643b8fa8df032db5463b04d` (open-interest raw models and opt-in client); offline 18-case harness **not run**. Resume later acceptance only when the user explicitly reopens testing or release readiness requires it.
 
 ## Remaining open design decisions
 

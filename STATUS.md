@@ -1,14 +1,20 @@
 # PTMagic 2.10 — Current Development Status
 
-**Updated:** November 9, 2026
+**Updated:** November 10, 2026
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
+**Current source checkpoint:** `314214b1a20bcddd1643b8fa8df032db5463b04d`
 
-**Current handoff:** [Stabilization, correlation, and validation](handoffs/2026-11-07-stabilization-correlation-validation.md)
+**Current handoff:** [Phase 2 open-interest foundation](handoffs/2026-11-10-phase2-open-interest.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
+
+## November 10 — Phase 2 started; further Phase 1 testing deferred
+
+**Owner decision:** Resume market-analysis feature development now. Defer the remaining configured runtime, PT API, browser, Spot/US, non-USDT, and two-startup acceptance checks. Preserve existing evidence and open issues; do not convert untested items into PASS or require another Phase 1 validation run before continuing Phase 2.
+
+**Source:** `314214b1a20bcddd1643b8fa8df032db5463b04d` on `phase1/market-data-foundation` publishes an optional Binance USD-M futures open-interest source foundation: raw current/history endpoint models, native quantity/value preservation, exact-time horizon change calculation, provider page bounds, and **18 authored offline test groups**. It is not yet integrated into normal analyzer raids or selectable MarketTrend metrics, and **no .NET build or tests of this new commit have been executed** in this turn. Next: implement bounded opt-in OI collection and application metric registration. [Phase 2 handoff](handoffs/2026-11-10-phase2-open-interest.md).
 
 ## November 9 — Reused configured TestMode acceptance evidence
 
@@ -145,6 +151,9 @@ The performance deferral is explicit. Startup reconstruction, broader snapshot c
 The old 2.9 performance results and November 5 cold-start timings are historical evidence, not a current steady-state CPU measurement of 2.10. The old first raid took 14m28s, including about 11m59s of legacy reconstruction; that observation explains future work without changing its agreed ordering.
 
 ## Next action
+
+**November 10 override:** Phase 2 OI source development is next; the older validation instructions below are deferred and retained for eventual acceptance, not the present execution queue.
+
 
 Collect the user-reported long run and its source/main-market/completion evidence. If another run is needed, use the explicit-DLL procedure in the [current verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md) with the existing runtime configuration. Native SOM and normal PT delivery require separate live acceptance because TestMode sends neither. The Monitor control is General Settings → APPLICATION → Startup Global SOM, immediately below Test Mode. Continue the applicable runtime/PT/browser checks before the remaining metric families in [the current technical roadmap](roadmaps/CURRENT.md).
 

@@ -1,16 +1,22 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
-**Current authority:** November 9, 2026
+**Current authority:** November 10, 2026
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
+**Source checkpoint:** `314214b1a20bcddd1643b8fa8df032db5463b04d`
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
+
+## November 10 — Phase 2 active (D-042)
+
+The owner directed immediate continuation into Phase 2 and deferral of further Phase 1 configured acceptance. Earlier runtime, actual PT API, browser and restart checks stay **pending**, not accepted. They no longer block Phase 2 source development. See [Phase 2 handoff](../handoffs/2026-11-10-phase2-open-interest.md).
+
+At application source `314214b1a20bcddd1643b8fa8df032db5463b04d`, the first **source-only** USD-M open-interest batch adds strict current/history observation models, one-page opt-in Binance endpoints and exact 5-minute historical change logic. Eighteen deterministic offline test groups were **authored but have not been executed**. No new metrics are registered and there are no new automatic raid requests. Next: bounded, pinned, cache-aware opt-in OI collection, then expose `OpenInterestChange` in the existing metric pipeline. Do not begin performance optimization or revise trading strategies.
 
 ## Uniform TestMode console diagnostics (D-041)
 
@@ -476,7 +482,7 @@ The confirmed-delivery checkpoint and decision-history audit trail have differen
 
 ## 11. Phase 2 — Futures raw observations
 
-**Status: planned.** Begin after current source acceptance; do not start a separate performance program first.
+**Status: started November 10 with optional raw OI source models/client; full acquisition/selection/trigger integration remains planned.** Owner explicitly deferred further Phase 1 acceptance and authorized moving into Phase 2 now. Do not start a separate performance program first.
 
 For each endpoint family, define:
 
@@ -725,6 +731,9 @@ A new metric family is accepted only when its contract, source, meaningful fixtu
 A release candidate additionally needs documented migration/default changes, acknowledged-delivery behavior, restart recovery, consistent current documentation, supported packaging/runtime, and reproducible provenance.
 
 ## 19. Immediate handoff and subsequent order
+
+**November 10 ordering supersedes the original numbered prerequisite sequence below:** Continue the source-only Phase 2 open-interest implementation, then subsequent derivative families; the prior Phase 1 runtime/browser/PT acceptance remains deferred for later and must not be misrepresented as complete. The original list is retained as a release-readiness checklist, not a directive to resume testing now.
+
 
 1. Run and review the current application build and all relevant existing/new regression harnesses.
 2. Correct any compilation or behavioral failures in this checkpoint.

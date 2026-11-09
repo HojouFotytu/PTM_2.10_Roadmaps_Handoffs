@@ -1,6 +1,6 @@
 # PTMagic 2.10 — User Roadmap
 
-**Updated:** November 9, 2026 · **Status:** In development
+**Updated:** November 10, 2026 · **Status:** In development
 
 [Current technical plan](roadmaps/CURRENT.md) · [Acceptance status](STATUS.md) · [Current handoff](handoffs/2026-11-07-stabilization-correlation-validation.md)
 
@@ -36,12 +36,16 @@ The normalized five-minute OHLCV cache now persists closed candles and reuses th
 
 **Status:** published at `925db7c`, eight new regression groups passed at `925db7c`, with .NET build and 37/37 focused checks passing; configured two-startup validation pending. It does not eliminate older tick-data reconstruction or first-seen checks.
 
+## Phase 2 started — November 10
+
+First optional USD-M open-interest raw-data/model/client source slice is published at `314214b`. Existing selection and runtime behavior are unchanged; tests are authored but not executed. The owner deferred further Phase 1 configured runtime/Monitor/PT acceptance while Phase 2 implementation proceeds. These remaining tests stay pending for release. See the [Phase 2 handoff](handoffs/2026-11-10-phase2-open-interest.md).
+
 ## Remaining work
 
 | Stage | Work |
 |---|---|
-| Current acceptance | Run the exact built DLL with the existing runtime configuration, verify source identity, then complete TestMode and separate PT/browser/exchange checks |
-| Phase 2 / 2B | Open interest, funding, positioning, taker flow, and market-wide summaries |
+| Deferred Phase 1 acceptance | Existing configured runtime, PT API, Monitor and cross-exchange checks remain open; no repeat testing now |
+| Phase 2 / 2B | OI raw source foundation published; next opt-in bounded acquisition, metric integration, funding, positioning, taker flow and aggregates |
 | Phase 3 | Transparent leverage expansion, crowding, deleveraging, and flow-divergence measurements |
 | Phase 4 | Integrate and validate each added metric family in GlobalSettings, SMS, exports, and Monitor |
 | Phase 5 | Spreads, depth, slippage estimates, and liquidity stress |

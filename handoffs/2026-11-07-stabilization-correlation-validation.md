@@ -14,7 +14,7 @@
 
 **Current state:** [STATUS.md](../STATUS.md)
 
-This is the sole current development handoff. Earlier dated handoffs remain historical. Begin with the actual application branch and source, then use the contracts and verification sequence below.
+**Superseded as the active implementation handoff by [November 10 Phase 2 handoff](2026-11-10-phase2-open-interest.md).** This document remains the archived Phase 1 acceptance checklist; its testing is deferred by owner instruction. Earlier dated handoffs remain historical. Begin with the actual application branch and source, then use the contracts and verification sequence below.
 
 **Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published. Deterministic validation is complete; configured runtime acceptance is next.
 
