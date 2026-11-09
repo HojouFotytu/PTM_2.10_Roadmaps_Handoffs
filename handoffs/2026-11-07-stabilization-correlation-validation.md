@@ -18,6 +18,12 @@ This is the sole current development handoff. Earlier dated handoffs remain hist
 
 **Publication authorization:** [D-038](../DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development) records the user's standing authorization to publish PTM 2.10 development changes to the named application and documentation branches without renewed conversational approval. Actual tool restrictions remain binding. The source checkpoint above is published. Deterministic validation is complete; configured runtime acceptance is next.
 
+## November 9 reuse of previous configured LONG/SHORT captures
+
+Previously supplied performance archives were reviewed through their published diagnostics and saved decision audits. SHORT has 358 PTM TestMode decisions (120 at source `86c7d2b`), including consecutive fresh cycles at 11:15:54 and 11:20:54 KST on November 9, with no recorded confirmed PT delivery; latest inspected metrics have sufficient history and complete sampled populations. The current application `87b9eaa` only changes logging configuration and changelog relative to that tested engine. LONG has a separate 117-decision **non-TestMode** application sample, which is not TestMode evidence. The retained decisions establish configured TestMode evaluation/no-confirmed-delivery behavior, **not** literal completed RAID SUMMARY evidence or actual native SOM acknowledgement. See [the existing evidence review](../updates/2026-11-09-reused-configured-testmode-evidence.md).
+
+**Reuse rule:** do not ask the user to run the same decision/coverage validation again. Section 3A's process launch and Section 4's test matrix remain available **only for a genuinely missing scenario or a relevant new code change**, not as an automatic repeat. Existing files should be used first. PT API, Monitor browser, cache two-startup comparison, and console-color visual rendering remain separate acceptance gates.
+
 ## November 9 presentation change — TestMode console highlighting
 
 Published application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` updates the three NLog console configurations to use the startup warning's purple/magenta color for any message containing `TestMode` (case-insensitive), including startup global SOM previews, configuration previews and RAID SUMMARY. Severity and file-log text remain unchanged.
