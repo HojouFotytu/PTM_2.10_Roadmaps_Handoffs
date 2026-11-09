@@ -317,6 +317,14 @@ All TestMode-related PTMagic and Monitor console lines should use the same purpl
 
 Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
 
+## D-046 — Binance USD-M funding metrics use settled events and dynamic history
+
+**Date:** November 10, 2026. Opt-in `FundingRate` and `FundingSum` are per-asset percentage-point metrics of **Regular** historical funding settlements (native decimal ×100). Preserve Special and unknown types separately; never treat an unknown type as a regular zero. The full user-specified MarketTrend window must be source-verified, not replaced with an assumed 8-hour funding period. `FundingRate` is the latest regular settlement in that window, unavailable if none. `FundingSum` is the arithmetic sum of regular settlements, valid zero only for fully verified empty regular history. No annualization or future estimated rates.
+
+Use the historical Binance USD-M `fundingRate` endpoint with pinned time, limited pages, fair request budgeting, and incomplete/failed history remaining unavailable. Funding history derives exclusively from configured funding-enabled MarketTrends, not an independent fixed retention setting. The request budget (default 60 pages/raid) is a separate operational throttle. Futures-only; no queries on Spot/US. Provider's `fundingIntervalHours` changes and interval metadata require distinct handling from raw settlement history.
+
+Source published at `6430bab1afa262fadd4ae31199c11084508b28c7`; **new funding build and deterministic test results pending** under D-045. Earlier OI 315/315 tests remain verified only at their actual tested revision.
+
 ## D-045 — Development tests are not deferred
 
 **Owner clarification:** November 10, 2026.
