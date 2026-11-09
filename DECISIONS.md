@@ -317,6 +317,14 @@ All TestMode-related PTMagic and Monitor console lines should use the same purpl
 
 Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
 
+## D-045 — Development tests are not deferred
+
+**Owner clarification:** November 10, 2026.
+
+D-042 deferred only the remaining Phase 1 configured integration checks explicitly discussed before proceeding to Phase 2. This never deferred normal Phase 2 builds, new-feature unit/scenario tests, affected regression harnesses, or fixing and re-running failed tests. Every new code batch requires execution evidence tied to the actual source SHA before it can be reported as validated. Authored but unexecuted tests do not count as PASS.
+
+The remaining Phase 1 real PT API, Monitor/browser, selected cross-exchange and restart tests stay pending for a future integration/release gate. They are not a reason to skip ordinary Phase 2 verification. Use the fail-fast PowerShell runner documented in the current Phase 2 handoff.
+
 ## D-044 — Open-interest history derives from configured MarketTrends
 
 **Owner instruction:** November 10, 2026.

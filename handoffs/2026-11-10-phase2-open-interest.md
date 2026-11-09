@@ -5,6 +5,8 @@
 **Source checkpoint:** `314214b1a20bcddd1643b8fa8df032db5463b04d`  
 **Status:** Historical first source slice; superseded as the active handoff by [incremental integration](2026-11-10-phase2-open-interest-incremental.md). No local .NET build or offline harness was executed for the first slice.
 
+**Clarification (D-045):** The only deferred tests are remaining Phase 1 configured integration scenarios. Phase 2 source builds and regression tests remain mandatory. The active instructions are in the [current handoff](2026-11-10-phase2-open-interest-incremental.md).
+
 ## Current scope and disposition
 
 The owner instructed the project to move into Phase 2 and **defer further Phase 1 runtime, PT API, Monitor/browser and restart acceptance testing**. This is a scheduling deferral, not an acceptance claim or a waiver of eventual release gates. Existing evidence is retained in `STATUS.md` and `updates/2026-11-09-reused-configured-testmode-evidence.md`.

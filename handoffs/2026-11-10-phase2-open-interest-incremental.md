@@ -3,7 +3,13 @@
 **Date:** November 10, 2026  
 **Application:** `HojouFotytu/PTMagic`, branch `phase1/market-data-foundation`  
 **Source checkpoint:** `0ae76f4c7886397a06ad346b42a375f6aa06be00`  
-**Status:** source published; build and tests not executed because further testing was deferred.
+**Status:** source published; normal Phase 2 build and regression tests are required and pending. Only the separate remaining Phase 1 configured integration tests were deferred.
+
+## Mandatory Phase 2 build and regressions (D-045)
+
+Only the specific remaining Phase 1 configured PT/API/Monitor/browser acceptance was deferred. The Phase 2 .NET build, raw OI and incremental OI offline tests and affected regression harnesses remain **required now**. Their results are still pending; the new source must not be labelled compiled or accepted.
+
+Run the repository's `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` or the complete PowerShell block below. This runner performs ordinary offline build/harness work only; it does not start PTMagic against configured PT or write settings. Record the exact Git source SHA and the results. Do not resume the separately deferred Phase 1 integration cases as part of this test.
 
 ## Scope and architecture
 
