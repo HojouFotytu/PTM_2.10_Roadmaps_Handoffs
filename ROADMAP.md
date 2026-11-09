@@ -38,7 +38,7 @@ The normalized five-minute OHLCV cache now persists closed candles and reuses th
 
 ## Phase 2 started — November 10
 
-First optional USD-M open-interest raw-data/model/client source slice is published at `314214b`. Existing selection and runtime behavior are unchanged; tests are authored but not executed. The owner deferred further Phase 1 configured runtime/Monitor/PT acceptance while Phase 2 implementation proceeds. These remaining tests stay pending for release. See the [Phase 2 handoff](handoffs/2026-11-10-phase2-open-interest.md).
+Initial raw OI models/client were followed by opt-in, bounded incremental historical acquisition and per-asset OI metric integration at `b723f76`. New settings and explicit metric names are documented in the [Phase 2 incremental handoff](handoffs/2026-11-10-phase2-open-interest-incremental.md). Tests are authored but have not been executed; existing configurations do not enable OI automatically. The owner deferred further Phase 1 configured runtime/Monitor/PT acceptance while Phase 2 implementation proceeds. These remaining tests stay pending for release. See the [Phase 2 handoff](handoffs/2026-11-10-phase2-open-interest.md).
 
 ## Remaining work
 

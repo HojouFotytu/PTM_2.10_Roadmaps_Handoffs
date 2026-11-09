@@ -2,7 +2,7 @@
 
 **Reconciled:** November 10, 2026
 
-**Source checkpoint:** `314214b1a20bcddd1643b8fa8df032db5463b04d`
+**Source checkpoint:** `b723f76664aa0de6b76de3f5ddf281c036c32275`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -316,6 +316,12 @@ Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Eig
 All TestMode-related PTMagic and Monitor console lines should use the same purple/magenta color as the startup `TESTMODE ENABLED` warning. Use NLog `ColoredConsole` message-based highlighting (case-insensitive), not a changed log level. Preserve INFO/WARN meaning, normal unrelated colors and uncolored file logs. Keep the application, Monitor and packaged default logging configs aligned.
 
 Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
+
+## D-043 — Opt-in bounded Binance Futures open-interest metrics
+
+**Implementation record:** November 10, 2026.
+
+Historical Binance USD-M open interest is sourced separately from normalized OHLCV, without any implied requests in PriceTrend-only settings. Add explicit per-asset `OpenInterestChange` and `OpenInterestValueChange` metrics (both percent changes from exact 5m provider endpoints), preserving native quantity and reported value independently. Missing, inconsistent, stale or insufficient source remains unavailable; no conversion or interpolation. Limit network requests and source retention separately from `StoreDataMaxHours`. The first batch adds a bounded serialized collector, compressed persistent cache, and existing metric/trigger/export integration. These are implemented, **not yet compiled or acceptance-tested**. Owner-deferral of testing under D-042 remains active.
 
 ## D-042 — Start Phase 2 and defer remaining Phase 1 testing
 
