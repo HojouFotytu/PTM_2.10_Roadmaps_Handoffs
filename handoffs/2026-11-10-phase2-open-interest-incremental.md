@@ -2,7 +2,7 @@
 
 **Date:** November 10, 2026  
 **Application:** `HojouFotytu/PTMagic`, branch `phase1/market-data-foundation`  
-**Source checkpoint:** `b723f76664aa0de6b76de3f5ddf281c036c32275`  
+**Source checkpoint:** `0ae76f4c7886397a06ad346b42a375f6aa06be00`  
 **Status:** source published; build and tests not executed because further testing was deferred.
 
 ## Scope and architecture
@@ -19,11 +19,16 @@ Files added:
 
 Updated registry, analyzer configuration model/default templates, source-independent history requirements, error diagnostics, runtime orchestration, and existing metric/export/trigger path. No new alternate expression language.
 
+## Corrected MarketTrend-derived OI history
+
+The independent `OpenInterestRetentionHours` setting and 672-hour cap have been **removed**. Enabled OI MarketTrends determine the required history: each needs its exact `TrendMinutes` interval, a reference observation, and a small overlapping repair window. The collector holds the longest duration required across configured OI-enabled Exchange MarketTrends, including different per-MarketTrend values. `StoreDataMaxHours` still applies to OHLCV, not OI. Provider history may have a shorter availability window: in that case OI is unavailable and the application does not shorten the requested trend.
+
+Monitor History Requirements shows the user's trend-derived requirement separately from OHLCV capacity. The 72-hour/672-hour limits described in the superseded implementation have no effect. The retained `OpenInterestMaxRequestsPerRaid` budget controls request volume, not retention. Source-only validation has been extended, but **not executed**.
+
 ## Configuration
 
 ```json
 "MarketAnalyzer": {
-  "OpenInterestRetentionHours": 72,
   "OpenInterestMaxRequestsPerRaid": 60
 }
 ```
@@ -38,7 +43,7 @@ The first metric is the percentage change of native `sumOpenInterest`. The secon
 
 **Network policy:** Only explicitly requested OI on Binance USD-M Futures enables collection. Default limit is 60 requests per raid, hard maximum 400; no single request has more than 500 records; two pages maximum per asset in any one raid. The collector is serialized and reuses the existing Binance HTTP rate limiter. It favors least-recently serviced symbols and incremental gaps rather than full historical downloads on every raid. An incomplete series stays unavailable. `0` disables acquisition.
 
-**Retention policy:** Historical OI is independent of normalized OHLCV `StoreDataMaxHours`; maximum 672h (28 days) stays inside Binance's approximately 30-day history window. No fabricated history, proxy notional, arbitrary value conversion or fallback to Spot/US data.
+**Retention policy:** Historical OI is independent of normalized OHLCV `StoreDataMaxHours`; its required duration is computed from the longest enabled OI MarketTrend. Binance's approximately one-month history window remains a source availability constraint, not an application retention limit. No fabricated history, proxy notional, arbitrary value conversion or fallback to Spot/US data.
 
 ## Acceptance status, limits, and upcoming phase
 

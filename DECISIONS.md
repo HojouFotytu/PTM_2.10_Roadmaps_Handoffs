@@ -2,7 +2,7 @@
 
 **Reconciled:** November 10, 2026
 
-**Source checkpoint:** `b723f76664aa0de6b76de3f5ddf281c036c32275`
+**Source checkpoint:** `0ae76f4c7886397a06ad346b42a375f6aa06be00`
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -316,6 +316,12 @@ Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Eig
 All TestMode-related PTMagic and Monitor console lines should use the same purple/magenta color as the startup `TESTMODE ENABLED` warning. Use NLog `ColoredConsole` message-based highlighting (case-insensitive), not a changed log level. Preserve INFO/WARN meaning, normal unrelated colors and uncolored file logs. Keep the application, Monitor and packaged default logging configs aligned.
 
 Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
+
+## D-044 — Open-interest history derives from configured MarketTrends
+
+**Owner instruction:** November 10, 2026.
+
+Remove the independent OI retention-hours setting and any fixed application history horizon. All OI data requirements must follow the user's explicit OI-enabled MarketTrends, just as the existing normalized metric families use their own TrendMinutes and lookbacks. Retain enough source observations for the longest required OI duration, with the exact reference and overlap. Recompute the requirement on configuration changes. The exchange's supported historical availability is an external limitation to report as unavailable, never justification for silently truncating a user's chosen trend. The OI request budget is a separate operational throttle, not a retention setting. Fixed-size corruption protections do not dictate metric history. Published at `0ae76f4c7886397a06ad346b42a375f6aa06be00`; native build/tests remain unexecuted.
 
 ## D-043 — Opt-in bounded Binance Futures open-interest metrics
 

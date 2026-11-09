@@ -38,6 +38,9 @@ The normalized five-minute OHLCV cache now persists closed candles and reuses th
 
 ## Phase 2 started — November 10
 
+**OI retention correction:** Removed the separate `MarketAnalyzer.OpenInterestRetentionHours` property (previously defaulted to 72 hours). Required historical OI observations are now derived from the longest explicitly OI-enabled MarketTrend's `TrendMinutes`, including the exact reference and overlap. The actual provider history window determines availability, not a fixed PTMagic hour ceiling. Request-budget controls remain independent. See [corrected Phase 2 handoff](handoffs/2026-11-10-phase2-open-interest-incremental.md).
+
+
 Initial raw OI models/client were followed by opt-in, bounded incremental historical acquisition and per-asset OI metric integration at `b723f76`. New settings and explicit metric names are documented in the [Phase 2 incremental handoff](handoffs/2026-11-10-phase2-open-interest-incremental.md). Tests are authored but have not been executed; existing configurations do not enable OI automatically. The owner deferred further Phase 1 configured runtime/Monitor/PT acceptance while Phase 2 implementation proceeds. These remaining tests stay pending for release. See the [Phase 2 handoff](handoffs/2026-11-10-phase2-open-interest.md).
 
 ## Remaining work
