@@ -74,3 +74,26 @@ The prior verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **33
 > Continue PTMagic 2.10 from [the active SOM handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work directly in `phase1/market-data-foundation`; do not make new branches/duplicate candidates without asking. Current SOM source `891f709010c867259a6cde3df8e9c82781091b7f` is **UNTESTED**; last verified `49f2aab66592b6e2922097ca5242b5a614090602` passed 332/332 before SOM changes. Review my next full PowerShell regression output, fix failures, re-run and record exact source SHA. Maintain global SOM **enable-only**, user manual release, and the first-two-raid red `PT: SOM` ticker/warnings. Only after tests pass, continue Phase 2 distinct account/position ratio metrics.
 
 [Status](../STATUS.md) · [Current roadmap](../roadmaps/CURRENT.md) · [D-045/D-047 decisions](../DECISIONS.md) · [Funding handoff](2026-11-10-phase2-funding.md) · [332-check evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
+
+## Additional November 10 change — Monitor metric display (NOT YET TESTED)
+
+**Latest application source:** `4fd49bf4da6b3f8028294625da8126fc283b1659` on existing `phase1/market-data-foundation`. The SOM enable-only source remains present; its pending validation has not been superseded. The Monitor Market Metrics **History Requirements** section has been removed completely **from the page only**; source history calculations, warning diagnostics, retention and availability policies are unchanged.
+
+The Status Summary Global Settings Log now persists all configured market-wide trend metrics **at activation time**. Gray means the metric was not part of the selected setting's activation trigger set; bright white means it was referenced, regardless of TRUE/FALSE/UNAVAILABLE outcome. The existing Activation Triggers column retains condition results; missing/unavailable metrics stay explicitly unavailable. Earlier entries are not backfilled using later values, and asset-only metrics are not presented as global results. A retained DEFAULT has no white items when no trigger expression selected it.
+
+**Authored tests:** two ConfigurationLifecycle groups for referenced/unreferenced/unavailable metrics and activation-time immutability. **No local .NET compile, harness execution or browser rendering has yet been recorded.** The old 332/332 PASS predates both this change and SOM changes.
+
+**Run locally from the existing application clone:**
+
+```powershell
+git switch phase1/market-data-foundation
+if ($LASTEXITCODE -ne 0) { throw "Branch switch failed" }
+git pull --ff-only
+if ($LASTEXITCODE -ne 0) { throw "Git pull failed" }
+git log -1 --format="%H"
+& ".\\Tests\\Phase2OpenInterestIncremental\\Run-Phase2Validation.ps1"
+if ($LASTEXITCODE -ne 0) { throw "Full validation failed" }
+```
+
+After the run, inspect the Status Summary Global Settings Log for all configured trends/metrics and white highlights on referenced FALSE as well as TRUE conditions. Verify the separate Market Metrics page has no history requirements panel. Keep startup SOM enable-only and user manually released. If an actual build/test fails, fix directly on the existing development branch, then re-run; record the actual SHA, counts and warnings.
+
