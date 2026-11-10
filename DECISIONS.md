@@ -2,7 +2,7 @@
 
 **Reconciled:** November 10, 2026
 
-**Source checkpoint:** `0ae76f4c7886397a06ad346b42a375f6aa06be00`
+**Current source checkpoint:** `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24` (SOM safety development tests pending)
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -316,6 +316,18 @@ Published implementation source: `925db7c153ee4d53cfe3b7bf736318e7a30bccf1`. Eig
 All TestMode-related PTMagic and Monitor console lines should use the same purple/magenta color as the startup `TESTMODE ENABLED` warning. Use NLog `ColoredConsole` message-based highlighting (case-insensitive), not a changed log level. Preserve INFO/WARN meaning, normal unrelated colors and uncolored file logs. Keep the application, Monitor and packaged default logging configs aligned.
 
 Application source `87b9eaa1c865e39d8fff6a657e1b332012be8c16` implements the shared rule. Source inspection is complete; user-local .NET build and live Windows console rendering are not yet verified. A source update alone cannot replace a running instance's already-installed `nlog.config`.
+
+## D-047 — Startup global SOM is enable-only; manual PT release
+
+**Owner directive:** November 10, 2026.
+
+PTMagic may enable ProfitTrailer's native global SOM on a new disruptive startup when configured, but **must never turn it OFF automatically**. The user manually releases SOM from ProfitTrailer when ready; the software does not assume ownership of an already enabled SOM or of manual changes made later. Automatic release after normal setting acknowledgement is withdrawn. The global SOM API adapter must reject any `enabled=false` request to prevent accidental old-call-site releases. Enabling global SOM must not alter PAIRS, DCA or INDICATORS settings. Failed or unconfirmed enable commands must not be silently treated as safe startup protection.
+
+Legacy v1 checkpoints containing a pending automatic release must not trigger an off request. Migrate to v2 enable-intent/acknowledgement/manual-review metadata and preserve explicit pending uncertainty. TestMode never calls the PT global SOM API.
+
+**Owner UI directive:** On first and second startup raids, issue a prominent warning in the RAID SUMMARY explaining that PTMagic requested SOM ON and the user must turn it off manually when ready. Show a **red `PT: SOM`** indicator alongside the global setting, SMS and PT health top Monitor tickers for those same first two raids, with an `(i)` tooltip. The ticker disappears after raid 2, but does not represent the actual PT global flag or remove the user's obligation to review it. Keep additional manual-review details available in the Status Summary.
+
+This decision supersedes the automatic-release paragraphs of **D-025 and D-037**; their separately acknowledged normal configuration delivery and startup enable/freshness safeguards remain valid. New implementation published at `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24`, with local build/regression acceptance still pending.
 
 ## D-046 — Binance USD-M funding metrics use settled events and dynamic history
 
