@@ -36,6 +36,14 @@ The normalized five-minute OHLCV cache now persists closed candles and reuses th
 
 **Status:** published at `925db7c`, eight new regression groups passed at `925db7c`, with .NET build and 37/37 focused checks passing; configured two-startup validation pending. It does not eliminate older tick-data reconstruction or first-seen checks.
 
+## November 10 — Funding and open-interest deterministic regression PASS
+
+**Verified exact application source:** `49f2aab66592b6e2922097ca5242b5a614090602` · **.NET SDK 10.0.403** · solution build **11.0 seconds** · **16/16** offline harnesses, **332/332** test groups. All **17 funding tests**, **35 open-interest tests**, and **280 pre-existing regression groups** passed. Eight nonfatal nullable warnings remain in two older test harnesses. [Full source-attributed evidence](updates/2026-11-10-phase2-funding-offline-validation.md).
+
+The current source includes an additional **Monitor Global Settings activation-trigger audit** change beyond the previous funding checkpoint. Core/PTMagic/Monitor compilation and 28/28 existing Monitor settings roundtrip checks passed, but the new Monitor screen has **not** been independently browser-tested.
+
+**Acceptance:** Funding and OI **deterministic development tests PASS at this source**. Live Binance history, ordinary configured raids, remote PT API acceptance and user-interface/browser checks are not established by these offline results. The separate specific deferred Phase 1 integration cases remain open. Next Phase 2 code work: distinct account/position long-short ratios with mandatory new unit/regression tests.
+
 ## November 10 — Phase 2 funding-rate acquisition and normalization published
 
 **Application implementation source:** `6430bab1afa262fadd4ae31199c11084508b28c7` (`phase1/market-data-foundation`).
@@ -72,7 +80,7 @@ Initial raw OI models/client were followed by opt-in, bounded incremental histor
 | Stage | Work |
 |---|---|
 | Deferred Phase 1 acceptance | Existing configured runtime, PT API, Monitor and cross-exchange checks remain open; no repeat testing now |
-| Phase 2 / 2B | OI 35/35 offline checks passed; funding source and 17 new offline checks published, funding execution pending; next account/position ratios, taker flow and market-wide aggregates |
+| Phase 2 / 2B | Funding 17/17 and OI 35/35 offline PASS at `49f2aab`; proceed with account/position ratios, then taker flow and market-wide derivatives aggregates |
 | Phase 3 | Transparent leverage expansion, crowding, deleveraging, and flow-divergence measurements |
 | Phase 4 | Integrate and validate each added metric family in GlobalSettings, SMS, exports, and Monitor |
 | Phase 5 | Spreads, depth, slippage estimates, and liquidity stress |

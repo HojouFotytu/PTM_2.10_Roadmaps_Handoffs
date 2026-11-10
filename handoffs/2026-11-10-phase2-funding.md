@@ -2,8 +2,14 @@
 
 **Date:** November 10, 2026 (KST)  
 **Application branch:** `HojouFotytu/PTMagic` → `phase1/market-data-foundation`  
-**Source checkpoint (implementation):** `6430bab1afa262fadd4ae31199c11084508b28c7`  
-**Status:** Published source, **build and unit/regression tests pending**.
+**Source checkpoint (verified offline):** `49f2aab66592b6e2922097ca5242b5a614090602`  
+**Status:** Build and all offline regression tests **PASS**; provider/runtime/Monitor-browser integration remains pending.
+
+## November 10 — Completed deterministic validation
+
+At `49f2aab66592b6e2922097ca5242b5a614090602`, the user ran the full `Run-Phase2Validation.ps1` procedure: .NET 10.0.403 solution build PASS in **11.0s**, **16/16** offline test harnesses PASS, **332/332** groups PASS. Funding **17/17**, OI **35/35**, existing regression **280/280**. Eight nonfatal nullable warnings in two older test projects. [Full evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
+
+The tested application source also includes a Monitor Global Settings activation-trigger log change; compilation and the 28 existing MonitorSettingsRoundTrip tests passed, but the new browser display was not acceptance-tested. The prior untested notes below describe the *initial publication state* and are superseded by these exact-source results.
 
 ## Funding implementation
 
@@ -26,7 +32,7 @@ The `MarketAnalyzer.FundingMaxRequestsPerRaid` setting (default 60, allowed 0–
 
 ## Test status and commands
 
-**Mandatory now:** Build and run the new funding harness and all existing offline regression projects before declaring deterministic acceptance. No new code has yet been compiled or tested in this session. The prior 315/315 results apply only to tested source `5f51faaa`.
+**Completed:** The required full solution build and all 16 offline test projects were run at `49f2aab` and passed (332/332). The earlier 315/315 evidence remains attributed to its older OI-only source `5f51faaa`; it is not the latest checkpoint.
 
 From the PTMagic application repository:
 
@@ -42,6 +48,6 @@ if ($LASTEXITCODE -ne 0) { throw "Pull failed" }
 
 The runner records the source revision, builds `PTMagic.sln`, then runs **16** deterministic test projects, including `Phase2Funding`, `Phase2OpenInterest`, `Phase2OpenInterestIncremental`, and all thirteen earlier PTM regression projects. No configured ProfitTrailer API writes, live trading actions or browser tests are included.
 
-**Future work:** distinguish provider's adjusted `fundingIntervalHours` metadata from historical settlement events, validate real remote endpoint behavior, implement account/position ratios and taker flow, then Phase 2B market aggregates. The particular deferred Phase 1 PT/SOM/browser integration tests remain pending separately. Ordinary Phase 2 source testing is mandatory.
+**Future work:** implement separate global/top-trader account and position long-short ratios, maintaining exact provider semantics and required tests; then taker flow and Phase 2B market aggregates. Distinct `fundingIntervalHours` metadata and live provider behavior still require separate acceptance. The particular deferred Phase 1 PT/SOM/browser integration tests remain pending separately. Ordinary Phase 2 source testing is mandatory.
 
 [Current roadmap](../roadmaps/CURRENT.md) · [Development status](../STATUS.md) · [Funding test instructions](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation/Tests/Phase2Funding).

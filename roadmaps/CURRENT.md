@@ -4,15 +4,23 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current application source (funding tests pending):** `6430bab1afa262fadd4ae31199c11084508b28c7`
+**Current tested application source:** `49f2aab66592b6e2922097ca5242b5a614090602`
 
-**Last verified source (OI 315/315):** `5f51faaa0db928cf33c52f6f93ca6f1b301735fb`
+**Offline acceptance:** .NET build + 16 harnesses, 332/332 groups PASS; remaining configured integration gates separate.
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-10-phase2-funding.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
+
+## November 10 — Funding and open-interest deterministic regression PASS
+
+**Verified exact application source:** `49f2aab66592b6e2922097ca5242b5a614090602` · **.NET SDK 10.0.403** · solution build **11.0 seconds** · **16/16** offline harnesses, **332/332** test groups. All **17 funding tests**, **35 open-interest tests**, and **280 pre-existing regression groups** passed. Eight nonfatal nullable warnings remain in two older test harnesses. [Full source-attributed evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
+
+The current source includes an additional **Monitor Global Settings activation-trigger audit** change beyond the previous funding checkpoint. Core/PTMagic/Monitor compilation and 28/28 existing Monitor settings roundtrip checks passed, but the new Monitor screen has **not** been independently browser-tested.
+
+**Acceptance:** Funding and OI **deterministic development tests PASS at this source**. Live Binance history, ordinary configured raids, remote PT API acceptance and user-interface/browser checks are not established by these offline results. The separate specific deferred Phase 1 integration cases remain open. Next Phase 2 code work: distinct account/position long-short ratios with mandatory new unit/regression tests.
 
 ## November 10 — Phase 2 funding-rate acquisition and normalization published
 
