@@ -77,7 +77,7 @@ The prior verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **33
 
 ## Additional November 10 change — Monitor metric display (NOT YET TESTED)
 
-**Latest application source:** `4fd49bf4da6b3f8028294625da8126fc283b1659` on existing `phase1/market-data-foundation`. The SOM enable-only source remains present; its pending validation has not been superseded. The Monitor Market Metrics **History Requirements** section has been removed completely **from the page only**; source history calculations, warning diagnostics, retention and availability policies are unchanged.
+**Latest application source:** `f95ace1a0d8300cb63becf04e6a774439b505f71` on existing `phase1/market-data-foundation`. The SOM enable-only source remains present; its pending validation has not been superseded. The Monitor Market Metrics **History Requirements** section has been removed completely **from the page only**; source history calculations, warning diagnostics, retention and availability policies are unchanged.
 
 The Status Summary Global Settings Log now persists all configured market-wide trend metrics **at activation time**. Gray means the metric was not part of the selected setting's activation trigger set; bright white means it was referenced, regardless of TRUE/FALSE/UNAVAILABLE outcome. The existing Activation Triggers column retains condition results; missing/unavailable metrics stay explicitly unavailable. Earlier entries are not backfilled using later values, and asset-only metrics are not presented as global results. A retained DEFAULT has no white items when no trigger expression selected it.
 
