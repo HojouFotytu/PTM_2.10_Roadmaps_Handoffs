@@ -4,15 +4,23 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current published application source (SOM + Monitor testing pending):** `f95ace1a0d8300cb63becf04e6a774439b505f71`
+**Current published and tested application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`
 
-**Latest deterministically tested application source:** `49f2aab66592b6e2922097ca5242b5a614090602`
+**Latest deterministically tested application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`
 
-**Latest verified offline suite:** 16/16 harnesses, 332/332 groups (funding + OI + regressions)
+**Latest verified offline suite:** 16/16 harnesses, **337/337 groups** (two successful full runs)
 
 **Current handoff:** [Startup SOM enable-only safety correction](handoffs/2026-11-10-som-enable-only.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
+
+## November 10 — SOM and Monitor validation accepted (latest evidence)
+
+**Exact verified application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`. The user ran the existing full validation script twice: .NET SDK 10.0.403 solution builds **PASS** in 15.6s and 10.3s; **all 16 offline harnesses and 337/337 test groups PASS in both runs**. This includes 71 ConfigurationLifecycle checks (SOM enable-only, startup manual-release notice, new metric snapshots), 28 Monitor settings roundtrip checks and 13 DecisionHistory checks. The first build reported eight nonfatal pre-existing nullable test-source warnings; the second reported no warnings, consistent with incremental compilation. No live exchange, PT API or browser acceptance is claimed.
+
+The Market Metrics History Requirements **UI panel** is removed; its diagnostic calculations remain active. Global Settings Log captures all available **market-wide** metrics across configured trends at entry creation and highlights a metric in white when referenced by any selected-setting trigger (even if FALSE/UNAVAILABLE); other metrics are gray. Existing history must not be fabricated from later snapshots. The red startup `PT: SOM` notice lasts only the first two raids; PTMagic never automatically requests global SOM OFF and the user releases it manually. **Do not rerun this completed offline suite as a prerequisite for new Phase 2 work.** Next development: distinct Futures global account, top-trader account and top-trader position long/short ratios. Configured runtime and Monitor browser verification remain separately open.
+
+**Evidence:** [November 10 — 337-group offline validation](updates/2026-11-10-som-monitor-offline-validation.md).
 
 ## November 10 — Monitor metric audit and removed History Requirements UI (UNTESTED)
 
