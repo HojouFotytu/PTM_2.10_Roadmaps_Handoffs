@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current application source (SOM + Monitor tests pending):** `4fd49bf4da6b3f8028294625da8126fc283b1659`
+**Current application source (SOM + Monitor tests pending):** `f95ace1a0d8300cb63becf04e6a774439b505f71`
 
 **Last verified source:** `49f2aab66592b6e2922097ca5242b5a614090602` (funding/OI 332/332 before safety changes)
 
@@ -18,7 +18,7 @@ Implementation and execution evidence are different states. All twelve harnesses
 
 ## Next validation — November 10 Monitor metrics display update
 
-At application source `4fd49bf4da6b3f8028294625da8126fc283b1659`, the Market Metrics **History Requirements** table has been removed from the Monitor only. All retention, metric readiness and warning calculations remain active. Global Settings Log now records all configured trend-level market-wide metrics at selection, with gray for unused metrics and bright white for those referenced in the setting trigger expression, regardless of the individual trigger truth value. The Activation Triggers column remains the Boolean-condition audit. Historical records are not backfilled from current snapshots; asset-only derivatives remain on their own per-asset metric page. The implementation adds two ConfigurationLifecycle offline tests but is **not yet compiled or executed locally**.
+At application source `f95ace1a0d8300cb63becf04e6a774439b505f71`, the Market Metrics **History Requirements** table has been removed from the Monitor only. All retention, metric readiness and warning calculations remain active. Global Settings Log now records all configured trend-level market-wide metrics at selection, with gray for unused metrics and bright white for those referenced in the setting trigger expression, regardless of the individual trigger truth value. The Activation Triggers column remains the Boolean-condition audit. Historical records are not backfilled from current snapshots; asset-only derivatives remain on their own per-asset metric page. The implementation adds two ConfigurationLifecycle offline tests but is **not yet compiled or executed locally**.
 
 **Immediate verification:** the existing `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` must compile Monitor and run the full regression suite, including the two new cases and earlier SOM safety tests. Validate both the Market Metrics and Status Summary Monitor pages in a browser; thereafter proceed to Phase 2 global account/top-trader long/short ratio families. No new branches or candidate paths are authorized by this update.
 
