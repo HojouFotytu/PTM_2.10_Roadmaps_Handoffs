@@ -2,16 +2,24 @@
 
 **Updated:** November 10, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Latest published SOM/Monitor source:** `891f709010c867259a6cde3df8e9c82781091b7f` — **UNTESTED since SOM changes**  
-**Last tested source:** `49f2aab66592b6e2922097ca5242b5a614090602` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (11.0s), **16/16 harnesses and 332/332 groups PASS**  
+**Latest published SOM/Monitor source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` — **offline ACCEPTED**  
+**Last tested source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (15.6s and 10.3s), **16/16 harnesses and 337/337 groups PASS twice**  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
 
-## START HERE — mandatory immediate action in the next chat
+## November 10 — SOM and Monitor validation accepted (latest evidence)
+
+**Exact verified application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`. The user ran the existing full validation script twice: .NET SDK 10.0.403 solution builds **PASS** in 15.6s and 10.3s; **all 16 offline harnesses and 337/337 test groups PASS in both runs**. This includes 71 ConfigurationLifecycle checks (SOM enable-only, startup manual-release notice, new metric snapshots), 28 Monitor settings roundtrip checks and 13 DecisionHistory checks. The first build reported eight nonfatal pre-existing nullable test-source warnings; the second reported no warnings, consistent with incremental compilation. No live exchange, PT API or browser acceptance is claimed.
+
+The Market Metrics History Requirements **UI panel** is removed; its diagnostic calculations remain active. Global Settings Log captures all available **market-wide** metrics across configured trends at entry creation and highlights a metric in white when referenced by any selected-setting trigger (even if FALSE/UNAVAILABLE); other metrics are gray. Existing history must not be fabricated from later snapshots. The red startup `PT: SOM` notice lasts only the first two raids; PTMagic never automatically requests global SOM OFF and the user releases it manually. **Do not rerun this completed offline suite as a prerequisite for new Phase 2 work.** Next development: distinct Futures global account, top-trader account and top-trader position long/short ratios. Configured runtime and Monitor browser verification remain separately open.
+
+**Evidence:** [November 10 — 337-group offline validation](updates/2026-11-10-som-monitor-offline-validation.md).
+
+## Historical validation instructions — already completed
 
 The previous chat was marked **HIGH RISK** for context complexity. Continue here rather than reconstructing old iterations.
 
-**First action:** Run/review the complete local Windows development validation for the SOM changes. The earlier 332/332 result is **NOT** acceptance of the newer SOM code. Use the existing PTMagic clone:
+**Completed:** the following validation procedure was run successfully twice at `fb94373d8928b681e3ebe1f7209bd1439db42e72` (337/337 PASS). Do not repeat it for this source unless new changes require revalidation. Use the existing PTMagic clone:
 
 ```powershell
 git switch phase1/market-data-foundation
