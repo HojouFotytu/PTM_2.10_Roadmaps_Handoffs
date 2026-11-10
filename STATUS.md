@@ -16,6 +16,14 @@ This file describes the present state. Dated evidence stays in [updates](updates
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
+## November 11 — Top dashboard refresh repaired (new build pending)
+
+**Root cause:** The recent PBL-count change made `DashboardTop` synchronously wait for the PT `/api/v2/data/pbl` endpoint even when `MaxDashboardBuyEntries=0`. A slow/failing PT PBL response delayed or failed the entire top panel, including Positions.
+
+**Correction published on existing PTMagic `phase1/market-data-foundation`:** the zero-limit Possible Buys count is now independently cached and refreshed **asynchronously** with one in-flight request, the existing Buy Analyzer refresh interval and an eight-second per-request timeout. DashboardTop uses the last successful count or an unknown `—` when the read fails; it never blocks Positions on that request. The buy list remains hidden at zero, Positions full width, normal list mode and Buy Analyzer unchanged. Updated source-level checks for the nonblocking path and the same layout.
+
+**Validation:** Source committed but local .NET build/focused `ConfigurationLifecycle` validation and browser refresh confirmation have **not yet been performed for this correction**. Prior **75/75 PASS** predates it. Run `git pull --ff-only`, `dotnet build .\\PTMagic.sln`, and `dotnet run --project .\\Tests\\ConfigurationLifecycle\\ConfigurationLifecycle.csproj` from the existing clone. Confirm dashboard continues refreshing when PBL is slow/unavailable.
+
 ## November 11 — Latest Monitor formatting focused validation PASS
 
 User-executed `.NET 10` solution build **PASS (15.7 seconds)** for Core, PTMagic and Monitor, with **75/75 ConfigurationLifecycle checks PASS** and no warnings/errors reported. Includes the latest Market-Wide Metrics page-local uppercase/gray/centering source check, plus PBL-count, compact ticker and SOM checks. `git pull` reported "Already up to date" but **the local run did not print a source SHA**. At documentation review the existing PTMagic branch head was `44dd757e29808eaa8662fbdf8a63835efb02378a`; do not treat this as a locally stamped test SHA. Previous unverified-build statements for this change are superseded by this evidence.
