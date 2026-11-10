@@ -9,6 +9,14 @@
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
+## November 11 — Top Dashboard refresh repair, second implementation (unverified)
+
+After the initial asynchronous count change, the owner reported that **DashboardTop still did not refresh**. The corrected implementation now serves the **Possible Buys (N)** header count from a separate authenticated `_get/PossibleBuysCount` endpoint. With `MaxDashboardBuyEntries=0`, `DashboardTop.cshtml` makes **no PBL count getter/API request** and remains independent of the count's success or failure. `Index.cshtml` requests the count on a separate 5-second-timeout AJAX channel with its own in-flight flag; the existing backend count cache has a separate eight-second PT fetch timeout and does not invent a zero when unavailable.
+
+**Top dashboard reliability:** `Index.cshtml` now uses a bounded 10-second DashboardTop AJAX request with completion cleanup and rescheduling even on timeout, error or rendering exception. The client carries forward its last count across HTML refreshes. Positive `MaxDashboardBuyEntries` still uses the original PBL list; the zero-limit header and full-width Positions layout remain. Source-level assertions for independent count, endpoint paths and retries were added/updated.
+
+**Status:** committed on existing PTMagic `phase1/market-data-foundation`, but **no new local .NET build, focused test run, browser refresh observation, or live PBL acceptance has been provided**. The earlier 75/75 pass belongs to the preceding implementation and does not validate this fix. Run `git pull --ff-only`, `dotnet build .\\PTMagic.sln`, and `dotnet run --project .\\Tests\\ConfigurationLifecycle\\ConfigurationLifecycle.csproj`. Confirm actual DashboardTop/Positions refresh in the browser; if it still stalls, capture the `_get/DashboardTop` request's status/latency and Monitor server error log rather than assuming another PBL cause.
+
 ## November 11 — Top dashboard refresh repaired (new build pending)
 
 **Root cause:** The recent PBL-count change made `DashboardTop` synchronously wait for the PT `/api/v2/data/pbl` endpoint even when `MaxDashboardBuyEntries=0`. A slow/failing PT PBL response delayed or failed the entire top panel, including Positions.
