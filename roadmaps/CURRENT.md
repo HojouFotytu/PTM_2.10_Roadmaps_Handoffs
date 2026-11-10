@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current application source (SOM fix tests pending):** `69729dba543ce46187cc4244693a5d1a53e88bbf`
+**Current application source (SOM fix tests pending):** `891f709010c867259a6cde3df8e9c82781091b7f`
 
 **Last verified source:** `49f2aab66592b6e2922097ca5242b5a614090602` (funding/OI 332/332 before safety changes)
 
@@ -16,9 +16,17 @@ This is the standalone current plan for PTMagic 2.10. It replaces the active gui
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
 
+## NEXT CHAT — verify SOM safety changes
+
+Application source `891f709010c867259a6cde3df8e9c82781091b7f` (existing `phase1/market-data-foundation` branch) contains enable-only startup SOM, manual ProfitTrailer release, legacy release-checkpoint migration, and the red `PT: SOM` ticker plus raid-summary warnings on startup raids 1–2. **The source has NOT yet passed its new local .NET build or regression suite.** Last verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332** before these changes.
+
+**First action:** run/review `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1`, fix any errors on the existing branch, and record actual test results with exact SHA. Never automatically issue global SOM `enabled=false`. Disappearing ticker after raid 2 is not proof of PT state and does not switch SOM off. After SOM validation, resume Phase 2 separate global account, top-trader account, and top-trader position long/short ratio metrics.
+
+[Complete active new-chat handoff](../handoffs/2026-11-10-som-enable-only.md). Only specified unfinished Phase 1 *configured integration* tests were deferred; normal source builds and regressions remain mandatory.
+
 ## November 10 — Startup global SOM made enable-only; two-raid manual-release warning
 
-**Safety correction source:** `69729dba543ce46187cc4244693a5d1a53e88bbf`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
+**Safety correction source:** `891f709010c867259a6cde3df8e9c82781091b7f`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
 
 The startup SOM API in PTMagic is now **enable-only**. The application no longer issues global `enabled=false` after normal analysis or configuration delivery, nor from restart/legacy release checkpoints. When `StartupSellOnlyMode=true`, an initial startup may send `enabled=true` to ProfitTrailer before long data loading; the user must manually disable global SOM in ProfitTrailer when ready. Without an ownership-aware live state API PTMagic cannot establish whether SOM is presently on, so it must not claim live-state monitoring or automatic restoration.
 
@@ -147,7 +155,7 @@ The current work adds:
 
 1. Correct SMS-set transitions, including removal of the last active SMS.
 2. Explicit configuration delivery results, retry state, and a confirmed-state checkpoint.
-3. Initial global SOM through the PT control API, with a conclusive/fresh configuration and separately acknowledged release condition.
+3. Enable-only startup global SOM through PT API; release is exclusively manual in ProfitTrailer (D-047).
 4. Monitor preservation of distinct trigger rows, tags, metrics, and precision.
 5. Structural reference and expression validation.
 6. Pinned acquisition boundaries, decision-age checks, and history requirement reporting.
@@ -438,37 +446,17 @@ Immediate off-and-reactivation can be legitimate if activation remains true. Tha
 
 ## 8. Startup protection and delivery lifecycle
 
-### 8.1 Startup global SOM through the PT API
+### 8.1 Startup global SOM — current enable-only contract (D-047)
 
-Application.StartupSellOnlyMode defaults to true.
+With `Application.StartupSellOnlyMode=true`, PTMagic requests native PT global SOM ON before an uncertain first-run market-data bootstrap, using the configured ProfitTrailer API token and `POST /api/v2/globalSellOnlyMode?enabled=true`. Global SOM prevents new buys and DCA buys while allowing sells. No PAIRS/DCA/INDICATORS overlay is sent.
 
-Before lengthy exchange bootstrap, use `POST /api/v2/globalSellOnlyMode` with the configured API token and query parameter `enabled=true`. The user's API direction supersedes the initial unpublished preset overlay. This control request contains no PAIRS, DCA, or INDICATORS payload and does not change the local preset files or explicit pair SOM values.
+**PTMagic never disables SOM automatically.** After conclusive market analysis and acknowledged normal configuration delivery, it leaves the native PT SOM flag untouched. **Only the user disables SOM manually in ProfitTrailer** when ready. PTMagic cannot read an authoritative current SOM state or establish previous user ownership with this setter. Its acknowledgement/checkpoint is NOT a live state readback. `StartupSellOnlyMode=false` opts out of new automatic enabling but does not clear an existing SOM.
 
-Resolve the endpoint beneath each configured PT Monitor URL, preserving an installation's path prefix. Use Application.ProfitTrailerServerAPIToken for the primary target. Application.ProfitTrailerServerAPITokenXtra defaults to empty, explicitly sharing the primary token with additional targets; a nonempty comma-separated value must align with the additional PT Monitor URLs. Do not hardcode instance addresses or expose query credentials in logs/history.
+Startup guard metadata uses schema-v2 `_data/StartupSellOnlyModeState.json`. Legacy schema-v1 `PendingRelease` markers migrate to manual review; never replay an automatic OFF. A failed/unknown enable or partial multi-target acknowledgement cannot be treated as successful global protection. Persist local intent before sending, fail closed on uncertainty, maintain TestMode no-write isolation and keep confirmed normal configuration delivery separate from SOM control.
 
-The user clarified the endpoint's native behavior: global SOM stops new buys and DCA buys while allowing sells. The startup guard changes this global flag without rewriting the existing property sets.
+**Two-raid notice:** On startup raids 1 and 2, the RAID SUMMARY logs a manual-release warning. The Monitor's header displays a red `PT: SOM` informational ticker with an `(i)` tooltip beside Global Setting, SMS and PT health. Starting at raid 3, the warning/ticker disappear; their disappearance NEVER turns SOM off or proves the current remote state. Manual-review context remains in Status Summary.
 
-Guard acquisition must be acknowledged before reporting that protection was established. If acquisition fails, abort the raid before slow bootstrap and retry at the next interval.
-
-Release is a separate API operation, ordered after normal configuration delivery:
-
-1. The raid's analysis is complete and fresh.
-2. Selection is conclusive under the accepted expression semantics.
-3. The required global/SMS configuration has been fully computed.
-4. PT acknowledges the normal configuration while the guard remains enabled.
-5. The startup lifecycle requests `enabled=false` and obtains its release acknowledgement separately.
-
-Indeterminate/stale evaluation and failed normal delivery do not authorize release. A release failure remains visible and retryable on a fresh conclusive raid; it does not erase the acknowledged normal configuration. Enable outcomes, pending release, and confirmed configuration are separate facts. Guard metadata is stored in `_data/StartupSellOnlyModeState.json`, independently of `_data/ConfigurationDeliveryState.json`, without secrets or raw properties.
-
-Save pending intent before enabled=true; an intent-write failure prevents that command and the slow bootstrap. A checkpoint failure after a real command acknowledgement is reported as a persistence failure without reversing the acknowledged result. StartupSellOnlyModeActive, StartupSellOnlyModePending, and StartupSellOnlyModeStatus expose these distinctions in Summary, Monitor, and decision history independently of normal configuration delivery.
-
-Acknowledgement comes from the setter response, not a later readback. Partial failure or timeout leaves remote state uncertain; reassert the owned guard before the next load and retry release only after another fresh conclusive decision. One target's success does not prove success for every configured target.
-
-Enabling StartupSellOnlyMode assigns the global SOM flag to PTMagic during startup. The implementation uses the supplied setter API and does not read or restore the prior global flag. A pre-existing global SOM=true therefore does not prevent the later requested false after the release conditions are met. This ownership rule is explicit in [D-037](../DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
-
-TestMode simulates the lifecycle without SOM API calls or configuration writes and without changing either live acknowledgement checkpoint. StartupSellOnlyMode=false prevents acquisition of a new guard and does not clear an untracked existing global SOM flag. A matching checkpoint with pending PTM-owned work still resumes recovery and eventual release, even after opt-out. An indeterminate startup must not invent DEFAULT as the previously applied state: preserve a known confirmed configuration or defer a new normal publication while the prior configuration is unknown.
-
-The user's native-behavior clarification defines the intended buying/selling contract; the new client and lifecycle still require configured PT verification before execution acceptance is claimed.
+**Verification:** current SOM source `891f709010c867259a6cde3df8e9c82781091b7f` remains untested by local .NET build/regressions. Earlier source `49f2aab66592b6e2922097ca5242b5a614090602` passed 332/332 offline groups *before* these SOM changes. [Active handoff](../handoffs/2026-11-10-som-enable-only.md).
 
 ### 8.2 Confirmed application
 
@@ -787,7 +775,7 @@ The current acceptance must include:
 - Binance Futures, Spot, and US paths where the user has a configured environment.
 - USDT and at least one supported non-USDT Fiat conversion case.
 - Warm, cold, cross-boundary, and deliberately incomplete history.
-- Global SOM guard retained through indeterminate/stale data, with normal configuration acknowledged before a separately acknowledged eligible release; prior protection and release failures remain explicit.
+- Global SOM enable-only guard with no automatic release, even after conclusive analysis or configuration acknowledgement; uncertain enable remains explicit for manual review.
 - Persistent SMS deactivation without same-raid activation.
 - Actual PT payload/readback for removal and delivery recovery, beyond TestMode simulation.
 - Invalid timeframe/reference startup handling.
@@ -804,19 +792,12 @@ A release candidate additionally needs documented migration/default changes, ack
 
 ## 19. Immediate handoff and subsequent order
 
-**November 10 ordering supersedes the original numbered prerequisite sequence below:** Continue the source-only Phase 2 open-interest implementation, then subsequent derivative families; the prior Phase 1 runtime/browser/PT acceptance remains deferred for later and must not be misrepresented as complete. The original list is retained as a release-readiness checklist, not a directive to resume testing now.
+1. **First:** user executes the full build and 16-harness offline runner at current SOM source `891f709010c867259a6cde3df8e9c82781091b7f`; assistant reviews results, fixes demonstrated errors directly, and records the exact revision. The earlier 332/332 at `49f2aab66592b6e2922097ca5242b5a614090602` is not SOM acceptance.
+2. Maintain D-047: PTMagic never sends global SOM OFF; manual PT release, legacy checkpoint migration and first-two-raid red Monitor ticker. Live PT and browser acceptance remain separate.
+3. After source verification, continue Phase 2 distinct Futures global account, top-trader account and top-trader position long/short ratios, then taker flow and Phase 2B metrics. Required history follows user MarketTrends; no fixed OI/funding retention-hours configuration.
+4. Continue later phases; dedicated performance optimization remains after approved metric families.
 
-
-1. Run and review the current application build and all relevant existing/new regression harnesses.
-2. Correct any compilation or behavioral failures in this checkpoint.
-3. Complete the lifecycle, startup, correlation, history, Monitor, and remaining migration runtime matrix.
-4. Mark accepted scope precisely, preserving the earlier Phase 1A–1C baseline and the limits of each execution.
-5. Begin Phase 2 raw derivatives data, then Phase 2B aggregates and Phase 3 conditions, extending Phase 4 integration throughout.
-6. Complete Phase 5 liquidity/depth measurements.
-7. Extend Phase 6 history/analysis according to the application requirements.
-8. Start the dedicated performance program only after all approved new metric additions are complete.
-
-Do not return to a historical handoff that instructs initial ATRP implementation or restoration of legacy PriceTrend. Do not import personal strategy work into application acceptance.
+The user deferred only specifically named earlier Phase 1 configured integration checks, not normal .NET builds or regression testing. Work directly on existing branches. **Ask before creating a new branch or duplicate candidate path.**
 
 ## 20. Source and document navigation
 
@@ -835,7 +816,7 @@ Current documentation:
 
 - [STATUS](../STATUS.md): present implementation/evidence matrix.
 - [DECISIONS](../DECISIONS.md): accepted contracts and supersession.
-- [Current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md): exact verification and next action.
+- [Current handoff](../handoffs/2026-11-10-som-enable-only.md): exact verification and next action.
 - [Update index](../updates/README.md): dated evidence.
 - [Historical roadmap index](README.md): preserved earlier plans.
 - [Historical current documents](../history/README.md): pre-reconciliation snapshots.
