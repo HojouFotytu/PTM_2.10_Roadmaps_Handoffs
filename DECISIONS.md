@@ -2,11 +2,19 @@
 
 **Reconciled:** November 10, 2026
 
-**Current source checkpoint:** `69729dba543ce46187cc4244693a5d1a53e88bbf` (SOM safety development tests pending)
+**Current source checkpoint:** `891f709010c867259a6cde3df8e9c82781091b7f` (SOM regression testing pending) (SOM safety development tests pending)
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
 This register governs current intent. “Accepted” identifies a design or user decision, not successful execution. [STATUS.md](STATUS.md) records implementation and evidence separately. The previous register is preserved in [history](history/2026-11-07-pre-reconciliation/DECISIONS.md); dated implementation records remain unchanged.
+
+## NEXT CHAT — verify SOM safety changes
+
+Application source `891f709010c867259a6cde3df8e9c82781091b7f` (existing `phase1/market-data-foundation` branch) contains enable-only startup SOM, manual ProfitTrailer release, legacy release-checkpoint migration, and the red `PT: SOM` ticker plus raid-summary warnings on startup raids 1–2. **The source has NOT yet passed its new local .NET build or regression suite.** Last verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332** before these changes.
+
+**First action:** run/review `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1`, fix any errors on the existing branch, and record actual test results with exact SHA. Never automatically issue global SOM `enabled=false`. Disappearing ticker after raid 2 is not proof of PT state and does not switch SOM off. After SOM validation, resume Phase 2 separate global account, top-trader account, and top-trader position long/short ratio metrics.
+
+[Complete active new-chat handoff](handoffs/2026-11-10-som-enable-only.md). Only specified unfinished Phase 1 *configured integration* tests were deferred; normal source builds and regressions remain mandatory.
 
 ## Existing decisions and their present disposition
 
@@ -65,6 +73,8 @@ All supported Exchange MarketTrends use the normalized engine. Supported applica
 [Compatibility restoration](updates/2026-11-05-pricetrend-compatibility-restoration.md) · [Recorded Futures validation](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
 
 ## D-025 — Startup SOM goal and release condition
+
+**SUPERSEDED where this section describes automatic release.** D-047 now forbids global SOM OFF requests; this older text is historical only.
 
 **User instruction:** November 7, 2026, assessment item 2D.
 
@@ -241,6 +251,8 @@ The accepted pre-change runtime baseline remains the November 5 build, 88 checks
 
 ## D-037 — Direct global SOM API supersedes the startup preset overlay
 
+**SUPERSEDED in its ownership/automatic-release details by D-047.** Keep the original API transport and no-shadow-preset principle, but all references below to automatic `enabled=false`, ownership of the user's SOM flag and release retries are obsolete.
+
 **User instruction:** November 7, 2026, after inspection of the initial startup implementation.
 
 Use the ProfitTrailer control endpoint supplied in the user's Swagger excerpt:
@@ -327,7 +339,7 @@ Legacy v1 checkpoints containing a pending automatic release must not trigger an
 
 **Owner UI directive:** On first and second startup raids, issue a prominent warning in the RAID SUMMARY explaining that PTMagic requested SOM ON and the user must turn it off manually when ready. Show a **red `PT: SOM`** indicator alongside the global setting, SMS and PT health top Monitor tickers for those same first two raids, with an `(i)` tooltip. The ticker disappears after raid 2, but does not represent the actual PT global flag or remove the user's obligation to review it. Keep additional manual-review details available in the Status Summary.
 
-This decision supersedes the automatic-release paragraphs of **D-025 and D-037**; their separately acknowledged normal configuration delivery and startup enable/freshness safeguards remain valid. New implementation published at `69729dba543ce46187cc4244693a5d1a53e88bbf`, with local build/regression acceptance still pending.
+This decision supersedes the automatic-release paragraphs of **D-025 and D-037**; their separately acknowledged normal configuration delivery and startup enable/freshness safeguards remain valid. New implementation published at `891f709010c867259a6cde3df8e9c82781091b7f`, with local build/regression acceptance still pending.
 
 ## D-046 — Binance USD-M funding metrics use settled events and dynamic history
 
