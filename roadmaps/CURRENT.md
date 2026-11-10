@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current application source (SOM fix tests pending):** `891f709010c867259a6cde3df8e9c82781091b7f`
+**Current application source (SOM + Monitor tests pending):** `4fd49bf4da6b3f8028294625da8126fc283b1659`
 
 **Last verified source:** `49f2aab66592b6e2922097ca5242b5a614090602` (funding/OI 332/332 before safety changes)
 
@@ -15,6 +15,12 @@
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
 Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
+
+## Next validation — November 10 Monitor metrics display update
+
+At application source `4fd49bf4da6b3f8028294625da8126fc283b1659`, the Market Metrics **History Requirements** table has been removed from the Monitor only. All retention, metric readiness and warning calculations remain active. Global Settings Log now records all configured trend-level market-wide metrics at selection, with gray for unused metrics and bright white for those referenced in the setting trigger expression, regardless of the individual trigger truth value. The Activation Triggers column remains the Boolean-condition audit. Historical records are not backfilled from current snapshots; asset-only derivatives remain on their own per-asset metric page. The implementation adds two ConfigurationLifecycle offline tests but is **not yet compiled or executed locally**.
+
+**Immediate verification:** the existing `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` must compile Monitor and run the full regression suite, including the two new cases and earlier SOM safety tests. Validate both the Market Metrics and Status Summary Monitor pages in a browser; thereafter proceed to Phase 2 global account/top-trader long/short ratio families. No new branches or candidate paths are authorized by this update.
 
 ## NEXT CHAT — verify SOM safety changes
 
