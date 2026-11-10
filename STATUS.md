@@ -4,7 +4,7 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current published application source (SOM fix testing pending):** `891f709010c867259a6cde3df8e9c82781091b7f`
+**Current published application source (SOM + Monitor testing pending):** `4fd49bf4da6b3f8028294625da8126fc283b1659`
 
 **Latest deterministically tested application source:** `49f2aab66592b6e2922097ca5242b5a614090602`
 
@@ -13,6 +13,14 @@
 **Current handoff:** [Startup SOM enable-only safety correction](handoffs/2026-11-10-som-enable-only.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
+
+## November 10 — Monitor metric audit and removed History Requirements UI (UNTESTED)
+
+**Application source:** `4fd49bf4da6b3f8028294625da8126fc283b1659` on the existing `phase1/market-data-foundation` branch. The Market Metrics page **no longer displays** the History Requirements panel. Metrics calculation/readiness, OHLCV/OI/funding retention, warnings and diagnostic generation remain unchanged.
+
+**Global Settings Log:** each new setting log entry now captures all configured market-wide metrics across all configured trends **at selection time**. Entries are gray by default; entries whose metric/trend participates in the selected setting's activation-trigger set are white, irrespective of whether the condition was TRUE, FALSE or UNAVAILABLE. Activation Triggers remains an independent condition/result audit. Asset-only metrics have no global aggregate to display; older historical records are never reconstructed from new data. Retained DEFAULT has no highlighted values if no evaluated trigger set selected it.
+
+**Validation:** authored two new ConfigurationLifecycle assertions, but **no updated local .NET build, complete regression run, or browser validation has occurred**. The prior SOM safety regression testing is also pending. Run the existing full fail-fast validation script, inspect the Status Summary display for both matching and retained settings and check the Market Metrics page no longer contains the panel. Full-suite count must be taken from actual execution; do not treat the old 332/332 evidence as validation of this source.
 
 ## NEXT CHAT — verify SOM safety changes
 
