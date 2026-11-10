@@ -105,3 +105,10 @@ if ($LASTEXITCODE -ne 0) { throw "Full validation failed" }
 
 After the run, inspect the Status Summary Global Settings Log for all configured trends/metrics and white highlights on referenced FALSE as well as TRUE conditions. Verify the separate Market Metrics page has no history requirements panel. Keep startup SOM enable-only and user manually released. If an actual build/test fails, fix directly on the existing development branch, then re-run; record the actual SHA, counts and warnings.
 
+
+## November 10 — Corrected Global Settings Log layout (pending local build)
+
+**Owner-directed UI:** exactly two market-data columns, **Market Trends** and **Market Metrics**, following Activation Time / Setting / Active Time. The separate Activation Triggers column, expression, and TRUE/FALSE labels have been removed from the page. All configured MarketTrends are listed gray unless referenced by the selected setting (white). All configured metrics are listed gray unless referenced (white); a condition whose recorded trigger result is TRUE is **green**. Asset-only metric names are included without a fabricated global value. A selected setting's own recorded trigger set determines colors, not later analytics. No changes to trading logic, metric calculations, SOM, or provider acquisition. Historical entries lacking full metric snapshots cannot be reconstructed reliably.
+
+**Implementation:** committed to the existing PTMagic `phase1/market-data-foundation` branch. **Validation:** newest change not yet locally compiled or browser-tested; the earlier full 337/337 PASS belongs to source `fb94373` before the UI correction. Focused command after `git pull --ff-only`: `dotnet build .\\PTMagic.sln` and `dotnet run --project .\\Tests\\ConfigurationLifecycle\\ConfigurationLifecycle.csproj`. Visually check two columns and white/gray/green logic.
+
