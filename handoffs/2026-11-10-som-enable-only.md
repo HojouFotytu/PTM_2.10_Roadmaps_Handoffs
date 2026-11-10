@@ -1,53 +1,76 @@
-# PTMagic 2.10 — Startup SOM enable-only safety handoff
+# PTMagic 2.10 — ACTIVE NEW-CHAT HANDOFF: SOM safety and Phase 2
 
-**Date:** November 10, 2026 (KST)  
-**Application source:** `69729dba543ce46187cc4244693a5d1a53e88bbf` · existing branch `phase1/market-data-foundation`  
-**Current verification:** **PENDING** local .NET build and regression run after code changes. Earlier verified `49f2aab` funding/OI 332/332 results apply only to that earlier code.
+**Updated:** November 10, 2026 (KST)  
+**Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
+**Latest published SOM/Monitor source:** `891f709010c867259a6cde3df8e9c82781091b7f` — **UNTESTED since SOM changes**  
+**Last tested source:** `49f2aab66592b6e2922097ca5242b5a614090602` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (11.0s), **16/16 harnesses and 332/332 groups PASS**  
+**Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
+**Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
 
-## Owner-approved behavior
+## START HERE — mandatory immediate action in the next chat
 
-Startup Global SOM is **enable-only**. With `StartupSellOnlyMode=true`, PTMagic issues `enabled=true` before the initial disruptive startup analysis; it NEVER sends `enabled=false` automatically, including after successful configuration delivery, later raids, restarts or changes to the Startup Global SOM option. The user turns SOM OFF manually from ProfitTrailer when ready to allow buying. This deliberately avoids reading an unavailable global-SOM ownership state or overriding previously user-enabled SOM.
+The previous chat was marked **HIGH RISK** for context complexity. Continue here rather than reconstructing old iterations.
 
-This mechanism only controls PT's native global switch; it never sends a temporary PAIRS/DCA/INDICATORS shadow preset. ProfitTrailer new buys and DCA buys remain blocked while global SOM is enabled; sells continue. TestMode does not send SOM requests.
-
-The API helper itself refuses disabled=false requests, preventing accidental legacy call sites from disabling global SOM. Schema 1 `PendingRelease` checkpoints are migrated into manual-review state; they cannot authorize an API disable. Schema 2 records pending enable and acknowledgement but does not claim to read the live PT flag. A failed or ambiguous enable does not silently allow an unprotected disruptive bootstrap; it requires review. On a new process startup, configured protection may be re-asserted for the new startup cycle; within the same cycle, no additional guard command is sent.
-
-## Two-raid notification
-
-- The first two completed RAID SUMMARY reports after startup protection include a clear `PT: SOM WARNING (startup raid 1/2)` or `(2/2)` message, instructing manual release in ProfitTrailer.
-- The Monitor's top ticker row has a **red `PT: SOM`** item beside the existing global-setting, SMS and PT health tickers during those first two raids; the `(i)` tooltip describes why PTMagic enabled global SOM and explicitly says it will not turn SOM off.
-- The red ticker automatically disappears after the second raid. It is an informational startup notice, not a live PT status signal or confirmation that the user has switched SOM off.
-- The summary retains manual-review status for troubleshooting even after the temporary ticker disappears. No automatic off request is sent when it disappears.
-
-## Source changed
-
-- `Core/Main/PTMagic.cs`: enable-only lifecycle, fail-closed uncertainty, per-process two-raid summary warning and summary flags.
-- `Core/ProfitTrailer/GlobalSellOnlyModeAPI.cs`: rejects requests to disable global SOM.
-- `Core/ProfitTrailer/StartupSellOnlyModeState.cs`: v2 checkpoint; safe migration from v1 auto-release intent.
-- `Core/DataObjects/PTMagicData.cs`: summary properties for manual-review and transient warning visibility.
-- `Monitor/Pages/_get/TickerWidgets.cshtml`: red `PT: SOM` ticker and explanation tooltip.
-- `Monitor/Pages/_Layout.cshtml`: ticker insertion/removal across the existing periodic AJAX refresh.
-- `Monitor/Pages/SettingsGeneral.cshtml`: manual-release help text.
-- `Tests/ConfigurationLifecycle/Program.cs`: reverse legacy auto-release assertions and add migration, restart, warning-count, and uncertainty tests.
-
-The new source-level Monitor ticker regression assertion is included in `ConfigurationLifecycle`. The exact code and all normal regression projects **still require a fresh .NET build and execution**; the 332 previous passing groups belong to the pre-SOM implementation. The user-visible warnings are scoped to the first two startup raids, not a real-time read of ProfitTrailer's SOM state.
-
-## Mandatory development verification
-
-Run from PTMagic repository root:
+**First action:** Run/review the complete local Windows development validation for the SOM changes. The earlier 332/332 result is **NOT** acceptance of the newer SOM code. Use the existing PTMagic clone:
 
 ```powershell
 git switch phase1/market-data-foundation
 if ($LASTEXITCODE -ne 0) { throw "Branch switch failed" }
 
 git pull --ff-only
-if ($LASTEXITCODE -ne 0) { throw "Pull failed" }
+if ($LASTEXITCODE -ne 0) { throw "Git pull failed" }
 
 & ".\Tests\Phase2OpenInterestIncremental\Run-Phase2Validation.ps1"
 ```
 
-The runner builds Core, PTMagic and Monitor and executes all 16 existing deterministic test projects, including ConfigurationLifecycle. No configured PT APIs are contacted by tests. Publish exact source SHA and actual failures/successes; do not inherit a previous `PASS` across this safety change.
+The checked-in runner records the SHA, builds `PTMagic.sln`, and runs all **16 offline test harnesses**, including `ConfigurationLifecycle`, `MonitorSettingsRoundTrip`, `DecisionHistory`, and funding/OI tests. No real PT writes or live exchange requests are part of this suite.
 
-**Separate later acceptance:** live PT API acknowledgement, multi-target partial enable reporting and actual Monitor browser tooltip behavior. Earlier Phase 1 configured integration work remains deferred as explicitly decided, without waiving normal offline development tests.
+**When the user provides the output:** diagnose failed builds/tests; fix production code and assertions in the existing paths; commit directly to the existing branch and re-run the affected/full tests. Record *actual* test counts, exact source SHA and warnings before declaring acceptance. Do not repeat previously passed older tests unless the new source requires regression verification.
 
-[Current technical roadmap](../roadmaps/CURRENT.md) · [Status](../STATUS.md) · [Decisions](../DECISIONS.md).
+## Current owner-approved SOM contract — D-047 (supersedes prior auto-release)
+
+- With `Application.StartupSellOnlyMode=true`, PTMagic may send global SOM **ON** through native `POST /api/v2/globalSellOnlyMode?enabled=true` before long initial startup analysis. Currently the live code requests ON at the first process startup when enabled; it does **not** independently determine whether initialization will be prolonged.
+- PTMagic must **NEVER** send `enabled=false` automatically, even after fresh analysis, acknowledged normal configuration delivery, restart or opt-out. The **user manually disables SOM in ProfitTrailer when ready**. While ON, new buys and DCA buys are blocked; sells remain allowed.
+- The boolean API does **not** report authoritative prior user ownership or live SOM state. A checkpoint/ticker cannot prove SOM remains ON or is OFF.
+- No temporary PAIRS/DCA/INDICATORS overlay. Normal setting/SMS publication and startup global SOM control remain separate.
+- TestMode never sends native SOM commands or replaces live checkpoint state. `StartupSellOnlyMode=false` prevents a new automatic enable but does not release a previously enabled PT global flag.
+- The global SOM API adapter rejects disable calls. Old v1 `PendingRelease` checkpoints migrate to schema v2 manual review. Save enable intent before posting; a failed/uncertain enable must not silently count as safe protection. Each configured PT target requires acknowledgement; partial multi-target failure cannot be reported as a complete success.
+
+## Required two-raid warning and Monitor UI
+
+- **Raid 1 and raid 2**: RAID SUMMARY logs a warning that PTMagic requested global SOM ON and the user must turn it OFF manually in ProfitTrailer.
+- The Monitor header adds a **red `PT: SOM` ticker** alongside selected Global Setting, SMS and PT health, with a small `(i)` tooltip explaining enable-only startup protection, manual release, and the fact that this is **not a live global SOM status readback**.
+- **Raid 3 onward**: both temporary warnings stop. Disappearance must NEVER disable global SOM or imply that PT is trading again. The underlying manual-review details remain in Status Summary.
+- The ticker uses existing `_get/TickerWidgets` output and `_Layout.cshtml` AJAX insertion/removal, not a separate persistent notification mechanism.
+
+## Source reference
+
+| Area | File |
+|---|---|
+| Enable-only lifecycle, notice count, raid warning | `Core/Main/PTMagic.cs` |
+| Reject global SOM OFF requests | `Core/ProfitTrailer/GlobalSellOnlyModeAPI.cs` |
+| Versioned manual-review checkpoint | `Core/ProfitTrailer/StartupSellOnlyModeState.cs` |
+| Summary flags | `Core/DataObjects/PTMagicData.cs` |
+| Red header ticker and tooltip | `Monitor/Pages/_get/TickerWidgets.cshtml` |
+| Insert/remove ticker on AJAX refresh | `Monitor/Pages/_Layout.cshtml` |
+| Setting help | `Monitor/Pages/SettingsGeneral.cshtml` |
+| Revised lifecycle, migration, ticker assertions | `Tests/ConfigurationLifecycle/Program.cs` |
+| Full fail-fast offline verification | `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` |
+
+**Priority test topics:** no `false` SOM request under any lifecycle path; migrated v1 release intent never causes OFF; uncertain/failed enable blocks unsafe bootstrap; no repeated enable within one startup; restart behavior; two-raid warning/ticker visibility then removal; TestMode isolation; multi-target partial failures. Existing ticker source assertion assumes the runner starts in repository root (which the checked-in runner does). These are validation targets, **not confirmed failures**.
+
+**Current acceptance:** New SOM source `891f709010c867259a6cde3df8e9c82781091b7f` has **NOT** received a local .NET build or updated test output in this conversation. Live PT endpoint behavior, Monitor browser display and the older configured integration cases remain separately unverified. Only the previously discussed *specific remaining Phase 1 configured integration checks* were deferred, **not normal development builds/tests** (D-045).
+
+## After SOM acceptance — Phase 2 queue
+
+The prior verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332**, including **17 funding**, **18 raw OI**, **17 incremental OI**, and **280 other** offline groups. The opt-in per-asset Binance Futures metrics are `OpenInterestChange`, `OpenInterestValueChange`, `FundingRate`, and `FundingSum`. Their history derives from enabled user `MarketTrend.TrendMinutes` and relevant lookbacks, not separate fixed OI/funding retention-hour defaults. Binance Spot and Binance US continue to use normalized price/volume/etc. metrics, but do not receive these Futures derivatives families.
+
+**Next development family:** distinct Binance Futures global account long/short ratio, top-trader account ratio, and top-trader **position** ratio; do not conflate accounts with positions. Then taker flow, Phase 2B aggregates and subsequent higher-order features. Each batch requires source-specific calculations, availability semantics, and mandatory offline tests. General performance optimization remains later.
+
+**Workflow preference:** Direct commits to the **existing branches**. **Always ask before creating a new branch or duplicate candidate path.** No repeated approval questions for routine publishing. Keep both repositories' `CHANGELOG-2.10.md` content identical, provide complete fail-fast PowerShell testing commands, and proactively flag conversation CAUTION/HIGH RISK.
+
+## Copy to the new chat
+
+> Continue PTMagic 2.10 from [the active SOM handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work directly in `phase1/market-data-foundation`; do not make new branches/duplicate candidates without asking. Current SOM source `891f709010c867259a6cde3df8e9c82781091b7f` is **UNTESTED**; last verified `49f2aab66592b6e2922097ca5242b5a614090602` passed 332/332 before SOM changes. Review my next full PowerShell regression output, fix failures, re-run and record exact source SHA. Maintain global SOM **enable-only**, user manual release, and the first-two-raid red `PT: SOM` ticker/warnings. Only after tests pass, continue Phase 2 distinct account/position ratio metrics.
+
+[Status](../STATUS.md) · [Current roadmap](../roadmaps/CURRENT.md) · [D-045/D-047 decisions](../DECISIONS.md) · [Funding handoff](2026-11-10-phase2-funding.md) · [332-check evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
