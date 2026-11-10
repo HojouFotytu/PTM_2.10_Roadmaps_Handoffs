@@ -2,7 +2,7 @@
 
 **Reconciled:** November 10, 2026
 
-**Current source checkpoint:** `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24` (SOM safety development tests pending)
+**Current source checkpoint:** `69729dba543ce46187cc4244693a5d1a53e88bbf` (SOM safety development tests pending)
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -327,7 +327,7 @@ Legacy v1 checkpoints containing a pending automatic release must not trigger an
 
 **Owner UI directive:** On first and second startup raids, issue a prominent warning in the RAID SUMMARY explaining that PTMagic requested SOM ON and the user must turn it off manually when ready. Show a **red `PT: SOM`** indicator alongside the global setting, SMS and PT health top Monitor tickers for those same first two raids, with an `(i)` tooltip. The ticker disappears after raid 2, but does not represent the actual PT global flag or remove the user's obligation to review it. Keep additional manual-review details available in the Status Summary.
 
-This decision supersedes the automatic-release paragraphs of **D-025 and D-037**; their separately acknowledged normal configuration delivery and startup enable/freshness safeguards remain valid. New implementation published at `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24`, with local build/regression acceptance still pending.
+This decision supersedes the automatic-release paragraphs of **D-025 and D-037**; their separately acknowledged normal configuration delivery and startup enable/freshness safeguards remain valid. New implementation published at `69729dba543ce46187cc4244693a5d1a53e88bbf`, with local build/regression acceptance still pending.
 
 ## D-046 — Binance USD-M funding metrics use settled events and dynamic history
 

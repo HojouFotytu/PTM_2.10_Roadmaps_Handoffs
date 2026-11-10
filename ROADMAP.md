@@ -38,7 +38,7 @@ The normalized five-minute OHLCV cache now persists closed candles and reuses th
 
 ## November 10 — Startup global SOM made enable-only; two-raid manual-release warning
 
-**Safety correction source:** `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
+**Safety correction source:** `69729dba543ce46187cc4244693a5d1a53e88bbf`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
 
 The startup SOM API in PTMagic is now **enable-only**. The application no longer issues global `enabled=false` after normal analysis or configuration delivery, nor from restart/legacy release checkpoints. When `StartupSellOnlyMode=true`, an initial startup may send `enabled=true` to ProfitTrailer before long data loading; the user must manually disable global SOM in ProfitTrailer when ready. Without an ownership-aware live state API PTMagic cannot establish whether SOM is presently on, so it must not claim live-state monitoring or automatic restoration.
 

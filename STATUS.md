@@ -4,7 +4,7 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current published application source (SOM fix testing pending):** `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24`
+**Current published application source (SOM fix testing pending):** `69729dba543ce46187cc4244693a5d1a53e88bbf`
 
 **Latest deterministically tested application source:** `49f2aab66592b6e2922097ca5242b5a614090602`
 
@@ -16,13 +16,15 @@ This file describes the present state. Dated evidence stays in [updates](updates
 
 ## November 10 — Startup global SOM made enable-only; two-raid manual-release warning
 
-**Safety correction source:** `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
+**Safety correction source:** `69729dba543ce46187cc4244693a5d1a53e88bbf`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
 
 The startup SOM API in PTMagic is now **enable-only**. The application no longer issues global `enabled=false` after normal analysis or configuration delivery, nor from restart/legacy release checkpoints. When `StartupSellOnlyMode=true`, an initial startup may send `enabled=true` to ProfitTrailer before long data loading; the user must manually disable global SOM in ProfitTrailer when ready. Without an ownership-aware live state API PTMagic cannot establish whether SOM is presently on, so it must not claim live-state monitoring or automatic restoration.
 
 The checkpoint is versioned to schema 2 with enable intent, acknowledgement, and manual-review metadata. Old pending-release checkpoints migrate into manual review, never an automatic `false` request. An unacknowledged enable blocks unsafe bootstrap rather than repeatedly overriding manual choices. Normal user-selected settings continue to be delivered after conclusive analysis independently of the global SOM flag. TestMode never sends a remote SOM command.
 
 **User-visible notice:** on the **first two raids of each startup**, when PTMagic requested the SOM guard, the RAID SUMMARY logs a warning to manually release SOM in PT. The shared Monitor ticker row displays a **red `PT: SOM`** badge alongside Selected Global Setting, SMS and PT health, with an information tooltip explaining startup activation, continued block on new/DCA buys, and manual release. The ticker disappears after raid 2; it does not verify the live PT flag or secretly switch it off. The underlying manual-review status remains inspectable in Status Summary.
+
+The new source-level Monitor ticker regression assertion is included in `ConfigurationLifecycle`. The exact code and all normal regression projects **still require a fresh .NET build and execution**; the 332 previous passing groups belong to the pre-SOM implementation. The user-visible warnings are scoped to the first two startup raids, not a real-time read of ProfitTrailer's SOM state.
 
 **Mandatory verification:** updated `ConfigurationLifecycle` offline regressions cover no-auto-disable behavior, interrupted startup, restart, legacy checkpoint migration and first-two-raid notice. Execute the complete `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` .NET build and all offline harnesses. UI/browser rendering remains a separate acceptance step.
 

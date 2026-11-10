@@ -1,7 +1,7 @@
 # PTMagic 2.10 — Startup SOM enable-only safety handoff
 
 **Date:** November 10, 2026 (KST)  
-**Application source:** `8b6ad114ff86f3468f84f0adf2f1bbf2d69d3b24` · existing branch `phase1/market-data-foundation`  
+**Application source:** `69729dba543ce46187cc4244693a5d1a53e88bbf` · existing branch `phase1/market-data-foundation`  
 **Current verification:** **PENDING** local .NET build and regression run after code changes. Earlier verified `49f2aab` funding/OI 332/332 results apply only to that earlier code.
 
 ## Owner-approved behavior
@@ -29,6 +29,8 @@ The API helper itself refuses disabled=false requests, preventing accidental leg
 - `Monitor/Pages/_Layout.cshtml`: ticker insertion/removal across the existing periodic AJAX refresh.
 - `Monitor/Pages/SettingsGeneral.cshtml`: manual-release help text.
 - `Tests/ConfigurationLifecycle/Program.cs`: reverse legacy auto-release assertions and add migration, restart, warning-count, and uncertainty tests.
+
+The new source-level Monitor ticker regression assertion is included in `ConfigurationLifecycle`. The exact code and all normal regression projects **still require a fresh .NET build and execution**; the 332 previous passing groups belong to the pre-SOM implementation. The user-visible warnings are scoped to the first two startup raids, not a real-time read of ProfitTrailer's SOM state.
 
 ## Mandatory development verification
 
