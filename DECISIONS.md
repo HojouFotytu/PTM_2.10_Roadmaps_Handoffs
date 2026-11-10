@@ -2,11 +2,19 @@
 
 **Reconciled:** November 10, 2026
 
-**Current source checkpoint:** `891f709010c867259a6cde3df8e9c82781091b7f` (SOM regression testing pending) (SOM safety development tests pending)
+**Current source checkpoint:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` (SOM and Monitor, 337/337 offline accepted twice; configured live/browser gates pending)
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
 This register governs current intent. “Accepted” identifies a design or user decision, not successful execution. [STATUS.md](STATUS.md) records implementation and evidence separately. The previous register is preserved in [history](history/2026-11-07-pre-reconciliation/DECISIONS.md); dated implementation records remain unchanged.
+
+## November 10 — SOM and Monitor validation accepted (latest evidence)
+
+**Exact verified application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`. The user ran the existing full validation script twice: .NET SDK 10.0.403 solution builds **PASS** in 15.6s and 10.3s; **all 16 offline harnesses and 337/337 test groups PASS in both runs**. This includes 71 ConfigurationLifecycle checks (SOM enable-only, startup manual-release notice, new metric snapshots), 28 Monitor settings roundtrip checks and 13 DecisionHistory checks. The first build reported eight nonfatal pre-existing nullable test-source warnings; the second reported no warnings, consistent with incremental compilation. No live exchange, PT API or browser acceptance is claimed.
+
+The Market Metrics History Requirements **UI panel** is removed; its diagnostic calculations remain active. Global Settings Log captures all available **market-wide** metrics across configured trends at entry creation and highlights a metric in white when referenced by any selected-setting trigger (even if FALSE/UNAVAILABLE); other metrics are gray. Existing history must not be fabricated from later snapshots. The red startup `PT: SOM` notice lasts only the first two raids; PTMagic never automatically requests global SOM OFF and the user releases it manually. **Do not rerun this completed offline suite as a prerequisite for new Phase 2 work.** Next development: distinct Futures global account, top-trader account and top-trader position long/short ratios. Configured runtime and Monitor browser verification remain separately open.
+
+**Evidence:** [November 10 — 337-group offline validation](updates/2026-11-10-som-monitor-offline-validation.md).
 
 ## NEXT CHAT — verify SOM safety changes
 
