@@ -2,14 +2,14 @@
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `51adbb863ce7b07e599bc627846722d66793432d`; latest user-tested application source: `875b4feb71104fbc609bd07dc3120405218d325f`. Subsequent application commits include Monitor UI work and the November 11 derivative-cache persistence/restart-test changes; those newest changes are not yet locally validated.  
+**Current inspected application branch head:** `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`; latest user-tested application source: `875b4feb71104fbc609bd07dc3120405218d325f`. Subsequent commits include Monitor UI work, derivative-cache persistence corrections, and complete/partial service-restart regressions. These later changes have not yet been locally validated.  
 **Last tested source:** `875b4feb71104fbc609bd07dc3120405218d325f` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (17.4s), **17/17 offline harnesses PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
 
 ## November 11 — Derivatives persistence and latest offline validation
 
-**Current branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`. **Last user-tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f`. The two later commits (`8d8873b`, `66f88f7`) changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`; application/runtime source is unchanged since the tested revision.
+**Current branch head:** `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`. **Last user-tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f`. The current branch includes subsequent Monitor UI changes and derivative cache/restart-test work. The 17/17 result below applies only to `875b4feb`; it does not validate the later source.
 
 At `875b4feb71104fbc609bd07dc3120405218d325f`, the user ran the .NET 10.0.403 solution build: Core, PTMagic and Monitor **PASS in 17.4 seconds**; **17/17 offline harnesses PASS**. New-family results: funding 18 groups, raw OI 18, incremental OI 17, and long/short ratios 29. Eight nonfatal nullable warnings came from the existing `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration` test projects. No build errors or failed harnesses.
 
@@ -27,7 +27,7 @@ The 10-minute disk-cache save throttle previously skipped writes whenever a cach
 
 Service-level restart regressions have been added to `Tests/Phase2Funding/Program.cs` and `Tests/Phase2LongShortRatios/Program.cs`. They construct a first service to persist complete coverage, construct a second service against the same directory and assert that no second provider request occurs, then corrupt a separate symbol cache and verify that a fresh service discards it and repairs coverage with one bounded request.
 
-**Exact application branch head:** `51adbb863ce7b07e599bc627846722d66793432d`. Commits: `6900e4b` funding cache, `047abfd` ratio cache, `b085aa8` funding restart tests, `51adbb8` ratio restart tests. **These changes have not yet been built or run locally.** Partial-coverage restart/resume is still to be added or otherwise explicitly verified; configured two-startup runtime acceptance remains pending.
+**Exact application branch head:** `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`. Relevant commits: `6900e4b` funding cache throttle correction; `047abfd` ratio cache throttle correction; `b085aa8` complete funding-service restart test; `51adbb8` complete ratio-service restart test; `71c7f1e` funding partial-coverage restart test; `c35cc9f` ratio partial-coverage restart test. **These changes have not yet been built or run locally.** The complete-cache restore, partial-range resume across new service instances, and corrupt-cache bounded-repair tests are now authored for both families. Configured two-startup runtime acceptance remains pending.
 
 
 Then perform configured two-startup acceptance: verify cache restoration, reduced Binance request counts, and unchanged metric availability/values. Live Binance endpoint/API-key acceptance and Monitor browser rendering remain pending. Taker-flow development follows persistence acceptance; do not start another metric family before this is resolved.
@@ -168,7 +168,7 @@ git log -1 --format="%H"
 if ($LASTEXITCODE -ne 0) { throw "Phase 2 validation failed" }
 ```
 
-Do not repeat the full suite absent a new code change that warrants it. For the next persistence work, add service-level restart regressions, then have the user execute the same runner and record the exact new source SHA.
+Do not repeat the full suite absent a new code change that warrants it. The service-level complete-restart, partial-resume and corrupt-cache repair regressions are now authored. Next: have the user execute the existing runner at the current branch head and record the exact source SHA, build result, harness counts and warnings.
 
 ## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
 
@@ -178,7 +178,7 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 **Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
 
-**Outstanding:** service-level restart tests through newly constructed funding/ratio data services; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
+**Outstanding:** local build and execution of the newly added service-level restart regressions; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
 
 ## Current owner-approved SOM contract — D-047 (supersedes prior auto-release)
 
@@ -212,15 +212,14 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 **Priority test topics:** no `false` SOM request under any lifecycle path; migrated v1 release intent never causes OFF; uncertain/failed enable blocks unsafe bootstrap; no repeated enable within one startup; restart behavior; two-raid warning/ticker visibility then removal; TestMode isolation; multi-target partial failures. Existing ticker source assertion assumes the runner starts in repository root (which the checked-in runner does). These are validation targets, **not confirmed failures**.
 
-**Current acceptance (updated November 11):** latest user-executed build and all 17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. Current branch head is `66f88f73f46d5c7863ff27e55c00b98d6917cf83`; the two later commits changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`, not application/runtime source. Dashboard rollback is part of the tested application source, but live DashboardTop browser refresh is not established. Live PT/Binance API and configured two-startup cache acceptance remain separate.
+**Current acceptance (updated November 11):** latest user-executed build and all 17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. Current branch head is `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`; later Monitor UI changes and derivative cache/restart-test changes are not yet covered by a user-run build or harness execution. Dashboard rollback is part of the previously tested application source, but live DashboardTop browser refresh is not established. Live PT/Binance API and configured two-startup cache acceptance remain separate.
 
 ## Immediate handoff and next development order
 
-1. Add service-level restart regressions for `FuturesFundingDataService` and `FuturesLongShortRatioDataService`: first instance persists, second instance restores from the same directory and avoids duplicate provider requests when coverage is complete.
-2. Cover partial-range resume and corrupt-cache bounded reacquisition.
-3. Run configured two-startup acceptance: restored histories, reduced Binance request counts, and unchanged metric availability/values.
-4. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
-5. Only after derivatives persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Run the existing `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` from the user's clone at branch head `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`. Record the exact local SHA, .NET build result, all harness counts and warnings. The newly added complete-restart, partial-resume and corrupt-cache repair tests have not yet been executed locally.
+2. After offline validation passes, perform configured two-startup acceptance: confirm cache restoration, reduced Binance request counts, and unchanged metric availability/values across both startups.
+3. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
+4. Only after derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
@@ -228,7 +227,7 @@ Work directly on existing branches. **Ask before creating a new branch or duplic
 
 ## Copy to the new chat
 
-> Continue PTMagic 2.10 from this [active handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work on the existing `phase1/market-data-foundation` branch; do not create branches or duplicate candidate paths without asking. Latest tested source `875b4feb71104fbc609bd07dc3120405218d325f`: .NET 10 solution build PASS and all 17 offline harnesses PASS; current branch head `66f88f73f46d5c7863ff27e55c00b98d6917cf83` contains only two later reminder-document commits. Next: service-level restart tests for funding and ratios, then configured two-startup cache acceptance and live Binance/Monitor checks. Taker flow follows persistence acceptance. Keep startup SOM enable-only with manual PT release. Dashboard refresh remains separate: preserve the original `.load()` path and restrict any approved fix to scheduling in `Monitor/Pages/Index.cshtml`; explain exact changes before editing.
+> Continue PTMagic 2.10 from this [active handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work on the existing `phase1/market-data-foundation` branch; do not create branches or duplicate candidate paths without asking. Last user-tested source `875b4feb71104fbc609bd07dc3120405218d325f`: .NET 10 solution build PASS and all 17 offline harnesses PASS. Current application branch head `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f` includes later Monitor UI, cache-throttle corrections and service-level complete/partial restart regressions; these later changes still need the existing offline validation runner. Next: local validation, configured two-startup cache acceptance, then live Binance/Monitor checks. Taker flow follows persistence acceptance. Keep startup SOM enable-only with manual PT release. Dashboard refresh remains separate: preserve the original `.load()` path and restrict any approved fix to scheduling in `Monitor/Pages/Index.cshtml`; explain exact changes before editing.
 
 [Status](../STATUS.md) · [Current roadmap](../roadmaps/CURRENT.md) · [D-045/D-047 decisions](../DECISIONS.md) · [Funding handoff](2026-11-10-phase2-funding.md) · [332-check evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
 
