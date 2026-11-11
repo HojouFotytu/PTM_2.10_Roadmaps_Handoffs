@@ -1,3 +1,9 @@
+## November 12 — Binance public global-account ratio boundary fix (validation pending)
+
+**[Live startTime overlap diagnosed; narrow ratio service correction published](2026-11-12-global-account-ratio-boundary-fix.md)**
+
+Live PowerShell data identified a valid extra aligned 5m observation exactly one millisecond before the requested start; strict ratio service validation had rejected it, explaining zero valid histories in the November 12 raids. Application source `6f6da51` ignores only this known overlap and includes focused pagination/cache regressions. **Local .NET build/test and configured recheck are pending**; earlier 386 offline checks at `5a21a48` remain historical evidence.
+
 ## November 11 — Adaptive derivative acquisition offline validation PASS
 
 **[D-051 adaptive acquisition: 18/18 harnesses, 386 checks PASS](2026-11-11-derivative-adaptive-acquisition-implementation.md)**

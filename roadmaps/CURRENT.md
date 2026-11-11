@@ -1,16 +1,18 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
-**Current authority:** November 11, 2026
+**Current authority:** November 12, 2026
 
 **Workstream boundary:** This roadmap covers PTMagic application development only. ProfitTrailer LONG/SHORT strategy-settings development is separate and is not modified or governed here. No strategy settings or settings-development artifacts are in scope.
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (adaptive acquisition offline validated)
+**Current inspected application branch head:** `6f6da519b783ee51b20df3c7dfd5cf91b004e630` (Global Account Ratio boundary correction published; build pending)
 
 **Latest user-tested application source:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (.NET 10.0.403 solution build PASS in 13.9s; **18/18 offline harnesses and 386 checks PASS**). Eight nonfatal nullable warnings occurred in two existing test projects; configured runtime acceptance is separate.
 
 **Offline acceptance:** Funding and ratio complete-cache restoration, partial-range resume across service restarts, corrupt-cache replacement, and Unicode symbol normalization/service/cache handling all pass. Configured two-startup, configured Unicode-market raid, live exchange/PT and browser acceptance remain separate. See [derivative persistence evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md) and [Unicode symbol evidence](../updates/2026-11-11-unicode-futures-symbol-validation.md).
+
+**November 12 live acceptance finding and patch:** The public global-account 5m ratio endpoint returned one legitimate aligned observation at the inclusive provider boundary, one millisecond before PTMagic's exclusive start. PTMagic's strict service check rejected the entire page, causing all ratio histories to fail in observed configured raids. [Source `6f6da51`](https://github.com/HojouFotytu/PTMagic/commit/6f6da519b783ee51b20df3c7dfd5cf91b004e630) ignores only the `from - 1 ms` overlap when `from` is exactly one millisecond beyond a five-minute boundary; other out-of-range rows continue to fail closed. Original 500-row provider count still controls pagination, and the overlap is excluded from cache. Tests were authored but **local solution build and focused verification remain pending**. Next: validate exact source, then rerun configured ratio acquisition and actual two-startup cache recovery. [Evidence](../updates/2026-11-12-global-account-ratio-boundary-fix.md).
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [project handoff](../handoffs/2026-11-10-som-enable-only.md) · [Monitor handoff](../handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md)
 

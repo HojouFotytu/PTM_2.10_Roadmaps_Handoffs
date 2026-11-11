@@ -1,8 +1,8 @@
 # PTMagic 2.10 — ACTIVE NEW-CHAT HANDOFF: SOM safety, Phase 2 derivatives and persistence
 
-**Updated:** November 11, 2026 (KST)  
+**Updated:** November 12, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (offline validated).  
+**Current inspected application branch head:** `6f6da519b783ee51b20df3c7dfd5cf91b004e630` (ratio boundary fix published; local build pending).  
 **Last tested source:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (13.9s), **18/18 offline harnesses and 386 checks PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor only. ProfitTrailer LONG/SHORT strategy-settings development is a separate workstream with no implicit crossover. No strategy settings or settings-development artifacts are modified by this handoff.
@@ -287,3 +287,12 @@ The active Phase 2 status is now: only public `GlobalLongShortAccountRatio` rema
 **Implementation:** Removed all three internal `DefaultRequestsPerRaid=60` constants. Production passes an unbounded page-count sentinel, while service-level bounded parameters remain for deterministic tests and internal pagination/correctness safeguards. `BinanceRateLimitTracker` now coordinates shared Futures IP weights, the OI/global-account historical endpoint allowance and the separate funding allowance, 429/418 Retry-After cooldowns, and cancellation-aware HTTP admission. The three families execute concurrently through `BinanceDerivativeAcquisitionScheduler`, granting fair per-page access until `Application.MaxAnalysisAgeSeconds` expires; partial histories remain UNAVAILABLE and persist for later raids. Existing SOM, PT writes, Monitor and LONG/SHORT strategy development are untouched.
 
 **Local acceptance complete:** the user ran `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` at exact `5a21a482711c8026b50fce10c55b3fb76f4075c3`; all 18 harnesses and 386 checks passed. **Next:** configured Unicode-market raid, two-startup persistence/request reduction, live Binance and Monitor verification. Do not treat offline tests as live runtime evidence. See [detailed implementation and validation record](../updates/2026-11-11-derivative-adaptive-acquisition-implementation.md).
+
+
+## November 12 — Global Account Ratio live-boundary correction (latest)
+
+**Application:** `phase1/market-data-foundation`, commit [`6f6da51`](https://github.com/HojouFotytu/PTMagic/commit/6f6da519b783ee51b20df3c7dfd5cf91b004e630) — **published, not yet .NET build-tested**. Last validated source remains `5a21a482711c8026b50fce10c55b3fb76f4075c3` (18/18 offline harnesses, 386 checks PASS). No branches were created or switched.
+
+**Real provider evidence:** BTCUSDT public ratio 5m response returned 13 rows, including an aligned timestamp `1794408900000` for requested start `1794408900001` (exact `startTime - 1ms`), and zero unaligned timestamps. This explains the observed `InvalidOperationException` and zero available ratio histories across the configured raid. The service now ignores **only** the single aligned overlap, continues to reject other out-of-window observations, does not cache the overlap, and retains raw provider row count for pagination. Focused service/restart regressions were added in the existing `Tests/Phase2LongShortRatios` harness. [Implementation record](../updates/2026-11-12-global-account-ratio-boundary-fix.md).
+
+**Immediate verification:** Pull the existing branch and run `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1`; do not claim new source validation until the user supplies exact SHA and results. Then confirm nonzero global-account ratio availability in a configured Unicode-capable raid and perform actual two-startup persistence acceptance. The diagnostic MarketTrend/SMS scope mismatch remains a separate test-configuration concern, not part of this source fix. No changes to SOM, PT APIs or LONG/SHORT strategy settings.

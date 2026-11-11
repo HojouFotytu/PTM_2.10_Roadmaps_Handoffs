@@ -1,16 +1,18 @@
 # PTMagic 2.10 — Current Development Status
 
-**Updated:** November 11, 2026
+**Updated:** November 12, 2026
 
 **Workstream boundary:** This repository documents PTMagic application development only. It does not govern or modify the separate ProfitTrailer LONG/SHORT strategy-settings workstream. No strategy settings, PAIRS/DCA/INDICATORS files, or settings-development artifacts are in scope.
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (adaptive acquisition, offline validated)
+**Current inspected application branch head:** `6f6da519b783ee51b20df3c7dfd5cf91b004e630` (ratio-provider boundary correction published; local validation pending)
 
 **Latest deterministically tested application source:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (.NET 10.0.403 solution build PASS in 13.9s; 18/18 offline harnesses and 386 checks PASS)
 
 **Latest verified offline suite:** .NET 10.0.403 solution build PASS in 13.9s; **18/18 harnesses and 386 checks PASS** at `5a21a48`. The 9 new adaptive checks PASS, with eight nonfatal nullable warnings in two existing test projects. [Adaptive implementation and validation evidence](updates/2026-11-11-derivative-adaptive-acquisition-implementation.md). Live integration remains unverified.
+
+**November 12 — Global Account Ratio provider-boundary correction:** A live PowerShell request for BTCUSDT 5m data returned 13 rows for an exclusive 60-minute window, including an aligned sample at exactly `startTime - 1 ms`. The ratio service rejected this as outside the request and logged only `InvalidOperationException`, explaining the observed 0 valid histories in two configured raids. PTMagic source [`6f6da51`](https://github.com/HojouFotytu/PTMagic/commit/6f6da519b783ee51b20df3c7dfd5cf91b004e630) now ignores only that exact aligned overlap, preserves the provider's original page count for pagination, and rejects all other out-of-window rows. Focused tests cover the 13-row provider response, cache exclusion, strict invalid-row handling and full-page restart pagination. **Published, not yet build/test validated.** The previously passed 18-harness, 386-check source is still `5a21a482711c8026b50fce10c55b3fb76f4075c3`. [Dated implementation record](updates/2026-11-12-global-account-ratio-boundary-fix.md).
 
 **Current project handoff:** [SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md)  
 **Current Monitor handoff:** [DashboardTop refresh resolved and Monitor interface state](handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md)
