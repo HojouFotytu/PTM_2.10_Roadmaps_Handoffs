@@ -4,7 +4,7 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `27da292158687bc0bf1aa3b990d06f53237b42d9`
+**Current inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`
 
 **Last fully verified offline source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` (SOM and Monitor, **337/337**; later Monitor source/runtime behavior remains separately unverified)
 
@@ -21,7 +21,7 @@ Implementation and execution evidence are different states. The latest full offl
 ## November 11 — Dashboard refresh investigation and current owner direction
 
 **Current application branch:** `HojouFotytu/PTMagic`, `phase1/market-data-foundation`.  
-**Inspected application branch head:** `27da292158687bc0bf1aa3b990d06f53237b42d9`.  
+**Inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`.  
 **Dashboard rollback baseline:** `438acbe8e40241cd190e45385dffbee5637b3eb8`.  
 **Last full offline acceptance:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`, 16/16 harnesses and 337/337 groups PASS twice. That acceptance is earlier than subsequent Monitor edits and the dashboard rollback; it is not current DashboardTop runtime acceptance.
 
