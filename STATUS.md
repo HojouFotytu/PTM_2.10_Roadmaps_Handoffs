@@ -4,9 +4,9 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`
+**Current inspected application branch head:** `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`
 
-**Latest deterministically tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f`
+**Latest deterministically tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f` (latest test evidence; later Monitor and derivative-cache/restart-test changes remain unvalidated)
 
 **Latest verified offline suite:** .NET 10 solution build PASS; **17/17 harnesses PASS** at `875b4feb` (17.4s; eight nonfatal nullable warnings in two existing test projects)
 
@@ -77,7 +77,7 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 **Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
 
-**Outstanding:** service-level restart tests through newly constructed funding/ratio data services; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
+**Outstanding:** local build and execution of the new service-level complete-restart, partial-resume and corrupt-cache repair regressions at current branch head `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
