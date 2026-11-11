@@ -8,23 +8,25 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Current application branch head | `27da292158687bc0bf1aa3b990d06f53237b42d9` |
-| Last fully verified application source | `fb94373d8928b681e3ebe1f7209bd1439db42e72` (337/337) |
+| Current application branch head | `66f88f73f46d5c7863ff27e55c00b98d6917cf83` (two later reminder-document-only commits after the tested source) |
+| Last tested application source | `875b4feb71104fbc609bd07dc3120405218d325f` (.NET 10 build and 17/17 offline harnesses PASS) |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
 | Cumulative effective 2.10 changes for PRs and merges | [CHANGELOG-2.10.md](CHANGELOG-2.10.md) |
 | Current decisions and supersession register | [DECISIONS.md](DECISIONS.md) |
-| Current handoff | [November 10 SOM safety and dashboard refresh investigation](handoffs/2026-11-10-som-enable-only.md) |
+| Current handoff | [November 11 SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md) |
 | Concise user roadmap | [ROADMAP.md](ROADMAP.md) |
 
 ## Present checkpoint
 
-The latest full offline acceptance is **16/16 harnesses and 337/337 groups**, passed twice at exact application source `fb94373d8928b681e3ebe1f7209bd1439db42e72`. It includes SOM and Monitor lifecycle changes, but predates later Monitor edits and the full dashboard rollback at current branch head `27da292`. No post-rollback local build or live Monitor browser result is recorded.
+The latest user-executed application validation is source `875b4feb71104fbc609bd07dc3120405218d325f`: .NET SDK 10.0.403 solution build PASS in 17.4 seconds and **all 17 offline harnesses PASS**. Eight nonfatal nullable warnings were reported in two existing test projects. The current branch head is `66f88f73f46d5c7863ff27e55c00b98d6917cf83`; its two commits after the tested source only modify `RANDOM_THOUGHTS_AND_REMINDERS.md`, not application/runtime code.
 
-**Phase 2:** OI metrics (`OpenInterestChange`, `OpenInterestValueChange`) and settled funding metrics (`FundingRate`, `FundingSum`) are implemented. Funding is the latest completed metric family. The next family is the three separate global-account, top-trader-account and top-trader-position long/short ratio feeds.
+**Phase 2:** Open Interest, settled funding and the three separate global-account, top-trader-account and top-trader-position long/short ratio metrics are implemented. Funding and ratio disk caches are integrated. The latest run passed 18 funding groups, 18 raw OI groups, 17 incremental OI groups and 29 ratio groups.
 
-**Open Monitor item:** Possible Buys and Positions are not refreshing reliably. Preserve the original jQuery `.load()` request and limit any correction to scheduling in `Monitor/Pages/Index.cshtml`. Do not change PBL/Positions data retrieval, DashboardTop rendering, DashboardBottom, ticker refresh, tooltips or autocoloring. The zero-limit PBL card/count experiment remains withdrawn; the current original behavior hides the entire card when the PBL limit is zero.
+**Immediate next task:** add service-level restart tests proving newly constructed funding and ratio services restore persisted coverage and avoid duplicate provider requests. Then perform configured two-startup acceptance to verify request reduction and unchanged metrics. Live Binance/API-key and Monitor browser acceptance remain pending. Taker flow follows after persistence acceptance.
+
+**Open Monitor item:** Possible Buys and Positions are not refreshing reliably. Preserve the original jQuery `.load()` request and limit any correction to scheduling in `Monitor/Pages/Index.cshtml`. Do not change PBL/Positions data retrieval, DashboardTop rendering, DashboardBottom, ticker refresh, tooltips or autocoloring. The zero-limit PBL experiment remains withdrawn.
 
 ## November 9 normalized OHLCV warm-start addition
 
@@ -67,7 +69,7 @@ The current commands and acceptance matrix are in the [active November 10 handof
 
 ## Sequencing
 
-Continue with the Phase 2 global-account and top-trader account/position ratio metrics. The specific remaining Phase 1 configured integration checks and live PT/Monitor acceptance remain open but do not block the approved Phase 2 development sequence. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
+Continue with service-level derivative restart tests and configured persistence acceptance, then proceed to taker flow. The specifically deferred Phase 1 configured integration checks and live PT/Monitor acceptance remain open. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
 
 Correctness work, bounded retention, and dependency validation continue as part of feature delivery. Do not use that exception to reintroduce a separate performance project ahead of the agreed gate.
 
