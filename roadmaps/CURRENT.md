@@ -14,7 +14,7 @@
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
-Implementation and execution evidence are different states. All twelve harnesses now have passing results across the two recorded November 7 runs, totaling 272 checks. Configured runtime, actual PT API, and browser acceptance remain open. Each result retains its actual source identity.
+Implementation and execution evidence are different states. The latest full offline acceptance is 16/16 harnesses and 337/337 groups, passed twice at `fb94373d8928b681e3ebe1f7209bd1439db42e72`. Later Monitor changes and the full dashboard rollback are not covered by that result. Configured runtime, actual PT API and browser acceptance remain open; each result retains its actual source identity.
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
@@ -61,14 +61,16 @@ No runtime log, failed HTTP response, or browser trace confirms which failure pa
 ### Current owner requirements for the next implementation
 
 - The data in **Possible Buys (PBL)** and **Positions** must refresh. The entire dashboard does not need to be re-rendered if a narrower update is sufficient.
-- Preserve the existing DashboardTop jQuery `.load()` request method unless the owner explicitly approves a different one.
-- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement.
+- Preserve the existing DashboardTop jQuery `.load()` request and callback; the correction is limited to **refresh scheduling in `Monitor/Pages/Index.cshtml`**.
+- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement. Do not change PBL/Positions data retrieval, calculations or DashboardTop rendering as part of the scheduling fix.
 - Do not alter the separate ticker tooltip-preservation code as a side effect.
 - Preserve existing PBL/Positions calculations and profit coloring.
 - **Explain the exact proposed change, files, and scope before editing any files.** The owner specifically corrected the workflow after an attempted premature update.
 - No implementation for this refresh correction has been agreed or committed. The current source remains the exact rollback state above.
 
-**Next action:** review the November 2 callback-dependent polling path and propose the smallest change that keeps PBL and Positions refreshing while preserving the original `.load()` call and ticker tooltip behavior. Wait for the owner's review of the explanation before changing source.
+**Dashboard follow-up:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, affected files and scope before editing; wait for the owner's review. Keep PBL/Positions retrieval and rendering, DashboardBottom, ticker refresh, tooltip behavior and profit coloring unchanged.
+
+**Analyzer development continues in parallel:** the next Phase 2 metric family is global account, top-trader account and top-trader position long/short ratios. OI and funding are complete; do not return to OI source development as the next metric.
 
 
 ## November 11 — Latest Monitor formatting focused validation PASS
