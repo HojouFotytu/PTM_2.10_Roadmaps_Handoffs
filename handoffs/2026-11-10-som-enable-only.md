@@ -2,16 +2,22 @@
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`; latest user-tested application source: `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`. This source includes the cache-throttle corrections, complete/partial funding and ratio restart tests, and the Monitor changes included on the branch.  
-**Last tested source:** `875b4feb71104fbc609bd07dc3120405218d325f` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (17.4s), **17/17 offline harnesses PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
+**Current inspected application branch head and latest user-tested source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`. This source includes the Unicode-aware shared derivative symbol normalizer and focused OI/funding/ratio service, cache and URL regression coverage.  
+**Last tested source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (16.7s), **17/17 offline harnesses and 384 checks PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
 
 ## November 11 — Derivatives persistence and latest offline validation
 
-**Current branch head and last user-tested application source:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`. The exact user-run .NET 10.0.403 build and all 17 offline harnesses passed at this source.
+**Current branch head and last user-tested application source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`. The exact user-run .NET 10.0.403 build and all 17 offline harnesses (384 checks) passed at this source.
 
-At `875b4feb71104fbc609bd07dc3120405218d325f`, the user ran the .NET 10.0.403 solution build: Core, PTMagic and Monitor **PASS in 17.4 seconds**; **17/17 offline harnesses PASS**. New-family results: funding 18 groups, raw OI 18, incremental OI 17, and long/short ratios 29. Eight nonfatal nullable warnings came from the existing `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration` test projects. No build errors or failed harnesses.
+At `f108cd1ab39c44103bed91d1899f90f86a830eb4`, the user ran the existing `Run-Phase2Validation.ps1`: Core, PTMagic and Monitor **PASS in 16.7 seconds**; **17/17 offline harnesses and 384 checks PASS**. Phase 2 results: funding 21, raw OI 19, incremental OI 18, and long/short ratios 39. ConfigurationLifecycle 73 and DecisionHistory 13. Eight nonfatal nullable warnings remain in `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration`; no build errors or failed harnesses.
+
+### Unicode Binance Futures symbol correction
+
+The live raid had failed because five Binance metadata COIN/PERPETUAL symbols use Chinese characters and the shared derivative symbol normalizer was ASCII-only: `哈基米USDT`, `币安人生USDT`, `我踏马来了USDT`, `牛来USDT`, `龙虾USDT`. `FuturesOpenInterest.NormalizeSymbol` now uses Unicode rune-aware letter/digit validation while continuing to reject whitespace, query separators and unsupported punctuation. OI, funding and ratio clients already URL-encode symbols; no endpoint/cache format, market eligibility, request budget, metric or trading-setting changes were made.
+
+Focused tests cover all five names at normalization/URL level and service/cache handling for OI (`哈基米USDT`), funding (`币安人生USDT`) and ratios (`我踏马来了USDT`). The offline suite proves application-side handling only; live Binance endpoint acceptance and a configured raid with these symbols remain pending. Full evidence: [Unicode futures symbol validation](../updates/2026-11-11-unicode-futures-symbol-validation.md).
 
 ### Persistent derivative caches
 
@@ -218,10 +224,11 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 ## Immediate handoff and next development order
 
-1. Perform configured two-startup derivative persistence acceptance in the user's existing PTMagic runtime. Record exact running binary/source, working directory, settings/configuration identity, eligible symbols, per-family request/restore summaries, and metric snapshot values/timestamps for both startups. Verify reduced Binance requests on the second startup and unchanged values for the same pinned data window.
-2. Verify live Binance funding, OI, global-account and top-trader account/position endpoints, including optional read-only API-key handling. Top-trader metrics remain UNAVAILABLE if no key is configured.
-3. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
-4. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Perform configured runtime acceptance with the five Unicode COIN perpetual symbols. Confirm the ordinary raid completes and OI/funding/ratio services do not abort; record live endpoint responses and per-family request/failure/availability summaries. Offline tests do not establish Binance's live support for these symbols.
+2. Perform configured two-startup derivative persistence acceptance in the user's existing PTMagic runtime. Record exact running binary/source, working directory, settings/configuration identity, eligible symbols, per-family request/restore summaries, and metric snapshot values/timestamps for both startups. Verify reduced Binance requests on the second startup and unchanged values for the same pinned data window.
+3. Verify live Binance funding, OI, global-account and top-trader account/position endpoints, including optional read-only API-key handling. Top-trader metrics remain UNAVAILABLE if no key is configured.
+4. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
+5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
