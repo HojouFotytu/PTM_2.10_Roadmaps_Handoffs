@@ -271,3 +271,10 @@ After the run, inspect the Status Summary Global Settings Log for all configured
 
 **Implementation:** committed to the existing PTMagic `phase1/market-data-foundation` branch. **Validation:** newest change not yet locally compiled or browser-tested; the earlier full 337/337 PASS belongs to source `fb94373` before the UI correction. Focused command after `git pull --ff-only`: `dotnet build .\\PTMagic.sln` and `dotnet run --project .\\Tests\\ConfigurationLifecycle\\ConfigurationLifecycle.csproj`. Visually check two columns and white/gray/green logic.
 
+
+
+## November 11 — Top-trader removal validation update
+
+The active Phase 2 status is now: only public `GlobalLongShortAccountRatio` remains. Both top-trader feeds and their API-key path were physically removed and user-validated at `1a1f1804237288433ed046b30fb7d9b780a32066` (17/17 offline harnesses, 377 checks PASS; solution build PASS in 18.2s). Eight nonfatal nullable warnings remain.
+
+The next application task is removal of the three user-configurable per-raid request budgets and implementation of adaptive derivative acquisition. Configured Unicode-market raid and two-startup persistence acceptance remain pending. See [dated validation](../updates/2026-11-11-top-trader-ratio-removal-validation.md).

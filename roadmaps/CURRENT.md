@@ -951,3 +951,10 @@ Current documentation:
 - [Historical current documents](../history/README.md): pre-reconciliation snapshots.
 
 This roadmap is maintained as current guidance. Preserve an earlier snapshot when a future change materially replaces its contract or ordering.
+
+
+## November 11 — Top-trader ratio/API-key removal validated
+
+At exact PTMagic application source `1a1f1804237288433ed046b30fb7d9b780a32066`, both top-trader metrics and their entire API-key path were removed. The sole ratio is the public `GlobalLongShortAccountRatio`. User-run .NET 10.0.403 solution build: PASS in 18.2 seconds; 17/17 offline harnesses and 377 checks PASS, including 32 ratio checks. Eight nonfatal nullable warnings remain.
+
+**Next:** remove the three configurable per-raid request budgets and implement shared adaptive derivative acquisition. Configured Unicode-market raid and two-startup persistence acceptance remain pending. See [dated evidence](../updates/2026-11-11-top-trader-ratio-removal-validation.md).

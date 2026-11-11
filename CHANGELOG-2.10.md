@@ -460,3 +460,8 @@ Configured runtime acceptance remains distinct: current-binary completed raids, 
 [development-settings]: https://github.com/HojouFotytu/PTMagic/blob/phase1/market-data-foundation/_Development/DevSettings/settings.general.json
 [source-cleanup]: https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/ad4029c858931384206413c966ce737f356d7623/updates/2026-11-04-cmc-legacy-pricetrend-cleanup.md
 [validation]: https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/ad4029c858931384206413c966ce737f356d7623/updates/2026-11-07-completed-harness-validation.md
+
+
+## Phase 2 — top-trader ratio removal validated (November 11)
+
+Only the public `GlobalLongShortAccountRatio` remains. Both top-trader feeds and all associated API-key handling were removed from PTMagic source, application configuration, Monitor UI and tests. At exact source `1a1f1804237288433ed046b30fb7d9b780a32066`, the user-run .NET 10.0.403 build passed in 18.2 seconds and all 17 offline harnesses / 377 checks passed, including 32 ratio checks. Eight nonfatal nullable warnings remain. Adaptive acquisition and configured runtime acceptance are still pending. [Full validation record](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/updates/2026-11-11-top-trader-ratio-removal-validation.md).

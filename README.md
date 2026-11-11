@@ -87,3 +87,8 @@ Correctness work, bounded retention, and dependency validation continue as part 
 - [Change log](CHANGELOG.md)
 
 The November 7 reconciliation preserves the original dated roadmap, handoff, issue, and update files. Earlier mutable current documents were captured under `history/2026-11-07-pre-reconciliation/` before being replaced.
+
+
+## Latest Phase 2 validation — November 11
+
+The current tested PTMagic source is `1a1f1804237288433ed046b30fb7d9b780a32066`. Both top-trader ratio feeds and their API-key path have been removed. Only public `GlobalLongShortAccountRatio` remains. Solution build PASS (18.2s); 17/17 offline harnesses and 377 checks PASS. Adaptive per-raid acquisition redesign remains the next implementation task. [Validation details](updates/2026-11-11-top-trader-ratio-removal-validation.md).

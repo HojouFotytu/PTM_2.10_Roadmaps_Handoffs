@@ -103,3 +103,10 @@ Dated update files are historical snapshots. Add a later correction or acceptanc
 A source commit and an authored test are not passing execution evidence. Report the actual source/binary identity, environment, check, and observed result. Personal strategy work remains outside this index.
 
 [Update template](TEMPLATE.md) · [Pre-reconciliation index snapshot](../history/2026-11-07-pre-reconciliation/updates-README.md)
+
+
+## November 11 — Top-trader ratio removal validated
+
+**[Single public global-account ratio; 377 offline checks passed](2026-11-11-top-trader-ratio-removal-validation.md)**
+
+At application source `1a1f1804237288433ed046b30fb7d9b780a32066`, both top-trader metrics and all API-key handling were removed. The .NET 10.0.403 solution build passed in 18.2 seconds; 17/17 offline harnesses and 377 checks passed. Adaptive acquisition and configured runtime acceptance remain pending.

@@ -371,3 +371,10 @@ Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases P
 Work directly on existing branches. **Ask before creating a new branch or duplicate candidate path.**
 
 Earlier files that instructed a restart of Phase 1C, preservation of a separate legacy PriceTrend path, use of the removed selective-legacy harness, or optimization before correlation are historical and superseded.
+
+
+## November 11 — Top-trader ratio/API-key removal validated
+
+At exact PTMagic application source `1a1f1804237288433ed046b30fb7d9b780a32066`, both top-trader metrics and their entire API-key path were removed. The only supported ratio is the public `GlobalLongShortAccountRatio`. The user ran the .NET 10.0.403 solution build successfully in 18.2 seconds; all 17 offline harnesses and 377 checks passed, including 32 global-account ratio checks. Eight nonfatal nullable warnings remain in two existing test projects. See [dated removal validation](updates/2026-11-11-top-trader-ratio-removal-validation.md).
+
+**Still pending:** remove the three user-configurable per-raid request-budget properties and implement shared adaptive derivative acquisition. Configured Unicode-market raid, two-startup persistence, live Binance and Monitor browser acceptance also remain pending.
