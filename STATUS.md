@@ -2,6 +2,8 @@
 
 **Updated:** November 11, 2026
 
+**Workstream boundary:** This repository documents PTMagic application development only. It does not govern or modify the separate ProfitTrailer LONG/SHORT strategy-settings workstream. No strategy settings, PAIRS/DCA/INDICATORS files, or settings-development artifacts are in scope.
+
 **Application branch:** `phase1/market-data-foundation`
 
 **Current inspected application branch head:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`
@@ -50,15 +52,17 @@ The separate Possible Buys count endpoint, async count cache, and replacement AJ
 
 **Disposition:** DashboardTop refresh is resolved. No dashboard refresh follow-up is currently open. See the [resolution evidence](updates/2026-11-11-dashboard-refresh-resolution.md) and [Monitor handoff](handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md).
 
-## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
+## Phase 2 — Binance Futures derivatives and persistence (offline implementation baseline passed; revised acquisition design pending)
 
-The three opt-in asset metrics `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio` are implemented. Global account participation, top-trader account counts and top-trader position-size participation remain distinct. All use exact 5-minute source observations over each MarketTrend's `TrendMinutes`; all expected timestamps are required and missing data remains UNAVAILABLE. The ratio window calculation averages implied long-side shares `r/(1+r)`, then converts the mean back to a ratio; neutral is 1.0. Top-trader endpoints require the optional read-only `BinanceFuturesApiKey`; no API secret is needed.
+The current approved ratio scope is **one public, opt-in, asset-scoped metric: `GlobalLongShortAccountRatio`**. It uses exact five-minute observations over each enabled MarketTrend's `TrendMinutes`; all expected timestamps are required, and missing data remains UNAVAILABLE. The window calculation averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral is 1.0. The two top-trader metrics and their API-key-only endpoints are removed from current scope by D-051. No additional Binance Futures API key is required for the retained public global-account ratio.
 
-Funding and ratio histories now use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart acceptance are documented above.
+Funding and the retained global-account ratio use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart evidence are documented above.
 
-**Offline validation PASS:** exact source `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`; .NET 10.0.403 solution build PASS in 10.3s; all 17/17 harnesses and 378 checks PASS. Phase 2 results: funding 20, raw OI 18, incremental OI 17, and long/short ratios 36. ConfigurationLifecycle passed 73 and DecisionHistory passed 13. Eight nonfatal nullable warnings remain in `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration`. Complete/partial service restart and corrupt-cache replacement tests pass for funding and ratios.
+**Last verified application baseline:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`; .NET 10.0.403 solution build PASS in 16.7s; 17/17 offline harnesses and 384 checks PASS. This evidence predates implementation of D-051. It verifies the prior three-source ratio and static per-raid budget design, not the newly approved single-source/adaptive-scheduling design.
 
-**Outstanding:** configured two-startup request-reduction and unchanged-metric acceptance; configured raid acceptance with the five Unicode symbols; live Binance/API-key and Monitor browser checks. Offline tests prove application-side Unicode handling and cache persistence, not live Binance endpoint acceptance for those symbols. Taker flow follows only after configured derivative persistence acceptance.
+**Current approved changes not yet implemented or validated:** remove both top-trader metrics and their API-key path; remove the three user-configurable per-raid request-budget properties; replace independent static per-raid ceilings with application-managed adaptive scheduling using the shared Binance rate-limit state. These are PTMagic application changes only. D-051 governs the target architecture.
+
+**Still pending:** implementation and offline validation of D-051; configured Unicode-market raid acceptance; configured two-startup cache/request-reduction acceptance; live Binance endpoint and Monitor browser checks. Taker-flow development remains deferred until the configured derivative persistence acceptance is complete.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
@@ -354,11 +358,13 @@ The old 2.9 performance results and November 5 cold-start timings are historical
 
 ## Immediate handoff and next development order
 
-1. Add service-level restart regressions for `FuturesFundingDataService` and `FuturesLongShortRatioDataService`: first instance persists, second instance restores from the same directory and avoids duplicate provider requests when coverage is complete.
-2. Cover partial-range resume and corrupt-cache bounded reacquisition.
-3. Run configured two-startup acceptance: restored histories, reduced Binance request counts, and unchanged metric availability/values.
-4. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
-5. Only after derivatives persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Implement D-051 in the PTMagic application: retain only public `GlobalLongShortAccountRatio`; remove both top-trader metric feeds and their API-key-only request path; remove the three user-configurable per-raid request-budget properties.
+2. Replace the static per-raid ceilings with application-managed adaptive derivative acquisition using the shared Binance rate-limit state, endpoint weights, response headers and 429/418 cooldowns. Preserve internal pagination, per-symbol progress safeguards, fair scheduling, incremental coverage, persistence and UNAVAILABLE semantics. Do not introduce replacement user-configurable static limits.
+3. Build and run the existing offline validation suite; add/adjust tests for single-source global ratio, adaptive scheduler behavior, shared rate-limit coordination, fairness, cooldowns, cache restoration and absence of top-trader/API-key paths.
+4. Perform configured Unicode-market raid acceptance and configured two-startup derivative persistence acceptance. Record exact source/binary, actual requests, cache restores, metric availability/values and Monitor output.
+5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+
+PTMagic application work is strictly separate from ProfitTrailer strategy-settings development. Do not modify strategy settings or their development artifacts as part of this roadmap.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
