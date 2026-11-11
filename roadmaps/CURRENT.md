@@ -4,11 +4,11 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`
+**Current inspected application branch head:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`
 
-**Latest user-tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f` (.NET 10 solution build PASS; **17/17 offline harnesses PASS**). Current branch head `66f88f73f46d5c7863ff27e55c00b98d6917cf83` contains two later reminder-document-only commits; application/runtime source is unchanged after the tested revision.
+**Latest user-tested application source:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a` (.NET 10.0.403 solution build PASS in 10.3s; **17/17 offline harnesses and 378 checks PASS**). Eight nonfatal nullable warnings occurred in two existing test projects.
 
-**Offline acceptance:** .NET 10 solution build PASS in 17.4s; **17/17 offline harnesses PASS** at the latest tested source. Eight nonfatal nullable warnings occurred in two existing test projects. Configured restart, live exchange/PT and browser acceptance remain separate.
+**Offline acceptance:** Funding and ratio complete-cache restoration, partial-range resume across service restarts, and corrupt-cache replacement all pass. Configured two-startup, live exchange/PT and browser acceptance remain separate. See [dated Phase 2 evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md).
 
 **Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-10-som-enable-only.md)
 
@@ -953,10 +953,10 @@ A release candidate additionally needs documented migration/default changes, ack
 
 ## Immediate handoff and next development order
 
-1. Run the existing `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` from the user's clone at application branch head `320ad5adee314c0ac59208556612ef8ca099e5e8`. Record the exact local SHA, .NET build result, all harness counts and warnings. The initial solution build passed at `c35cc9f`, but Phase2Funding exposed an incorrect corrupt-cache assertion (the test expected no file after successful repair). Funding and ratio tests now require a valid replacement cache with restored observations and coverage. Rerun the full suite at the corrected source.
-2. After offline validation passes, perform configured two-startup acceptance: confirm cache restoration, reduced Binance request counts, and unchanged metric availability/values across both startups.
-3. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
-4. Only after derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Perform configured two-startup derivative persistence acceptance using the existing PTMagic runtime and the user's configured Binance Futures environment. Record exact running binary/source, working directory, settings/configuration identity, eligible symbols, per-family request/restore summaries, and metric snapshot values/timestamps for both startups. Verify reduced Binance requests on the second startup and unchanged values for the same pinned data window.
+2. Verify live Binance funding, OI, global-account and top-trader account/position endpoints, including optional read-only API-key handling. Top-trader metrics remain UNAVAILABLE when the key is not configured.
+3. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
+4. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
