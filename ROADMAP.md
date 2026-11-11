@@ -14,6 +14,10 @@ The top-dashboard **Possible Buys (PBL)** and **Positions** data must refresh re
 
 The dashboard was fully rolled back to the pre-experiment source baseline. PBL and Positions still become stale in Monitor; the refresh root cause is not runtime-confirmed. Current zero-limit behavior is the original behavior: the entire Possible Buys card is hidden when `MaxDashboardBuyEntries=0`. The earlier count-card/layout experiment remains withdrawn. No refresh correction has been implemented or accepted yet.
 
+### Current analyzer stage — Phase 2 long/short ratios
+
+The three distinct ratio feeds are implemented in source. Complete local build/focused verification and then configured Binance/API-key/Monitor acceptance. The next new metric family after acceptance is taker flow.
+
 ### Next analyzer metric family — Phase 2
 
 **Most recently completed:** Binance USD-M Futures open-interest and settled funding metrics. Funding was the latest completed family: `FundingRate` and `FundingSum`; the preceding OI metrics are `OpenInterestChange` and `OpenInterestValueChange`. The funding/OI tests passed at `49f2aab` and are included in the later full 337/337 offline acceptance at `fb94373`.
