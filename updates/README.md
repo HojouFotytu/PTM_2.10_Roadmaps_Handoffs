@@ -1,3 +1,9 @@
+## November 11 — Single-source ratio and adaptive derivative acquisition decisions
+
+**[D-051/D-052: public global-account ratio only; application-managed adaptive acquisition](2026-11-11-single-source-ratio-adaptive-acquisition.md)**
+
+The approved PTMagic ratio scope retains only `GlobalLongShortAccountRatio`; both top-trader metrics and their API-key-only path are removed entirely. The three user-configurable per-raid request-budget properties are to be removed and replaced by application-managed adaptive acquisition using shared Binance rate-limit state, endpoint weights, response headers and 429/418 cooldowns. Internal pagination, fairness, incremental coverage, persistence and UNAVAILABLE safeguards remain. This is a design decision, not completed implementation. PTMagic application development remains strictly separate from ProfitTrailer strategy-settings development. No application source, configuration or strategy settings were changed in this documentation update.
+
 ## Latest November 11 Monitor resolution
 
 **[DashboardTop refresh restored and runtime-confirmed](2026-11-11-dashboard-refresh-resolution.md)**
