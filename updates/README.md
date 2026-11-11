@@ -1,3 +1,9 @@
+## Latest November 11 dashboard investigation
+
+**[Dashboard refresh history, PBL rollback, and current Monitor state](2026-11-11-dashboard-refresh-history-and-current-state.md)**
+
+The PBL/dashboard experiment was fully reverted to exact pre-change file blobs. The original DashboardTop jQuery `.load()` mechanism remains in place, but the user still reports stale PBL/Positions data. Git history identifies the November 2 callback-dependent polling rewrite and tooltip/color operations before request-flag reset as concrete code-level risks; runtime cause remains unconfirmed. The owner requires the proposed fix to be explained before source edits. The compact PBL count card is not implemented; zero again hides the full Possible Buys card.
+
 # PTMagic 2.10 — Dated implementation and evidence updates
 
 ## Latest user-local verification

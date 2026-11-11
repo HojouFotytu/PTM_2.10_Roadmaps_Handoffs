@@ -1,8 +1,8 @@
 # PTMagic 2.10 — Current Decision Register
 
-**Reconciled:** November 10, 2026
+**Reconciled:** November 11, 2026
 
-**Current source checkpoint:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` (SOM and Monitor, 337/337 offline accepted twice; configured live/browser gates pending)
+**Current inspected application branch head:** `27da292158687bc0bf1aa3b990d06f53237b42d9`; last fully offline-accepted source `fb94373d8928b681e3ebe1f7209bd1439db42e72` (337/337; later Monitor changes/rollback not covered by that suite)
 
 **Scope:** PTMagic 2.10 application development. Personal trading-strategy work is independent.
 
@@ -397,3 +397,12 @@ Published first source slice: `314214b1a20bcddd1643b8fa8df032db5463b04d` (open-i
 - Pairwise correlation has not been approved for first-release implementation.
 
 The previously open Phase 1C formula choices were resolved by its implemented and accepted contract; do not reopen them as if ATRP and volume expansion had not been developed.
+
+
+## D-048 — Preserve the existing DashboardTop refresh mechanism; refresh only required card data
+
+**Owner direction:** November 11, 2026.
+
+The dashboard needs current **Possible Buys (PBL)** and **Positions** data; it does not need to re-render the entire dashboard if a narrower update is sufficient. Preserve the existing DashboardTop jQuery `.load()` request method unless the owner explicitly approves a different request mechanism. Do not alter the separate ticker tooltip-preservation implementation as a side effect. Preserve existing PBL/Positions calculations and profit coloring. Do not reintroduce the experimental `PossibleBuysCount` endpoint, asynchronous count cache, or custom AJAX replacement from the failed November 10–11 PBL attempt.
+
+The owner requires an explanation of the exact proposed change, affected files, and scope **before any source edits**. No refresh fix is yet approved or implemented. The current dashboard/PBL source files are restored to exact baseline `438acbe` blobs. The top refresh defect remains open. November 2 callback-driven polling changes (`ec19a5e`, `26ce2d8`) are a code-level investigation lead, not a runtime-confirmed root cause. See [November 11 dashboard refresh history and current state](updates/2026-11-11-dashboard-refresh-history-and-current-state.md).
