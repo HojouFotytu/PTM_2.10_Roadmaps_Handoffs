@@ -69,6 +69,18 @@ No runtime log, failed HTTP response, or browser trace confirms which failure pa
 **Dashboard follow-up:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, affected files and scope before editing; wait for the owner's review. Keep PBL/Positions retrieval and rendering, DashboardBottom, ticker refresh, tooltip behavior and profit coloring unchanged.
 
 
+## Phase 2 — Binance Futures long/short ratio metrics (source implemented; verification pending)
+
+Three distinct opt-in asset metrics are implemented: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation remain separate. No global aggregate is introduced in this batch.
+
+All three use Binance USD-M Futures 5-minute observations over each MarketTrend's exact `TrendMinutes`. The source's `longShortRatio`, `longAccount` and `shortAccount` are preserved independently. The window result averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral remains 1.0. Every expected 5-minute timestamp is required. No interpolation, nearest-time substitution, zero fill or silent shortening.
+
+The two top-trader endpoints use an optional read-only `BinanceFuturesApiKey`; no API secret or signed request is required. The key is not echoed by the Monitor form. Without it, top-trader acquisition is skipped and those metrics remain UNAVAILABLE; the global account metric remains available.
+
+A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, maximum 80), with fair source/symbol scheduling, at most two pages per series per raid, 500 rows per request and a 30-day provider history ceiling. History is currently in-memory only; restart re-acquisition is bounded by the same budget.
+
+**Verification pending:** local .NET build, focused `Phase2LongShortRatios` harness execution, live Binance/API-key acceptance and Monitor browser rendering. No test PASS is claimed yet.
+
 ## November 11 — Latest Monitor formatting focused validation PASS
 
 User-executed `.NET 10` solution build **PASS (15.7 seconds)** for Core, PTMagic and Monitor, with **75/75 ConfigurationLifecycle checks PASS** and no warnings/errors reported. Includes the latest Market-Wide Metrics page-local uppercase/gray/centering source check, plus the then-current PBL experiment, compact ticker and SOM checks. The PBL experiment was subsequently fully rolled back; this run does not validate current DashboardTop behavior. `git pull` reported "Already up to date" but **the local run did not print a source SHA**. At documentation review the existing PTMagic branch head was `44dd757e29808eaa8662fbdf8a63835efb02378a`; do not treat this as a locally stamped test SHA. Previous unverified-build statements for this change are superseded by this evidence.
@@ -363,7 +375,7 @@ The old 2.9 performance results and November 5 cold-start timings are historical
 
 ## Next action
 
-**Next analyzer metric family:** implement three distinct Binance USD-M Futures per-symbol long/short ratio feeds: global account ratio, top-trader account ratio, and top-trader position ratio. The most recently completed metric family is settled funding (`FundingRate` and `FundingSum`); the open-interest metrics (`OpenInterestChange` and `OpenInterestValueChange`) were completed immediately before it. Keep account participation separate from position-size participation.
+**Current analyzer stage:** the three Binance USD-M Futures long/short ratio sources are implemented and integrated in source. The next step is local build and focused verification, not another metric family. Funding was the most recently completed family; OI preceded it.
 
 The full 337/337 offline suite at `fb94373` is already accepted and should not be repeated as a prerequisite. New source changes require a build and focused tests, with the exact source SHA and actual counts recorded.
 
