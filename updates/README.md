@@ -4,6 +4,12 @@
 
 The PBL/dashboard experiment was fully reverted to exact pre-change file blobs. The original DashboardTop jQuery `.load()` mechanism remains in place, but the user still reports stale PBL/Positions data. Git history identifies the November 2 callback-dependent polling rewrite and tooltip/color operations before request-flag reset as concrete code-level risks; runtime cause remains unconfirmed. The owner requires the proposed fix to be explained before source edits. The compact PBL count card is not implemented; zero again hides the full Possible Buys card.
 
+## November 11 — Phase 2 derivative persistence offline validation PASS
+
+**[Phase 2 derivative persistence: 378 checks passed at 86fa4c9](2026-11-11-phase2-derivative-persistence-offline-validation.md)**
+
+The user ran the existing 17-harness PowerShell validation runner at exact application source `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`. The .NET 10.0.403 solution build passed in 10.3 seconds and all 17/17 harnesses passed: **378 checks total**. Funding and ratio complete restart, partial-range resume across restarts, and corrupt-cache replacement tests all passed. Eight nonfatal nullable warnings remain in two existing test projects. Configured two-startup runtime acceptance and live Binance/PT/Monitor checks remain pending.
+
 # PTMagic 2.10 — Dated implementation and evidence updates
 
 ## Latest user-local verification
