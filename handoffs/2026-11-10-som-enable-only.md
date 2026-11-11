@@ -1,11 +1,33 @@
-# PTMagic 2.10 — ACTIVE NEW-CHAT HANDOFF: SOM safety and Phase 2
+# PTMagic 2.10 — ACTIVE NEW-CHAT HANDOFF: SOM safety, Phase 2 derivatives and persistence
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`; last fully offline-accepted source remains `fb94373d8928b681e3ebe1f7209bd1439db42e72`  
-**Last tested source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (15.6s and 10.3s), **16/16 harnesses and 337/337 groups PASS twice**  
+**Current inspected application branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`; latest user-tested application source: `875b4feb71104fbc609bd07dc3120405218d325f` (two later commits changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`).  
+**Last tested source:** `875b4feb71104fbc609bd07dc3120405218d325f` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (17.4s), **17/17 offline harnesses PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
+
+## November 11 — Derivatives persistence and latest offline validation
+
+**Current branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`. **Last user-tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f`. The two later commits (`8d8873b`, `66f88f7`) changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`; application/runtime source is unchanged since the tested revision.
+
+At `875b4feb71104fbc609bd07dc3120405218d325f`, the user ran the .NET 10.0.403 solution build: Core, PTMagic and Monitor **PASS in 17.4 seconds**; **17/17 offline harnesses PASS**. New-family results: funding 18 groups, raw OI 18, incremental OI 17, and long/short ratios 29. Eight nonfatal nullable warnings came from the existing `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration` test projects. No build errors or failed harnesses.
+
+### Persistent derivative caches
+
+- OI: `_data/DerivativesOpenInterestCache` (existing).
+- Funding: `_data/DerivativesFundingCache`.
+- Ratios: `_data/DerivativesLongShortRatioCache`, partitioned by endpoint source and symbol.
+
+Funding and ratio caches store versioned compressed raw observations and verified provider-query coverage intervals. They use temporary-file/atomic replacement, validate restored identity/timestamps/values and defensive limits, and discard corrupt files fail-open. Coverage does not fabricate observations or turn missing data into zero. Funding cache ordering preserves distinct Regular/Special settlements at the same timestamp.
+
+### Remaining acceptance
+
+Current tests directly verify cache save/restore, ratio source isolation and corruption recovery. They do **not** yet prove end-to-end restart through newly constructed `FuturesFundingDataService` and `FuturesLongShortRatioDataService` instances.
+
+**Next task:** add service-level restart tests: persist through one service instance, construct a second instance against the same directory, and prove complete restored coverage avoids another provider request. Also verify partial coverage resumes only the missing range and corrupt-cache recovery triggers bounded reacquisition.
+
+Then perform configured two-startup acceptance: verify cache restoration, reduced Binance request counts, and unchanged metric availability/values. Live Binance endpoint/API-key acceptance and Monitor browser rendering remain pending. Taker-flow development follows persistence acceptance; do not start another metric family before this is resolved.
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
@@ -122,37 +144,38 @@ The Market Metrics History Requirements **UI panel** is removed; its diagnostic 
 
 **Evidence:** [November 10 — 337-group offline validation](updates/2026-11-10-som-monitor-offline-validation.md).
 
-## Historical validation instructions — already completed
+## Latest full offline validation — November 11
 
-The previous chat was marked **HIGH RISK** for context complexity. Continue here rather than reconstructing old iterations.
+The user executed `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` at exact source `875b4feb71104fbc609bd07dc3120405218d325f`. The .NET 10.0.403 solution build succeeded in 17.4 seconds and all **17/17 harnesses passed**. The runner compiles Core, PTMagic and Monitor. It does not make live Binance requests, execute configured raids, write to ProfitTrailer, or verify browser rendering.
 
-**Completed:** the following validation procedure was run successfully twice at `fb94373d8928b681e3ebe1f7209bd1439db42e72` (337/337 PASS). Do not repeat it for this source unless new changes require revalidation. Use the existing PTMagic clone:
+**Standard local command for future code changes:**
 
 ```powershell
+$ErrorActionPreference = "Stop"
+
 git switch phase1/market-data-foundation
 if ($LASTEXITCODE -ne 0) { throw "Branch switch failed" }
 
 git pull --ff-only
 if ($LASTEXITCODE -ne 0) { throw "Git pull failed" }
 
+git log -1 --format="%H"
+
 & ".\Tests\Phase2OpenInterestIncremental\Run-Phase2Validation.ps1"
+if ($LASTEXITCODE -ne 0) { throw "Phase 2 validation failed" }
 ```
 
-The checked-in runner records the SHA, builds `PTMagic.sln`, and runs all **16 offline test harnesses**, including `ConfigurationLifecycle`, `MonitorSettingsRoundTrip`, `DecisionHistory`, and funding/OI tests. No real PT writes or live exchange requests are part of this suite.
+Do not repeat the full suite absent a new code change that warrants it. For the next persistence work, add service-level restart regressions, then have the user execute the same runner and record the exact new source SHA.
 
-**When the user provides the output:** diagnose failed builds/tests; fix production code and assertions in the existing paths; commit directly to the existing branch and re-run the affected/full tests. Record *actual* test counts, exact source SHA and warnings before declaring acceptance. Do not repeat previously passed older tests unless the new source requires regression verification.
+## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
 
-## Phase 2 — Binance Futures long/short ratio metrics (source implemented; verification pending)
+The three opt-in asset metrics `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio` are implemented. Global account participation, top-trader account counts and top-trader position-size participation remain distinct. All use exact 5-minute source observations over each MarketTrend's `TrendMinutes`; all expected timestamps are required and missing data remains UNAVAILABLE. The ratio window calculation averages implied long-side shares `r/(1+r)`, then converts the mean back to a ratio; neutral is 1.0. Top-trader endpoints require the optional read-only `BinanceFuturesApiKey`; no API secret is needed.
 
-Three distinct opt-in asset metrics are implemented: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation remain separate. No global aggregate is introduced in this batch.
+Funding and ratio histories now use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart acceptance are documented above.
 
-All three use Binance USD-M Futures 5-minute observations over each MarketTrend's exact `TrendMinutes`. The source's `longShortRatio`, `longAccount` and `shortAccount` are preserved independently. The window result averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral remains 1.0. Every expected 5-minute timestamp is required. No interpolation, nearest-time substitution, zero fill or silent shortening.
+**Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
 
-The two top-trader endpoints use an optional read-only `BinanceFuturesApiKey`; no API secret or signed request is required. The key is not echoed by the Monitor form. Without it, top-trader acquisition is skipped and those metrics remain UNAVAILABLE; the global account metric remains available.
-
-A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, maximum 80), with fair source/symbol scheduling, at most two pages per series per raid, 500 rows per request and a 30-day provider history ceiling. History is currently in-memory only; restart re-acquisition is bounded by the same budget.
-
-**Verification pending:** local .NET build, focused `Phase2LongShortRatios` harness execution, live Binance/API-key acceptance and Monitor browser rendering. No test PASS is claimed yet.
+**Outstanding:** service-level restart tests through newly constructed funding/ratio data services; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
 
 ## Current owner-approved SOM contract — D-047 (supersedes prior auto-release)
 
@@ -186,19 +209,23 @@ A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, m
 
 **Priority test topics:** no `false` SOM request under any lifecycle path; migrated v1 release intent never causes OFF; uncertain/failed enable blocks unsafe bootstrap; no repeated enable within one startup; restart behavior; two-raid warning/ticker visibility then removal; TestMode isolation; multi-target partial failures. Existing ticker source assertion assumes the runner starts in repository root (which the checked-in runner does). These are validation targets, **not confirmed failures**.
 
-**Current acceptance (updated November 11):** SOM and Monitor lifecycle changes passed the full .NET 10 offline suite twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`: 16/16 harnesses and 337/337 groups. The current application branch head is `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`, after the dashboard rollback; no post-rollback local build or browser verification has been supplied. Live PT endpoint behavior and configured runtime/browser acceptance remain separate. Do not repeat the completed 337/337 suite as a prerequisite for beginning the next Phase 2 metric family; new source changes still require their own build and focused regressions under D-045.
+**Current acceptance (updated November 11):** latest user-executed build and all 17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. Current branch head is `66f88f73f46d5c7863ff27e55c00b98d6917cf83`; the two later commits changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`, not application/runtime source. Dashboard rollback is part of the tested application source, but live DashboardTop browser refresh is not established. Live PT/Binance API and configured two-startup cache acceptance remain separate.
 
-## After SOM acceptance — Phase 2 queue
+## Immediate handoff and next development order
 
-The prior verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332**, including **17 funding**, **18 raw OI**, **17 incremental OI**, and **280 other** offline groups. The opt-in per-asset Binance Futures metrics are `OpenInterestChange`, `OpenInterestValueChange`, `FundingRate`, and `FundingSum`. Their history derives from enabled user `MarketTrend.TrendMinutes` and relevant lookbacks, not separate fixed OI/funding retention-hour defaults. Binance Spot and Binance US continue to use normalized price/volume/etc. metrics, but do not receive these Futures derivatives families.
+1. Add service-level restart regressions for `FuturesFundingDataService` and `FuturesLongShortRatioDataService`: first instance persists, second instance restores from the same directory and avoids duplicate provider requests when coverage is complete.
+2. Cover partial-range resume and corrupt-cache bounded reacquisition.
+3. Run configured two-startup acceptance: restored histories, reduced Binance request counts, and unchanged metric availability/values.
+4. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
+5. Only after derivatives persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
-**Next development family:** distinct Binance Futures global account long/short ratio, top-trader account ratio, and top-trader **position** ratio; do not conflate accounts with positions. Then taker flow, Phase 2B aggregates and subsequent higher-order features. Each batch requires source-specific calculations, availability semantics, and mandatory offline tests. General performance optimization remains later.
+Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
-**Workflow preference:** Direct commits to the **existing branches**. **Always ask before creating a new branch or duplicate candidate path.** No repeated approval questions for routine publishing. Keep both repositories' `CHANGELOG-2.10.md` content identical, provide complete fail-fast PowerShell testing commands, and proactively flag conversation CAUTION/HIGH RISK.
+Work directly on existing branches. **Ask before creating a new branch or duplicate candidate path.**
 
 ## Copy to the new chat
 
-> Continue PTMagic 2.10 from [the active handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work directly in `phase1/market-data-foundation`; do not create branches or duplicate candidate paths without asking. SOM and Monitor lifecycle changes passed 16/16 harnesses and 337/337 groups twice at `fb94373`. Current branch head is `27da292`; the later dashboard rollback has no post-rollback local build/browser acceptance. Keep global SOM **enable-only** and user manual release. Next Phase 2 family: global account, top-trader account and top-trader position long/short ratios. Separately, repair top-dashboard refresh scheduling only in `Monitor/Pages/Index.cshtml`, preserving the existing jQuery `.load()` path and all callback behavior.
+> Continue PTMagic 2.10 from this [active handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work on the existing `phase1/market-data-foundation` branch; do not create branches or duplicate candidate paths without asking. Latest tested source `875b4feb71104fbc609bd07dc3120405218d325f`: .NET 10 solution build PASS and all 17 offline harnesses PASS; current branch head `66f88f73f46d5c7863ff27e55c00b98d6917cf83` contains only two later reminder-document commits. Next: service-level restart tests for funding and ratios, then configured two-startup cache acceptance and live Binance/Monitor checks. Taker flow follows persistence acceptance. Keep startup SOM enable-only with manual PT release. Dashboard refresh remains separate: preserve the original `.load()` path and restrict any approved fix to scheduling in `Monitor/Pages/Index.cshtml`; explain exact changes before editing.
 
 [Status](../STATUS.md) · [Current roadmap](../roadmaps/CURRENT.md) · [D-045/D-047 decisions](../DECISIONS.md) · [Funding handoff](2026-11-10-phase2-funding.md) · [332-check evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
 
