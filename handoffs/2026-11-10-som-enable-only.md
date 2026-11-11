@@ -2,14 +2,14 @@
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `320ad5adee314c0ac59208556612ef8ca099e5e8`; latest user-tested application source: `875b4feb71104fbc609bd07dc3120405218d325f`. Subsequent commits include Monitor UI work, derivative-cache persistence corrections, and complete/partial service-restart regressions. These later changes have not yet been locally validated.  
+**Current inspected application branch head:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`; latest user-tested application source: `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`. This source includes the cache-throttle corrections, complete/partial funding and ratio restart tests, and the Monitor changes included on the branch.  
 **Last tested source:** `875b4feb71104fbc609bd07dc3120405218d325f` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (17.4s), **17/17 offline harnesses PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
 
 ## November 11 — Derivatives persistence and latest offline validation
 
-**Current branch head:** `320ad5adee314c0ac59208556612ef8ca099e5e8`. **Last user-tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f`. The current branch includes subsequent Monitor UI changes and derivative cache/restart-test work. The 17/17 result below applies only to `875b4feb`; it does not validate the later source.
+**Current branch head and last user-tested application source:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`. The exact user-run .NET 10.0.403 build and all 17 offline harnesses passed at this source.
 
 At `875b4feb71104fbc609bd07dc3120405218d325f`, the user ran the .NET 10.0.403 solution build: Core, PTMagic and Monitor **PASS in 17.4 seconds**; **17/17 offline harnesses PASS**. New-family results: funding 18 groups, raw OI 18, incremental OI 17, and long/short ratios 29. Eight nonfatal nullable warnings came from the existing `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration` test projects. No build errors or failed harnesses.
 
@@ -27,10 +27,12 @@ The 10-minute disk-cache save throttle previously skipped writes whenever a cach
 
 Service-level restart regressions have been added to `Tests/Phase2Funding/Program.cs` and `Tests/Phase2LongShortRatios/Program.cs`. They construct a first service to persist complete coverage, construct a second service against the same directory and assert that no second provider request occurs, then corrupt a separate symbol cache and verify that a fresh service discards it and repairs coverage with one bounded request.
 
-**Exact application branch head:** `320ad5adee314c0ac59208556612ef8ca099e5e8`. Relevant commits: `6900e4b` funding cache throttle correction; `047abfd` ratio cache throttle correction; `b085aa8` complete funding-service restart test; `51adbb8` complete ratio-service restart test; `71c7f1e` funding partial-coverage restart test; `c35cc9f` ratio partial-coverage restart test. **Local validation at `c35cc9f` built the full solution but the Phase2Funding harness failed** because its corrupt-cache recovery test incorrectly expected the cache file to remain absent after successful repair. The production recovery path deletes the corrupt file, reacquires history, and writes a valid replacement. The funding and ratio assertions have now been corrected to require restorable replacement observations and coverage (commits `578aad4`, `320ad5a`). The corrected tests have not yet been rerun. Configured two-startup runtime acceptance remains pending.
+**Exact application source tested:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`. Relevant persistence commits: `6900e4b` funding cache throttle correction; `047abfd` ratio cache throttle correction; `b085aa8` complete funding-service restart test; `51adbb8` complete ratio-service restart test; `71c7f1e` funding partial-coverage restart test; `c35cc9f` ratio partial-coverage restart test; `578aad4` funding corrupt-cache replacement assertion; `320ad5a` ratio corrupt-cache replacement assertion. The Monitor page-consolidation assertion was corrected in `86fa4c9`.
+
+**User-run validation at `86fa4c9`: PASS.** .NET 10.0.403 solution build PASS in 10.3 seconds; all 17/17 offline harnesses and 378 checks PASS. Phase2Funding 20; Phase2OpenInterest 18; Phase2OpenInterestIncremental 17; Phase2LongShortRatios 36; ConfigurationLifecycle 73; DecisionHistory 13. Eight nonfatal nullable warnings remain in two existing test projects. Complete and partial cache restart, no-duplicate-request, and corrupt-cache replacement checks passed for both funding and ratios. See [dated validation evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md). Configured two-startup runtime acceptance remains pending.
 
 
-Then perform configured two-startup acceptance: verify cache restoration, reduced Binance request counts, and unchanged metric availability/values. Live Binance endpoint/API-key acceptance and Monitor browser rendering remain pending. Taker-flow development follows persistence acceptance; do not start another metric family before this is resolved.
+Next perform configured two-startup acceptance: verify restored histories, reduced Binance request counts, and unchanged metric availability/values for the same pinned data window. Then verify live Binance funding, OI, global-account and top-trader account/position endpoints, optional read-only API-key handling, and Monitor browser rendering. Taker-flow development follows configured derivative persistence acceptance; do not start another metric family before this is resolved.
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
@@ -216,10 +218,10 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 ## Immediate handoff and next development order
 
-1. Run the existing `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` from the user's clone at branch head `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`. Record the exact local SHA, .NET build result, all harness counts and warnings. The newly added complete-restart, partial-resume and corrupt-cache repair tests have not yet been executed locally.
-2. After offline validation passes, perform configured two-startup acceptance: confirm cache restoration, reduced Binance request counts, and unchanged metric availability/values across both startups.
-3. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
-4. Only after derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Perform configured two-startup derivative persistence acceptance in the user's existing PTMagic runtime. Record exact running binary/source, working directory, settings/configuration identity, eligible symbols, per-family request/restore summaries, and metric snapshot values/timestamps for both startups. Verify reduced Binance requests on the second startup and unchanged values for the same pinned data window.
+2. Verify live Binance funding, OI, global-account and top-trader account/position endpoints, including optional read-only API-key handling. Top-trader metrics remain UNAVAILABLE if no key is configured.
+3. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
+4. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
