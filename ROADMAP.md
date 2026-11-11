@@ -14,25 +14,23 @@ The top-dashboard **Possible Buys (PBL)** and **Positions** data must refresh re
 
 The dashboard was fully rolled back to the pre-experiment source baseline. PBL and Positions still become stale in Monitor; the refresh root cause is not runtime-confirmed. Current zero-limit behavior is the original behavior: the entire Possible Buys card is hidden when `MaxDashboardBuyEntries=0`. The earlier count-card/layout experiment remains withdrawn. No refresh correction has been implemented or accepted yet.
 
-### Current analyzer stage — Phase 2 long/short ratios
+### Current analyzer stage — Phase 2 derivatives persistence
 
-The three distinct ratio feeds are implemented in source. Complete local build/focused verification and then configured Binance/API-key/Monitor acceptance. The next new metric family after acceptance is taker flow.
+OI, settled funding and all three long/short ratio metrics are implemented. The .NET 10 solution build and all 17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. Funding and ratio disk caches are integrated. The remaining immediate work is service-level restart testing, then configured two-startup request-reduction acceptance and live Binance/Monitor checks. Taker flow follows after persistence acceptance.
 
 ### Next analyzer metric family — Phase 2
 
-**Most recently completed:** Binance USD-M Futures open-interest and settled funding metrics. Funding was the latest completed family: `FundingRate` and `FundingSum`; the preceding OI metrics are `OpenInterestChange` and `OpenInterestValueChange`. The funding/OI tests passed at `49f2aab` and are included in the later full 337/337 offline acceptance at `fb94373`.
+The next new family is **taker flow**, but it is sequenced after completing derivative persistence acceptance.
 
-**Next:** three distinct per-symbol feeds:
+- First prove funding and ratio cache restoration through newly constructed data-service instances.
+- Then verify a configured restart restores the cache, reduces Binance requests, and leaves metric values/availability unchanged.
+- Verify live Binance global/top-trader endpoints and API-key handling, plus Monitor display.
 
-1. Global long/short account ratio — all traders' account participation for that symbol.
-2. Top-trader long/short account ratio — account participation among the top 20% by margin balance, each account counted once.
-3. Top-trader long/short position ratio — long/short position-size proportions among the top 20% by margin balance.
-
-The endpoint's word **global** means all traders for one symbol, not an exchange-wide aggregate. Account ratios and position ratios are different populations and must remain separate. Binance supports periods from 5m through 1d, returns at most 500 rows per request, and exposes only the latest 30 days; the top-trader endpoints require an API key. Exact PTMagic metric outputs, acquisition windows and UNAVAILABLE/coverage rules must be designed before implementation. [Binance USDⓈ-M Futures market-data API](https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/market-data).
+The three ratio metrics already passed their 29-group harness at `875b4feb71104fbc609bd07dc3120405218d325f`; funding passed 18 groups, raw OI 18 and incremental OI 17. All 17 offline harnesses and the .NET solution build passed at that source.
 
 ### Acceptance status
 
-SOM and Monitor lifecycle changes passed 16/16 harnesses and 337/337 groups twice at `fb94373`. That result predates later Monitor edits and the dashboard rollback. Live PT API, configured-exchange and browser acceptance remain separate.
+The latest user-executed .NET 10 solution build and all 17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. This validates the current application source through that revision, including dashboard rollback and derivatives persistence. Live PT API, configured-exchange, configured restart and browser acceptance remain separate.
 
 [Current technical plan](roadmaps/CURRENT.md) · [Current handoff](handoffs/2026-11-10-som-enable-only.md).
 
