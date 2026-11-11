@@ -1,6 +1,6 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
-**Current documentation checkpoint: November 9, 2026.**
+**Current documentation checkpoint: November 11, 2026.**
 
 PTMagic 2.10 expands deterministic market analysis and the configuration-management layer around ProfitTrailer. Its scope includes normalized market data, price and volume measurements, correlation, future derivatives and liquidity measurements, GlobalSetting/SMS integration, and native inspection and validation. It has no external AI layer.
 
@@ -8,26 +8,23 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Published source checkpoint for this handoff | `925db7c153ee4d53cfe3b7bf736318e7a30bccf1` |
+| Current application branch head | `27da292158687bc0bf1aa3b990d06f53237b42d9` |
+| Last fully verified application source | `fb94373d8928b681e3ebe1f7209bd1439db42e72` (337/337) |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
 | Cumulative effective 2.10 changes for PRs and merges | [CHANGELOG-2.10.md](CHANGELOG-2.10.md) |
 | Current decisions and supersession register | [DECISIONS.md](DECISIONS.md) |
-| Current handoff | [November 7 stabilization and correlation validation](handoffs/2026-11-07-stabilization-correlation-validation.md) |
+| Current handoff | [November 10 SOM safety and dashboard refresh investigation](handoffs/2026-11-10-som-enable-only.md) |
 | Concise user roadmap | [ROADMAP.md](ROADMAP.md) |
 
 ## Present checkpoint
 
-The November 7 work implements configuration lifecycle corrections, startup global sell-only protection through ProfitTrailer's control API, delivery acknowledgement and retry handling, Monitor trigger preservation, configuration reference validation, pinned request boundaries, decision-age checks, history requirements, the Concentration ranking-window correction, Phase 1D correlation, and bounded decision-history recording.
+The latest full offline acceptance is **16/16 harnesses and 337/337 groups**, passed twice at exact application source `fb94373d8928b681e3ebe1f7209bd1439db42e72`. It includes SOM and Monitor lifecycle changes, but predates later Monitor edits and the full dashboard rollback at current branch head `27da292`. No post-rollback local build or live Monitor browser result is recorded.
 
-The user superseded the initial startup-preset overlay with `POST /api/v2/globalSellOnlyMode`, using query parameters `token` and `enabled`. Startup protection changes that API state without submitting PAIRS, DCA, or INDICATORS. The normal configuration is delivered only after analysis; guard release has its own API acknowledgement. See [D-037](DECISIONS.md#d-037--direct-global-som-api-supersedes-the-startup-preset-overlay).
+**Phase 2:** OI metrics (`OpenInterestChange`, `OpenInterestValueChange`) and settled funding metrics (`FundingRate`, `FundingSum`) are implemented. Funding is the latest completed metric family. The next family is the three separate global-account, top-trader-account and top-trader-position long/short ratio feeds.
 
-**All 272 checks across twelve harnesses now have passing user-local results: 193 checks in ten harnesses at `86c2ea3`, followed by 66 ConfigurationLifecycle and 13 DecisionHistory checks at `d331fbd`.** The latest continuation used .NET SDK 10.0.403 and built Core, PTMagic, and Monitor in 10.9 seconds. These are two recorded runs, not a single twelve-harness run at one revision. See [current evidence](updates/2026-11-07-completed-harness-validation.md).
-
-The two Telegram fixture corrections are verified by native execution. Production code and assertions were unchanged between the tested revisions. The current `a0b375c` publication adds [the cumulative effective-change record](CHANGELOG-2.10.md), makes startup SOM explicit in both supplied general-settings templates, and clarifies the existing Monitor Application toggle with visible TestMode help. Engine code and test cases are unchanged. No new build or browser result is claimed, and this update alone requires no harness rerun. An explicit compiled-DLL launch reached a missing-preset validation error, and the user later reported a long initial run underway. Collect that result and source identity before requesting a repeat. TestMode simulates SOM, so actual PT acknowledgement and browser integration remain separate acceptance work. [Publication status](STATUS.md#publication-status).
-
-The earlier pre-change `d0b0b87` baseline remains historical evidence: a user-run application build, 88 checks across six harnesses, and nine Binance Futures USDT TestMode raids. The deployed SHA was inferred from the workflow because those logs printed version 2.10.0 rather than a Git SHA. [Evidence](updates/2026-11-05-price-compatibility-nine-raid-testmode.md).
+**Open Monitor item:** Possible Buys and Positions are not refreshing reliably. Preserve the original jQuery `.load()` request and limit any correction to scheduling in `Monitor/Pages/Index.cshtml`. Do not change PBL/Positions data retrieval, DashboardTop rendering, DashboardBottom, ticker refresh, tooltips or autocoloring. The zero-limit PBL card/count experiment remains withdrawn; the current original behavior hides the entire card when the PBL limit is zero.
 
 ## November 9 normalized OHLCV warm-start addition
 
@@ -66,11 +63,11 @@ D-021, D-022, and D-038 remain active:
 - GitHub is used for source control and documentation. Automatic GitHub Actions or remote build/test execution requires an explicit user request. The earlier automatic regression workflow was removed; do not restore it by following a historical handoff.
 - Every source-change handoff supplies a complete, fail-fast PowerShell sequence with the exact current project paths and specific runtime checks.
 
-The current commands and acceptance matrix are in the [November 7 handoff](handoffs/2026-11-07-stabilization-correlation-validation.md). Run them from the **PTMagic application repository**, not this documentation repository.
+The current commands and acceptance matrix are in the [active November 10 handoff](handoffs/2026-11-10-som-enable-only.md). Run them from the **PTMagic application repository**, not this documentation repository.
 
 ## Sequencing
 
-Local deterministic acceptance of the November 7 changes is complete. Finish the configured runtime, PT integration, and browser checks, then continue the remaining metric families. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
+Continue with the Phase 2 global-account and top-trader account/position ratio metrics. The specific remaining Phase 1 configured integration checks and live PT/Monitor acceptance remain open but do not block the approved Phase 2 development sequence. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
 
 Correctness work, bounded retention, and dependency validation continue as part of feature delivery. Do not use that exception to reintroduce a separate performance project ahead of the agreed gate.
 
