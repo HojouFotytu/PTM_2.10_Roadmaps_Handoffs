@@ -59,14 +59,14 @@ No runtime log, failed HTTP response, or browser trace confirms which failure pa
 ### Current owner requirements for the next implementation
 
 - The data in **Possible Buys (PBL)** and **Positions** must refresh. The entire dashboard does not need to be re-rendered if a narrower update is sufficient.
-- Preserve the existing DashboardTop jQuery `.load()` request method unless the owner explicitly approves a different one.
-- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement.
+- Preserve the existing DashboardTop jQuery `.load()` request and callback; the correction is limited to **refresh scheduling in `Monitor/Pages/Index.cshtml`**.
+- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement. Do not change PBL/Positions data retrieval, calculations or DashboardTop rendering as part of the scheduling fix.
 - Do not alter the separate ticker tooltip-preservation code as a side effect.
 - Preserve existing PBL/Positions calculations and profit coloring.
 - **Explain the exact proposed change, files, and scope before editing any files.** The owner specifically corrected the workflow after an attempted premature update.
 - No implementation for this refresh correction has been agreed or committed. The current source remains the exact rollback state above.
 
-**Next action:** review the November 2 callback-dependent polling path and propose the smallest change that keeps PBL and Positions refreshing while preserving the original `.load()` call and ticker tooltip behavior. Wait for the owner's review of the explanation before changing source.
+**Dashboard follow-up:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, affected files and scope before editing; wait for the owner's review. Keep PBL/Positions retrieval and rendering, DashboardBottom, ticker refresh, tooltip behavior and profit coloring unchanged.
 
 
 ## November 11 — Latest Monitor formatting focused validation PASS
@@ -316,7 +316,7 @@ Detailed issue tracking: [configuration lifecycle and analytics reliability](iss
 
 ## Execution queue
 
-The completed deterministic inventory is **272 passing check groups across twelve projects**, with each result attributed to its actual source: 193 at `86c2ea3`, then 66 lifecycle and 13 history at `d331fbd`. Collect the reported ongoing run before requesting another launch. The current handoff retains the explicit built-DLL procedure and the complete twelve-project sequence for later work that requires them; the documentation/template/static-view update does not require repeating the completed harness checks.
+The latest full deterministic inventory is **337 passing check groups across sixteen harnesses**, twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`. This is accepted offline evidence for that source, not validation of later Monitor edits or the dashboard rollback. Do not repeat the full suite as a prerequisite for starting the next Phase 2 metric family; new source changes still require their own build and focused regression evidence under D-045.
 
 Runtime acceptance remains open for:
 
@@ -346,7 +346,7 @@ Some runtime scenarios require the user's configured exchange/PT installation. S
 | Unified PriceTrend migration | Implemented; Futures USDT evidence accepted with the stated non-USDT/Spot/US/browser gaps |
 | Phase 1D — BTC correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
 | Minimal decision history | 13/13 deterministic checks passed at `d331fbd`; configured runtime integration remains; full Phase 6 stays planned |
-| Phase 2 / 2B — derivatives ingestion and aggregates | Planned |
+| Phase 2 / 2B — derivatives ingestion and aggregates | OI and funding implemented; 35 OI and 17 funding checks passed at `49f2aab` and included in the later 337/337 suite. Next: three long/short account/position ratio feeds, then taker flow and Phase 2B aggregates. |
 | Phase 3 — higher-order market state measurements | Planned |
 | Phase 4 — selection, Monitor, and engine integration | Continues for every metric family |
 | Phase 5 — liquidity, depth, and execution measurements | Planned |
@@ -363,9 +363,10 @@ The old 2.9 performance results and November 5 cold-start timings are historical
 
 ## Next action
 
-**November 10 override:** Phase 2 OI source development is next; the older validation instructions below are deferred and retained for eventual acceptance, not the present execution queue.
+**Next analyzer metric family:** implement three distinct Binance USD-M Futures per-symbol long/short ratio feeds: global account ratio, top-trader account ratio, and top-trader position ratio. The most recently completed metric family is settled funding (`FundingRate` and `FundingSum`); the open-interest metrics (`OpenInterestChange` and `OpenInterestValueChange`) were completed immediately before it. Keep account participation separate from position-size participation.
 
+The full 337/337 offline suite at `fb94373` is already accepted and should not be repeated as a prerequisite. New source changes require a build and focused tests, with the exact source SHA and actual counts recorded.
 
-Collect the user-reported long run and its source/main-market/completion evidence. If another run is needed, use the explicit-DLL procedure in the [current verification handoff](handoffs/2026-11-07-stabilization-correlation-validation.md) with the existing runtime configuration. Native SOM and normal PT delivery require separate live acceptance because TestMode sends neither. The Monitor control is General Settings → APPLICATION → Startup Global SOM, immediately below Test Mode. Continue the applicable runtime/PT/browser checks before the remaining metric families in [the current technical roadmap](roadmaps/CURRENT.md).
+**Parallel Monitor item:** the DashboardTop PBL/Positions refresh remains open. Preserve the original jQuery `.load()` method and limit the correction to scheduling in `Monitor/Pages/Index.cshtml`; do not alter PBL/Positions data retrieval, rendering, ticker refresh, tooltip behavior or profit coloring.
 
 Earlier files that instructed a restart of Phase 1C, preservation of a separate legacy PriceTrend path, use of the removed selective-legacy harness, or optimization before correlation are historical and superseded.
