@@ -4,13 +4,13 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`
+**Current inspected application branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`
 
-**Latest deterministically tested application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`
+**Latest deterministically tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f`
 
-**Latest verified offline suite:** 16/16 harnesses, **337/337 groups** (two successful full runs)
+**Latest verified offline suite:** .NET 10 solution build PASS; **17/17 harnesses PASS** at `875b4feb` (17.4s; eight nonfatal nullable warnings in two existing test projects)
 
-**Current handoff:** [Startup SOM enable-only safety correction and dashboard refresh investigation](handoffs/2026-11-10-som-enable-only.md)
+**Current handoff:** [SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md)
 
 This file describes the present state. Dated evidence stays in [updates](updates/README.md). The earlier append-heavy status is preserved in [history](history/2026-11-07-pre-reconciliation/STATUS.md). Accepted behavior is in [DECISIONS](DECISIONS.md); the complete plan is [roadmaps/CURRENT.md](roadmaps/CURRENT.md).
 
@@ -69,17 +69,15 @@ No runtime log, failed HTTP response, or browser trace confirms which failure pa
 **Dashboard follow-up:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, affected files and scope before editing; wait for the owner's review. Keep PBL/Positions retrieval and rendering, DashboardBottom, ticker refresh, tooltip behavior and profit coloring unchanged.
 
 
-## Phase 2 — Binance Futures long/short ratio metrics (source implemented; verification pending)
+## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
 
-Three distinct opt-in asset metrics are implemented: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation remain separate. No global aggregate is introduced in this batch.
+The three opt-in asset metrics `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio` are implemented. Global account participation, top-trader account counts and top-trader position-size participation remain distinct. All use exact 5-minute source observations over each MarketTrend's `TrendMinutes`; all expected timestamps are required and missing data remains UNAVAILABLE. The ratio window calculation averages implied long-side shares `r/(1+r)`, then converts the mean back to a ratio; neutral is 1.0. Top-trader endpoints require the optional read-only `BinanceFuturesApiKey`; no API secret is needed.
 
-All three use Binance USD-M Futures 5-minute observations over each MarketTrend's exact `TrendMinutes`. The source's `longShortRatio`, `longAccount` and `shortAccount` are preserved independently. The window result averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral remains 1.0. Every expected 5-minute timestamp is required. No interpolation, nearest-time substitution, zero fill or silent shortening.
+Funding and ratio histories now use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart acceptance are documented above.
 
-The two top-trader endpoints use an optional read-only `BinanceFuturesApiKey`; no API secret or signed request is required. The key is not echoed by the Monitor form. Without it, top-trader acquisition is skipped and those metrics remain UNAVAILABLE; the global account metric remains available.
+**Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
 
-A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, maximum 80), with fair source/symbol scheduling, at most two pages per series per raid, 500 rows per request and a 30-day provider history ceiling. History is currently in-memory only; restart re-acquisition is bounded by the same budget.
-
-**Verification pending:** local .NET build, focused `Phase2LongShortRatios` harness execution, live Binance/API-key acceptance and Monitor browser rendering. No test PASS is claimed yet.
+**Outstanding:** service-level restart tests through newly constructed funding/ratio data services; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
@@ -328,7 +326,7 @@ Detailed issue tracking: [configuration lifecycle and analytics reliability](iss
 
 ## Execution queue
 
-The latest full deterministic inventory is **337 passing check groups across sixteen harnesses**, twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`. This is accepted offline evidence for that source, not validation of later Monitor edits or the dashboard rollback. Do not repeat the full suite as a prerequisite for starting the next Phase 2 metric family; new source changes still require their own build and focused regression evidence under D-045.
+The latest user-executed offline validation is the .NET 10 solution build plus **17/17 harnesses PASS** at exact source `875b4feb71104fbc609bd07dc3120405218d325f`. This supersedes the earlier 16-harness/337-group result at `fb94373` for current source acceptance. The two later branch commits changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`. New source changes still require their own build and focused regression evidence under D-045.
 
 Runtime acceptance remains open for:
 
@@ -358,7 +356,7 @@ Some runtime scenarios require the user's configured exchange/PT installation. S
 | Unified PriceTrend migration | Implemented; Futures USDT evidence accepted with the stated non-USDT/Spot/US/browser gaps |
 | Phase 1D — BTC correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
 | Minimal decision history | 13/13 deterministic checks passed at `d331fbd`; configured runtime integration remains; full Phase 6 stays planned |
-| Phase 2 / 2B — derivatives ingestion and aggregates | OI and funding implemented; 35 OI and 17 funding checks passed at `49f2aab` and included in the later 337/337 suite. Next: three long/short account/position ratio feeds, then taker flow and Phase 2B aggregates. |
+| Phase 2 / 2B — derivatives ingestion and aggregates | OI, funding and three long/short ratio metrics implemented. Latest build and 17/17 harnesses PASS at `875b4feb`; funding/ratio disk caches added. Next: service-level restart tests, configured two-startup acceptance, then taker flow and Phase 2B aggregates. |
 | Phase 3 — higher-order market state measurements | Planned |
 | Phase 4 — selection, Monitor, and engine integration | Continues for every metric family |
 | Phase 5 — liquidity, depth, and execution measurements | Planned |
@@ -373,12 +371,16 @@ The performance deferral is explicit. Startup reconstruction, broader snapshot c
 
 The old 2.9 performance results and November 5 cold-start timings are historical evidence, not a current steady-state CPU measurement of 2.10. The old first raid took 14m28s, including about 11m59s of legacy reconstruction; that observation explains future work without changing its agreed ordering.
 
-## Next action
+## Immediate handoff and next development order
 
-**Current analyzer stage:** the three Binance USD-M Futures long/short ratio sources are implemented and integrated in source. The next step is local build and focused verification, not another metric family. Funding was the most recently completed family; OI preceded it.
+1. Add service-level restart regressions for `FuturesFundingDataService` and `FuturesLongShortRatioDataService`: first instance persists, second instance restores from the same directory and avoids duplicate provider requests when coverage is complete.
+2. Cover partial-range resume and corrupt-cache bounded reacquisition.
+3. Run configured two-startup acceptance: restored histories, reduced Binance request counts, and unchanged metric availability/values.
+4. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
+5. Only after derivatives persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
-The full 337/337 offline suite at `fb94373` is already accepted and should not be repeated as a prerequisite. New source changes require a build and focused tests, with the exact source SHA and actual counts recorded.
+Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
-**Parallel Monitor item:** the DashboardTop PBL/Positions refresh remains open. Preserve the original jQuery `.load()` method and limit the correction to scheduling in `Monitor/Pages/Index.cshtml`; do not alter PBL/Positions data retrieval, rendering, ticker refresh, tooltip behavior or profit coloring.
+Work directly on existing branches. **Ask before creating a new branch or duplicate candidate path.**
 
 Earlier files that instructed a restart of Phase 1C, preservation of a separate legacy PriceTrend path, use of the removed selective-legacy harness, or optimization before correlation are historical and superseded.
