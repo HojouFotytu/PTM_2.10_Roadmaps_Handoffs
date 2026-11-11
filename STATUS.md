@@ -4,7 +4,7 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`
+**Current inspected application branch head:** `320ad5adee314c0ac59208556612ef8ca099e5e8`
 
 **Latest deterministically tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f` (latest test evidence; later Monitor and derivative-cache/restart-test changes remain unvalidated)
 
@@ -77,7 +77,9 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 **Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
 
-**Outstanding:** local build and execution of the new service-level complete-restart, partial-resume and corrupt-cache repair regressions at current branch head `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
+**Validation update:** at `c35cc9f`, the .NET 10 solution build passed (15.5s), then `Phase2Funding` failed because the corrupt-cache recovery test expected the cache file to remain absent after the service had correctly replaced it with recovered data. Both funding and ratio assertions now verify restored replacement observations and coverage. Corrected source head: `320ad5adee314c0ac59208556612ef8ca099e5e8`; rerun the full existing validation script.
+
+**Outstanding:** corrected offline build/harness execution; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
