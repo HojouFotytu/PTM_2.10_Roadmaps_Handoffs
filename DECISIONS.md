@@ -406,3 +406,18 @@ The previously open Phase 1C formula choices were resolved by its implemented an
 The dashboard needs current **Possible Buys (PBL)** and **Positions** data. Preserve the existing DashboardTop jQuery `.load()` request and its callback. The authorized refresh correction is **scheduling-only in `Monitor/Pages/Index.cshtml`**; do not replace the request mechanism, add endpoints/count caches, change PBL/Positions retrieval or calculations, modify DashboardTop rendering, or alter the separate ticker tooltip-preservation code, DashboardBottom, tooltip behavior or profit coloring. Do not reintroduce the experimental `PossibleBuysCount` endpoint, asynchronous count cache, or custom AJAX replacement.
 
 Before any source edit, explain the exact proposed scheduling change, affected files, and scope, then wait for the owner's review. No refresh fix is yet approved or implemented. The current dashboard/PBL source files are restored to exact baseline `438acbe` blobs. The top refresh defect remains open. November 2 callback-driven polling changes (`ec19a5e`, `26ce2d8`) are a code-level investigation lead, not a runtime-confirmed root cause. See [November 11 dashboard refresh history and current state](updates/2026-11-11-dashboard-refresh-history-and-current-state.md).
+
+
+## D-049 — Binance Futures long/short ratio metric contract
+
+**Owner direction:** November 11, 2026.
+
+Implement three separate, opt-in, asset-scoped Binance USD-M Futures metrics: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation are distinct and must not be conflated. No exchange-wide aggregates are introduced in this batch.
+
+Use native five-minute observations over each configured MarketTrend's exact `TrendMinutes` window. Preserve provider `longShortRatio`, `longAccount` and `shortAccount` independently. Calculate the window metric by converting each provider ratio to its implied long-side share `r/(1+r)`, averaging those shares, then converting the mean back to a ratio. Neutral is 1.0. Require every expected five-minute observation; never interpolate, use a nearest timestamp, fill zero or silently shorten the window.
+
+The two top-trader endpoints require an optional Binance API key with read-only market-data access; no API secret or signed request is required. Do not echo the key in Monitor or log it. Missing credentials leave only the top-trader metrics unavailable; the global account source remains usable.
+
+All three sources share a bounded per-raid request budget (default 60; zero disables; maximum 80), fair source/symbol scheduling and at most two pages per source/symbol per raid. Provider history is limited to the latest 30 days and 500 rows per request. No disk persistence is currently implemented; restart re-acquisition is subject to the same budget.
+
+Implementation is published on the existing `phase1/market-data-foundation` branch. Local .NET build, focused test execution, live Binance/API-key acceptance and Monitor browser verification remain pending.
