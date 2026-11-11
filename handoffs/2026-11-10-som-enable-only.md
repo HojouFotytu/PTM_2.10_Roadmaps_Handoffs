@@ -5,7 +5,7 @@
 **Current inspected application branch head and latest user-tested source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`. This source includes the Unicode-aware shared derivative symbol normalizer and focused OI/funding/ratio service, cache and URL regression coverage.  
 **Last tested source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (16.7s), **17/17 offline harnesses and 384 checks PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
-**Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
+**Scope:** PTMagic 2.10 application, APIs, analytics and Monitor only. ProfitTrailer LONG/SHORT strategy-settings development is a separate workstream with no implicit crossover. No strategy settings or settings-development artifacts are modified by this handoff.
 
 ## November 11 — Derivatives persistence and latest offline validation
 
@@ -178,15 +178,17 @@ if ($LASTEXITCODE -ne 0) { throw "Phase 2 validation failed" }
 
 Do not repeat the full suite absent a new code change that warrants it. The service-level complete-restart, partial-resume and corrupt-cache repair regressions are now authored. Next: have the user execute the existing runner at the current branch head and record the exact source SHA, build result, harness counts and warnings.
 
-## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
+## Phase 2 — Binance Futures derivatives and persistence (D-051 current scope)
 
-The three opt-in asset metrics `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio` are implemented. Global account participation, top-trader account counts and top-trader position-size participation remain distinct. All use exact 5-minute source observations over each MarketTrend's `TrendMinutes`; all expected timestamps are required and missing data remains UNAVAILABLE. The ratio window calculation averages implied long-side shares `r/(1+r)`, then converts the mean back to a ratio; neutral is 1.0. Top-trader endpoints require the optional read-only `BinanceFuturesApiKey`; no API secret is needed.
+The current approved ratio scope is one public, opt-in, asset-scoped metric: `GlobalLongShortAccountRatio`. It uses exact five-minute observations over each enabled MarketTrend's `TrendMinutes`; all expected timestamps are required and missing data remains UNAVAILABLE. The calculation averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral is 1.0.
 
-Funding and ratio histories now use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart acceptance are documented above.
+The two top-trader metrics, their endpoints, authentication-specific handling and optional API-key requirement are removed from current scope by D-051. No additional Binance Futures API key is required for the retained public global-account metric.
 
-**Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
+The three per-raid request-budget properties are also removed from the user-facing PTMagic analyzer configuration. PTMagic must manage derivative acquisition dynamically through its shared Binance rate-limit state, endpoint request weights, response headers and 429/418 cooldowns. Preserve internal pagination, per-symbol progress safeguards, fair scheduling, incremental coverage, disk persistence, cancellation and UNAVAILABLE semantics. Do not replace the removed settings with other arbitrary user-configurable static limits.
 
-**Outstanding:** local build and execution of the newly added service-level restart regressions; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
+**Implementation status:** D-051 is a newly approved design decision, not an implemented or tested source change. The last user-tested application source remains `f108cd1ab39c44103bed91d1899f90f86a830eb4` (17 offline harnesses, 384 checks PASS). That evidence predates D-051 and does not validate the revised single-source/adaptive-scheduling design.
+
+Funding and the retained global-account ratio use versioned compressed disk caches with raw observations and verified query-coverage intervals. OI retains its separate cache. The five Unicode COIN perpetual symbols have passed application-side normalization, service/cache and URL-encoding offline tests; live Binance endpoint acceptance and a configured raid with those symbols remain pending. See [Unicode validation evidence](../updates/2026-11-11-unicode-futures-symbol-validation.md).
 
 ## Current owner-approved SOM contract — D-047 (supersedes prior auto-release)
 
@@ -224,11 +226,11 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 ## Immediate handoff and next development order
 
-1. Perform configured runtime acceptance with the five Unicode COIN perpetual symbols. Confirm the ordinary raid completes and OI/funding/ratio services do not abort; record live endpoint responses and per-family request/failure/availability summaries. Offline tests do not establish Binance's live support for these symbols.
-2. Perform configured two-startup derivative persistence acceptance in the user's existing PTMagic runtime. Record exact running binary/source, working directory, settings/configuration identity, eligible symbols, per-family request/restore summaries, and metric snapshot values/timestamps for both startups. Verify reduced Binance requests on the second startup and unchanged values for the same pinned data window.
-3. Verify live Binance funding, OI, global-account and top-trader account/position endpoints, including optional read-only API-key handling. Top-trader metrics remain UNAVAILABLE if no key is configured.
-4. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
-5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Implement D-051 in the PTMagic application: retain only public `GlobalLongShortAccountRatio`; remove both top-trader metric feeds and their API-key-only request path; remove the three user-configurable per-raid request-budget properties.
+2. Implement application-managed adaptive derivative acquisition using shared Binance rate-limit state, endpoint request weights, response headers and 429/418 cooldowns. Preserve internal pagination, per-symbol progress safeguards, fair scheduling, incremental coverage, persistence and UNAVAILABLE semantics. Do not add replacement user-configurable static limits.
+3. Build and run the existing offline validation suite. Add focused tests for global-account-only ratio behavior, absence of top-trader/API-key paths, adaptive capacity, fairness, cooldowns and cross-family shared rate-limit coordination.
+4. Perform configured runtime acceptance with the five Unicode COIN perpetual symbols, then configured two-startup derivative persistence acceptance. Record exact running binary/source, live request counts, cache restoration, metric availability/values and Monitor output.
+5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
