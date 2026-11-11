@@ -916,11 +916,13 @@ A release candidate additionally needs documented migration/default changes, ack
 
 ## Immediate handoff and next development order
 
-1. Perform configured runtime acceptance with the five Unicode COIN perpetual symbols. Confirm the ordinary raid completes and OI/funding/ratio services do not abort. Record actual live endpoint responses and per-family request/failure/availability summaries; offline tests do not establish Binance's live support for these symbols.
-2. Perform configured two-startup derivative persistence acceptance using the existing PTMagic runtime and the user's configured Binance Futures environment. Record exact running binary/source, working directory, settings/configuration identity, eligible symbols, per-family request/restore summaries, and metric snapshot values/timestamps for both startups. Verify reduced Binance requests on the second startup and unchanged values for the same pinned data window.
-3. Verify live Binance funding, OI, global-account and top-trader account/position endpoints, including optional read-only API-key handling. Top-trader metrics remain UNAVAILABLE when the key is not configured.
-4. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
+1. Implement D-051 in the PTMagic application: retain only public `GlobalLongShortAccountRatio`; remove both top-trader metric feeds and their API-key-only request path; remove the three user-configurable per-raid request-budget properties.
+2. Implement application-managed adaptive derivative acquisition using the shared Binance rate-limit state, endpoint request weights, response headers and 429/418 cooldowns. Preserve internal pagination, per-symbol progress safeguards, fair scheduling, incremental coverage, persistence and UNAVAILABLE semantics. Do not add replacement user-configurable static limits.
+3. Build and run the existing offline validation suite, with focused coverage for global-account-only ratio behavior, absence of top-trader/API-key paths, adaptive capacity, fairness and cooldown handling.
+4. Perform configured runtime acceptance with the five Unicode COIN perpetual symbols, then configured two-startup derivative persistence acceptance. Record exact running binary/source, actual live requests, cache restoration, metric availability/values and Monitor output.
 5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+
+PTMagic application development remains separate from ProfitTrailer strategy-settings development. Do not modify strategy settings or their development artifacts as part of this roadmap.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. DashboardTop refresh is resolved and confirmed working; no dashboard refresh task remains open. The separate Possible Buys count/card experiment remains withdrawn. Continue Monitor interface work only within the user's explicitly requested scope.
 
