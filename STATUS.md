@@ -4,11 +4,11 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`
+**Current inspected application branch head:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`
 
-**Latest deterministically tested application source:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a` (.NET 10.0.403 solution build PASS in 10.3s; 17/17 offline harnesses and 378 checks PASS)
+**Latest deterministically tested application source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4` (.NET 10.0.403 solution build PASS in 16.7s; 17/17 offline harnesses and 384 checks PASS)
 
-**Latest verified offline suite:** .NET 10.0.403 solution build PASS in 10.3s; **17/17 harnesses and 378 checks PASS** at `86fa4c9`. Eight nonfatal nullable warnings remain in two existing test projects. See [Phase 2 derivative persistence evidence](updates/2026-11-11-phase2-derivative-persistence-offline-validation.md).
+**Latest verified offline suite:** .NET 10.0.403 solution build PASS in 16.7s; **17/17 harnesses and 384 checks PASS** at `f108cd1`. Eight nonfatal nullable warnings remain in two existing test projects. See [Unicode futures symbol validation](updates/2026-11-11-unicode-futures-symbol-validation.md) and [Phase 2 derivative persistence evidence](updates/2026-11-11-phase2-derivative-persistence-offline-validation.md).
 
 **Current handoff:** [SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md)
 
@@ -77,7 +77,7 @@ Funding and ratio histories now use persistent versioned compressed caches. Raw 
 
 **Offline validation PASS:** exact source `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`; .NET 10.0.403 solution build PASS in 10.3s; all 17/17 harnesses and 378 checks PASS. Phase 2 results: funding 20, raw OI 18, incremental OI 17, and long/short ratios 36. ConfigurationLifecycle passed 73 and DecisionHistory passed 13. Eight nonfatal nullable warnings remain in `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration`. Complete/partial service restart and corrupt-cache replacement tests pass for funding and ratios.
 
-**Outstanding:** configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows only after configured derivative persistence acceptance.
+**Outstanding:** configured two-startup request-reduction and unchanged-metric acceptance; configured raid acceptance with the five Unicode symbols; live Binance/API-key and Monitor browser checks. Offline tests prove application-side Unicode handling and cache persistence, not live Binance endpoint acceptance for those symbols. Taker flow follows only after configured derivative persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
