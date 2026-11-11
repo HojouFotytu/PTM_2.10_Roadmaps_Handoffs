@@ -4,11 +4,11 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `320ad5adee314c0ac59208556612ef8ca099e5e8`
+**Current inspected application branch head:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`
 
-**Latest deterministically tested application source:** `875b4feb71104fbc609bd07dc3120405218d325f` (latest test evidence; later Monitor and derivative-cache/restart-test changes remain unvalidated)
+**Latest deterministically tested application source:** `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a` (.NET 10.0.403 solution build PASS in 10.3s; 17/17 offline harnesses and 378 checks PASS)
 
-**Latest verified offline suite:** .NET 10 solution build PASS; **17/17 harnesses PASS** at `875b4feb` (17.4s; eight nonfatal nullable warnings in two existing test projects)
+**Latest verified offline suite:** .NET 10.0.403 solution build PASS in 10.3s; **17/17 harnesses and 378 checks PASS** at `86fa4c9`. Eight nonfatal nullable warnings remain in two existing test projects. See [Phase 2 derivative persistence evidence](updates/2026-11-11-phase2-derivative-persistence-offline-validation.md).
 
 **Current handoff:** [SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md)
 
@@ -75,11 +75,9 @@ The three opt-in asset metrics `GlobalLongShortAccountRatio`, `TopTraderLongShor
 
 Funding and ratio histories now use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart acceptance are documented above.
 
-**Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
+**Offline validation PASS:** exact source `86fa4c9a306f7eb61742c26bbb1ae633bb775a2a`; .NET 10.0.403 solution build PASS in 10.3s; all 17/17 harnesses and 378 checks PASS. Phase 2 results: funding 20, raw OI 18, incremental OI 17, and long/short ratios 36. ConfigurationLifecycle passed 73 and DecisionHistory passed 13. Eight nonfatal nullable warnings remain in `Phase1SmsSummaryIsolation` and `NormalizedPriceTrendMigration`. Complete/partial service restart and corrupt-cache replacement tests pass for funding and ratios.
 
-**Validation update:** at `c35cc9f`, the .NET 10 solution build passed (15.5s), then `Phase2Funding` failed because the corrupt-cache recovery test expected the cache file to remain absent after the service had correctly replaced it with recovered data. Both funding and ratio assertions now verify restored replacement observations and coverage. Corrected source head: `320ad5adee314c0ac59208556612ef8ca099e5e8`; rerun the full existing validation script.
-
-**Outstanding:** corrected offline build/harness execution; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
+**Outstanding:** configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows only after configured derivative persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
