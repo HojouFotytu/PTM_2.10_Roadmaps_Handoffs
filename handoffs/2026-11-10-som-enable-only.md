@@ -2,7 +2,7 @@
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `27da292158687bc0bf1aa3b990d06f53237b42d9`; last fully offline-accepted source remains `fb94373d8928b681e3ebe1f7209bd1439db42e72`  
+**Current inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`; last fully offline-accepted source remains `fb94373d8928b681e3ebe1f7209bd1439db42e72`  
 **Last tested source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (15.6s and 10.3s), **16/16 harnesses and 337/337 groups PASS twice**  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
@@ -12,7 +12,7 @@
 ## November 11 — Dashboard refresh investigation and current owner direction
 
 **Current application branch:** `HojouFotytu/PTMagic`, `phase1/market-data-foundation`.  
-**Inspected application branch head:** `27da292158687bc0bf1aa3b990d06f53237b42d9`.  
+**Inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`.  
 **Dashboard rollback baseline:** `438acbe8e40241cd190e45385dffbee5637b3eb8`.  
 **Last full offline acceptance:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`, 16/16 harnesses and 337/337 groups PASS twice. That acceptance is earlier than subsequent Monitor edits and the dashboard rollback; it is not current DashboardTop runtime acceptance.
 
@@ -186,7 +186,7 @@ A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, m
 
 **Priority test topics:** no `false` SOM request under any lifecycle path; migrated v1 release intent never causes OFF; uncertain/failed enable blocks unsafe bootstrap; no repeated enable within one startup; restart behavior; two-raid warning/ticker visibility then removal; TestMode isolation; multi-target partial failures. Existing ticker source assertion assumes the runner starts in repository root (which the checked-in runner does). These are validation targets, **not confirmed failures**.
 
-**Current acceptance (updated November 11):** SOM and Monitor lifecycle changes passed the full .NET 10 offline suite twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`: 16/16 harnesses and 337/337 groups. The current application branch head is `27da292158687bc0bf1aa3b990d06f53237b42d9`, after the dashboard rollback; no post-rollback local build or browser verification has been supplied. Live PT endpoint behavior and configured runtime/browser acceptance remain separate. Do not repeat the completed 337/337 suite as a prerequisite for beginning the next Phase 2 metric family; new source changes still require their own build and focused regressions under D-045.
+**Current acceptance (updated November 11):** SOM and Monitor lifecycle changes passed the full .NET 10 offline suite twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`: 16/16 harnesses and 337/337 groups. The current application branch head is `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`, after the dashboard rollback; no post-rollback local build or browser verification has been supplied. Live PT endpoint behavior and configured runtime/browser acceptance remain separate. Do not repeat the completed 337/337 suite as a prerequisite for beginning the next Phase 2 metric family; new source changes still require their own build and focused regressions under D-045.
 
 ## After SOM acceptance — Phase 2 queue
 
