@@ -1,24 +1,43 @@
 # PTMagic 2.10 — User Roadmap
 
-**Updated:** November 10, 2026 · **Status:** In development
+**Updated:** November 11, 2026 · **Status:** In development
 
 [Current technical plan](roadmaps/CURRENT.md) · [Acceptance status](STATUS.md) · [Current handoff](handoffs/2026-11-10-som-enable-only.md)
 
 PTMagic 2.10 expands native market analysis beyond price trends. It adds breadth, volatility, volume, relative strength, correlation, and later futures positioning and liquidity measurements, using transparent calculations and existing GlobalSetting/SMS controls.
 
-## NEXT CHAT — verify SOM safety changes
+## Current priorities — November 11, 2026
 
-Application source `891f709010c867259a6cde3df8e9c82781091b7f` (existing `phase1/market-data-foundation` branch) contains enable-only startup SOM, manual ProfitTrailer release, legacy release-checkpoint migration, and the red `PT: SOM` ticker plus raid-summary warnings on startup raids 1–2. **The source has NOT yet passed its new local .NET build or regression suite.** Last verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332** before these changes.
+### Dashboard refresh follow-up — open
 
-**First action:** run/review `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1`, fix any errors on the existing branch, and record actual test results with exact SHA. Never automatically issue global SOM `enabled=false`. Disappearing ticker after raid 2 is not proof of PT state and does not switch SOM off. After SOM validation, resume Phase 2 separate global account, top-trader account, and top-trader position long/short ratio metrics.
+The top-dashboard **Possible Buys (PBL)** and **Positions** data must refresh reliably. Preserve the existing jQuery `.load()` request and its callback. The authorized correction is **scheduling-only in `Monitor/Pages/Index.cshtml`**; do not replace the transport, add an endpoint/count cache, change PBL/Positions data retrieval or calculations, or alter DashboardTop rendering. Leave DashboardBottom, ticker refresh, tooltip cleanup/reinitialization and profit autocoloring untouched. The November 2 callback-dependent polling path is an investigation lead, not a runtime-confirmed root cause. Explain the exact proposed code change, files and scope before editing, then wait for owner review.
 
-[Complete active new-chat handoff](handoffs/2026-11-10-som-enable-only.md). Only specified unfinished Phase 1 *configured integration* tests were deferred; normal source builds and regressions remain mandatory.
+The dashboard was fully rolled back to the pre-experiment source baseline. PBL and Positions still become stale in Monitor; the refresh root cause is not runtime-confirmed. Current zero-limit behavior is the original behavior: the entire Possible Buys card is hidden when `MaxDashboardBuyEntries=0`. The earlier count-card/layout experiment remains withdrawn. No refresh correction has been implemented or accepted yet.
+
+### Next analyzer metric family — Phase 2
+
+**Most recently completed:** Binance USD-M Futures open-interest and settled funding metrics. Funding was the latest completed family: `FundingRate` and `FundingSum`; the preceding OI metrics are `OpenInterestChange` and `OpenInterestValueChange`. The funding/OI tests passed at `49f2aab` and are included in the later full 337/337 offline acceptance at `fb94373`.
+
+**Next:** three distinct per-symbol feeds:
+
+1. Global long/short account ratio — all traders' account participation for that symbol.
+2. Top-trader long/short account ratio — account participation among the top 20% by margin balance, each account counted once.
+3. Top-trader long/short position ratio — long/short position-size proportions among the top 20% by margin balance.
+
+The endpoint's word **global** means all traders for one symbol, not an exchange-wide aggregate. Account ratios and position ratios are different populations and must remain separate. Binance supports periods from 5m through 1d, returns at most 500 rows per request, and exposes only the latest 30 days; the top-trader endpoints require an API key. Exact PTMagic metric outputs, acquisition windows and UNAVAILABLE/coverage rules must be designed before implementation. [Binance USDⓈ-M Futures market-data API](https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/market-data).
+
+### Acceptance status
+
+SOM and Monitor lifecycle changes passed 16/16 harnesses and 337/337 groups twice at `fb94373`. That result predates later Monitor edits and the dashboard rollback. Live PT API, configured-exchange and browser acceptance remain separate.
+
+[Current technical plan](roadmaps/CURRENT.md) · [Current handoff](handoffs/2026-11-10-som-enable-only.md).
 
 ## Accepted foundation
 
 - Shared normalized five-minute OHLCV history with incremental refresh and incomplete-data safeguards.
 - Price returns, breadth, dispersion, relative strength, and return concentration.
 - Trend-duration ATR and quote-volume measurements.
+- Binance USDⓈ-M Futures open-interest and settled funding metrics (`OpenInterestChange`, `OpenInterestValueChange`, `FundingRate`, `FundingSum`).
 - Metric-based GlobalSetting, SMS activation, and SMS OffTrigger evaluation.
 - Market Metrics inspection, exported snapshots, and grouped diagnostics.
 - Unified normalized PriceTrend on Binance Futures, Binance Spot, and Binance US in source; the strongest recorded runtime evidence is for Futures USDT.
@@ -36,7 +55,7 @@ The accepted baseline passed a local .NET 10 build, 88 regression checks, and re
 - Per-market BTC correlation and market mean/median correlation.
 - Bounded native decision-history records with configuration/source identity and delivery outcomes.
 
-All 272 checks across twelve harnesses have now passed: 193 checks in ten harnesses at `86c2ea3`, followed by 66 lifecycle and 13 history checks at `d331fbd`. The latest build succeeded in 10.9 seconds with .NET SDK 10.0.403. This completes deterministic acceptance across the two recorded revisions; configured TestMode, actual PT API, and browser checks remain. [Validation evidence](updates/2026-11-07-completed-harness-validation.md).
+The latest full offline acceptance is 16/16 harnesses and 337/337 groups, passed twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`. It includes the SOM and Monitor lifecycle changes, but not the later dashboard rollback. Configured TestMode, actual PT API and browser acceptance remain separate. [Validation evidence](updates/2026-11-10-som-monitor-offline-validation.md).
 
 ## Targeted warm-start improvement — source published
 
@@ -46,7 +65,7 @@ The normalized five-minute OHLCV cache now persists closed candles and reuses th
 
 ## November 10 — Startup global SOM made enable-only; two-raid manual-release warning
 
-**Safety correction source:** `891f709010c867259a6cde3df8e9c82781091b7f`, existing PTMagic branch `phase1/market-data-foundation`. **Published, not yet build/regression verified.** The previous verified 332/332 offline tests were for source `49f2aab66592b6e2922097ca5242b5a614090602` before this change.
+**Safety correction source:** `891f709010c867259a6cde3df8e9c82781091b7f`, existing PTMagic branch `phase1/market-data-foundation`. The change was subsequently included in the full 16-harness, 337/337 offline acceptance at `fb94373`. The current branch head includes later Monitor changes not covered by that run.
 
 The startup SOM API in PTMagic is now **enable-only**. The application no longer issues global `enabled=false` after normal analysis or configuration delivery, nor from restart/legacy release checkpoints. When `StartupSellOnlyMode=true`, an initial startup may send `enabled=true` to ProfitTrailer before long data loading; the user must manually disable global SOM in ProfitTrailer when ready. Without an ownership-aware live state API PTMagic cannot establish whether SOM is presently on, so it must not claim live-state monitoring or automatic restoration.
 
@@ -54,7 +73,7 @@ The checkpoint is versioned to schema 2 with enable intent, acknowledgement, and
 
 **User-visible notice:** on the **first two raids of each startup**, when PTMagic requested the SOM guard, the RAID SUMMARY logs a warning to manually release SOM in PT. The shared Monitor ticker row displays a **red `PT: SOM`** badge alongside Selected Global Setting, SMS and PT health, with an information tooltip explaining startup activation, continued block on new/DCA buys, and manual release. The ticker disappears after raid 2; it does not verify the live PT flag or secretly switch it off. The underlying manual-review status remains inspectable in Status Summary.
 
-**Mandatory verification:** updated `ConfigurationLifecycle` offline regressions cover no-auto-disable behavior, interrupted startup, restart, legacy checkpoint migration and first-two-raid notice. Execute the complete `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` .NET build and all offline harnesses. UI/browser rendering remains a separate acceptance step.
+**Offline acceptance:** SOM lifecycle and first-two-raid notice regressions were included in the 337/337 full-suite PASS at `fb94373`. Do not repeat that completed full suite as a prerequisite for the next metric family. Live PT acknowledgement, ordinary configured raids and Monitor/browser rendering remain separate acceptance steps.
 
 ## November 10 — Funding and open-interest deterministic regression PASS
 
