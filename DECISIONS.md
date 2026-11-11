@@ -418,6 +418,23 @@ Use native five-minute observations over each configured MarketTrend's exact `Tr
 
 The two top-trader endpoints require an optional Binance API key with read-only market-data access; no API secret or signed request is required. Do not echo the key in Monitor or log it. Missing credentials leave only the top-trader metrics unavailable; the global account source remains usable.
 
-All three sources share a bounded per-raid request budget (default 60; zero disables; maximum 80), fair source/symbol scheduling and at most two pages per source/symbol per raid. Provider history is limited to the latest 30 days and 500 rows per request. No disk persistence is currently implemented; restart re-acquisition is subject to the same budget.
+All three sources share a bounded per-raid request budget (default 60; zero disables; maximum 80), fair source/symbol scheduling and at most two pages per source/symbol per raid. Provider history is limited to the latest 30 days and 500 rows per request. Disk persistence for ratios and funding was subsequently added under D-050; service-level restart and configured two-startup acceptance remain pending.
 
-Implementation is published on the existing `phase1/market-data-foundation` branch. Local .NET build, focused test execution, live Binance/API-key acceptance and Monitor browser verification remain pending.
+Implementation is published on the existing `phase1/market-data-foundation` branch. The .NET 10 solution build and all 17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. Live Binance/API-key acceptance, end-to-end service restart acceptance and Monitor browser verification remain pending.
+
+
+## D-050 — Persist Futures funding and long/short ratio histories
+
+**Implementation direction:** November 11, 2026.
+
+Funding and all three Binance USD-M Futures long/short ratio data sources must use disk persistence, consistent with the existing OI and normalized OHLCV warm-start approach. The active runtime paths are:
+
+- OI: `_data/DerivativesOpenInterestCache` (existing).
+- Funding: `_data/DerivativesFundingCache`.
+- Ratios: `_data/DerivativesLongShortRatioCache`, partitioned by source and symbol.
+
+The funding and ratio caches store versioned compressed raw observations and verified provider-query coverage intervals. Coverage records mean a bounded provider query was exhausted; they are not synthetic observations and do not imply missing periods are zero. Cache writes use a temporary file and atomic replacement. Restore validates schema/version, symbol/source identity, timestamps, values and defensive size/count limits. Corrupt cache files are discarded fail-open so normal bounded incremental acquisition can repair the history.
+
+Funding cache ordering permits distinct `Regular` and `Special` rate types at the same settlement timestamp while rejecting duplicate same-type observations. Ratio caches keep the three endpoint sources separate for each symbol.
+
+**Verification:** the user executed a .NET 10.0.403 solution build (17.4s) and all 17 offline harnesses successfully at `875b4feb71104fbc609bd07dc3120405218d325f`. Direct cache save/restore, source isolation and corruption recovery tests passed. This does **not** yet prove end-to-end restoration through newly constructed data-service instances or configured two-startup request reduction. Those service-level tests and runtime acceptance remain required before persistence is considered fully accepted.
