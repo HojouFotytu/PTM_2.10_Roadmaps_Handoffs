@@ -953,11 +953,10 @@ A release candidate additionally needs documented migration/default changes, ack
 
 ## Immediate handoff and next development order
 
-1. Add service-level restart regressions for `FuturesFundingDataService` and `FuturesLongShortRatioDataService`: first instance persists, second instance restores from the same directory and avoids duplicate provider requests when coverage is complete.
-2. Cover partial-range resume and corrupt-cache bounded reacquisition.
-3. Run configured two-startup acceptance: restored histories, reduced Binance request counts, and unchanged metric availability/values.
-4. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
-5. Only after derivatives persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Run the existing `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` from the user's clone at application branch head `c35cc9f3ac180e241d240f6c2c06a00c2d887d8f`. Record the exact local SHA, .NET build result, all harness counts and warnings. The newly added complete-restart, partial-resume and corrupt-cache repair regressions have not yet been executed locally.
+2. After offline validation passes, perform configured two-startup acceptance: confirm cache restoration, reduced Binance request counts, and unchanged metric availability/values across both startups.
+3. Verify live Binance global-account and top-trader account/position endpoints, optional API-key handling, and Monitor browser display.
+4. Only after derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
 Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
 
