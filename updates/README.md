@@ -4,6 +4,12 @@
 
 The PBL/dashboard experiment was fully reverted to exact pre-change file blobs. The original DashboardTop jQuery `.load()` mechanism remains in place, but the user still reports stale PBL/Positions data. Git history identifies the November 2 callback-dependent polling rewrite and tooltip/color operations before request-flag reset as concrete code-level risks; runtime cause remains unconfirmed. The owner requires the proposed fix to be explained before source edits. The compact PBL count card is not implemented; zero again hides the full Possible Buys card.
 
+## November 11 — Unicode Binance Futures symbol validation PASS
+
+**[Unicode Binance Futures symbols: 384 checks passed at f108cd1](2026-11-11-unicode-futures-symbol-validation.md)**
+
+The user reported five eligible COIN perpetual symbols containing Chinese characters. The shared derivative symbol normalizer was ASCII-only and aborted OI service preparation. Unicode-aware letter/digit validation now accepts these exchange-provided names while retaining rejection of whitespace, query separators and unsupported punctuation. The user ran the existing 17-harness suite at exact source `f108cd1ab39c44103bed91d1899f90f86a830eb4`: .NET 10.0.403 solution build PASS in 16.7 seconds; **17/17 harnesses and 384 checks PASS**. OI, funding and ratio service/cache handling is covered offline. Live Binance endpoint acceptance and a configured raid using the five symbols remain pending.
+
 ## November 11 — Phase 2 derivative persistence offline validation PASS
 
 **[Phase 2 derivative persistence: 378 checks passed at 86fa4c9](2026-11-11-phase2-derivative-persistence-offline-validation.md)**
