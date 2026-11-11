@@ -142,6 +142,18 @@ The checked-in runner records the SHA, builds `PTMagic.sln`, and runs all **16 o
 
 **When the user provides the output:** diagnose failed builds/tests; fix production code and assertions in the existing paths; commit directly to the existing branch and re-run the affected/full tests. Record *actual* test counts, exact source SHA and warnings before declaring acceptance. Do not repeat previously passed older tests unless the new source requires regression verification.
 
+## Phase 2 — Binance Futures long/short ratio metrics (source implemented; verification pending)
+
+Three distinct opt-in asset metrics are implemented: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation remain separate. No global aggregate is introduced in this batch.
+
+All three use Binance USD-M Futures 5-minute observations over each MarketTrend's exact `TrendMinutes`. The source's `longShortRatio`, `longAccount` and `shortAccount` are preserved independently. The window result averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral remains 1.0. Every expected 5-minute timestamp is required. No interpolation, nearest-time substitution, zero fill or silent shortening.
+
+The two top-trader endpoints use an optional read-only `BinanceFuturesApiKey`; no API secret or signed request is required. The key is not echoed by the Monitor form. Without it, top-trader acquisition is skipped and those metrics remain UNAVAILABLE; the global account metric remains available.
+
+A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, maximum 80), with fair source/symbol scheduling, at most two pages per series per raid, 500 rows per request and a 30-day provider history ceiling. History is currently in-memory only; restart re-acquisition is bounded by the same budget.
+
+**Verification pending:** local .NET build, focused `Phase2LongShortRatios` harness execution, live Binance/API-key acceptance and Monitor browser rendering. No test PASS is claimed yet.
+
 ## Current owner-approved SOM contract — D-047 (supersedes prior auto-release)
 
 - With `Application.StartupSellOnlyMode=true`, PTMagic may send global SOM **ON** through native `POST /api/v2/globalSellOnlyMode?enabled=true` before long initial startup analysis. Currently the live code requests ON at the first process startup when enabled; it does **not** independently determine whether initialization will be prolonged.
