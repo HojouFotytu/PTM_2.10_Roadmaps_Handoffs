@@ -70,8 +70,20 @@ No runtime log, failed HTTP response, or browser trace confirms which failure pa
 
 **Dashboard follow-up:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, affected files and scope before editing; wait for the owner's review. Keep PBL/Positions retrieval and rendering, DashboardBottom, ticker refresh, tooltip behavior and profit coloring unchanged.
 
-**Analyzer development continues in parallel:** the next Phase 2 metric family is global account, top-trader account and top-trader position long/short ratios. OI and funding are complete; do not return to OI source development as the next metric.
+**Analyzer development continues in parallel:** the three Futures long/short ratio feeds are implemented in source and wired into the raid pipeline. The next step is local build and focused verification, followed by live endpoint and Monitor checks.
 
+
+## Phase 2 — Binance Futures long/short ratio metrics (source implemented; verification pending)
+
+Three distinct opt-in asset metrics are implemented: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation remain separate. No global aggregate is introduced in this batch.
+
+All three use Binance USD-M Futures 5-minute observations over each MarketTrend's exact `TrendMinutes`. The source's `longShortRatio`, `longAccount` and `shortAccount` are preserved independently. The window result averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral remains 1.0. Every expected 5-minute timestamp is required. No interpolation, nearest-time substitution, zero fill or silent shortening.
+
+The two top-trader endpoints use an optional read-only `BinanceFuturesApiKey`; no API secret or signed request is required. The key is not echoed by the Monitor form. Without it, top-trader acquisition is skipped and those metrics remain UNAVAILABLE; the global account metric remains available.
+
+A shared `LongShortRatioMaxRequestsPerRaid` budget defaults to 60 (0 disables, maximum 80), with fair source/symbol scheduling, at most two pages per series per raid, 500 rows per request and a 30-day provider history ceiling. History is currently in-memory only; restart re-acquisition is bounded by the same budget.
+
+**Verification pending:** local .NET build, focused `Phase2LongShortRatios` harness execution, live Binance/API-key acceptance and Monitor browser rendering. No test PASS is claimed yet.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
