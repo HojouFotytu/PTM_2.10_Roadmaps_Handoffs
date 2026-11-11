@@ -2,6 +2,8 @@
 
 **Current authority:** November 11, 2026
 
+**Workstream boundary:** This roadmap covers PTMagic application development only. ProfitTrailer LONG/SHORT strategy-settings development is separate and is not modified or governed here. No strategy settings or settings-development artifacts are in scope.
+
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
 **Current inspected application branch head:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`
@@ -54,15 +56,17 @@ The separate Possible Buys count/card experiment remains rolled back. `MaxDashbo
 
 **Disposition:** DashboardTop refresh is resolved; no dashboard refresh task remains open. Continue Monitor work only in response to explicit owner requests.
 
-## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
+## Phase 2 — Binance Futures derivatives and persistence (offline baseline passed; D-051 implementation pending)
 
-The three opt-in asset metrics `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio` are implemented. Global account participation, top-trader account counts and top-trader position-size participation remain distinct. All use exact 5-minute source observations over each MarketTrend's `TrendMinutes`; all expected timestamps are required and missing data remains UNAVAILABLE. The ratio window calculation averages implied long-side shares `r/(1+r)`, then converts the mean back to a ratio; neutral is 1.0. Top-trader endpoints require the optional read-only `BinanceFuturesApiKey`; no API secret is needed.
+The current approved ratio scope is one public, opt-in, asset-scoped metric: `GlobalLongShortAccountRatio`. It uses exact five-minute observations over each enabled MarketTrend's `TrendMinutes`; all expected timestamps are required, and missing data remains UNAVAILABLE. The window calculation averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral is 1.0. The two top-trader metrics and their API-key-only endpoints are removed from current scope by D-051. The retained global-account endpoint requires no additional API key.
 
-Funding and ratio histories now use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart acceptance are documented above.
+Funding and the retained global-account ratio use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart evidence are documented above.
 
-**Validation:** .NET 10 solution build PASS in 17.4s and all 17 offline harnesses PASS at `875b4feb71104fbc609bd07dc3120405218d325f`, including 29 ratio groups, 18 funding, 18 raw OI and 17 incremental OI groups. Eight nonfatal nullable warnings in two existing test projects.
+**D-051 implementation pending:** remove both top-trader metrics and their API-key path; remove the three user-configurable per-raid request-budget properties; replace fixed per-raid request ceilings with application-managed adaptive acquisition coordinated through the shared Binance rate limiter. Preserve pagination and internal correctness safeguards. Do not introduce replacement user-configurable static limits.
 
-**Outstanding:** service-level restart tests through newly constructed funding/ratio data services; configured two-startup request-reduction and unchanged-metric acceptance; live Binance/API-key and Monitor browser checks. Taker flow follows after persistence acceptance.
+**Validation boundary:** the last offline PASS at `f108cd1ab39c44103bed91d1899f90f86a830eb4` (17 harnesses, 384 checks) predates D-051. It verifies the earlier three-source ratio and static per-raid budgets, not the newly approved single-source/adaptive-scheduling design. D-051 changes require their own build and offline tests before they can be reported as implemented or validated.
+
+**Still pending:** D-051 implementation and offline validation; configured Unicode-market raid acceptance; configured two-startup cache/request-reduction acceptance; live Binance endpoint and Monitor browser checks. Taker-flow development remains deferred until configured derivative persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
