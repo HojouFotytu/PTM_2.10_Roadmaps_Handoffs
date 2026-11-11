@@ -12,7 +12,7 @@ This register governs current intent. “Accepted” identifies a design or user
 
 **Exact verified application source:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`. The user ran the existing full validation script twice: .NET SDK 10.0.403 solution builds **PASS** in 15.6s and 10.3s; **all 16 offline harnesses and 337/337 test groups PASS in both runs**. This includes 71 ConfigurationLifecycle checks (SOM enable-only, startup manual-release notice, new metric snapshots), 28 Monitor settings roundtrip checks and 13 DecisionHistory checks. The first build reported eight nonfatal pre-existing nullable test-source warnings; the second reported no warnings, consistent with incremental compilation. No live exchange, PT API or browser acceptance is claimed.
 
-The Market Metrics History Requirements **UI panel** is removed; its diagnostic calculations remain active. Global Settings Log captures all available **market-wide** metrics across configured trends at entry creation and highlights a metric in white when referenced by any selected-setting trigger (even if FALSE/UNAVAILABLE); other metrics are gray. Existing history must not be fabricated from later snapshots. The red startup `PT: SOM` notice lasts only the first two raids; PTMagic never automatically requests global SOM OFF and the user releases it manually. **Do not rerun this completed offline suite as a prerequisite for new Phase 2 work.** Next development: distinct Futures global account, top-trader account and top-trader position long/short ratios. Configured runtime and Monitor browser verification remain separately open.
+The Market Metrics History Requirements **UI panel** is removed; its diagnostic calculations remain active. Global Settings Log captures all available **market-wide** metrics across configured trends at entry creation and highlights a metric in white when referenced by any selected-setting trigger (even if FALSE/UNAVAILABLE); other metrics are gray. Existing history must not be fabricated from later snapshots. The red startup `PT: SOM` notice lasts only the first two raids; PTMagic never automatically requests global SOM OFF and the user releases it manually. **Do not rerun this completed offline suite as a prerequisite for new Phase 2 work.** Current Phase 2 ratio scope and application-owned request scheduling are governed by D-051; configured runtime and Monitor browser verification remain separately open.
 
 **Evidence:** [November 10 — 337-group offline validation](updates/2026-11-10-som-monitor-offline-validation.md).
 
@@ -20,7 +20,7 @@ The Market Metrics History Requirements **UI panel** is removed; its diagnostic 
 
 Application source `891f709010c867259a6cde3df8e9c82781091b7f` (existing `phase1/market-data-foundation` branch) contains enable-only startup SOM, manual ProfitTrailer release, legacy release-checkpoint migration, and the red `PT: SOM` ticker plus raid-summary warnings on startup raids 1–2. **The source has NOT yet passed its new local .NET build or regression suite.** Last verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332** before these changes.
 
-**First action:** run/review `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1`, fix any errors on the existing branch, and record actual test results with exact SHA. Never automatically issue global SOM `enabled=false`. Disappearing ticker after raid 2 is not proof of PT state and does not switch SOM off. After SOM validation, resume Phase 2 separate global account, top-trader account, and top-trader position long/short ratio metrics.
+**Current next action:** follow D-051: retain the public global-account ratio only, remove the two top-trader metric feeds, and replace user-configurable per-raid request budgets with application-managed adaptive rate-limit scheduling. Preserve the existing Unicode-symbol, cache-persistence and offline-validation evidence. Do not modify ProfitTrailer strategy settings or their development repositories as part of PTMagic 2.10 work.
 
 [Complete active new-chat handoff](handoffs/2026-11-10-som-enable-only.md). Only specified unfinished Phase 1 *configured integration* tests were deferred; normal source builds and regressions remain mandatory.
 
@@ -410,7 +410,7 @@ Before any source edit, explain the exact proposed scheduling change, affected f
 
 ## D-049 — Binance Futures long/short ratio metric contract
 
-**Owner direction:** November 11, 2026.
+**Historical owner direction:** November 11, 2026. **Superseded on November 11 by D-051.** The three-source/top-trader design and optional API-key requirement below are preserved as historical rationale, not current scope.
 
 Implement three separate, opt-in, asset-scoped Binance USD-M Futures metrics: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation are distinct and must not be conflated. No exchange-wide aggregates are introduced in this batch.
 
@@ -427,7 +427,7 @@ Implementation is published on the existing `phase1/market-data-foundation` bran
 
 **Implementation direction:** November 11, 2026.
 
-Funding and all three Binance USD-M Futures long/short ratio data sources must use disk persistence, consistent with the existing OI and normalized OHLCV warm-start approach. The active runtime paths are:
+Funding and the retained Binance USD-M Futures global-account long/short ratio data source use disk persistence, consistent with the existing OI and normalized OHLCV warm-start approach. The original all-three-source wording is superseded by D-051. The active runtime paths are:
 
 - OI: `_data/DerivativesOpenInterestCache` (existing).
 - Funding: `_data/DerivativesFundingCache`.
@@ -438,3 +438,28 @@ The funding and ratio caches store versioned compressed raw observations and ver
 Funding cache ordering permits distinct `Regular` and `Special` rate types at the same settlement timestamp while rejecting duplicate same-type observations. Ratio caches keep the three endpoint sources separate for each symbol.
 
 **Verification:** the user executed a .NET 10.0.403 solution build (17.4s) and all 17 offline harnesses successfully at `875b4feb71104fbc609bd07dc3120405218d325f`. Direct cache save/restore, source isolation and corruption recovery tests passed. This does **not** yet prove end-to-end restoration through newly constructed data-service instances or configured two-startup request reduction. Those service-level tests and runtime acceptance remain required before persistence is considered fully accepted.
+
+
+## D-051 — Public global-account ratio only; application-managed derivative acquisition
+
+**Owner direction:** November 11, 2026.
+
+Retain only the public, asset-scoped Binance USD-M Futures metric `GlobalLongShortAccountRatio`. Remove `TopTraderLongShortAccountRatio` and `TopTraderLongShortPositionRatio` from the approved PTMagic 2.10 metric scope entirely. Do not retain them as disabled, optional, or credential-gated alternatives. Their account-count and position-size distinctions are no longer part of the active metric design.
+
+The top-trader-only API-key dependency and authentication path are unnecessary for the retained ratio scope. No additional Binance API key should be required for the global-account ratio.
+
+The three per-raid request-budget properties `OpenInterestMaxRequestsPerRaid`, `FundingMaxRequestsPerRaid`, and `LongShortRatioMaxRequestsPerRaid` are not user-facing controls. PTMagic must manage derivative acquisition internally and dynamically using the shared Binance rate-limit state, endpoint request weights, response headers and exchange cooldowns. Do not replace them with other arbitrary user-configurable static limits. The exact internal scheduler implementation and its validation remain future application work; this decision does not claim that adaptive scheduling is already implemented.
+
+Retain internal safeguards needed for correctness and service stability: endpoint pagination limits, bounded per-symbol page progress, fair scheduling, incremental coverage, persistent caches, cancellation, retry/cooldown handling, and UNAVAILABLE semantics for missing data. These are application-owned mechanics, not user strategy settings.
+
+This decision supersedes D-049's three-source ratio contract and static shared ratio request budget. Existing source/offline evidence remains historical evidence for the implementation at its tested revision; it does not validate the revised single-source/adaptive-scheduling design.
+
+## D-052 — Strict separation of PTMagic application and ProfitTrailer strategy-settings development
+
+**Owner direction:** November 11, 2026.
+
+PTMagic 2.10 application development and ProfitTrailer LONG/SHORT strategy-settings development are independent workstreams with no implicit crossover. PTMagic code, API, data-acquisition, analytics, Monitor and PTMagic project documentation work must not trigger changes to the separate strategy-settings repositories or artifacts.
+
+Do not modify LONG/SHORT strategy analyzers, GlobalSettings/SMS designs, PAIRS/DCA/INDICATORS property files, strategy settings repositories, or related settings-development documents during PTMagic work unless the user explicitly requests that separate work. Likewise, strategy-settings decisions do not authorize PTMagic source or configuration changes.
+
+For this PTMagic request, the authorized action is limited to the PTM 2.10 roadmap/handoff documentation. No application source, PTMagic configuration/settings files, or ProfitTrailer strategy-settings files are changed by this documentation update.
