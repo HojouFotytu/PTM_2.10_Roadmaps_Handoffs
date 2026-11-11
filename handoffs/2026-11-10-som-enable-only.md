@@ -2,7 +2,7 @@
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head:** `66f88f73f46d5c7863ff27e55c00b98d6917cf83`; latest user-tested application source: `875b4feb71104fbc609bd07dc3120405218d325f` (two later commits changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`).  
+**Current inspected application branch head:** `51adbb863ce7b07e599bc627846722d66793432d`; latest user-tested application source: `875b4feb71104fbc609bd07dc3120405218d325f`. Subsequent application commits include Monitor UI work and the November 11 derivative-cache persistence/restart-test changes; those newest changes are not yet locally validated.  
 **Last tested source:** `875b4feb71104fbc609bd07dc3120405218d325f` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (17.4s), **17/17 offline harnesses PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor; *not* personal LONG/SHORT ProfitTrailer trading strategies or property-trio development.
@@ -21,11 +21,14 @@ At `875b4feb71104fbc609bd07dc3120405218d325f`, the user ran the .NET 10.0.403 so
 
 Funding and ratio caches store versioned compressed raw observations and verified provider-query coverage intervals. They use temporary-file/atomic replacement, validate restored identity/timestamps/values and defensive limits, and discard corrupt files fail-open. Coverage does not fabricate observations or turn missing data into zero. Funding cache ordering preserves distinct Regular/Special settlements at the same timestamp.
 
-### Remaining acceptance
+### Persistence implementation update — November 11 (local validation pending)
 
-Current tests directly verify cache save/restore, ratio source isolation and corruption recovery. They do **not** yet prove end-to-end restart through newly constructed `FuturesFundingDataService` and `FuturesLongShortRatioDataService` instances.
+The 10-minute disk-cache save throttle previously skipped writes whenever a cache file was recently written, even if newly acquired observations or verified coverage had changed. Both funding and ratio cache writers now restore/compare the existing snapshot before applying the throttle: unchanged snapshots remain throttled, while changed rows or coverage are persisted immediately. This prevents a recent partial-cache write from suppressing a later progress update and forcing a restart to repeat already completed provider work.
 
-**Next task:** add service-level restart tests: persist through one service instance, construct a second instance against the same directory, and prove complete restored coverage avoids another provider request. Also verify partial coverage resumes only the missing range and corrupt-cache recovery triggers bounded reacquisition.
+Service-level restart regressions have been added to `Tests/Phase2Funding/Program.cs` and `Tests/Phase2LongShortRatios/Program.cs`. They construct a first service to persist complete coverage, construct a second service against the same directory and assert that no second provider request occurs, then corrupt a separate symbol cache and verify that a fresh service discards it and repairs coverage with one bounded request.
+
+**Exact application branch head:** `51adbb863ce7b07e599bc627846722d66793432d`. Commits: `6900e4b` funding cache, `047abfd` ratio cache, `b085aa8` funding restart tests, `51adbb8` ratio restart tests. **These changes have not yet been built or run locally.** Partial-coverage restart/resume is still to be added or otherwise explicitly verified; configured two-startup runtime acceptance remains pending.
+
 
 Then perform configured two-startup acceptance: verify cache restoration, reduced Binance request counts, and unchanged metric availability/values. Live Binance endpoint/API-key acceptance and Monitor browser rendering remain pending. Taker-flow development follows persistence acceptance; do not start another metric family before this is resolved.
 
