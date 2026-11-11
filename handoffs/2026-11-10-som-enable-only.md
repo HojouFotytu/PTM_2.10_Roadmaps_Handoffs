@@ -52,14 +52,14 @@ No runtime log, failed HTTP response, or browser trace confirms which failure pa
 ### Current owner requirements for the next implementation
 
 - The data in **Possible Buys (PBL)** and **Positions** must refresh. The entire dashboard does not need to be re-rendered if a narrower update is sufficient.
-- Preserve the existing DashboardTop jQuery `.load()` request method unless the owner explicitly approves a different one.
-- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement.
+- Preserve the existing DashboardTop jQuery `.load()` request and callback; the authorized correction is **scheduling-only in `Monitor/Pages/Index.cshtml`**.
+- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement. Do not change PBL/Positions retrieval or calculations, DashboardTop rendering, DashboardBottom, ticker refresh, tooltip behavior or profit coloring.
 - Do not alter the separate ticker tooltip-preservation code as a side effect.
 - Preserve existing PBL/Positions calculations and profit coloring.
 - **Explain the exact proposed change, files, and scope before editing any files.** The owner specifically corrected the workflow after an attempted premature update.
 - No implementation for this refresh correction has been agreed or committed. The current source remains the exact rollback state above.
 
-**Next action:** review the November 2 callback-dependent polling path and propose the smallest change that keeps PBL and Positions refreshing while preserving the original `.load()` call and ticker tooltip behavior. Wait for the owner's review of the explanation before changing source.
+**Next dashboard action:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, files and scope before editing; wait for owner review. Continue Phase 2 ratio-metric development in parallel.
 
 
 ## November 11 — Latest Monitor formatting focused validation PASS
@@ -174,7 +174,7 @@ The checked-in runner records the SHA, builds `PTMagic.sln`, and runs all **16 o
 
 **Priority test topics:** no `false` SOM request under any lifecycle path; migrated v1 release intent never causes OFF; uncertain/failed enable blocks unsafe bootstrap; no repeated enable within one startup; restart behavior; two-raid warning/ticker visibility then removal; TestMode isolation; multi-target partial failures. Existing ticker source assertion assumes the runner starts in repository root (which the checked-in runner does). These are validation targets, **not confirmed failures**.
 
-**Current acceptance:** New SOM source `891f709010c867259a6cde3df8e9c82781091b7f` has **NOT** received a local .NET build or updated test output in this conversation. Live PT endpoint behavior, Monitor browser display and the older configured integration cases remain separately unverified. Only the previously discussed *specific remaining Phase 1 configured integration checks* were deferred, **not normal development builds/tests** (D-045).
+**Current acceptance (updated November 11):** SOM and Monitor lifecycle changes passed the full .NET 10 offline suite twice at exact source `fb94373d8928b681e3ebe1f7209bd1439db42e72`: 16/16 harnesses and 337/337 groups. The current application branch head is `27da292158687bc0bf1aa3b990d06f53237b42d9`, after the dashboard rollback; no post-rollback local build or browser verification has been supplied. Live PT endpoint behavior and configured runtime/browser acceptance remain separate. Do not repeat the completed 337/337 suite as a prerequisite for beginning the next Phase 2 metric family; new source changes still require their own build and focused regressions under D-045.
 
 ## After SOM acceptance — Phase 2 queue
 
@@ -186,7 +186,7 @@ The prior verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **33
 
 ## Copy to the new chat
 
-> Continue PTMagic 2.10 from [the active SOM handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work directly in `phase1/market-data-foundation`; do not make new branches/duplicate candidates without asking. Current SOM source `891f709010c867259a6cde3df8e9c82781091b7f` is **UNTESTED**; last verified `49f2aab66592b6e2922097ca5242b5a614090602` passed 332/332 before SOM changes. Review my next full PowerShell regression output, fix failures, re-run and record exact source SHA. Maintain global SOM **enable-only**, user manual release, and the first-two-raid red `PT: SOM` ticker/warnings. Only after tests pass, continue Phase 2 distinct account/position ratio metrics.
+> Continue PTMagic 2.10 from [the active handoff](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs/blob/main/handoffs/2026-11-10-som-enable-only.md). Work directly in `phase1/market-data-foundation`; do not create branches or duplicate candidate paths without asking. SOM and Monitor lifecycle changes passed 16/16 harnesses and 337/337 groups twice at `fb94373`. Current branch head is `27da292`; the later dashboard rollback has no post-rollback local build/browser acceptance. Keep global SOM **enable-only** and user manual release. Next Phase 2 family: global account, top-trader account and top-trader position long/short ratios. Separately, repair top-dashboard refresh scheduling only in `Monitor/Pages/Index.cshtml`, preserving the existing jQuery `.load()` path and all callback behavior.
 
 [Status](../STATUS.md) · [Current roadmap](../roadmaps/CURRENT.md) · [D-045/D-047 decisions](../DECISIONS.md) · [Funding handoff](2026-11-10-phase2-funding.md) · [332-check evidence](../updates/2026-11-10-phase2-funding-offline-validation.md).
 
