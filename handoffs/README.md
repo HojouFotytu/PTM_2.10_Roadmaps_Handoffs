@@ -1,12 +1,18 @@
 # PTMagic 2.10 — Development Handoffs
 
-## Current handoff
+## Current handoffs
 
-**[2026-11-07 — Stabilization, correlation, and decision-history validation](2026-11-07-stabilization-correlation-validation.md)**
+### Monitor-only handoff
 
-This is the sole current starting point. It records the current source checkpoint, new implementation, validation ownership, exact local command sequence, remaining runtime acceptance, and subsequent metric roadmap.
+**[2026-11-11 — DashboardTop refresh resolved; Monitor interface state](2026-11-11-monitor-dashboard-refresh-resolved.md)**
 
-All 272 checks now have passing results across the `86c2ea3` and `d331fbd` runs. After another log showed older Core behavior, the next command block explicitly selects the newly built DLL with the existing runtime working directory and TestMode configuration, then verifies source identity. Actual PT and browser acceptance follow separately. The full twelve-project sequence remains a reference for later changes, with no repeat required for documentation-only updates. Each earlier pass retains its tested source.
+Use this handoff for Monitor interface work. It records the recent Market Analyzer, Global Settings Log, metric-status legend, native NVD3 legend positioning and DashboardTop refresh changes. The user confirmed that DashboardTop is refreshing properly. It also records the strict requirement to explain the exact change and affected files before any GitHub edit, and to make no unrequested additions.
+
+### Overall PTMagic 2.10 handoff
+
+**[2026-11-10 — SOM safety, Phase 2 derivatives and persistence](2026-11-10-som-enable-only.md)**
+
+Use this handoff for the broader PTMagic 2.10 startup-SOM and Phase 2 derivative work. The Monitor-specific handoff above does not replace this project-wide context.
 
 ## Historical handoffs
 

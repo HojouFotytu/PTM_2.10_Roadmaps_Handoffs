@@ -10,7 +10,7 @@
 
 **Offline acceptance:** Funding and ratio complete-cache restoration, partial-range resume across service restarts, corrupt-cache replacement, and Unicode symbol normalization/service/cache handling all pass. Configured two-startup, configured Unicode-market raid, live exchange/PT and browser acceptance remain separate. See [derivative persistence evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md) and [Unicode symbol evidence](../updates/2026-11-11-unicode-futures-symbol-validation.md).
 
-**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-10-som-enable-only.md)
+**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [project handoff](../handoffs/2026-11-10-som-enable-only.md) · [Monitor handoff](../handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md)
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
@@ -40,60 +40,19 @@ Current tests directly verify cache save/restore, ratio source isolation and cor
 
 Then perform configured two-startup acceptance: verify cache restoration, reduced Binance request counts, and unchanged metric availability/values. Live Binance endpoint/API-key acceptance and Monitor browser rendering remain pending. Taker-flow development follows persistence acceptance; do not start another metric family before this is resolved.
 
-## November 11 — Dashboard refresh investigation and current owner direction
+## November 11 — DashboardTop refresh restored
 
-**Current application branch:** `HojouFotytu/PTMagic`, `phase1/market-data-foundation`.  
-**Inspected application branch head:** `731f4bd502e0daa508368c8e164f9cf4c0d7d33e`.  
-**Dashboard rollback baseline:** `438acbe8e40241cd190e45385dffbee5637b3eb8`.  
-**Last full offline acceptance:** `fb94373d8928b681e3ebe1f7209bd1439db42e72`, 16/16 harnesses and 337/337 groups PASS twice. That acceptance is earlier than subsequent Monitor edits and the dashboard rollback; it is not current DashboardTop runtime acceptance.
+**Application branch:** `phase1/market-data-foundation`.  
+**Current inspected HEAD:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`.  
+**Fix commit:** [`de5ecc8`](https://github.com/HojouFotytu/PTMagic/commit/de5ecc8c3b8ef81d1a6305beebd075185342e395). Current `Monitor/Pages/Index.cshtml` still contains the fix; later commits through the current HEAD did not modify that file.
 
-### Dashboard/PBL state — fully rolled back
+The DashboardTop callback now guards the `cleanupOrphanedTooltips()` call with a function-existence check. This avoids aborting the refresh callback when an older cached `custom.js` does not expose the helper. Only `Monitor/Pages/Index.cshtml` changed. The existing jQuery `.load()` request, five-second refresh interval, request guard, tooltip initialization and profit autocoloring remain unchanged.
 
-The owner directed a complete rollback of every Possible Buys/dashboard layout and count experiment. Current source files were checked against the baseline Git blobs:
+**Acceptance:** the user reported a successful local .NET solution build after pulling the fix (Core, PTMagic and Monitor; **15.6 seconds**) and subsequently confirmed that the **top dashboard is refreshing properly**. The original browser console error was not captured; the stale-helper failure path was identified by source inspection. See [resolution evidence](../updates/2026-11-11-dashboard-refresh-resolution.md) and the [Monitor handoff](../handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md).
 
-| File | Current blob | Baseline blob | Result |
-| --- | --- | --- | --- |
-| `Monitor/Pages/Index.cshtml` | `520f94d549a6b5d728f3688e1e82a93cc1add582` | same | Exact match |
-| `Monitor/Pages/_get/DashboardTop.cshtml` | `914f18da75ec44213e061fb5613d7af276e79b44` | same | Exact match |
-| `Core/DataObjects/ProfitTrailerData.cs` | `c725ddba129ad8013be9b07c4f876086d244b091` | same | Exact match |
+The separate Possible Buys count/card experiment remains rolled back. `MaxDashboardBuyEntries=0` continues to hide the Possible Buys card; no count endpoint, async count cache, or replacement AJAX implementation was reintroduced.
 
-The separate `PossibleBuysCount` endpoint and async count cache are absent; the experimental dashboard test was removed. The original `BuyLog` zero-limit short-circuit is restored. Therefore `MaxDashboardBuyEntries=0` again hides the entire Possible Buys card, and the PBL getter does not fetch a new PBL response in that mode. The requested compact count card above full-width Positions is **not implemented**; that experiment was withdrawn.
-
-The original DashboardTop jQuery `.load()` method, tooltip cleanup/initialization, and `.text-autocolor(false)` post-load call are present. No new local build or browser verification has been supplied after the rollback.
-
-### Refresh defect — still open after rollback
-
-The owner reports that the top dashboard remains stale (reported as 12 minutes since its last update), including PBL/Positions data. Restoring the PBL-related files to their pre-experiment blobs did **not** restore observed refresh behavior. The PBL experiment was therefore not the only possible cause.
-
-Git history identifies the November 2 refresh rewrite:
-
-- `ec19a5eff1e2389c638b6cd71435a525fb99a8f2` — `Optimize dashboard AJAX polling`: replaced the previous interval-driven DashboardTop polling in `Monitor/Pages/Index.cshtml` with a request-running flag and a one-shot timer scheduled only from the `.load()` completion callback; added `document.hidden` gating.
-- `26ce2d80a66e392d389fff11a07cfd9ad3dc3260` — `Preserve active dashboard tooltips during refresh`: inserted `cleanupOrphanedTooltips()`, tooltip initialization and profit autocoloring in the callback **before** clearing `dashboardTopRequestRunning` and scheduling the next request.
-
-The current `Index.cshtml` is byte-identical to the November 2 post-tooltip version at `26ce2d8`. Ticker tooltip preservation was implemented separately in `Monitor/Pages/_Layout.cshtml` and `Monitor/Pages/_get/TickerWidgets.cshtml`; those ticker changes are not the same code path as DashboardTop polling.
-
-**Source-level risks, not runtime-confirmed causes:**
-1. The current `.load()` request has no explicit timeout; if it never completes, the callback never schedules another refresh.
-2. The next refresh is scheduled only at the end of the completion callback.
-3. Tooltip cleanup, tooltip initialization, and autocoloring run before the request-running flag is reset and the next refresh is scheduled. An exception in any of those operations can prevent subsequent polling.
-4. The `document.hidden` guard pauses refresh while the browser tab is hidden and triggers an immediate request when the tab becomes visible.
-
-No runtime log, failed HTTP response, or browser trace confirms which failure path is occurring. Do not state that the ticker tooltip fix itself caused the dashboard failure.
-
-### Current owner requirements for the next implementation
-
-- The data in **Possible Buys (PBL)** and **Positions** must refresh. The entire dashboard does not need to be re-rendered if a narrower update is sufficient.
-- Preserve the existing DashboardTop jQuery `.load()` request and callback; the correction is limited to **refresh scheduling in `Monitor/Pages/Index.cshtml`**.
-- Do not reintroduce the experimental PBL count endpoint, async count cache, or custom AJAX replacement. Do not change PBL/Positions data retrieval, calculations or DashboardTop rendering as part of the scheduling fix.
-- Do not alter the separate ticker tooltip-preservation code as a side effect.
-- Preserve existing PBL/Positions calculations and profit coloring.
-- **Explain the exact proposed change, files, and scope before editing any files.** The owner specifically corrected the workflow after an attempted premature update.
-- No implementation for this refresh correction has been agreed or committed. The current source remains the exact rollback state above.
-
-**Dashboard follow-up:** review the November 2 callback-dependent polling path and propose a scheduling-only change in `Monitor/Pages/Index.cshtml`. Preserve the original `.load()` request and callback. Explain the exact change, affected files and scope before editing; wait for the owner's review. Keep PBL/Positions retrieval and rendering, DashboardBottom, ticker refresh, tooltip behavior and profit coloring unchanged.
-
-**Analyzer development continues in parallel:** the three Futures long/short ratio feeds are implemented in source and wired into the raid pipeline. The next step is local build and focused verification, followed by live endpoint and Monitor checks.
-
+**Disposition:** DashboardTop refresh is resolved; no dashboard refresh task remains open. Continue Monitor work only in response to explicit owner requests.
 
 ## Phase 2 — Binance Futures long/short ratios and derivative persistence (implementation and offline suite passed)
 
@@ -959,7 +918,7 @@ A release candidate additionally needs documented migration/default changes, ack
 4. Verify derivative metric availability and values in the Monitor browser against the saved runtime snapshot.
 5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
 
-Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. Dashboard PBL/Positions refresh remains a separate open task. Preserve the original jQuery `.load()` path and restrict any approved correction to scheduling in `Monitor/Pages/Index.cshtml`, after explaining the exact change and waiting for owner review.
+Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. DashboardTop refresh is resolved and confirmed working; no dashboard refresh task remains open. The separate Possible Buys count/card experiment remains withdrawn. Continue Monitor interface work only within the user's explicitly requested scope.
 
 Work directly on existing branches. **Ask before creating a new branch or duplicate candidate path.**
 

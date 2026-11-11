@@ -1,8 +1,14 @@
-## Latest November 11 dashboard investigation
+## Latest November 11 Monitor resolution
 
-**[Dashboard refresh history, PBL rollback, and current Monitor state](2026-11-11-dashboard-refresh-history-and-current-state.md)**
+**[DashboardTop refresh restored and runtime-confirmed](2026-11-11-dashboard-refresh-resolution.md)**
 
-The PBL/dashboard experiment was fully reverted to exact pre-change file blobs. The original DashboardTop jQuery `.load()` mechanism remains in place, but the user still reports stale PBL/Positions data. Git history identifies the November 2 callback-dependent polling rewrite and tooltip/color operations before request-flag reset as concrete code-level risks; runtime cause remains unconfirmed. The owner requires the proposed fix to be explained before source edits. The compact PBL count card is not implemented; zero again hides the full Possible Buys card.
+The user reports that the top dashboard now refreshes properly. The one-file fix guards the `cleanupOrphanedTooltips()` call in `Monitor/Pages/Index.cshtml` when a browser may have an older cached `custom.js`. The user's local solution build passed after pulling the fix (15.6 seconds across Core, PTMagic and Monitor). The original jQuery `.load()` path and five-second refresh remain unchanged. No PBL endpoint/cache or ticker refresh changes were reintroduced.
+
+## Historical November 11 dashboard investigation
+
+**[Dashboard refresh history and pre-fix state](2026-11-11-dashboard-refresh-history-and-current-state.md)**
+
+This record preserves the earlier open-investigation state and PBL rollback history. Its unresolved-refresh statements describe the pre-fix checkpoint and are superseded by the resolution record above.
 
 ## November 11 — Unicode Binance Futures symbol validation PASS
 
