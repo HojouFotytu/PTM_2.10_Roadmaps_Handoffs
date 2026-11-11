@@ -1,3 +1,9 @@
+## November 11 — Adaptive derivative acquisition implementation (validation pending)
+
+**[D-051 adaptive acquisition published at 5a21a48](2026-11-11-derivative-adaptive-acquisition-implementation.md)**
+
+Budget removal passed the .NET 10 solution build and 17 offline harnesses (377 checks) at `6606712`; adaptive acquisition source is now published at `5a21a48` but has **not been built or tested locally**. The new 18th harness covers Binance shared quotas, response-header weights, cooldowns, deadline and fairness, and acquisition beyond 60 pages. Configured runtime acceptance remains separate.
+
 ## November 11 — Single-source ratio and adaptive derivative acquisition decisions
 
 **[D-051/D-052: public global-account ratio only; application-managed adaptive acquisition](2026-11-11-single-source-ratio-adaptive-acquisition.md)**

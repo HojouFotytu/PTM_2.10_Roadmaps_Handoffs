@@ -2,8 +2,8 @@
 
 **Updated:** November 11, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
-**Current inspected application branch head and latest user-tested source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`. This source includes the Unicode-aware shared derivative symbol normalizer and focused OI/funding/ratio service, cache and URL regression coverage.  
-**Last tested source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (16.7s), **17/17 offline harnesses and 384 checks PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
+**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (adaptive acquisition published, build pending).  
+**Last tested source:** `66067123635cbe68063713cbbc389793e5690fed` — .NET SDK 10.0.403, Core/PTMagic/Monitor build PASS (16.2s), **17/17 offline harnesses and 377 checks PASS**. Eight nonfatal nullable warnings remain in two existing test projects.  
 **Documentation:** [PTM_2.10_Roadmaps_Handoffs](https://github.com/HojouFotytu/PTM_2.10_Roadmaps_Handoffs), existing `main`  
 **Scope:** PTMagic 2.10 application, APIs, analytics and Monitor only. ProfitTrailer LONG/SHORT strategy-settings development is a separate workstream with no implicit crossover. No strategy settings or settings-development artifacts are modified by this handoff.
 
@@ -38,7 +38,7 @@ Service-level restart regressions have been added to `Tests/Phase2Funding/Progra
 **User-run validation at `86fa4c9`: PASS.** .NET 10.0.403 solution build PASS in 10.3 seconds; all 17/17 offline harnesses and 378 checks PASS. Phase2Funding 20; Phase2OpenInterest 18; Phase2OpenInterestIncremental 17; Phase2LongShortRatios 36; ConfigurationLifecycle 73; DecisionHistory 13. Eight nonfatal nullable warnings remain in two existing test projects. Complete and partial cache restart, no-duplicate-request, and corrupt-cache replacement checks passed for both funding and ratios. See [dated validation evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md). Configured two-startup runtime acceptance remains pending.
 
 
-Next implement D-051 in PTMagic application code: retain only public GlobalLongShortAccountRatio, remove top-trader feeds and their API-key path, remove the three user-configurable per-raid request budgets, and implement shared adaptive derivative acquisition. Then build/test, perform configured Unicode-market raid acceptance and configured two-startup persistence acceptance, and verify Monitor output. Taker-flow development follows persistence acceptance.
+D-051 source changes are now implemented: global-account ratio only and no optional API-key path; all three user-configurable and temporary sixty-request ceilings removed; shared adaptive derivative admission committed at `5a21a482711c8026b50fce10c55b3fb76f4075c3`. **Run the 18-harness .NET validation before claiming acceptance.** Then complete configured Unicode-market raid and two-startup persistence acceptance; taker flow follows.
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
@@ -186,7 +186,7 @@ The two top-trader metrics, their endpoints, authentication-specific handling an
 
 The three per-raid request-budget properties are also removed from the user-facing PTMagic analyzer configuration. PTMagic must manage derivative acquisition dynamically through its shared Binance rate-limit state, endpoint request weights, response headers and 429/418 cooldowns. Preserve internal pagination, per-symbol progress safeguards, fair scheduling, incremental coverage, disk persistence, cancellation and UNAVAILABLE semantics. Do not replace the removed settings with other arbitrary user-configurable static limits.
 
-**Implementation status:** D-051 is a newly approved design decision, not an implemented or tested source change. The last user-tested application source remains `f108cd1ab39c44103bed91d1899f90f86a830eb4` (17 offline harnesses, 384 checks PASS). That evidence predates D-051 and does not validate the revised single-source/adaptive-scheduling design.
+**Implementation status (November 11 update):** D-051 source is published through `5a21a482711c8026b50fce10c55b3fb76f4075c3`. The last user-tested application source is `66067123635cbe68063713cbbc389793e5690fed` (17/17 harnesses and 377 checks PASS) before adaptive changes. The new shared scheduler and rate-limiter code has **not** yet been compiled/tested locally.
 
 Funding and the retained global-account ratio use versioned compressed disk caches with raw observations and verified query-coverage intervals. OI retains its separate cache. The five Unicode COIN perpetual symbols have passed application-side normalization, service/cache and URL-encoding offline tests; live Binance endpoint acceptance and a configured raid with those symbols remain pending. See [Unicode validation evidence](../updates/2026-11-11-unicode-futures-symbol-validation.md).
 
@@ -277,4 +277,13 @@ After the run, inspect the Status Summary Global Settings Log for all configured
 
 The active Phase 2 status is now: only public `GlobalLongShortAccountRatio` remains. Both top-trader feeds and their API-key path were physically removed and user-validated at `1a1f1804237288433ed046b30fb7d9b780a32066` (17/17 offline harnesses, 377 checks PASS; solution build PASS in 18.2s). Eight nonfatal nullable warnings remain.
 
-The next application task is removal of the three user-configurable per-raid request budgets and implementation of adaptive derivative acquisition. Configured Unicode-market raid and two-startup persistence acceptance remain pending. See [dated validation](../updates/2026-11-11-top-trader-ratio-removal-validation.md).
+**Superseded:** request-budget removal is user-validated at `6606712`, and adaptive acquisition is published at `5a21a48` pending local build and the new 18-project regression run. Configured Unicode-market raid and two-startup persistence acceptance remain pending. See [adaptive implementation record](../updates/2026-11-11-derivative-adaptive-acquisition-implementation.md).
+
+
+## November 11 — Adaptive acquisition implementation handoff (latest)
+
+**Application source:** [`5a21a48`](https://github.com/HojouFotytu/PTMagic/commit/5a21a482711c8026b50fce10c55b3fb76f4075c3), existing `phase1/market-data-foundation` branch. **Published but not build-tested.** Previous user-run passing source: `66067123635cbe68063713cbbc389793e5690fed`, .NET 10.0.403 build 16.2s, 17/17 harnesses and 377 checks PASS (8 nonfatal nullable warnings).
+
+**Implementation:** Removed all three internal `DefaultRequestsPerRaid=60` constants. Production passes an unbounded page-count sentinel, while service-level bounded parameters remain for deterministic tests and internal pagination/correctness safeguards. `BinanceRateLimitTracker` now coordinates shared Futures IP weights, the OI/global-account historical endpoint allowance and the separate funding allowance, 429/418 Retry-After cooldowns, and cancellation-aware HTTP admission. The three families execute concurrently through `BinanceDerivativeAcquisitionScheduler`, granting fair per-page access until `Application.MaxAnalysisAgeSeconds` expires; partial histories remain UNAVAILABLE and persist for later raids. Existing SOM, PT writes, Monitor and LONG/SHORT strategy development are untouched.
+
+**Next local acceptance:** pull existing branch, record SHA, run `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` (now 18 harnesses, including `Phase2AdaptiveAcquisition`). Fix concrete failures before configuring live raids. No local build result or live Binance/API/Monitor acceptance should be inferred from the commit. See [detailed implementation record](../updates/2026-11-11-derivative-adaptive-acquisition-implementation.md).

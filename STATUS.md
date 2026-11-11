@@ -6,11 +6,11 @@
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`
+**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (adaptive acquisition published; local build pending)
 
-**Latest deterministically tested application source:** `f108cd1ab39c44103bed91d1899f90f86a830eb4` (.NET 10.0.403 solution build PASS in 16.7s; 17/17 offline harnesses and 384 checks PASS)
+**Latest deterministically tested application source:** `66067123635cbe68063713cbbc389793e5690fed` (.NET 10.0.403 solution build PASS in 16.2s; 17/17 offline harnesses and 377 checks PASS)
 
-**Latest verified offline suite:** .NET 10.0.403 solution build PASS in 16.7s; **17/17 harnesses and 384 checks PASS** at `f108cd1`. Eight nonfatal nullable warnings remain in two existing test projects. See [Unicode futures symbol validation](updates/2026-11-11-unicode-futures-symbol-validation.md) and [Phase 2 derivative persistence evidence](updates/2026-11-11-phase2-derivative-persistence-offline-validation.md).
+**Latest verified offline suite:** .NET 10.0.403 solution build PASS in 16.2s; **17/17 harnesses and 377 checks PASS** at `6606712`. Eight nonfatal nullable warnings remain in two existing test projects. This verifies D-051 budget removal, not the subsequent adaptive scheduler. [Adaptive implementation (build pending)](updates/2026-11-11-derivative-adaptive-acquisition-implementation.md).
 
 **Current project handoff:** [SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md)  
 **Current Monitor handoff:** [DashboardTop refresh resolved and Monitor interface state](handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md)
@@ -52,17 +52,17 @@ The separate Possible Buys count endpoint, async count cache, and replacement AJ
 
 **Disposition:** DashboardTop refresh is resolved. No dashboard refresh follow-up is currently open. See the [resolution evidence](updates/2026-11-11-dashboard-refresh-resolution.md) and [Monitor handoff](handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md).
 
-## Phase 2 — Binance Futures derivatives and persistence (offline implementation baseline passed; revised acquisition design pending)
+## Phase 2 — Binance Futures derivatives (D-051 adaptive acquisition published; validation pending)
 
 The current approved ratio scope is **one public, opt-in, asset-scoped metric: `GlobalLongShortAccountRatio`**. It uses exact five-minute observations over each enabled MarketTrend's `TrendMinutes`; all expected timestamps are required, and missing data remains UNAVAILABLE. The window calculation averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral is 1.0. The two top-trader metrics and their API-key-only endpoints are removed from current scope by D-051. No additional Binance Futures API key is required for the retained public global-account ratio.
 
 Funding and the retained global-account ratio use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart evidence are documented above.
 
-**Last verified application baseline:** `f108cd1ab39c44103bed91d1899f90f86a830eb4`; .NET 10.0.403 solution build PASS in 16.7s; 17/17 offline harnesses and 384 checks PASS. This evidence predates implementation of D-051. It verifies the prior three-source ratio and static per-raid budget design, not the newly approved single-source/adaptive-scheduling design.
+**Validated D-051 baseline:** The top-trader/API-key path was removed and validated at `1a1f180`. The three user-configurable request budgets were removed and the compile correction was validated at `66067123635cbe68063713cbbc389793e5690fed`: Core/PTMagic/Monitor build PASS in 16.2s; 17/17 harnesses, 377 checks PASS. Earlier `f108cd1` evidence (384 checks) pertains to an obsolete three-source ratio implementation and remains historical.
 
-**Current approved changes not yet implemented or validated:** remove both top-trader metrics and their API-key path; remove the three user-configurable per-raid request-budget properties; replace independent static per-raid ceilings with application-managed adaptive scheduling using the shared Binance rate-limit state. These are PTMagic application changes only. D-051 governs the target architecture.
+**Adaptive source published:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` replaces temporary 60-request defaults with a shared Binance rate-limit tracker, provider-specific five-minute quotas, response-weight feedback, 429/418 cooldowns, a fair per-page family scheduler and cancellation at the existing MaxAnalysisAgeSeconds deadline. The provider's documented quotas, native pagination and per-symbol progress safeguards remain. Historical OI, funding and global ratio observations stay cached; missing observations remain UNAVAILABLE. A new Phase2AdaptiveAcquisition harness is registered, making **18 harnesses** in the checked-in runner. **No .NET compile/test execution has been reported for this source.**
 
-**Still pending:** implementation and offline validation of D-051; configured Unicode-market raid acceptance; configured two-startup cache/request-reduction acceptance; live Binance endpoint and Monitor browser checks. Taker-flow development remains deferred until the configured derivative persistence acceptance is complete.
+**Next:** build/test at exact `5a21a482711c8026b50fce10c55b3fb76f4075c3`; correct any concrete errors; then configured Unicode-market raid, two-startup persistence/request-reduction acceptance and live Binance/Monitor verification. Taker-flow development remains deferred until persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
@@ -377,4 +377,4 @@ Earlier files that instructed a restart of Phase 1C, preservation of a separate 
 
 At exact PTMagic application source `1a1f1804237288433ed046b30fb7d9b780a32066`, both top-trader metrics and their entire API-key path were removed. The only supported ratio is the public `GlobalLongShortAccountRatio`. The user ran the .NET 10.0.403 solution build successfully in 18.2 seconds; all 17 offline harnesses and 377 checks passed, including 32 global-account ratio checks. Eight nonfatal nullable warnings remain in two existing test projects. See [dated removal validation](updates/2026-11-11-top-trader-ratio-removal-validation.md).
 
-**Still pending:** remove the three user-configurable per-raid request-budget properties and implement shared adaptive derivative acquisition. Configured Unicode-market raid, two-startup persistence, live Binance and Monitor browser acceptance also remain pending.
+**Superseded by current D-051 status above:** budget removal was validated at `6606712` and adaptive acquisition published at `5a21a48`. The new scheduler's build/tests and configured runtime acceptance remain pending.
