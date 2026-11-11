@@ -1,8 +1,8 @@
-## November 11 — Adaptive derivative acquisition implementation (validation pending)
+## November 11 — Adaptive derivative acquisition offline validation PASS
 
-**[D-051 adaptive acquisition published at 5a21a48](2026-11-11-derivative-adaptive-acquisition-implementation.md)**
+**[D-051 adaptive acquisition: 18/18 harnesses, 386 checks PASS](2026-11-11-derivative-adaptive-acquisition-implementation.md)**
 
-Budget removal passed the .NET 10 solution build and 17 offline harnesses (377 checks) at `6606712`; adaptive acquisition source is now published at `5a21a48` but has **not been built or tested locally**. The new 18th harness covers Binance shared quotas, response-header weights, cooldowns, deadline and fairness, and acquisition beyond 60 pages. Configured runtime acceptance remains separate.
+At source `5a21a482711c8026b50fce10c55b3fb76f4075c3`, the user ran .NET SDK 10.0.403: Core/PTMagic/Monitor solution build PASS in 13.9s, **18/18 offline harnesses and 386 checks PASS**, including all nine adaptive checks for Binance quotas, response-weight headers, cooldowns, fairness, deadlines and acquisition beyond 60 pages. Eight pre-existing nonfatal nullable warnings remain. Configured Unicode-market raid, two-startup persistence and live PT/Binance/Monitor acceptance remain pending.
 
 ## November 11 — Single-source ratio and adaptive derivative acquisition decisions
 

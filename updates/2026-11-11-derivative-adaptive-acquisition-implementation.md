@@ -3,7 +3,7 @@
 **Date:** 2026-11-11 (KST)  
 **Application:** [PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`  
 **Source commit:** [`5a21a482711c8026b50fce10c55b3fb76f4075c3`](https://github.com/HojouFotytu/PTMagic/commit/5a21a482711c8026b50fce10c55b3fb76f4075c3)  
-**Status:** Published to GitHub, **local .NET build and offline harness validation pending**.
+**Status:** Published to GitHub and **offline validated November 11, 2026** (.NET 10.0.403 solution build PASS; 18/18 harnesses, 386 checks PASS). Configured runtime acceptance remains pending.
 
 ## Earlier completed evidence
 
@@ -34,4 +34,12 @@ git log -1 --format="%H"
 if ($LASTEXITCODE -ne 0) { throw "Adaptive validation failed" }
 ```
 
-Expected commit at authoring: `5a21a482711c8026b50fce10c55b3fb76f4075c3`. **Actual output is required before marking any result PASS.** Following a successful local run, perform configured Unicode COIN-market raid and configured two-startup derivative-cache persistence/request-reduction acceptance, then live Binance and Monitor review. Taker-flow development remains deferred until persistence acceptance.
+Expected and user-verified commit: `5a21a482711c8026b50fce10c55b3fb76f4075c3`. The required local run has now passed (evidence recorded below). Next: configured Unicode COIN-market raid, configured two-startup derivative-cache persistence/request-reduction acceptance, then live Binance/PT and Monitor review. Taker-flow development remains deferred until persistence acceptance.
+
+## November 11 — User-executed offline acceptance
+
+**User-run validation (November 11, 2026):** Exact source `5a21a482711c8026b50fce10c55b3fb76f4075c3`, .NET SDK 10.0.403, Core/PTMagic/Monitor solution build **PASS in 13.9 seconds**, all **18/18 offline harnesses PASS (386 checks)**. New `Phase2AdaptiveAcquisition`: **9/9** focused groups PASS, including OI/global-ratio shared allowance, separate funding allowance, request-weight headers, 429/418 cooldowns, family admission, freshness/cancellation, and more than 60 pages in each family. Eight nonfatal nullable warnings remain in `Phase1SmsSummaryIsolation` (2) and `NormalizedPriceTrendMigration` (6). No live Binance, configured raids, ProfitTrailer API actions or Monitor browser acceptance occurred.
+
+The focused adaptive groups explicitly confirm shared OI/global-account-ratio historical allowance, separate funding allowance, endpoint-weight response-header accounting, HTTP 429/418 cooldowns, fair family admission, stale/saturated/cancelled acquisition, and completion beyond 60 pages for all three derivative families. Earlier cache and Unicode service regressions also passed in the same suite.
+
+**Acceptance:** D-051 offline implementation and validation COMPLETE at `5a21a482711c8026b50fce10c55b3fb76f4075c3`. **Not yet accepted:** live provider/IP enforcement, multiple PTMagic processes sharing one outbound IP, configured Unicode Binance symbols, actual request reduction and unchanged values across two real startups, actual ProfitTrailer delivery, and Monitor browser behavior. No strategy-settings workstream modifications are authorized or implied.

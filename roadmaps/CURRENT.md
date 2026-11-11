@@ -6,9 +6,9 @@
 
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (adaptive acquisition implementation, untested locally)
+**Current inspected application branch head:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (adaptive acquisition offline validated)
 
-**Latest user-tested application source:** `66067123635cbe68063713cbbc389793e5690fed` (.NET 10.0.403 solution build PASS in 16.2s; **17/17 offline harnesses and 377 checks PASS**). Eight nonfatal nullable warnings occurred in two existing test projects. This predates the new adaptive implementation.
+**Latest user-tested application source:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (.NET 10.0.403 solution build PASS in 13.9s; **18/18 offline harnesses and 386 checks PASS**). Eight nonfatal nullable warnings occurred in two existing test projects; configured runtime acceptance is separate.
 
 **Offline acceptance:** Funding and ratio complete-cache restoration, partial-range resume across service restarts, corrupt-cache replacement, and Unicode symbol normalization/service/cache handling all pass. Configured two-startup, configured Unicode-market raid, live exchange/PT and browser acceptance remain separate. See [derivative persistence evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md) and [Unicode symbol evidence](../updates/2026-11-11-unicode-futures-symbol-validation.md).
 
@@ -16,7 +16,7 @@
 
 This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
 
-Implementation and execution evidence are different states. The latest user-executed build and 17/17 offline harnesses passed at `875b4feb71104fbc609bd07dc3120405218d325f`. The two subsequent commits through `66f88f73f46d5c7863ff27e55c00b98d6917cf83` changed only `RANDOM_THOUGHTS_AND_REMINDERS.md`. Live Binance/PT, configured two-startup cache recovery and Monitor browser acceptance remain open; each result retains its actual source identity.
+Implementation and execution evidence are different states. The latest user-executed .NET 10.0.403 build and all 18 offline harnesses (386 checks) passed at exact source `5a21a482711c8026b50fce10c55b3fb76f4075c3`. Prior validation records retain their historical source identities. Live Binance/PT, configured Unicode-market raids, two-startup cache recovery and Monitor browser acceptance remain open.
 
 **November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
 
@@ -56,17 +56,17 @@ The separate Possible Buys count/card experiment remains rolled back. `MaxDashbo
 
 **Disposition:** DashboardTop refresh is resolved; no dashboard refresh task remains open. Continue Monitor work only in response to explicit owner requests.
 
-## Phase 2 — Binance Futures derivatives and persistence (D-051 adaptive source published; offline validation pending)
+## Phase 2 — Binance Futures derivatives and persistence (D-051 offline validated)
 
 The current approved ratio scope is one public, opt-in, asset-scoped metric: `GlobalLongShortAccountRatio`. It uses exact five-minute observations over each enabled MarketTrend's `TrendMinutes`; all expected timestamps are required, and missing data remains UNAVAILABLE. The window calculation averages implied long-side shares `r/(1+r)` and converts the mean back to a ratio; neutral is 1.0. The two top-trader metrics and their API-key-only endpoints are removed from current scope by D-051. The retained global-account endpoint requires no additional API key.
 
 Funding and the retained global-account ratio use persistent versioned compressed caches. Raw observations and verified coverage intervals are saved atomically; corrupt cache files are discarded fail-open. OI's existing disk cache remains unchanged. Cache paths and restart evidence are documented above.
 
-**D-051 source status:** Both top-trader metrics/API-key path were removed at `1a1f180`. Three configurable per-raid budgets were removed and validated at `66067123635cbe68063713cbbc389793e5690fed` (17/17 harnesses, 377 checks PASS). Adaptive acquisition was committed at `5a21a482711c8026b50fce10c55b3fb76f4075c3`: production no longer uses fixed sixty-page ceilings; shared Binance IP/provider-capacity accounting and response-header/cooldown feedback regulate requests. The three derivative families acquire concurrently through a fair per-page scheduler until the existing raid freshness deadline. No PT strategy-settings changes.
+**D-051 source status:** Both top-trader metrics/API-key path were removed at `1a1f180`. Three configurable per-raid budgets were removed and validated at `6606712` (17/17 harnesses, 377 checks PASS). Adaptive acquisition at `5a21a482711c8026b50fce10c55b3fb76f4075c3` removes fixed sixty-page ceilings; shared Binance IP/provider-capacity accounting and response-header/cooldown feedback regulate requests. The three derivative families acquire concurrently through a fair per-page scheduler until the existing raid freshness deadline. No PT strategy-settings changes.
 
-**Acceptance boundary:** The new `Tests/Phase2AdaptiveAcquisition` focused harness is included in the runner (now 18 projects), but no local .NET solution build or offline execution is recorded at `5a21a482711c8026b50fce10c55b3fb76f4075c3`. Earlier passing tests cannot be substituted for this validation.
+**Offline acceptance:** **User-run validation (November 11, 2026):** Exact source `5a21a482711c8026b50fce10c55b3fb76f4075c3`, .NET SDK 10.0.403, Core/PTMagic/Monitor solution build **PASS in 13.9 seconds**, all **18/18 offline harnesses PASS (386 checks)**. New `Phase2AdaptiveAcquisition`: **9/9** focused groups PASS, including OI/global-ratio shared allowance, separate funding allowance, request-weight headers, 429/418 cooldowns, family admission, freshness/cancellation, and more than 60 pages in each family. Eight nonfatal nullable warnings remain in `Phase1SmsSummaryIsolation` (2) and `NormalizedPriceTrendMigration` (6). No live Binance, configured raids, ProfitTrailer API actions or Monitor browser acceptance occurred.
 
-**Next:** run `Tests/Phase2OpenInterestIncremental/Run-Phase2Validation.ps1` at exact current source, correct any failures, then configured Unicode-market raid, configured two-startup persistence/request-reduction, and live Binance/Monitor acceptance. Taker-flow stays deferred until persistence acceptance.
+**Next:** Configured Unicode COIN-market raid, two-startup persistence/request-reduction acceptance and live Binance/Monitor verification. Record source/binary identity, provider request counts, cache restoration and metric availability/values. Taker-flow remains deferred until configured persistence acceptance.
 
 ## November 11 — Latest Monitor formatting focused validation PASS
 
@@ -957,4 +957,4 @@ This roadmap is maintained as current guidance. Preserve an earlier snapshot whe
 
 At exact PTMagic application source `1a1f1804237288433ed046b30fb7d9b780a32066`, both top-trader metrics and their entire API-key path were removed. The sole ratio is the public `GlobalLongShortAccountRatio`. User-run .NET 10.0.403 solution build: PASS in 18.2 seconds; 17/17 offline harnesses and 377 checks PASS, including 32 ratio checks. Eight nonfatal nullable warnings remain.
 
-**Superseded:** request-budget removal passed at `6606712`, and adaptive acquisition is published at `5a21a48` pending local validation. Configured Unicode-market raid and two-startup persistence acceptance remain pending. See [dated evidence](../updates/2026-11-11-derivative-adaptive-acquisition-implementation.md).
+**Superseded:** request-budget removal passed at `6606712`, and adaptive acquisition passed offline validation at `5a21a48` (18 harnesses, 386 checks). Configured Unicode-market raid and two-startup persistence acceptance remain pending. See [dated evidence](../updates/2026-11-11-derivative-adaptive-acquisition-implementation.md).
