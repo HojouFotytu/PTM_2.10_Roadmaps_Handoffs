@@ -1,5 +1,8 @@
 # PTMagic 2.10 — Development Handoffs
 
+**D-053 implementation checkpoint — November 12, 2026:** PTMagic application source [`892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d`](https://github.com/HojouFotytu/PTMagic/commit/892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d) now removes the three OI/long-short positioning metrics, OI/ratio source acquisition and active cache integrations, obsolete tests, and UI labels. The **24 retained metrics** include 17 global-capable and seven asset-only measurements; settled funding remains with independent safe acquisition. A new user-local .NET build, the reduced **15-harness** offline suite and configured runtime checks are **pending**. The earlier `d101b5a0` 18-harness PASS is **pre-removal evidence**, not validation of the new code. This status **supersedes all earlier “source removal pending” or OI/positioning future-work instructions** in this document; past implementation and validation records are historical. The next step is local validation of `892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d`, not further OI/positioning development.
+
+
 ## Current scope — November 12 D-053
 
 D-053 removes OI and all long/short positioning metrics and their planned market aggregates/higher-order dependencies. The remaining 24-metric target and implementation-pending status are in [current roadmap](../roadmaps/CURRENT.md) and the [active project handoff](2026-11-10-som-enable-only.md). Earlier dated handoffs about OI or ratios are historical, **not future development instructions**.
