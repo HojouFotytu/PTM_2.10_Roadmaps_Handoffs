@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-12 KST  
 **Application repository:** `HojouFotytu/PTMagic` / existing `phase1/market-data-foundation`  
-**Published source revision:** [`5b02d4b75d7fcb24782492fa84ed642e0ebbffdf`](https://github.com/HojouFotytu/PTMagic/commit/5b02d4b75d7fcb24782492fa84ed642e0ebbffdf)  
+**Published source revision:** [`361c729ff8e64f40b2e0a507c557297161fbbc1e`](https://github.com/HojouFotytu/PTMagic/commit/361c729ff8e64f40b2e0a507c557297161fbbc1e)  
 **Status:** **Implemented in source and inspected. A .NET build and new focused tests are pending user-local execution.** This is **not** a verified runtime-acceptance claim.
 
 ## Implemented metric contract
@@ -31,7 +31,9 @@ Binance USDⓈ-M `/fapi/v1/klines` provides total quote volume at array index 7 
 
 Existing harnesses (not new directories): `Tests/Phase1COhlcv` adds exact weighted ratio, integration, zero-volume, legacy missing-data and Binance index-10 parser checks; `Tests/NormalizedWarmStartCache` adds realistic legacy-v1 restoration, selectively requested taker history, immediate v2 persistence despite the save throttle, and restart reuse; `Tests/Phase2AdaptiveAcquisition` now expects **26** registered metrics (17 global-capable, nine asset-only).
 
-The D-053 user-run build and **36/36** focused tests at `e31635a1` and four configured TestMode raids are previous-feature evidence only; they do **not** validate this new revision. A .NET SDK is unavailable to the assistant's execution environment. No compile or test PASS is claimed for `5b02d4b75d7fcb24782492fa84ed642e0ebbffdf`.
+A further targeted guard prevents repeat full-history requests when the configured OHLCV retention is too short to hold the required taker period; that metric remains unavailable until the retention constraint is resolved. The existing warm-start harness includes a direct regression for this condition. The newly authored focused tests total **15 Phase1COhlcv groups, 10 NormalizedWarmStartCache groups, and 8 Phase2AdaptiveAcquisition groups** (33 expected; **not yet executed**).
+
+The D-053 user-run build and **36/36** focused tests at `e31635a1` and four configured TestMode raids are previous-feature evidence only; they do **not** validate this new revision. A .NET SDK is unavailable to the assistant's execution environment. No compile or test PASS is claimed for `361c729ff8e64f40b2e0a507c557297161fbbc1e`.
 
 ## Exact next verification
 
