@@ -3,7 +3,7 @@
 **Date:** 2026-11-12 KST  
 **Application repository:** `HojouFotytu/PTMagic` / existing `phase1/market-data-foundation`  
 **Published source revision:** [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278)  
-**Status:** **Implemented in source and inspected. A .NET build and new focused tests are pending user-local execution.** This is **not** a verified runtime-acceptance claim.
+**Status:** **Implemented, source-inspected, compiled and focused-offline verified on November 13, 2026 KST.** Configured taker-flow TestMode/runtime acceptance remains pending.
 
 ## Implemented metric contract
 
@@ -62,3 +62,7 @@ After the **new** source passes, use the existing 26-metric TestMode analyzer to
 **Separation:** This is PTMagic software only. No modifications to ProfitTrailer personal LONG/SHORT analyzer, settings, PAIRS, DCA, INDICATORS, or separate strategy repositories.
 
 [Prior D-053 acceptance](2026-11-12-d053-configured-testmode-validation.md) · [Source design review](2026-11-12-phase2-taker-flow-source-review.md) · [Current technical roadmap](../roadmaps/CURRENT.md)
+
+## Subsequent execution evidence — November 13, 2026 KST
+
+**November 13, 2026 — Phase 2 Taker Flow focused verification PASS:** User-supplied execution at exact PTMagic source [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278) confirmed `dotnet build .\PTMagic.sln` **PASS (16.1s; Core, PTMagic, Monitor net10.0)** and all **33/33 focused offline groups PASS**: Phase1COhlcv **15/15**, NormalizedWarmStartCache **10/10**, Phase2AdaptiveAcquisition **8/8**, including the 26-metric registry (17 global-capable, nine asset-only). **Next:** configured Binance Futures TestMode raid using the updated 26-metric analyzer, verifying source taker-buy quote volume, both computed metrics, cache upgrade, and repeat-raid behavior. **Not yet established:** configured taker-flow runtime acceptance, actual PT delivery, or browser acceptance. Prior statements that the taker revision's build or focused tests are pending are superseded; earlier historical test reports remain source-specific.
