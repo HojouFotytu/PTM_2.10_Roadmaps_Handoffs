@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+**Phase 2 Taker Flow implementation — November 12:** application source [`5b02d4b75d7fcb24782492fa84ed642e0ebbffdf`](https://github.com/HojouFotytu/PTMagic/commit/5b02d4b75d7fcb24782492fa84ed642e0ebbffdf) now contains **26 registered metrics** (17 globally evaluable, nine asset-only), including `TakerBuyRatio` and `TakerImbalance`. The existing kline reader retains index-10 taker-buy **quote** volume, an opt-in exact-period feature engine calculates both metrics, legacy OHLCV cache **v1** remains readable, and cache **v2** persists source-verified taker fields with targeted repair of old cache windows. The existing diagnostic TestMode analyzer was extended in place; Monitor labels/colors and focused tests were updated. **Published and source-inspected; .NET build, new focused test execution and configured taker-flow raid are PENDING.** The earlier D-053 PASS cannot be reattributed to this feature. [Implementation and verification handoff](../updates/2026-11-12-phase2-taker-flow-implementation.md).
+
 **Phase 2 Taker Flow — source assessment started November 12:** [Source/persistence review](../updates/2026-11-12-phase2-taker-flow-source-review.md) confirms Binance kline index 10 is currently discarded by `BinanceKlineClient`; `MarketCandle` and version-1 normalized warm-start cache contain no taker-buy quote volume. Proposed new asset-only metrics `TakerBuyRatio=B/Q` and `TakerImbalance=2B/Q−1` will reuse the existing pinned 5m kline pipeline, sum exact complete TrendMinutes periods and keep missing data UNAVAILABLE. **Implementation is not yet published**; preserving existing OHLCV cache warm-start behavior while safely refreshing missing taker fields is the principal design requirement. D-053 is closed at configured TestMode level; Phase 2 Taker Flow is the active development track.
 
 **2026-11-12 D-053 configured verification — PASS:** user-run `.NET 10` solution build **PASS (12.9s)** at application source `e31635a1e67347918ca1bbf94d0fb64809b1cea0`; **Phase2Funding 28/28** and **Phase2AdaptiveAcquisition 8/8** (**36/36 focused offline checks**). The user-supplied log and `_data` archive show **four completed TestMode raids**, 519 COIN markets, **519/519 funding history coverage**, **4,169/4,169 available trigger inputs** per decision, **zero completed-raid metric warnings**, successful bulk-only funding acquisition (6/1/1/1 pages; no failures) and fresh determinate decisions. Obsolete OI/ratio warnings preceded the corrected analyzer reload. **D-053 source, focused checks and configured TestMode acceptance are complete**; non-TestMode PT delivery, startup SOM enforcement and Monitor browser acceptance remain unverified. **Next development: Phase 2 taker-flow assessment and implementation; do not repeat retired OI/ratio validation.** [Full D-053 configured evidence](../updates/2026-11-12-d053-configured-testmode-validation.md).
@@ -669,7 +671,7 @@ The confirmed-delivery checkpoint and decision-history audit trail have differen
 
 ## 11. Phase 2 — Binance Futures funding and taker flow (active scope D-053)
 
-**Status:** settled funding is implemented and live-tested; taker flow remains planned. OI and all long/short positioning metrics, source clients and acquisition are **withdrawn**. Source code removal is complete and audited; current-revision local build and configured runtime acceptance remain pending.
+**Status:** settled funding is implemented and live-tested; taker flow source is now implemented at `5b02d4b75d7fcb24782492fa84ed642e0ebbffdf`, with compilation and configured raid checks pending. OI and all long/short positioning metrics, source clients and acquisition are **withdrawn**. Source code removal is complete and audited; current-revision local build and configured runtime acceptance remain pending.
 
 ### 11.1 Withdrawn source families — explicitly out of scope
 
@@ -681,14 +683,14 @@ Retain `FundingRate` and `FundingSum` from documented Binance USD-M *settled* fu
 
 Preserve the verified bulk funding acquisition with safe symbol-specific fallback, disk persistence, bounded paging and application-controlled provider admission. Funding has a separate provider request allowance from the withdrawn OI/positioning endpoints.
 
-### 11.3 Taker flow — next metric family
+### 11.3 Taker flow — implemented source, execution pending
 
 Proposed asset metrics:
 
 - `TakerBuyRatio` = taker-buy quote volume / total quote volume; range [0, 1].
 - `TakerImbalance` = (taker-buy quote volume − taker-sell quote volume) / total quote volume; range [-1, +1].
 
-Confirm the Binance kline response supplies compatible total and taker-buy quote-volume fields and preserve their exact units and time alignment in the normalized candle model and persistent cache. **Prefer reusing already collected klines** rather than adding symbol-specific taker-flow history requests. Derive sell volume as total minus buy only when the source contract and numerical validation justify that interpretation. Zero/invalid totals, insufficient history or incompatible units remain UNAVAILABLE. No source change has been made for this proposed family.
+Confirm the Binance kline response supplies compatible total and taker-buy quote-volume fields and preserve their exact units and time alignment in the normalized candle model and persistent cache. **Prefer reusing already collected klines** rather than adding symbol-specific taker-flow history requests. Derive sell volume as total minus buy only when the source contract and numerical validation justify that interpretation. Zero/invalid totals, insufficient history or incompatible units remain UNAVAILABLE. Source implementation is published; source-stamped build, focused testing and configured raid validation are pending. Refer to the Phase 2 implementation record above.
 
 ## 12. Phase 2B — Retained market-wide Futures aggregates
 
