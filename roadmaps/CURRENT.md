@@ -1,26 +1,20 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
-**Current authority:** November 12, 2026
+**Current authority:** November 12, 2026 · **Active scope decision:** [D-053](../DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210)
 
-**Workstream boundary:** This roadmap covers PTMagic application development only. ProfitTrailer LONG/SHORT strategy-settings development is separate and is not modified or governed here. No strategy settings or settings-development artifacts are in scope.
+**Workstream boundary:** PTMagic application development only. ProfitTrailer LONG/SHORT strategy-settings development and its repositories, files and policy remain independent.
 
-**Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`
+**Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), branch `phase1/market-data-foundation`.
 
-**Current inspected application branch head:** `6f6da519b783ee51b20df3c7dfd5cf91b004e630` (Global Account Ratio boundary correction published; build pending)
+**Latest user-tested application source (before D-053 implementation):** `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2`. On November 12 the .NET 10.0.403 solution build passed in 14.8 seconds, all 18 offline harnesses passed, including 80 ConfigurationLifecycle checks and eight pre-existing nonfatal nullable warnings. The live corrected funding raid attained 519/519 coverage in one bulk request, while OI/ratio each competed for the combined 800-request safe historical allowance. The three withdrawn metrics **still exist in this source**.
 
-**Latest user-tested application source:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (.NET 10.0.403 solution build PASS in 13.9s; **18/18 offline harnesses and 386 checks PASS**). Eight nonfatal nullable warnings occurred in two existing test projects; configured runtime acceptance is separate.
+**New scope (decision approved, source change pending):** remove `OpenInterestChange`, `OpenInterestValueChange`, `GlobalLongShortAccountRatio`, their OI/positioning-only collectors and API dependencies, and all planned cross-market OI/positioning aggregates and higher-order conditions. The approved target catalogue is **24 metrics: 17 global-capable and 7 asset-only**. Keep settled funding, kline-based taker-flow development, funding/taker-flow market aggregates, independent price/volume/correlation, liquidity/depth and transparent flow conditions. No disabled/legacy OI or positioning metrics are part of the target product.
 
-**Offline acceptance:** Funding and ratio complete-cache restoration, partial-range resume across service restarts, corrupt-cache replacement, and Unicode symbol normalization/service/cache handling all pass. Configured two-startup, configured Unicode-market raid, live exchange/PT and browser acceptance remain separate. See [derivative persistence evidence](../updates/2026-11-11-phase2-derivative-persistence-offline-validation.md) and [Unicode symbol evidence](../updates/2026-11-11-unicode-futures-symbol-validation.md).
+**Immediate action:** implement the removal in the PTMagic source and affected tests/settings/Monitor/registry/export/diagnostics, then validate at a new source SHA. Do not spend additional acceptance cycles on withdrawn OI/ratio acquisition or restart behavior. Continue with retained funding runtime behavior, taker-flow sourcing and Phase 2B thereafter. Do not delete users' existing on-disk cache files as a byproduct of documentation.
 
-**November 12 live acceptance finding and patch:** The public global-account 5m ratio endpoint returned one legitimate aligned observation at the inclusive provider boundary, one millisecond before PTMagic's exclusive start. PTMagic's strict service check rejected the entire page, causing all ratio histories to fail in observed configured raids. [Source `6f6da51`](https://github.com/HojouFotytu/PTMagic/commit/6f6da519b783ee51b20df3c7dfd5cf91b004e630) ignores only the `from - 1 ms` overlap when `from` is exactly one millisecond beyond a five-minute boundary; other out-of-range rows continue to fail closed. Original 500-row provider count still controls pagination, and the overlap is excluded from cache. Tests were authored but **local solution build and focused verification remain pending**. Next: validate exact source, then rerun configured ratio acquisition and actual two-startup cache recovery. [Evidence](../updates/2026-11-12-global-account-ratio-boundary-fix.md).
+**Historical-status notice:** the November 10–12 milestone sections retained below record their then-current implementation and historical validation, not current forward requirements. D-053 and the rewritten canonical Phase 2/2B/3/5 sections control future development. Earlier ratio-boundary, derivative persistence and rate-limit findings remain valid historical evidence, even though their feature families are now withdrawn.
 
-**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [project handoff](../handoffs/2026-11-10-som-enable-only.md) · [Monitor handoff](../handoffs/2026-11-11-monitor-dashboard-refresh-resolved.md)
-
-This is the standalone current plan for PTMagic 2.10. It replaces the active guidance in the dated November 4 technical roadmaps while preserving those files as history. A reader does not need to reconstruct the old conversation to determine the current contract or next step.
-
-Implementation and execution evidence are different states. The latest user-executed .NET 10.0.403 build and all 18 offline harnesses (386 checks) passed at exact source `5a21a482711c8026b50fce10c55b3fb76f4075c3`. Prior validation records retain their historical source identities. Live Binance/PT, configured Unicode-market raids, two-startup cache recovery and Monitor browser acceptance remain open.
-
-**November 10 — Market Trends positive color:** The existing Market Trends column displays its activation-time PriceTrend percentage when available. Positive values (>0%) are **green**, regardless of setting-trigger membership; nonpositive/unknown trends remain **white** if referenced by the selected setting, **gray** if unused. The Market Metrics gray/white/green trigger-color policy is unchanged. Monitor-only UI change published; the last reported 71/71 ConfigurationLifecycle PASS and solution build predate this color adjustment. Local build/browser verification of the new source is pending.
+**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-10-som-enable-only.md) · [concise roadmap](../ROADMAP.md)
 
 ## November 11 — Derivatives persistence and latest offline validation
 
@@ -304,9 +298,9 @@ The qualified Telegram fixture references are now verified by native execution; 
 | Phase 1C — OHLC/volume metrics | Accepted baseline; new requirement reporting requires validation |
 | Phase 1D — correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
 | Phase 1E — inspection and robustness | Deterministic lifecycle/editor/history checks passed; configured PT, browser, cross-exchange and failure-path acceptance remain |
-| Phase 2 — futures raw observations | Planned |
-| Phase 2B — futures market aggregation | Planned |
-| Phase 3 — higher-order conditions | Planned |
+| Phase 2 — Futures funding and taker flow | Funding implemented; OI/positioning withdrawal pending; taker flow next |
+| Phase 2B — funding and taker-flow market aggregates | Planned; OI/positioning aggregates withdrawn by D-053 |
+| Phase 3 — transparent flow confirmation/divergence | Planned; leverage/crowding/deleveraging conditions withdrawn |
 | Phase 4 — trigger/UI integration | Implemented for current families, extended with each new family |
 | Phase 5 — liquidity/depth/stress | Planned |
 | Phase 6 — native history and historical analysis | Minimal decision audit trail has 13/13 passing checks at `d331fbd`; configured integration and the full analysis system remain |
@@ -466,7 +460,7 @@ Insufficient retention leaves affected metrics unavailable with an explicit reas
 
 ## 6. Current metric catalogue
 
-The current source checkpoint contains the original nineteen canonical metrics plus three Phase 1D correlation metrics. Metric names are selected inside a named MarketTrend; do not create hardcoded metric names such as Breadth4h to replace the trend reference.
+**D-053 target: 24 canonical metric names** — 17 global-capable (including PriceTrend, which also has asset scope) and seven asset-only. The previously implemented registry still holds 27 until the approved three-metric source removal occurs. The underlying 22 legacy normalized/correlation metrics and the two funding metrics remain. Metric names are selected inside a named MarketTrend; do not create hardcoded metric names such as Breadth4h to replace the trend reference.
 
 | Metric | Scope | Meaning / unit |
 |---|---|---|
@@ -666,95 +660,47 @@ The current build embeds the source revision and appends -dirty when the checkou
 
 The confirmed-delivery checkpoint and decision-history audit trail have different purposes. A history append is not a delivery acknowledgement.
 
-## 11. Phase 2 — Futures raw observations
+## 11. Phase 2 — Binance Futures funding and taker flow (active scope D-053)
 
-**Status: started November 10 with optional raw OI source models/client; full acquisition/selection/trigger integration remains planned.** Owner explicitly deferred further Phase 1 acceptance and authorized moving into Phase 2 now. Do not start a separate performance program first.
+**Status:** settled funding is implemented and live-tested; taker flow remains planned. OI and all long/short positioning metrics, source clients and acquisition are **withdrawn**. Source code removal is the immediate next development task; this roadmap does not claim it is already complete.
 
-For each endpoint family, define:
+### 11.1 Withdrawn source families — explicitly out of scope
 
-- Applicable exchange, product, and symbol universe.
-- Native unit and transformation rules.
-- Exact observation timestamp and publication/settlement delay.
-- Supported history horizon and sampling interval.
-- Refresh, timeout, cancellation, retry, and rate-limit policy.
-- Retention and staleness.
-- Availability/coverage metadata.
-- A deterministic mapper and numerical fixtures.
-- A clear feature-enable/dependency switch.
+Remove all remaining registry, trigger, API acquisition, service, active disk-cache, export, Monitor and test-configuration references to `OpenInterestChange`, `OpenInterestValueChange`, and `GlobalLongShortAccountRatio` as part of the code cleanup. Do not add substitute OI or positioning feeds, an optional SMS-only mode or inactive compatibility implementations. Retain historical Git commits, old test results and old docs as historical records. Do not automatically delete a user's existing disk caches.
 
-Verify current official Binance endpoint documentation before coding. The labels below describe required data, not preapproved network method names.
+### 11.2 Settled funding — retained
 
-### 11.1 Open interest
+Retain `FundingRate` and `FundingSum` from documented Binance USD-M *settled* funding observations. Keep native rate, event type, mark price when supplied, event timestamp, complete provider-query coverage, exact `MarketTrend.TrendMinutes` horizon, and separate Regular vs Special semantics. Invalid/absent/partial history remains UNAVAILABLE; no rate is inferred from a presumed eight-hour cadence.
 
-Retain current and historical OI in its native documented units. Preserve distinctions between contract counts, base-asset amounts, and quote-notional values.
+Preserve the verified bulk funding acquisition with safe symbol-specific fallback, disk persistence, bounded paging and application-controlled provider admission. Funding has a separate provider request allowance from the withdrawn OI/positioning endpoints.
 
-Derived OI change over an exactly aligned supported trend horizon:
+### 11.3 Taker flow — next metric family
 
-(OI_end / OI_start - 1) ×100.
+Proposed asset metrics:
 
-Require a positive valid reference and aligned observations. Do not silently compare different contract units or aggregate raw quantities across unrelated assets.
+- `TakerBuyRatio` = taker-buy quote volume / total quote volume; range [0, 1].
+- `TakerImbalance` = (taker-buy quote volume − taker-sell quote volume) / total quote volume; range [-1, +1].
 
-Keep raw OI changes separate from interpretation. Price rising with OI rising, price rising with OI falling, and their downward counterparts are observed combinations; they are not automatic predictions.
+Confirm the Binance kline response supplies compatible total and taker-buy quote-volume fields and preserve their exact units and time alignment in the normalized candle model and persistent cache. **Prefer reusing already collected klines** rather than adding symbol-specific taker-flow history requests. Derive sell volume as total minus buy only when the source contract and numerical validation justify that interpretation. Zero/invalid totals, insufficient history or incompatible units remain UNAVAILABLE. No source change has been made for this proposed family.
 
-### 11.2 Funding
+## 12. Phase 2B — Retained market-wide Futures aggregates
 
-Retain native rate, interval/settlement metadata, timestamp, and any explicitly defined normalized representation. Funding schedules can differ; normalization must not discard the raw observation.
+Only **funding** and **taker flow** aggregates are approved. The previous OI median/expansion/contraction/extreme breadth, positioning median/concentration/breadth and top-trader measurement families are removed from the roadmap.
 
-Candidate per-asset features include current funding and deviation from a defined market reference. Market median, positive/negative breadth, and extreme-funding breadth belong in Phase 2B.
-
-Positive funding alone is not a sufficient long-crowding conclusion; negative funding alone is not a sufficient short-crowding conclusion.
-
-### 11.3 Account and position ratios
-
-Keep global account long/short ratio, top-trader account ratio, and top-trader position ratio distinct. Account counts and position sizes measure different things.
-
-Where native fields permit a long-share transformation, retain both the raw ratio and the transparent transformation. Do not fabricate history for products or symbols the provider does not cover.
-
-### 11.4 Taker flow
-
-Retain buy and sell flow with units and matching intervals. Derived examples:
-
-- TakerBuyRatio = buy / (buy + sell), range [0,1].
-- TakerImbalance = (buy - sell) / (buy + sell), range [-1,+1].
-
-A zero/invalid denominator is unavailable. Reuse adequate already-ingested source fields when supported rather than inventing additional endpoint dependencies.
-
-Change and persistence measures can be added once the underlying series is validated.
-
-## 12. Phase 2B — Futures market aggregates
-
-Aggregate only after per-asset measurements have a verified contract.
-
-Planned families include:
-
-| Family | Candidate aggregate measurements |
+| Family | Planned aggregate measurements |
 |---|---|
-| OI | Median change, expansion breadth, contraction breadth, extreme expansion/contraction breadth |
-| Funding | Median rate, positive/negative breadth, extreme positive/negative breadth |
-| Positioning | Median account/position ratios and explicitly defined concentration/breadth measures |
-| Taker flow | Median buy ratio, buy-dominance breadth, strong-dominance breadth, imbalance distribution |
+| Funding | Median settled rate, positive/negative funding breadth, extreme positive/negative funding breadth |
+| Taker flow | Median taker-buy ratio, buyer-dominance breadth, strong-dominance breadth, taker-imbalance distribution |
 
-Use explicit eligible and valid populations. A ratio available for fewer symbols must not silently change the market universe relative to another metric.
+Define per-family source applicability, eligible population, valid sample count, completeness, freshness, thresholds and weighting. Preserve the existing 90% cross-sectional minimum where appropriate, and use a stricter requirement when a measure mathematically requires it. A valid cohort/subpopulation must be explicitly labeled; do not silently claim whole-market coverage.
 
-Decide equal weighting versus a meaningful normalized notional weighting separately for each aggregate. Raw cross-asset OI sums are not comparable until their units are reconciled. Preserve numerator, denominator, sample coverage, and freshness in outputs.
+## 13. Phase 3 — Transparent higher-order flow conditions
 
-Do not apply the current 90% policy blindly to a newly defined measure whose mathematical meaning requires complete data; record any stricter requirement.
+Retain transparent **price/quote-volume/taker-flow confirmation and divergence** conditions, using only available validated components with explicit units, aligned periods, validity and thresholds. Funding/volatility context may be included only after a separate defined analytical contract.
 
-## 13. Phase 3 — Transparent higher-order conditions
+**Removed:** leverage expansion, long and short crowding inferred from withdrawn positioning/OI, OI-based deleveraging, and OI components of flow divergence. Funding alone must not be relabeled as verified trader leverage or long/short crowding.
 
-Build these only from validated inputs. Expose components and validity rather than beginning with opaque scores.
-
-Planned concepts:
-
-- Leverage expansion: a declared combination of OI, participation, and volatility changes.
-- Long crowding: funding, OI, and distinct positioning inputs.
-- Short crowding: the corresponding measured conditions on the other side.
-- Deleveraging: explicit OI contraction with participation/volatility context, with price direction recorded separately.
-- Flow confirmation/divergence: transparent combinations of price, taker flow, OI, and quote-volume behavior.
-
-Choose Boolean components, labeled states, or a transparent score only after defining units, ranges, thresholds, weights, and missing-input behavior. If a score is adopted, every component and weight must be configurable or fixed in a documented versioned contract, and inspectable in diagnostics.
-
-Do not label all OI contraction as liquidation or infer trader identity from public aggregate data. Preserve what was measured and what was derived.
+Prefer inspectable Boolean components or labeled states. Any future score must have a documented formula, weights, freshness and missing-input behavior before adoption.
 
 ## 14. Phase 4 — Metric integration as each family arrives
 
@@ -777,7 +723,7 @@ A future metric cannot force new optional endpoints merely by being present in a
 
 ## 15. Phase 5 — Liquidity, depth, and stress
 
-**Status: planned after derivatives/higher-order metric work.** Endpoint cost and native sampling make this a deliberate separate stage, but the dedicated performance program remains after its approved metric additions.
+**Status: planned after retained funding/taker-flow and higher-order metric work.** Endpoint cost and native sampling make this a separate stage; the dedicated performance program remains after approved metric additions.
 
 ### 15.1 Spread
 
@@ -806,7 +752,7 @@ Do not present an estimate from insufficient or stale depth as an executable quo
 
 ### 15.4 Stress components
 
-Expose widening spreads, falling depth, high volatility, OI contraction, funding extremes, and taker-flow imbalance as separate measured components before introducing a combined stress state.
+Expose widening spreads, falling depth, high volatility, funding extremes and taker-flow imbalance as separate measured components before introducing a combined stress state. OI contraction is explicitly excluded by D-053.
 
 Sampling must match the supported observation cadence. Do not pretend an instantaneous book snapshot has the same temporal meaning as a full trend-period aggregate.
 
@@ -831,7 +777,7 @@ No personal strategy implementation is part of Phase 6.
 
 ## 17. Post-metric performance program — explicitly deferred
 
-**Gate for the broader performance program: all approved new metric additions are complete, including derivatives, aggregation, higher-order conditions, and liquidity/depth.** The narrowly approved normalized-candle warm-start cache was implemented earlier under D-040.
+**Gate for the broader performance program: all *retained* approved metric additions are complete, including funding, taker flow, their aggregates, transparent flow conditions, and liquidity/depth. OI and positioning are not performance-program prerequisites.** The narrowly approved normalized-candle warm-start cache was implemented earlier under D-040.
 
 This ordering is the November 7 user decision and supersedes earlier recommendations to optimize before correlation. Preserve required correctness and bounded storage during implementation; keep this separate optimization stage deferred.
 
@@ -916,19 +862,15 @@ A new metric family is accepted only when its contract, source, meaningful fixtu
 
 A release candidate additionally needs documented migration/default changes, acknowledged-delivery behavior, restart recovery, consistent current documentation, supported packaging/runtime, and reproducible provenance.
 
-## Immediate handoff and next development order
+## Immediate handoff and next development order — D-053 (November 12)
 
-1. Implement D-051 in the PTMagic application: retain only public `GlobalLongShortAccountRatio`; remove both top-trader metric feeds and their API-key-only request path; remove the three user-configurable per-raid request-budget properties.
-2. Implement application-managed adaptive derivative acquisition using the shared Binance rate-limit state, endpoint request weights, response headers and 429/418 cooldowns. Preserve internal pagination, per-symbol progress safeguards, fair scheduling, incremental coverage, persistence and UNAVAILABLE semantics. Do not add replacement user-configurable static limits.
-3. Build and run the existing offline validation suite, with focused coverage for global-account-only ratio behavior, absence of top-trader/API-key paths, adaptive capacity, fairness and cooldown handling.
-4. Perform configured runtime acceptance with the five Unicode COIN perpetual symbols, then configured two-startup derivative persistence acceptance. Record exact running binary/source, actual live requests, cache restoration, metric availability/values and Monitor output.
-5. Only after configured derivative persistence acceptance, continue with taker-flow metrics and then Phase 2B aggregates. Dedicated performance optimization remains after all approved metric families.
+1. Remove all OI and long/short positioning metrics and associated active source/service/cache/API/registry/trigger/export/Monitor dependencies on the existing `phase1/market-data-foundation` application branch. Update only the affected existing tests and diagnostic configuration; retain old evidence historically.
+2. Validate the resulting code at its actual new SHA. Confirm 24 implemented canonical metrics (17 global-capable, 7 asset-only), funding works, underlying-type and SMS population filtering remains intact, SOM stays enable-only and no removed metric is silently reintroduced.
+3. Continue configured funding verification as applicable and implement `TakerBuyRatio`/`TakerImbalance` using existing kline taker-volume fields if their meaning and persistence can be validated without extra endpoint traffic.
+4. Implement only funding and taker-flow Phase 2B market aggregates, then transparent price/volume/flow conditions and liquidity/depth/stress work. No OI or positioning acquisition redesign or Phase 2B measurements remain planned.
+5. Preserve deferred PT API/Monitor browser integration gates and the post-metric performance program. The application code is **not yet updated for D-053**.
 
-PTMagic application development remains separate from ProfitTrailer strategy-settings development. Do not modify strategy settings or their development artifacts as part of this roadmap.
-
-Maintain D-047: PTMagic never sends global SOM OFF; the user manually releases PT global SOM. DashboardTop refresh is resolved and confirmed working; no dashboard refresh task remains open. The separate Possible Buys count/card experiment remains withdrawn. Continue Monitor interface work only within the user's explicitly requested scope.
-
-Work directly on existing branches. **Ask before creating a new branch or duplicate candidate path.**
+Retain D-047 global SOM enable-only/manual release and D-052 strict software-versus-strategy boundary. Historical instructions below this point or in dated handoffs are superseded where inconsistent with D-053.
 
 ## 20. Source and document navigation
 
