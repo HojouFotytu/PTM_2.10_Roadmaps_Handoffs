@@ -1,5 +1,9 @@
 # PTMagic 2.10 — Development Handoffs
 
+## Current scope — November 12 D-053
+
+D-053 removes OI and all long/short positioning metrics and their planned market aggregates/higher-order dependencies. The remaining 24-metric target and implementation-pending status are in [current roadmap](../roadmaps/CURRENT.md) and the [active project handoff](2026-11-10-som-enable-only.md). Earlier dated handoffs about OI or ratios are historical, **not future development instructions**.
+
 ## Current handoffs
 
 ### Monitor-only handoff
