@@ -1,3 +1,7 @@
+## November 12 — D-053 OI and positioning withdrawal (new scope decision)
+
+The current owner-approved roadmap removes `OpenInterestChange`, `OpenInterestValueChange`, `GlobalLongShortAccountRatio`, their planned cross-market aggregates and OI/positioning-based higher-order conditions. The approved product target is 24 metrics, with funding, future taker-flow/aggregates and liquidity retained. **Application source is not yet changed:** `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` remains the user-tested 18/18-harness pre-removal baseline. [Decision](../DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210) · [Current roadmap](../roadmaps/CURRENT.md). Older updates remain chronological evidence only.
+
 ## November 12 — Binance public global-account ratio boundary fix (validation pending)
 
 **[Live startTime overlap diagnosed; narrow ratio service correction published](2026-11-12-global-account-ratio-boundary-fix.md)**
