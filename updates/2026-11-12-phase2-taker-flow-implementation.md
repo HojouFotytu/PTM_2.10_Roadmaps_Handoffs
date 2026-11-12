@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-12 KST  
 **Application repository:** `HojouFotytu/PTMagic` / existing `phase1/market-data-foundation`  
-**Published source revision:** [`361c729ff8e64f40b2e0a507c557297161fbbc1e`](https://github.com/HojouFotytu/PTMagic/commit/361c729ff8e64f40b2e0a507c557297161fbbc1e)  
+**Published source revision:** [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278)  
 **Status:** **Implemented in source and inspected. A .NET build and new focused tests are pending user-local execution.** This is **not** a verified runtime-acceptance claim.
 
 ## Implemented metric contract
@@ -33,7 +33,7 @@ Existing harnesses (not new directories): `Tests/Phase1COhlcv` adds exact weight
 
 A further targeted guard prevents repeat full-history requests when the configured OHLCV retention is too short to hold the required taker period; that metric remains unavailable until the retention constraint is resolved. The existing warm-start harness includes a direct regression for this condition. The newly authored focused tests total **15 Phase1COhlcv groups, 10 NormalizedWarmStartCache groups, and 8 Phase2AdaptiveAcquisition groups** (33 expected; **not yet executed**).
 
-The D-053 user-run build and **36/36** focused tests at `e31635a1` and four configured TestMode raids are previous-feature evidence only; they do **not** validate this new revision. A .NET SDK is unavailable to the assistant's execution environment. No compile or test PASS is claimed for `361c729ff8e64f40b2e0a507c557297161fbbc1e`.
+The D-053 user-run build and **36/36** focused tests at `e31635a1` and four configured TestMode raids are previous-feature evidence only; they do **not** validate this new revision. A .NET SDK is unavailable to the assistant's execution environment. No compile or test PASS is claimed for `f7d802facfabb4611098d695d88a269d60daa278`.
 
 ## Exact next verification
 
