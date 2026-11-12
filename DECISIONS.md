@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Current Decision Register
 
+**Current scope (November 12, 2026): D-053 supersedes the open-interest and long/short positioning feature scope.** The approved future application contains **24 metrics (17 global-capable and 7 asset-only)** after source cleanup; `FundingRate`/`FundingSum`, kline-based taker flow, and funding/taker market-wide aggregates remain. The current code still contains the three withdrawn metrics until implementation. Earlier OI/ratio entries below are retained for decision history, **not authorization for future development**.
+
 **Reconciled:** November 11, 2026
 
 **Current inspected application branch head:** `27da292158687bc0bf1aa3b990d06f53237b42d9`; last fully offline-accepted source `fb94373d8928b681e3ebe1f7209bd1439db42e72` (337/337; later Monitor changes/rollback not covered by that suite)
@@ -20,7 +22,7 @@ The Market Metrics History Requirements **UI panel** is removed; its diagnostic 
 
 Application source `891f709010c867259a6cde3df8e9c82781091b7f` (existing `phase1/market-data-foundation` branch) contains enable-only startup SOM, manual ProfitTrailer release, legacy release-checkpoint migration, and the red `PT: SOM` ticker plus raid-summary warnings on startup raids 1–2. **The source has NOT yet passed its new local .NET build or regression suite.** Last verified source `49f2aab66592b6e2922097ca5242b5a614090602` passed **332/332** before these changes.
 
-**Current next action:** follow D-051: retain the public global-account ratio only, remove the two top-trader metric feeds, and replace user-configurable per-raid request budgets with application-managed adaptive rate-limit scheduling. Preserve the existing Unicode-symbol, cache-persistence and offline-validation evidence. Do not modify ProfitTrailer strategy settings or their development repositories as part of PTMagic 2.10 work.
+**Current next action (D-053):** remove `OpenInterestChange`, `OpenInterestValueChange`, and `GlobalLongShortAccountRatio` and their source-only OI/positioning acquisition, cache, registry, configuration and Monitor paths from PTMagic. Preserve funding, existing 17 global metrics, valid asset metrics, normalized OHLCV, startup SOM, and the existing eligibility filter. Update applicable existing tests/diagnostics. Then resume funding/taker-flow work and funding/taker Phase 2B aggregates. Source removal is **pending**; no strategy-settings development is in scope.
 
 [Complete active new-chat handoff](handoffs/2026-11-10-som-enable-only.md). Only specified unfinished Phase 1 *configured integration* tests were deferred; normal source builds and regressions remain mandatory.
 
@@ -367,11 +369,15 @@ The remaining Phase 1 real PT API, Monitor/browser, selected cross-exchange and 
 
 ## D-044 — Open-interest history derives from configured MarketTrends
 
+**HISTORICAL — superseded entirely for future scope by D-053 (November 12).** This records prior implemented behavior, not an active requirement.
+
 **Owner instruction:** November 10, 2026.
 
 Remove the independent OI retention-hours setting and any fixed application history horizon. All OI data requirements must follow the user's explicit OI-enabled MarketTrends, just as the existing normalized metric families use their own TrendMinutes and lookbacks. Retain enough source observations for the longest required OI duration, with the exact reference and overlap. Recompute the requirement on configuration changes. The exchange's supported historical availability is an external limitation to report as unavailable, never justification for silently truncating a user's chosen trend. The OI request budget is a separate operational throttle, not a retention setting. Fixed-size corruption protections do not dictate metric history. Published at `0ae76f4c7886397a06ad346b42a375f6aa06be00`; native build/tests remain unexecuted.
 
 ## D-043 — Opt-in bounded Binance Futures open-interest metrics
+
+**HISTORICAL — superseded entirely for future scope by D-053 (November 12).** The OI metrics and acquisition are withdrawn.
 
 **Implementation record:** November 10, 2026.
 
@@ -410,6 +416,8 @@ Before any source edit, explain the exact proposed scheduling change, affected f
 
 ## D-049 — Binance Futures long/short ratio metric contract
 
+**HISTORICAL — superseded first by D-051 and now fully excluded by D-053.**
+
 **Historical owner direction:** November 11, 2026. **Superseded on November 11 by D-051.** The three-source/top-trader design and optional API-key requirement below are preserved as historical rationale, not current scope.
 
 Implement three separate, opt-in, asset-scoped Binance USD-M Futures metrics: `GlobalLongShortAccountRatio`, `TopTraderLongShortAccountRatio`, and `TopTraderLongShortPositionRatio`. Global account participation, top-trader account counts and top-trader position-size participation are distinct and must not be conflated. No exchange-wide aggregates are introduced in this batch.
@@ -424,6 +432,8 @@ Implementation is published on the existing `phase1/market-data-foundation` bran
 
 
 ## D-050 — Persist Futures funding and long/short ratio histories
+
+**Partially superseded by D-053:** settled-funding persistence remains approved; OI and ratio persistence become historical and are no longer active feature requirements.
 
 **Implementation direction:** November 11, 2026.
 
@@ -441,6 +451,8 @@ Funding cache ordering permits distinct `Regular` and `Special` rate types at th
 
 
 ## D-051 — Public global-account ratio only; application-managed derivative acquisition
+
+**Partially superseded by D-053:** the retained global-account ratio is now withdrawn; provider-safe admission, cooldowns and application-owned scheduling remain applicable to retained funding and future data families.
 
 **Owner direction:** November 11, 2026.
 
@@ -463,3 +475,25 @@ PTMagic 2.10 application development and ProfitTrailer LONG/SHORT strategy-setti
 Do not modify LONG/SHORT strategy analyzers, GlobalSettings/SMS designs, PAIRS/DCA/INDICATORS property files, strategy settings repositories, or related settings-development documents during PTMagic work unless the user explicitly requests that separate work. Likewise, strategy-settings decisions do not authorize PTMagic source or configuration changes.
 
 For this PTMagic request, the authorized action is limited to the PTM 2.10 roadmap/handoff documentation. No application source, PTMagic configuration/settings files, or ProfitTrailer strategy-settings files are changed by this documentation update.
+
+
+## D-053 — Remove Binance Futures open-interest and long/short positioning metrics from PTMagic 2.10
+
+**Owner direction:** November 12, 2026. **Approved documentation scope; source removal pending.**
+
+Remove all three presently implemented asset-specific metrics:
+- `OpenInterestChange`
+- `OpenInterestValueChange`
+- `GlobalLongShortAccountRatio`
+
+Remove the OI and positioning-only endpoint clients, service models, acquisition and scheduling work, caches as active dependencies, metric registry entries, exported/Monitor calculations, trigger paths, and obsolete configuration controls/diagnostics when performing application cleanup. Do not merely disable the metrics or preserve a hidden legacy calculation path. Do not fabricate values for references to withdrawn names. Existing user data/cache files must not be silently deleted by this documentation decision. Update tests and the existing diagnostic test configuration when source removal is performed.
+
+**Reason:** USD-M OI and global-account-ratio sources are symbol-specific. PTMagic's current conservative shared historical-data allowance is 800 requests per rolling five-minute window. The November 12 live raids showed exactly 800 combined OI/ratio requests, with 519 assets per family and rotating incomplete coverage. This makes a 90% current-window market-wide requirement unattainable for both families together under that acquisition model (at least 936 current requests for 519 assets if each family requires one per symbol). Do not presume the provider has independent quotas or relax the safety allowance as a workaround. The owner elects scope removal rather than an acquisition redesign for these metrics.
+
+**Retain:** all 17 existing globally evaluable metrics; `RelativeStrengthMarket`, `RelativeStrengthBTC`, `ATRP`, `VolumeExpansion`, `CorrelationToBTC`, `FundingRate`, and `FundingSum` as the seven remaining asset-only metrics. The approved target registry is **24 metrics** (17 global-capable, including global/asset `PriceTrend`, and 7 asset-only). Funding's separate bulk acquisition, cache, exact settlement semantics and source-aware availability remain. Continue planned `TakerBuyRatio` and `TakerImbalance`, preferably deriving their inputs from existing Binance kline taker-buy fields if validated, then Phase 2B funding and taker-flow market aggregates.
+
+**Withdraw from future roadmap:** OI median/expansion/contraction/extreme breadth; long/short account/position median, concentration and breadth; leverage expansion; OI/positioning-based long and short crowding; OI-based deleveraging; OI-dependent branches of flow confirmation/divergence and composite market stress. Flow confirmation/divergence may continue on price, volume and taker-flow evidence. Funding extremes, volatility, spread, book depth and liquidity stress remain eligible independent measurements, but funding alone must not be labeled as verified trader crowding.
+
+**Implementation and evidence boundary:** On November 12 the user built and passed all 18 current offline harnesses at application source `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` (80 ConfigurationLifecycle checks, eight pre-existing nullable warnings). That binary still contains the three withdrawn metrics. This is a **new roadmap decision**, not proof the removal is implemented, built, tested or live-accepted. Keep earlier commits and dated test evidence immutable as historical facts.
+
+**Preserve:** the separate LONG/SHORT strategy-settings boundary (D-052), SOM enable-only safety (D-047), explicit underlying-type eligibility, frozen metric populations and strict UNAVAILABLE semantics. Only the PTMagic software/documentation workstream is authorized by this decision.
