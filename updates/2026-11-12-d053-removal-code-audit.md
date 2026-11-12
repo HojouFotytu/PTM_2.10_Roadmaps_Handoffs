@@ -1,7 +1,7 @@
 # PTMagic 2.10 — D-053 three-metric removal: read-only code audit
 
 **Date:** 2026-11-12 (KST)  
-**Status:** Source inspection complete; no further critical or major removal-related defect identified in inspected source. **A post-removal local build, current harness execution, configured raids and live PT/Monitor acceptance have not been verified.**  
+**Status:** Source inspection complete; no further critical or major removal-related defect identified in inspected source. Subsequent user-reported local build, 36 focused checks, and four configured TestMode raids PASS at `e31635a1`. Non-TestMode PT delivery and Monitor browser acceptance remain unverified. [Validation record](2026-11-12-d053-configured-testmode-validation.md).  
 **Scope:** PTMagic **software** implementation only; independent of personal LONG/SHORT analyzers or PAIRS/DCA/INDICATORS strategy settings. No rollback requested, proposed or performed.
 
 ## Source provenance and comparison
@@ -61,3 +61,7 @@ No GitHub Actions run for this removal was found in the examined branch history.
 A proportionate verification step is a clean `dotnet build .\PTMagic.sln` and, if desired, the two directly affected offline harnesses (`Phase2Funding` and `Phase2AdaptiveAcquisition`) against the printed source SHA. The existing full 15-harness runner remains available, but unrelated repeated synthetic test cycles are not prerequisites for unrelated strategy work. Configured runtime/funding freshness, live Binance behavior and PT/Monitor interactions remain separately unverified.
 
 Continue only with approved retained families: funding, future taker-flow metrics and their market aggregates, transparent price/volume/flow conditions and liquidity/depth/stress work. No OI/positioning restoration, redesign or historical acceptance work is planned. Prior dated OI/ratio handoffs and passing tests remain historical evidence, not current instructions. Keep PTMagic software and user-specific analyzer/strategy development strictly separate.
+
+## Subsequent verification — November 12
+
+**2026-11-12 D-053 configured verification — PASS:** user-run `.NET 10` solution build **PASS (12.9s)** at application source `e31635a1e67347918ca1bbf94d0fb64809b1cea0`; **Phase2Funding 28/28** and **Phase2AdaptiveAcquisition 8/8** (**36/36 focused offline checks**). The user-supplied log and `_data` archive show **four completed TestMode raids**, 519 COIN markets, **519/519 funding history coverage**, **4,169/4,169 available trigger inputs** per decision, **zero completed-raid metric warnings**, successful bulk-only funding acquisition (6/1/1/1 pages; no failures) and fresh determinate decisions. Obsolete OI/ratio warnings preceded the corrected analyzer reload. **D-053 source, focused checks and configured TestMode acceptance are complete**; non-TestMode PT delivery, startup SOM enforcement and Monitor browser acceptance remain unverified. **Next development: Phase 2 taker-flow assessment and implementation; do not repeat retired OI/ratio validation.** [Full D-053 configured evidence](../updates/2026-11-12-d053-configured-testmode-validation.md).
