@@ -1,6 +1,6 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
-**Current documentation checkpoint: November 11, 2026.**
+**Current documentation checkpoint: November 12, 2026. D-053 is the active metric scope; older dated text below is historical.**
 
 PTMagic 2.10 expands deterministic market analysis and the configuration-management layer around ProfitTrailer. Its scope includes normalized market data, price and volume measurements, correlation, future derivatives and liquidity measurements, GlobalSetting/SMS integration, and native inspection and validation. It has no external AI layer.
 
@@ -17,6 +17,12 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 | Current decisions and supersession register | [DECISIONS.md](DECISIONS.md) |
 | Current handoff | [November 11 SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md) |
 | Concise user roadmap | [ROADMAP.md](ROADMAP.md) |
+
+## Current scope — D-053 (November 12)
+
+The PTMagic 2.10 owner has withdrawn OI and long/short positioning rather than scaling the shared historical-data quota. The three currently implemented metrics `OpenInterestChange`, `OpenInterestValueChange`, and `GlobalLongShortAccountRatio` and their source-specific network/cache/registry/Monitor features are to be removed. The approved **post-removal 24-metric** catalogue retains **17 globally usable** metrics and **7 asset-only** metrics, including `FundingRate` and `FundingSum`. Remaining roadmap: taker-buy ratio/imbalance, funding and taker-flow market aggregates, transparent price/volume/flow analysis, liquidity/depth/stress, audit history and final performance work.
+
+**Implementation not yet done.** Current app source is `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2`, user-local .NET 10.0.403 build PASS (14.8 seconds) and **18/18 offline harnesses PASS** with 80 ConfigurationLifecycle tests. Those tests verified the former 27-metric code, not the proposed removal. [D-053](DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210) supersedes conflicting historical decisions; [current roadmap](roadmaps/CURRENT.md) is authoritative. Source cleanup and focused validation are next. Preserve strategy-settings separation.
 
 ## Present checkpoint
 
@@ -69,7 +75,7 @@ The current commands and acceptance matrix are in the [active November 10 handof
 
 ## Sequencing
 
-Continue with service-level derivative restart tests and configured persistence acceptance, then proceed to taker flow. The specifically deferred Phase 1 configured integration checks and live PT/Monitor acceptance remain open. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
+Implement D-053 source removal of OI and long/short positioning first, then continue with validated funding and taker flow. The specifically deferred Phase 1 configured integration checks and live PT/Monitor acceptance remain open. The dedicated performance program is **deferred until all approved new metrics have been completed**, including derivatives and liquidity. This supersedes earlier recommendations to perform startup, snapshot-cache, logging, or incremental-calculation optimization before correlation.
 
 Correctness work, bounded retention, and dependency validation continue as part of feature delivery. Do not use that exception to reintroduce a separate performance project ahead of the agreed gate.
 
