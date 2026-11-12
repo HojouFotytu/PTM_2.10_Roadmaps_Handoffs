@@ -1,6 +1,6 @@
 # PTMagic 2.10 — Cumulative release changes
 
-**Updated:** November 11, 2026
+**Updated:** November 12, 2026
 
 **Application version:** 2.10.0, in development
 
@@ -9,6 +9,10 @@
 This is the cumulative record of **2.10 changes that remain in effect**. It covers the normalized market-analysis foundation begun on November 2, 2026, through the current implementation. Entries describe the resulting behavior and are consolidated when that behavior changes. Planned features, superseded implementations, reversed changes and personal trading-strategy work are outside this record.
 
 The same document is maintained in the [application repository][app-copy] for code merges and pull requests, and in the [2.10 roadmap/handoff repository][docs-copy] for project continuity. The [current roadmap][roadmap] tracks future work; [status and evidence][status] track acceptance. The implementation references below identify the inspected `fac346c` source baseline. The accompanying template and Monitor help updates make the existing startup SOM default explicit in both supplied general-settings files and explain its TestMode behavior beside the toggle.
+
+## Pending application change — D-053 metric withdrawal (not yet in cumulative released features)
+
+On November 12 the owner approved removal of `OpenInterestChange`, `OpenInterestValueChange`, `GlobalLongShortAccountRatio` and all related OI/positioning-only acquisition and planned higher-order/market-wide uses. **Not implemented yet**: source `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` still contains the three metric names; the user-run 18/18 offline harnesses and 80 lifecycle tests at that source concern the pre-removal code. The planned resulting registry is 24 metrics, retaining funding and all 17 global-capable metrics. Once source removal is committed and verified, reconcile the cumulative effective-change tables and mirror the changelog to the PTMagic application repository. This notice supersedes earlier catalogue wording below as a statement of **future** product scope; the old tables remain evidence of the current pre-removal implementation until the source changes. [D-053](DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210).
 
 ## Dashboard — DashboardTop refresh compatibility fix (November 11)
 
