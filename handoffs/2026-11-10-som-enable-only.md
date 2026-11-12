@@ -1,5 +1,14 @@
 # PTMagic 2.10 — ACTIVE NEW-CHAT HANDOFF: SOM safety, Phase 2 derivatives and persistence
 
+## ACTIVE SUPERSESSION — D-053, November 12, 2026
+
+**This section overrides all conflicting future-work instructions in this dated handoff.** The owner has withdrawn `OpenInterestChange`, `OpenInterestValueChange` and `GlobalLongShortAccountRatio` entirely. Remove their source-only clients/collectors, active caches, metric registry/trigger/Monitor/export integration and test settings. Cancel OI/positioning-based Phase 2B market metrics, leverage expansion, long/short crowding, OI deleveraging and OI-related stress. Keep funding, 17 existing global-capable metrics, the seven asset-only metrics (five normalized plus FundingRate and FundingSum), and future taker flow, market-wide funding/taker aggregates and liquidity.
+
+**Current application source:** `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2`, before removal, .NET 10.0.403 solution build PASS (14.8s); **18/18 offline harnesses PASS** including ConfigurationLifecycle 80/80. Removal is not implemented or validated yet. The November 12 corrected live raid confirmed 519/519 funding coverage in one bulk request; OI+ratio demand exceeded the safe shared 800-request/5-minute allowance. Underlying-type-filtered acquisition and SMS, SOM enable-only and DashboardTop refresh must remain unchanged.
+
+**Immediate code handoff:** remove the withdrawn families on existing `phase1/market-data-foundation` (no new branches/folders); adjust existing tests and diagnostic test config, run source-stamped build/focused checks, then continue funding/taker-flow acquisition and Phase 2B funding/taker market aggregates. No further OI/ratio acceptance checks. Preserve earlier development evidence as history. [D-053](../DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210) and [current roadmap](../roadmaps/CURRENT.md) control.
+
+
 **Updated:** November 12, 2026 (KST)  
 **Application:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic), existing branch `phase1/market-data-foundation`  
 **Current inspected application branch head:** `6f6da519b783ee51b20df3c7dfd5cf91b004e630` (ratio boundary fix published; local build pending).  
