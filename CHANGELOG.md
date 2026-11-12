@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Change log
 
+> **November 12, 2026 scope supersession:** D-053 withdraws OI and long/short positioning metrics from the approved PTMagic 2.10 roadmap. Earlier change-log entries remain historical implementation records; source removal is pending. See [active decisions](DECISIONS.md) and [current roadmap](roadmaps/CURRENT.md).
+
 For the cumulative changes that remain in effect and must accompany PRs/merges, use [CHANGELOG-2.10.md](CHANGELOG-2.10.md). This file retains chronological project history.
 
 **Current application source checkpoint:** `87b9eaa1c865e39d8fff6a657e1b332012be8c16`
