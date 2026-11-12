@@ -1,5 +1,7 @@
 # PTMagic 2.10 Roadmaps
 
+**D-053 scope (November 12):** OI and long/short positioning metrics and their planned market aggregates/higher-order conditions are withdrawn. The [current technical roadmap](CURRENT.md) targets 24 remaining metrics. Source removal is pending at tested pre-removal source `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2`; older dated plans are historical.
+
 ## Current authority
 
 **[CURRENT.md](CURRENT.md)** is the standalone current technical roadmap. [../ROADMAP.md](../ROADMAP.md) is its concise user-facing overview. Current implementation and execution evidence are in [../STATUS.md](../STATUS.md).
