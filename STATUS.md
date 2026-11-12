@@ -2,13 +2,19 @@
 
 **Updated:** November 12, 2026
 
+## Current scope and immediate implementation — D-053
+
+The approved future registry is **24 metrics**, replacing the current 27 by removing `OpenInterestChange`, `OpenInterestValueChange` and `GlobalLongShortAccountRatio`. **Source cleanup is not complete.** The previous live runs achieved 519/519 funding coverage with one bulk request; OI and ratio were limited by a shared 800-requests/5-minute conservative acquisition allowance. The owner elected full removal, including associated OI/ratio Phase 2B aggregates and OI/leverage/positioning-based higher-order concepts, instead of redesigning acquisition.
+
+**Next:** implement the three-metric and source-family cleanup in the existing application branch; update affected test configuration, Monitor/export and existing test suites; verify the new SHA and retained funding, 17 global-capable metrics, seven asset-only metrics, and SOM/underlying-type safety. Then implement taker-flow from validated kline fields if possible, followed by funding/taker aggregates, flow conditions and liquidity/depth. Previously pending OI/ratio restart, coverage and endpoint validation are **canceled as release gates**. Preserve older evidence below strictly as historical. [D-053](DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210) governs contradictory earlier sections.
+
 **Workstream boundary:** This repository documents PTMagic application development only. It does not govern or modify the separate ProfitTrailer LONG/SHORT strategy-settings workstream. No strategy settings, PAIRS/DCA/INDICATORS files, or settings-development artifacts are in scope.
 
 **Application branch:** `phase1/market-data-foundation`
 
-**Current inspected application branch head:** `6f6da519b783ee51b20df3c7dfd5cf91b004e630` (ratio-provider boundary correction published; local validation pending)
+**Current inspected application branch head:** `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` (**current source, pre-D-053 cleanup**).
 
-**Latest deterministically tested application source:** `5a21a482711c8026b50fce10c55b3fb76f4075c3` (.NET 10.0.403 solution build PASS in 13.9s; 18/18 offline harnesses and 386 checks PASS)
+**Latest deterministically tested application source:** `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` (.NET 10.0.403 solution build PASS in 14.8s; 18/18 offline harnesses PASS; ConfigurationLifecycle 80/80 PASS). This code predates D-053 removal.
 
 **Latest verified offline suite:** .NET 10.0.403 solution build PASS in 13.9s; **18/18 harnesses and 386 checks PASS** at `5a21a48`. The 9 new adaptive checks PASS, with eight nonfatal nullable warnings in two existing test projects. [Adaptive implementation and validation evidence](updates/2026-11-11-derivative-adaptive-acquisition-implementation.md). Live integration remains unverified.
 
