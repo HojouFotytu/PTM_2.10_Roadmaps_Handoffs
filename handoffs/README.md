@@ -15,9 +15,11 @@
 
 D-053 removes OI and all long/short positioning metrics and their planned market aggregates/higher-order dependencies. The 24-metric D-053 catalogue was a historical checkpoint; Phase 2 Taker Flow subsequently established 26 metrics. Current acceptance and next actions are in the [active Dev 9 handoff](2026-11-14-ptm-210-dev9.md). Earlier dated handoffs about OI or ratios are historical, **not future development instructions**.
 
-## Performance Export design — November 13, 2026
+## PT Data — Current Monitor Handoff (November 14)
 
-**[Monitor PT Data ZIP — implementation and date-window validation handoff](2026-11-13-monitor-performance-export-design.md)** documents the proposed authenticated, user-initiated, read-only PT trading/performance data ZIP. It covers buy/sell records, current PBL/PAIRS/DCA, settled funding, effective properties, CX/CY attribution, GitHub strategy history, manifest completeness, security and staged implementation. **The PT Data page and date-window pagination are published; live PT paging, downloads and completeness require separate acceptance.** This does not change the existing roadmap priority or supersede the dashboard refresh resolution.
+**November 14, 2026 — PT Data date-based pagination:** PTMagic export commit [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5) replaces the old 250/1,000/5,000 record-count selections with 7-day, 1-month, 3-month, 6-month and all-available ranges. Buys/sales now request `page=0` upward, `perPage=25`, `BOUGHTDATE`/`SOLDDATE` descending; nested `{hashcode,data}` responses are aggregated, preserving original trade records and `extraInfo -- CV:`. Schema-1.1 manifests record ranges, pages, counts and status. The earlier schema-1.0 ZIP (23 buys, 25 sales, 8 PAIRS, 2 DCA) validated the original export only; **new live multi-page/date-range export remains unverified**, and `range_coverage_complete` checks only for duplicate records, not completeness of PT lifetime history. The later PTMagic HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) does not alter PT Data files. [Current handoff](2026-11-13-monitor-performance-export-design.md).
+
+The initial first-page and record-count design is historical; PBL, PT property readback, full strategy context and combined LONG/SHORT export are not part of the implemented seven-source exporter.
 
 ## Current handoffs
 
