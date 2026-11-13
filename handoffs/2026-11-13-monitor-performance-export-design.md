@@ -1,5 +1,7 @@
 # PTMagic 2.10 Monitor — Handoff: On-demand Performance Export ZIP
 
+> **Current workstream reference (November 14):** PT Data **date-window pagination is source-published** at `618b6285`, not merely proposed record limits; retain the November 13 implementation update as authority for paging. [Current app-wide Dev 9 handoff](handoffs/2026-11-14-ptm-210-dev9.md). Live multi-page PT API, export completeness and browser/security acceptance remain separately outstanding.
+
 **Date:** 2026-11-13  
 **Status:** Date-range pagination published — native build and live PT/browser validation pending (see current update below)  
 **Application repository / branch:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation) / `phase1/market-data-foundation`  
