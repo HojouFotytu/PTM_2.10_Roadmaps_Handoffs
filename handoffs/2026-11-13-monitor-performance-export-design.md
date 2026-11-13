@@ -1,12 +1,38 @@
 # PTMagic 2.10 Monitor — Handoff: On-demand Performance Export ZIP
 
 **Date:** 2026-11-13  
-**Status:** Initial PT Data implementation published — build and native PT/browser verification pending (see update below)  
+**Status:** Date-range pagination published — native build and live PT/browser validation pending (see current update below)  
 **Application repository / branch:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation) / `phase1/market-data-foundation`  
 **Application branch HEAD inspected for this handoff:** `5f09cd3d2da1bc87ccfca990170f7d24dc047767`  
 **Documentation repository:** `HojouFotytu/PTM_2.10_Roadmaps_Handoffs` / `main`  
 **Existing Monitor handoff:** [DashboardTop refresh resolved](2026-11-11-monitor-dashboard-refresh-resolved.md)  
 **Current roadmap:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md) · **Status:** [STATUS.md](../STATUS.md) · **Decisions:** [DECISIONS.md](../DECISIONS.md)
+
+## November 13 implementation update — date-based paginated PT history (current)
+
+**Source commit:** [`618b6285d18e3c655139ae675bce389b72034ee5`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5) on existing `phase1/market-data-foundation` branch. **Published; native .NET build and live API/browser acceptance NOT YET VERIFIED.** Earlier initial-implementation notes below are historical and are superseded where they describe record-count choices or one-request history export.
+
+- `Control → PT Data` now selects **Past 7 days, Past 1 month, Past 3 months, Past 6 months, or All available history** (default: all). Windows are rolling UTC periods measured from export start; calendar months use `AddMonths`. Applies to buys/sales only, not position snapshots or funding.
+- Both `/api/v2/data/buys` and `/api/v2/data/sales` use explicit zero-based `page`, `perPage=25` (documented default), `sort=BOUGHTDATE` or `SOLDDATE`, and `sortDirection=DESCENDING`. Each request parses the real PT `{hashcode, data:[...]}` envelope; continues paging to an exhausted history page or an eligible date cutoff. Actual PT pagination/sort behavior must be verified with live export.
+- Buy time filter uses `lastBoughtDate`, sell time filter `soldDate` (Unix seconds). A date cutoff is used for early stop only if ordering has remained descending and buy `firstBoughtDate` matches `lastBoughtDate`; otherwise the code scans to end of history. Duplicate record IDs with changed content fail the dataset rather than silently overwrite it. Pagination loops, byte budgets, and timeout are bounded.
+- The combined `Trades/buys.json` / `Trades/sales.json` are **transformed** envelopes of `{data:[...], sourcePageHashcodes:[...]}`. Each individual PT trade record and all nested `buyStrategiesData` / `sellStrategiesData`, `extraInfo` formula and historical `CV` values are copied without field-by-field normalization. The original single-response top-level `hashcode` is not represented as a hash of an aggregated export.
+- `manifest.json` is now schema `1.1`: includes `history_range`, UTC boundaries, pages retrieved, examined/included record counts, sort/date fields, cutoff/end status, duplicate count, and a cautious `range_coverage_complete` flag. Per-dataset status may be `available`, `partial`, `failed`, or `skipped`; downstream readers must not assume the first two historical files remain byte-for-byte original API responses.
+- Existing current-position and funding requests, password requirements, PT connection restrictions, and trade/setting isolation remain unchanged.
+
+**Evidence:** User's original export `PT-Data-2026-11-13T12-25-40Z.zip` contains the nested `data` format (23 buys, 25 sales). The user supplied ProfitTrailer Swagger screenshots showing zero-based `page`, `perPage`, supported date sorts, and `ASCENDING` / `DESCENDING` selection. The current implementation was reviewed statically after GitHub write. **Do not mark build, API page exhaustion, retention completeness, or browser download as passed until actual user-run acceptance.**
+
+**Focused native acceptance (Windows PowerShell, PTMagic repository):**
+
+```powershell
+git pull --ff-only
+if ($LASTEXITCODE -ne 0) { throw "Git pull failed" }
+dotnet build .\PTMagic.sln
+if ($LASTEXITCODE -ne 0) { throw "Build failed" }
+```
+
+Then open PT Data, perform a 7-day export and an All available export, inspect manifest pages/counts, ensure no missing or duplicate trades, verify recent buy/sell timestamps and unchanged nested CV diagnostics, and verify the range boundary. Test a period with more than 25 entries to confirm successive pages. Do not claim complete historical coverage from a small one-page sample.
+
+---
 
 ## November 13 implementation update — PT Data (supersedes the initial page naming and source assumptions)
 
