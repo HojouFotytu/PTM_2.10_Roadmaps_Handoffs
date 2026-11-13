@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
+**Current handoff — November 14, 2026:** [PTMagic 2.10 Dev 8 → Dev 9](handoffs/2026-11-14-ptm-210-dev9.md) is the authoritative next-session entry point. **D-053 complete:** build + 36 focused checks + four 519-market configured TestMode raids PASS at `e31635a1`. **Taker Flow implemented:** 26 metrics (17 global-capable; nine asset-only), source `f7d802f` build + **33/33 focused checks PASS**; **configured 26-metric Taker Flow runtime and v2 cache migration still unverified**. The supplied November 13 log/archive ran the **older 24-metric `e31635a1`** and cannot validate Taker Flow. **Commit-based KST build ID** at `146f5733`: build 13.1s, DecisionHistory **14/14 PASS**, `Build unknown` corrected and **deployed raid display verified by owner**. **PT Data date-window pagination `618b6285`** and **Linux startup path fix `bda2394e`** are separate Monitor/platform workstreams; live PT history/ZIP and Linux deployment acceptance not established by the cited source commits. Application branch `phase1/market-data-foundation` (latest pre-doc source `bda2394e`); docs `main`. Historical dated entries below may say pending; they do not supersede this checkpoint.
+
 **November 13, 2026 — Phase 2 Taker Flow focused verification PASS:** User-supplied execution at exact PTMagic source [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278) confirmed `dotnet build .\PTMagic.sln` **PASS (16.1s; Core, PTMagic, Monitor net10.0)** and all **33/33 focused offline groups PASS**: Phase1COhlcv **15/15**, NormalizedWarmStartCache **10/10**, Phase2AdaptiveAcquisition **8/8**, including the 26-metric registry (17 global-capable, nine asset-only). **Next:** configured Binance Futures TestMode raid using the updated 26-metric analyzer, verifying source taker-buy quote volume, both computed metrics, cache upgrade, and repeat-raid behavior. **Not yet established:** configured taker-flow runtime acceptance, actual PT delivery, or browser acceptance. Prior statements that the taker revision's build or focused tests are pending are superseded; earlier historical test reports remain source-specific. [Implementation record](updates/2026-11-12-phase2-taker-flow-implementation.md).
 
 **Phase 2 Taker Flow implementation — November 12:** application source [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278) now contains **26 registered metrics** (17 globally evaluable, nine asset-only), including `TakerBuyRatio` and `TakerImbalance`. The existing kline reader retains index-10 taker-buy **quote** volume, an opt-in exact-period feature engine calculates both metrics, legacy OHLCV cache **v1** remains readable, and cache **v2** persists source-verified taker fields with targeted repair of old cache windows. The existing diagnostic TestMode analyzer was extended in place; Monitor labels/colors and focused tests were updated. **Published and source-inspected; .NET build, new focused test execution and configured taker-flow raid are PENDING.** The earlier D-053 PASS cannot be reattributed to this feature. [Implementation and verification handoff](updates/2026-11-12-phase2-taker-flow-implementation.md).
@@ -19,8 +21,8 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 |---|---|
 | Application | [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic) |
 | Application branch | `phase1/market-data-foundation` |
-| Current application branch head | `f7d802facfabb4611098d695d88a269d60daa278` (Phase 2 taker-flow source published; build/runtime not yet verified) |
-| Last tested application source | `f7d802facfabb4611098d695d88a269d60daa278` (net10.0 solution build PASS 16.1s; 33/33 taker-flow focused groups PASS; TestMode runtime pending) |
+| Last inspected application code HEAD before handoff documentation | `bda2394eccd0e0439a8578bf7c7b1c4287e15382` (branch moves with docs updates; recheck live HEAD before edits) |
+| Last Taker Flow offline-verified source | `f7d802facfabb4611098d695d88a269d60daa278` (16.1s build; 33/33 focused PASS; configured taker runtime pending) |
 | Framework / application version | .NET 10 / 2.10.0 |
 | Current technical plan | [roadmaps/CURRENT.md](roadmaps/CURRENT.md) |
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
@@ -30,7 +32,7 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 | Current Monitor handoff | [November 13 expandable asset metrics and value colors](handoffs/2026-11-13-monitor-inline-asset-metrics.md) |
 | Concise user roadmap | [ROADMAP.md](ROADMAP.md) |
 
-## Current scope — D-053 (November 12)
+## D-053 scope — historical November 12 checkpoint (now complete)
 
 The PTMagic 2.10 owner has withdrawn OI and long/short positioning rather than scaling the shared historical-data quota. The three currently implemented metrics `OpenInterestChange`, `OpenInterestValueChange`, and `GlobalLongShortAccountRatio` and their source-specific network/cache/registry/Monitor features are to be removed. The approved **post-removal 24-metric** catalogue retains **17 globally usable** metrics and **7 asset-only** metrics, including `FundingRate` and `FundingSum`. Remaining roadmap: taker-buy ratio/imbalance, funding and taker-flow market aggregates, transparent price/volume/flow analysis, liquidity/depth/stress, audit history and final performance work.
 
