@@ -1,12 +1,39 @@
 # PTMagic 2.10 Monitor — Handoff: On-demand Performance Export ZIP
 
 **Date:** 2026-11-13  
-**Status:** Design handoff only — NOT implemented or runtime-verified  
+**Status:** Initial PT Data implementation published — build and native PT/browser verification pending (see update below)  
 **Application repository / branch:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation) / `phase1/market-data-foundation`  
 **Application branch HEAD inspected for this handoff:** `5f09cd3d2da1bc87ccfca990170f7d24dc047767`  
 **Documentation repository:** `HojouFotytu/PTM_2.10_Roadmaps_Handoffs` / `main`  
 **Existing Monitor handoff:** [DashboardTop refresh resolved](2026-11-11-monitor-dashboard-refresh-resolved.md)  
 **Current roadmap:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md) · **Status:** [STATUS.md](../STATUS.md) · **Decisions:** [DECISIONS.md](../DECISIONS.md)
+
+## November 13 implementation update — PT Data (supersedes the initial page naming and source assumptions)
+
+**Status:** First on-demand ZIP implementation published on PTMagic `phase1/market-data-foundation`; **local .NET build, native PT data-shape checks, browser/ZIP review and security acceptance remain NOT VERIFIED**. The earlier sections below are retained as the design rationale; where they differ from this update, this section defines the initial implementation.
+
+**Final page name and navigation:** **PT Data**, a separate Monitor page under **Control**. The page explains that it creates a local ZIP for later analysis, without displaying API endpoints. It offers record-count choices of **all PT-returned records (default)**, **250**, **1,000**, and **5,000** per history dataset. Because source-provided ordering/pagination/date semantics have not been verified, these are *record limits*, not guaranteed most-recent, calendar-window, or all-lifetime results. A limited export takes the first N records in the order returned by PT and the manifest explicitly records this fact.
+
+**Visible dataset options:**
+
+| UI option | Source content in ZIP | Default | Reliability |
+|---|---|---|---|
+| Buy History | `GET /api/v2/data/buys` | Selected | Original response or selected first N records, with truncation metadata |
+| Sell History | `GET /api/v2/data/sales` | Selected | Same history-limit behavior |
+| Current Positions | `GET /api/v2/data/watchmode`, `/pending`, `/pairs`, `/dca` | Selected | Four independent point-in-time responses grouped as a single UI choice; partial failures independently recorded |
+| Funding Updates | `GET /api/v2/data/funding` | **Not selected** | **Potentially incomplete**; PT cannot record funding charges while PT is offline. This is **not** an authoritative funding ledger |
+
+**Security/operation:** Page and ZIP POST use existing authenticated Monitor conventions. Export POST is **forbidden when Monitor password protection is disabled**. The only target is the current Monitor's configured primary PT instance, preserving its URL path prefix and configured token internally. No arbitrary endpoints, PT writes, AI uploads, new branches or trading changes. Responses are bounded to 32 MiB each / 128 MiB combined; a single export has a 120-second time budget; HTTP 429/503 receives one bounded retry; no redirects. Temporary ZIP is private and deleted when its download stream closes. No persistent archive or scheduled collector.
+
+**ZIP semantics:** Original PT JSON bytes retained when no history limit is applied; capped history arrays are reserialized without modifying individual record content and marked transformed. Manifest lists requested/skipped/available/failed, source labels, counts when the source is a JSON array, byte size, timestamp, first-N truncation, provenance, funding caveat, and an explicit warning that PT-retained records may not cover full history. Failed sources do not become fake empty data. If multiple selected sources fail, the manifest labels the export partial or failed. Source-provided historic timestamps, pagination and exact chronological order remain **unverified**.
+
+**Out of the initial seven-endpoint scope:** PBL (no dedicated endpoint supplied), PT PAIRS/DCA/INDICATORS readback, PTMagic settings/context JSON and combined LONG/SHORT archives. Do not imply these are included; adding them later requires a separate source/credential safety review. Use the configured Monitor once per bot and upload two ZIPs for comparison where appropriate.
+
+**Application files:** `Monitor/Pages/PTData.cshtml`, `Monitor/Pages/PTData.cshtml.cs`, `Monitor/_Internal/PTDataExportService.cs`, and the **Control** menu link in `Monitor/Pages/_Layout.cshtml`. No DashboardTop refresh or strategy-settings code is changed.
+
+**Acceptance outstanding:** User-run `git pull --ff-only`, `dotnet build .\\PTMagic.sln`; open PT Data in a password-protected Monitor, generate a small and all-available ZIP, inspect `manifest.json` and raw JSON for field fidelity / source ordering, verify funding off-default, simulate or observe partial data source failures, and confirm the ZIP is not accessible when logged out. Do not describe this as runtime-validated until those steps are performed.
+
+---
 
 ## 1. Decision and objective
 
