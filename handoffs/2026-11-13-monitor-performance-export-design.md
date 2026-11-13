@@ -3,12 +3,52 @@
 > **Current workstream reference (November 14):** PT Data **date-window pagination is source-published** at `618b6285`, not merely proposed record limits; retain the November 13 implementation update as authority for paging. [Current app-wide Dev 9 handoff](handoffs/2026-11-14-ptm-210-dev9.md). Live multi-page PT API, export completeness and browser/security acceptance remain separately outstanding.
 
 **Date:** 2026-11-13  
-**Status:** Date-range pagination published — native build and live PT/browser validation pending (see current update below)  
+**Status:** Current date-range exporter published; multi-page/date-window live acceptance pending (see November 14 handoff)  
 **Application repository / branch:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation) / `phase1/market-data-foundation`  
-**Application branch HEAD inspected for this handoff:** `5f09cd3d2da1bc87ccfca990170f7d24dc047767`  
+**Application branch HEAD inspected for this handoff:** `bda2394eccd0e0439a8578bf7c7b1c4287e15382` (PT Data code last modified at `618b6285d18e3c655139ae675bce389b72034ee5`)  
 **Documentation repository:** `HojouFotytu/PTM_2.10_Roadmaps_Handoffs` / `main`  
 **Existing Monitor handoff:** [DashboardTop refresh resolved](2026-11-11-monitor-dashboard-refresh-resolved.md)  
 **Current roadmap:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md) · **Status:** [STATUS.md](../STATUS.md) · **Decisions:** [DECISIONS.md](../DECISIONS.md)
+
+## November 14, 2026 — CURRENT PT Data handoff (supersedes dated record-limit design)
+
+**Application:** PTMagic `phase1/market-data-foundation`; date-range exporter source [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5); later inspected HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) contains unrelated Monitor path/startup adjustments, not an exporter modification. This handoff is documentation-only.
+
+### Current implemented contract
+
+- **Control → PT Data** offers **Past 7 days, Past 1 month, Past 3 months, Past 6 months, All available history (default)**. Cutoffs are UTC from the export-start timestamp; months use calendar-month subtraction. Date ranges affect buys/sales, not current position snapshots or optional funding.
+- ProfitTrailer buys: `page=0&perPage=25&sort=BOUGHTDATE&sortDirection=DESCENDING`, incrementing page. Date filtering uses Unix-seconds `lastBoughtDate`. Sales: `page=0&perPage=25&sort=SOLDDATE&sortDirection=DESCENDING`, filtering `soldDate`.
+- Source responses are `{hashcode,data:[...]}`, **not** top-level arrays. Multi-page exported files combine qualifying records into `Trades/buys.json` / `Trades/sales.json` with `{data:[...],sourcePageHashcodes:[...]}`. This is a transformed envelope, but each trade and its nested diagnostic `extraInfo` formula and `-- CV:` remain preserved. Never use `currentValue: 0` to infer missing diagnostic CV.
+- Pagination ends on an empty page, or after crossing the cutoff **only when observed dates are descending**. Buys additionally require observed `firstBoughtDate == lastBoughtDate` to trust early stopping; if unequal, scan to exhausted history instead. Trade ID deduplication detects repeats; conflicting records under the same ID cause a dataset failure, identical overlap is reported as `partial`. Source-size/page/time limits prevent unbounded iteration.
+- Manifest **schema 1.1** records UTC range, pages, examined and included counts, sort/date fields, cutoff reached/end of history, duplicate counts, status and `range_coverage_complete`. The latter presently means only `duplicate_records == 0`; it **does not establish full coverage** when pages can shift during live trading, history retention truncates, or a page is missed.
+- Current Positions: independent watchmode/pending/pairs/dca snapshot responses. Funding Updates: independently selected/off default and potentially incomplete for PT offline periods. Only the configured current PT target, authenticated Monitor and fixed read-only endpoints are permitted. No settings/trading operations or AI upload.
+
+### Evidence separated by source revision
+
+1. The **original** ZIP `PT-Data-2026-11-13T12-25-40Z.zip` (pre-pagination, manifest schema 1.0) was inspected: **23 buy records; 25 sales; 8 PAIRS; 2 DCA; empty pending/watchmode; six sources available and none failed**. It demonstrates valid download/JSON/raw fields, but the 25 sales may be a single default page. **It does not validate current multi-page export.**
+2. The user's ProfitTrailer Swagger screenshots show `page` (default 0), `perPage` (sales default 25), `hashcode`, `searchTerm`, `sort` choices `NONE`, `SOLDDATE`, `BOUGHTDATE`, `COIN`, `PROFIT`, `PROFITCURRENCY`, `BUYTYPE`, and `sortDirection` `ASCENDING` / `DESCENDING`. These demonstrate API parameters, not actual behavior under concurrent trades.
+3. The user confirms **buy and sell diagnostic `CV` values were captured at the time the order was sent to the exchange**, so downstream analysis can decode historical BUYNOTE/SELLNOTE values without current-state inference. `extraInfo` preserves the actual values even where `currentValue` is zero.
+4. **Current source builds/live verification:** No new ZIP generated with schema 1.1, verified >25 trade pages or date cutoff is recorded here. Other project build results are **not automatically evidence for this exporter**. A recent user's full-solution build at the later path-fix revision is recorded in another conversation, but does not prove successful PT Data API pagination.
+
+### Acceptance for the next conversation
+
+Run in the **existing** PTMagic clone (no new branch):
+
+```powershell
+git pull --ff-only
+if ($LASTEXITCODE -ne 0) { throw "Git pull failed" }
+git rev-parse HEAD
+dotnet build .\PTMagic.sln
+if ($LASTEXITCODE -ne 0) { throw "Build failed" }
+```
+
+Deploy via the established local workflow and reload Monitor. Export **Past 7 days** and **All available** using **more than 25 buys or more than 25 sales**. Inspect manifest/page counts, oldest/newest UTC transaction dates, the inclusive cutoff and export-start limits, duplicate IDs, distinct transactions with identical timestamps, and preserved original `extraInfo -- CV:` diagnostics. Cross-check retrieved records against independently fetched PT pages; check the DCA first/last purchase-date distinction. Verify auth/logged-out refusal, funding-off default and partial errors. Record exact revision and actual results before claiming **live PASS**.
+
+**Current known risks:** page-shift / instability while PT is trading, maximum supported `perPage` not independently tested, `BOUGHTDATE` versus last-buy timestamp semantics, PT retention limits, and `range_coverage_complete` overstatement. Do not weaken the existing export security or silently claim lifetime completeness.
+
+**Application files changed by the exporter:** `Monitor/_Internal/PTDataExportService.cs`, `Monitor/Pages/PTData.cshtml.cs`, `Monitor/Pages/PTData.cshtml`. No strategy, Analyzer, or ProfitTrailer settings changes.
+
+---
 
 ## November 13 implementation update — date-based paginated PT history (current)
 
@@ -36,7 +76,7 @@ Then open PT Data, perform a 7-day export and an All available export, inspect m
 
 ---
 
-## November 13 implementation update — PT Data (supersedes the initial page naming and source assumptions)
+## November 13 initial PT Data implementation — HISTORICAL (record-count controls superseded)
 
 **Status:** First on-demand ZIP implementation published on PTMagic `phase1/market-data-foundation`; **local .NET build, native PT data-shape checks, browser/ZIP review and security acceptance remain NOT VERIFIED**. The earlier sections below are retained as the design rationale; where they differ from this update, this section defines the initial implementation.
 
