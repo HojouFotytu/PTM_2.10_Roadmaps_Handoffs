@@ -517,3 +517,15 @@ Add `TakerBuyRatio` (summed taker-buy quote volume / summed total quote volume; 
 Preserve legacy normalized OHLCV warm-start **version 1** cache compatibility for existing price/volume metrics; introduce nullable taker fields in **version 2** cache records and selectively source-verify only the needed taker period on configured trends. Verified taker repair must persist immediately despite the normal save throttle. Do not delete or invalidate the full old cache, or fetch extra taker data when disabled.
 
 **Implemented reference:** application revision [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278); [implementation record](updates/2026-11-12-phase2-taker-flow-implementation.md). The existing TestMode analyzer is updated in place to 26 metrics (17 global-capable, nine asset-only). Only PTMagic software development is in scope; the user's personal LONG/SHORT settings and strategy repositories remain independent. This supersedes older language that taker flow is not yet implemented, but is **not** a build PASS claim.
+
+## D-055 — Inline expandable asset metrics in Market Analyzer
+
+**Owner-approved November 12–13, 2026. Implemented in source.** Do not reinstate the separate Per-Market Metrics page/table. Instead, add collapsed-by-default metric detail rows under the existing market rows of Market Analyzer Absolute/Relative Trend Changes, with names indented and native values aligned to their requesting MarketTrend columns.
+
+Show only explicitly configured asset-scoped metrics for the trend's selected asset population. Unrequested cells are blank; invalid/stale/unpublished values show `--` with a reason; do not duplicate the primary-row `PriceTrend`. Expanded details collapse on mode switch and before sorting. Retain the existing Market-Wide Metrics grouped panel unchanged and do not recompute native values for the Relative view.
+
+Determine colors from **unrounded numeric values**: green above / red below each metric's neutral reference, which is 0 for signed metrics, 1.0x for `VolumeExpansion`, and 0.5 for `TakerBuyRatio`. Exact neutral, unavailable and stale values are muted. Colors describe numeric direction, not trading profit. Use the existing `AssetMetrics` snapshot; do not add collection, calculation, a new page or settings.
+
+D-053 withdrawn open-interest and long/short-positioning metrics remain removed; D-054 taker metrics join the active 26-metric registry. Do not restore retired metrics because historic UI mockups mentioned them. Preserve strict PTMagic/strategy-settings separation (D-052).
+
+**Implementations:** [`f70c0e1` — expansion](https://github.com/HojouFotytu/PTMagic/commit/f70c0e1b7bb0171066998acb84d39c5b1aeac57a), [`68ee15c` — color correction](https://github.com/HojouFotytu/PTMagic/commit/68ee15c0d693d3a63003ed4e1de9d0333354e9c1). [Current Monitor handoff](handoffs/2026-11-13-monitor-inline-asset-metrics.md). Initial browser layout confirmed except color; post-color-fix browser confirmation remains pending.

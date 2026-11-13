@@ -26,7 +26,8 @@ PTMagic 2.10 expands deterministic market analysis and the configuration-managem
 | Current implementation and acceptance status | [STATUS.md](STATUS.md) |
 | Cumulative effective 2.10 changes for PRs and merges | [CHANGELOG-2.10.md](CHANGELOG-2.10.md) |
 | Current decisions and supersession register | [DECISIONS.md](DECISIONS.md) |
-| Current handoff | [November 11 SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md) |
+| Current PTMagic-wide handoff | [SOM safety, Phase 2 derivatives and persistence](handoffs/2026-11-10-som-enable-only.md) |
+| Current Monitor handoff | [November 13 expandable asset metrics and value colors](handoffs/2026-11-13-monitor-inline-asset-metrics.md) |
 | Concise user roadmap | [ROADMAP.md](ROADMAP.md) |
 
 ## Current scope — D-053 (November 12)

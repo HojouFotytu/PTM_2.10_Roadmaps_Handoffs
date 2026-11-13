@@ -21,9 +21,11 @@ D-053 removes OI and all long/short positioning metrics and their planned market
 
 ### Monitor-only handoff
 
-**[2026-11-11 — DashboardTop refresh resolved; Monitor interface state](2026-11-11-monitor-dashboard-refresh-resolved.md)**
+**[2026-11-13 — Expandable Market Analyzer asset metrics and value colors](2026-11-13-monitor-inline-asset-metrics.md)**
 
-Use this handoff for Monitor interface work. It records the recent Market Analyzer, Global Settings Log, metric-status legend, native NVD3 legend positioning and DashboardTop refresh changes. The user confirmed that DashboardTop is refreshing properly. It also records the strict requirement to explain the exact change and affected files before any GitHub edit, and to make no unrequested additions.
+**Current Monitor starting point:** approved collapsed inline rows inside the existing Absolute/Relative Trend Changes tables, correct MarketTrend alignment, native values, metric-specific green/red neutral thresholds, D-053/D-054 scope and validation boundaries. The general layout was browser-confirmed; color correction is published but awaits user browser confirmation.
+
+The [November 11 DashboardTop refresh handoff](2026-11-11-monitor-dashboard-refresh-resolved.md) remains historical authority for the confirmed DashboardTop refresh and earlier Global Settings Log/UI decisions. Its removed standalone Per-Market Metrics view is not the newly approved inline expansion.
 
 ### Overall PTMagic 2.10 handoff
 
