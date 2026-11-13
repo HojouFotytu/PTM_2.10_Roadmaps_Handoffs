@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+**Current handoff — November 14, 2026:** [PTMagic 2.10 Dev 8 → Dev 9](handoffs/2026-11-14-ptm-210-dev9.md) is the authoritative next-session entry point. **D-053 complete:** build + 36 focused checks + four 519-market configured TestMode raids PASS at `e31635a1`. **Taker Flow implemented:** 26 metrics (17 global-capable; nine asset-only), source `f7d802f` build + **33/33 focused checks PASS**; **configured 26-metric Taker Flow runtime and v2 cache migration still unverified**. The supplied November 13 log/archive ran the **older 24-metric `e31635a1`** and cannot validate Taker Flow. **Commit-based KST build ID** at `146f5733`: build 13.1s, DecisionHistory **14/14 PASS**, `Build unknown` corrected and **deployed raid display verified by owner**. **PT Data date-window pagination `618b6285`** and **Linux startup path fix `bda2394e`** are separate Monitor/platform workstreams; live PT history/ZIP and Linux deployment acceptance not established by the cited source commits. Application branch `phase1/market-data-foundation` (latest pre-doc source `bda2394e`); docs `main`. Historical dated entries below may say pending; they do not supersede this checkpoint.
+
 **November 13 — Monitor PT Data ZIP exporter published (verification pending):** A dedicated **PT Data** page appears under **Control**, with history-record limits (all PT-returned, 250, 1,000, 5,000) and selections for Buy History, Sell History, grouped Current Positions (watchmode/pending/pairs/dca) and optional **Funding Updates** (off by default). Funding records are explicitly **not reliable as a complete funding ledger when PT was offline**. The initial implementation uses only the configured current bot's seven supplied PT read endpoints; original JSON is preserved when unlimited, first-N record exports are clearly marked, and `manifest.json` records partial/failure/truncation with a native PT history-completeness warning. Requires Monitor password protection, bounds HTTP responses and execution time, and does not change strategies, Analyzer or DashboardTop. **.NET build, native PT data fidelity, and browser/download security checks remain NOT VERIFIED.** [Implementation handoff](../handoffs/2026-11-13-monitor-performance-export-design.md).
 
 **November 13, 2026 — Phase 2 Taker Flow focused verification PASS:** User-supplied execution at exact PTMagic source [`f7d802facfabb4611098d695d88a269d60daa278`](https://github.com/HojouFotytu/PTMagic/commit/f7d802facfabb4611098d695d88a269d60daa278) confirmed `dotnet build .\PTMagic.sln` **PASS (16.1s; Core, PTMagic, Monitor net10.0)** and all **33/33 focused offline groups PASS**: Phase1COhlcv **15/15**, NormalizedWarmStartCache **10/10**, Phase2AdaptiveAcquisition **8/8**, including the 26-metric registry (17 global-capable, nine asset-only). **Next:** configured Binance Futures TestMode raid using the updated 26-metric analyzer, verifying source taker-buy quote volume, both computed metrics, cache upgrade, and repeat-raid behavior. **Not yet established:** configured taker-flow runtime acceptance, actual PT delivery, or browser acceptance. Prior statements that the taker revision's build or focused tests are pending are superseded; earlier historical test reports remain source-specific. [Implementation record](../updates/2026-11-12-phase2-taker-flow-implementation.md).
@@ -27,7 +29,7 @@
 
 **Historical-status notice:** the November 10–12 milestone sections retained below record their then-current implementation and historical validation, not current forward requirements. D-053 and the rewritten canonical Phase 2/2B/3/5 sections control future development. Earlier ratio-boundary, derivative persistence and rate-limit findings remain valid historical evidence, even though their feature families are now withdrawn.
 
-**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [current handoff](../handoffs/2026-11-10-som-enable-only.md) · [concise roadmap](../ROADMAP.md)
+**Documentation:** [STATUS](../STATUS.md) · [DECISIONS](../DECISIONS.md) · [active Dev 9 handoff](../handoffs/2026-11-14-ptm-210-dev9.md) · [concise roadmap](../ROADMAP.md)
 
 ## November 11 — Derivatives persistence and latest offline validation
 
@@ -687,7 +689,7 @@ Retain `FundingRate` and `FundingSum` from documented Binance USD-M *settled* fu
 
 Preserve the verified bulk funding acquisition with safe symbol-specific fallback, disk persistence, bounded paging and application-controlled provider admission. Funding has a separate provider request allowance from the withdrawn OI/positioning endpoints.
 
-### 11.3 Taker flow — source and focused offline verified, configured runtime pending
+### 11.3 Taker flow — 33/33 focused checks PASS; configured runtime, values and cache-v2 still pending
 
 Proposed asset metrics:
 
@@ -875,7 +877,7 @@ A new metric family is accepted only when its contract, source, meaningful fixtu
 
 A release candidate additionally needs documented migration/default changes, acknowledged-delivery behavior, restart recovery, consistent current documentation, supported packaging/runtime, and reproducible provenance.
 
-## Immediate handoff and next development order — D-053 (November 12)
+## Historical D-053 handoff — November 12 (superseded by Dev 9)
 
 1. Remove all OI and long/short positioning metrics and associated active source/service/cache/API/registry/trigger/export/Monitor dependencies on the existing `phase1/market-data-foundation` application branch. Update only the affected existing tests and diagnostic configuration; retain old evidence historically.
 2. Validate the resulting code at its actual new SHA. Confirm 24 implemented canonical metrics (17 global-capable, 7 asset-only), funding works, underlying-type and SMS population filtering remains intact, SOM stays enable-only and no removed metric is silently reintroduced.
