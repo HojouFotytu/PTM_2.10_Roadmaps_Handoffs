@@ -13,6 +13,10 @@
 
 D-053 removes OI and all long/short positioning metrics and their planned market aggregates/higher-order dependencies. The implemented 24-metric catalogue and pending post-removal execution status are in [current roadmap](../roadmaps/CURRENT.md) and the [active project handoff](2026-11-10-som-enable-only.md). Earlier dated handoffs about OI or ratios are historical, **not future development instructions**.
 
+## Performance Export design — November 13, 2026
+
+**[Monitor Performance Export ZIP — design handoff](2026-11-13-monitor-performance-export-design.md)** documents the proposed authenticated, user-initiated, read-only PT trading/performance data ZIP. It covers buy/sell records, current PBL/PAIRS/DCA, settled funding, effective properties, CX/CY attribution, GitHub strategy history, manifest completeness, security and staged implementation. **Design only; no Monitor implementation or PT API endpoint verification yet.** This does not change the existing roadmap priority or supersede the dashboard refresh resolution.
+
 ## Current handoffs
 
 ### Monitor-only handoff
