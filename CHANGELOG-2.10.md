@@ -1,5 +1,12 @@
 # PTMagic 2.10 — Cumulative release changes
 
+## November 15 — Monitor source changes and active export blocker
+
+Source-published Monitor UI updates: SSE/FileSystemWatcher live Logs rather than one-second DOM-rebuild polling; Analyzer previous-completed-raid summary plus new live raid; bounded Monitor historical lines and separate warning/error retention; application-version build hover; instance-name-stamped PT Data ZIP; solid green `fa-shield` on explicitly armed TPS position data (latest inspected source `11fb69b`). The filename is evidenced by the GeorgeShort download; combined current browser/runtime acceptance is **not established**.
+
+**Known defect:** November 14 `7d` and `all` PT Data ZIPs fail Buy and Sell History with `invalid_or_oversized_data`, while current-position endpoints succeed. Regression source boundary `618b628`; no established validation cause and no fix committed. Additional `/api/v2/data/misc` Account Information is postponed. See [Monitor 5 handoff](handoffs/2026-11-15-monitor-5.md).
+
+
 **Updated:** November 14, 2026
 
 **Application version:** 2.10.0, in development

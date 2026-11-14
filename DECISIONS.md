@@ -1,5 +1,12 @@
 # PTMagic 2.10 — Current Decision Register
 
+## November 15 — Monitor 5 scope and pre-commit tests
+
+[Monitor 5 handoff](handoffs/2026-11-15-monitor-5.md). **Fix the existing PT Data buy/sell-history regression first**, by reproducing realistic pagination/validation cases offline, exposing safe specific failure reasons and verifying actual PT pages after a correction. The original exporter worked for a single PT page; the later `618b628` date-window rewrite is a behavioral boundary, **not proven failure cause**. A three-day bot history makes `7d` vs `all` an unsuitable isolation test. **Defer** Account Information `GET /api/v2/data/misc` with the seven specifically requested balance/TCV breakdown fields until history works.
+
+**Testing rule:** slightly more upfront **simulated** checks, with complexity-sensitive API/pagination fixtures and regression cases, prior to commits. Minor UI changes need focused checks only; distinguish simulated, compile, runtime and browser PASS. Preserve the source-published SSE Logs viewer, previous-raid-summary and Monitor WARN/ERROR retention, and green TPS `fa-shield` only on explicit PT armed state.
+
+
 
 ## November 14 — Decision: date-based PT trade history
 

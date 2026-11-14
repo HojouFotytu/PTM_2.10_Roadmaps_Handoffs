@@ -1,5 +1,10 @@
 ## November 14 — Active Dev 9 handoff and verification boundaries
 
+## November 15 — Monitor 5 checkpoint
+
+[Current Monitor 5 handoff](../handoffs/2026-11-15-monitor-5.md): user ZIPs for `7d` and `all` reproduce Buy/Sell History `invalid_or_oversized_data` failures while position JSON succeeds; `618b628` is the major export rewrite boundary, not proven exact bug. No diagnostic patch or fix committed. SSE Logs, Analyzer previous summary and Monitor error-history behavior, version build tooltip, instance-name filename and green TPS shield are source-published; runtime/browser acceptance is separate. Add proportionate simulated tests before subsequent code commits; account-info export is deferred.
+
+
 **Current handoff — November 14, 2026:** [PTMagic 2.10 Dev 8 → Dev 9](../handoffs/2026-11-14-ptm-210-dev9.md) is the authoritative next-session entry point. **D-053 complete:** build + 36 focused checks + four 519-market configured TestMode raids PASS at `e31635a1`. **Taker Flow implemented:** 26 metrics (17 global-capable; nine asset-only), source `f7d802f` build + **33/33 focused checks PASS**; **configured 26-metric Taker Flow runtime and v2 cache migration still unverified**. The supplied November 13 log/archive ran the **older 24-metric `e31635a1`** and cannot validate Taker Flow. **Commit-based KST build ID** at `146f5733`: build 13.1s, DecisionHistory **14/14 PASS**, `Build unknown` corrected and **deployed raid display verified by owner**. **PT Data date-window pagination `618b6285`** and **Linux startup path fix `bda2394e`** are separate Monitor/platform workstreams; live PT history/ZIP and Linux deployment acceptance not established by the cited source commits. Application branch `phase1/market-data-foundation` (latest pre-doc source `bda2394e`); docs `main`. Historical dated entries below may say pending; they do not supersede this checkpoint.
 
 ## November 13 — Phase 2 Taker Flow focused verification PASS

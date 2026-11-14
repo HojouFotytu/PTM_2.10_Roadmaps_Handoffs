@@ -1,5 +1,8 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
+**November 15 — Current Monitor 5 handoff:** [Monitor live Logs, PT Data regression, TPS and testing](handoffs/2026-11-15-monitor-5.md). User ZIPs for both `7d` and `all` show Buy/Sell History **failed** (`invalid_or_oversized_data`), while 18 DCA records exported. `618b628` is the major pagination/validation change boundary, but exact root cause is unknown and no fix/diagnostic patch is committed. SSE Logs, raid-summary/Monitor error retention, build hover, instance-name filename and TPS shield (latest app source `11fb69b`) are source-published with relevant acceptance outstanding. `/api/v2/data/misc` Account Information remains deferred.
+
+
 
 **November 14, 2026 — PT Data Export handoff:** PTMagic [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5) replaces historical record limits with **7 days / 1 month / 3 months / 6 months / all available**, requests sorted descending buys/sales across page-zero-based `perPage=25` batches, and writes schema-1.1 manifests while preserving historical `extraInfo -- CV:` values. Application HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) does not further change the PT Data source. The November 13 **schema-1.0** ZIP showed 23 buys, 25 sales, eight PAIRS and two DCA; it does **not** validate the new multi-page exporter. Current live date-cutoff, multi-page and security acceptance remain open. The manifest's `range_coverage_complete` means only no duplicates were detected; it does **not** prove lifetime completeness. See [current PT Data handoff](handoffs/2026-11-13-monitor-performance-export-design.md).
 

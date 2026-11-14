@@ -1,5 +1,8 @@
 # PTMagic 2.10 Monitor — Handoff: On-demand Performance Export ZIP
 
+> **Current failure update — November 15:** [Monitor 5 handoff](2026-11-15-monitor-5.md) supersedes earlier 'date-range exporter merely unverified' status: actual GeorgeShort schema-1.1 `7d` and `all` ZIPs **both fail Buy/Sell History**, generic `invalid_or_oversized_data`, with current positions including 18 DCA successful. Exact check unknown; no diagnostic/fix patch committed. `618b628` is the major change boundary, not proven root cause. Original schema-1.0 single-response export succeeded but did not establish complete history. Test representative PT pagination cases *before* a correction. Preserve dated historical material below.
+
+
 > **Current workstream reference (November 14):** PT Data **date-window pagination is source-published** at `618b6285`, not merely proposed record limits; retain the November 13 implementation update as authority for paging. [Current app-wide Dev 9 handoff](handoffs/2026-11-14-ptm-210-dev9.md). Live multi-page PT API, export completeness and browser/security acceptance remain separately outstanding.
 
 **Date:** 2026-11-13  
