@@ -1,19 +1,19 @@
 # PTMagic 2.10 Monitor — Handoff: On-demand Performance Export ZIP
 
-> **Current failure update — November 15:** [Monitor 5 handoff](2026-11-15-monitor-5.md) supersedes earlier 'date-range exporter merely unverified' status: actual GeorgeShort schema-1.1 `7d` and `all` ZIPs **both fail Buy/Sell History**, generic `invalid_or_oversized_data`, with current positions including 18 DCA successful. Exact check unknown; no diagnostic/fix patch committed. `618b628` is the major change boundary, not proven root cause. Original schema-1.0 single-response export succeeded but did not establish complete history. Test representative PT pagination cases *before* a correction. Preserve dated historical material below.
+> **Superseded — 2026-11-15:** [Current PT Data live pagination handoff](2026-11-15-pt-data-pagination-live-evidence-handoff.md) supersedes the exporter status, pagination contract, failure classification and next actions below. `618b628` and schema-1.1 `perPage=25` are historical. Replacement `3c7eddd` uses schema 1.2/`paged-json-v2` and `perPage=10`; offline checks passed, but actual GeorgeLong page 1 repeats page 0 for both buys and sales. Preserve earlier design history only; do **not** treat it as active implementation instructions.
 
 
 > **Current workstream reference (November 14):** PT Data **date-window pagination is source-published** at `618b6285`, not merely proposed record limits; retain the November 13 implementation update as authority for paging. [Current app-wide Dev 9 handoff](handoffs/2026-11-14-ptm-210-dev9.md). Live multi-page PT API, export completeness and browser/security acceptance remain separately outstanding.
 
 **Date:** 2026-11-13  
-**Status:** Current date-range exporter published; multi-page/date-window live acceptance pending (see November 14 handoff)  
+**Status at this historical checkpoint:** date-range exporter published; multi-page/date-window acceptance was pending and subsequent live attempts failed. Follow the November 15 current handoff, not these older instructions.  
 **Application repository / branch:** [HojouFotytu/PTMagic](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation) / `phase1/market-data-foundation`  
 **Application branch HEAD inspected for this handoff:** `bda2394eccd0e0439a8578bf7c7b1c4287e15382` (PT Data code last modified at `618b6285d18e3c655139ae675bce389b72034ee5`)  
 **Documentation repository:** `HojouFotytu/PTM_2.10_Roadmaps_Handoffs` / `main`  
 **Existing Monitor handoff:** [DashboardTop refresh resolved](2026-11-11-monitor-dashboard-refresh-resolved.md)  
 **Current roadmap:** [roadmaps/CURRENT.md](../roadmaps/CURRENT.md) · **Status:** [STATUS.md](../STATUS.md) · **Decisions:** [DECISIONS.md](../DECISIONS.md)
 
-## November 14, 2026 — CURRENT PT Data handoff (supersedes dated record-limit design)
+## November 14, 2026 — HISTORICAL schema-1.1 PT Data handoff (superseded by November 15 live evidence)
 
 **Application:** PTMagic `phase1/market-data-foundation`; date-range exporter source [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5); later inspected HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) contains unrelated Monitor path/startup adjustments, not an exporter modification. This handoff is documentation-only.
 

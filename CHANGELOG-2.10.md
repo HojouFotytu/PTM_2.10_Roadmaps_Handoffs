@@ -1,19 +1,25 @@
 # PTMagic 2.10 — Cumulative release changes
 
-## November 15 — Monitor source changes and active export blocker
+## November 15 — PT Data replacement source and live pagination blocker (current)
+
+The PT Data read-only history exporter was rebuilt in PTMagic [`3c7eddd`](https://github.com/HojouFotytu/PTMagic/commit/3c7eddd9d4ce8694140c6210344253afef8eb41e) as **`paged-json-v2`, ZIP manifest schema 1.2**. It requests 10 sorted records per API page (shrinks 10 → 5 → 2 → 1 only when a response exceeds size limits), preserves every successful raw JSON page and original nested trade record, writes partial combined histories safely, and distinguishes repeated pages/HTTP/JSON/size failures. Current-position and optional funding exports remain separate and unchanged. The [focused CI job](https://github.com/HojouFotytu/PTMagic/actions/runs/43665987850) executed all **20 simulated HTTP→JSON→ZIP tests successfully** and a .NET 10 Monitor Release build passed with **zero warnings and zero errors**. The tests assume paging progresses when the mock PT API honors `page`.
+
+**Live acceptance FAIL:** The user-supplied GeorgeLong `2026-11-15T03-00-33Z` ZIP runs this new exporter, but page 1 is **byte-identical to page 0** for both buys (180,843 bytes) and sales (120,514 bytes), yielding only 10 unique trades each and `history_page_repeated`, `status=partial`; no response-size reductions. Snapshots of 29 PAIRS and 1 DCA succeed. **Root cause of page non-advancement not yet established** (client query spelling/indexing versus PT response semantics). Do not claim the rebuilt exporter supports completed real PT history until actual PT page 0/1 responses advance. Next: verify real PT API pagination/query parameters and read-only direct page-0/page-1 requests; correct only the confirmed cause, then re-export and inspect. `/api/v2/data/misc` remains deferred. [Authoritative handoff](handoffs/2026-11-15-pt-data-pagination-live-evidence-handoff.md).
+
+## November 15 — Monitor source changes and historical schema-1.1 blocker
 
 Source-published Monitor UI updates: SSE/FileSystemWatcher live Logs rather than one-second DOM-rebuild polling; Analyzer previous-completed-raid summary plus new live raid; bounded Monitor historical lines and separate warning/error retention; application-version build hover; instance-name-stamped PT Data ZIP; solid green `fa-shield` on explicitly armed TPS position data (latest inspected source `11fb69b`). The filename is evidenced by the GeorgeShort download; combined current browser/runtime acceptance is **not established**.
 
-**Known defect:** November 14 `7d` and `all` PT Data ZIPs fail Buy and Sell History with `invalid_or_oversized_data`, while current-position endpoints succeed. Regression source boundary `618b628`; no established validation cause and no fix committed. Additional `/api/v2/data/misc` Account Information is postponed. See [Monitor 5 handoff](handoffs/2026-11-15-monitor-5.md).
+**Historical failure (old schema 1.1; superseded in source by 3c7eddd):** November 14 `7d` and `all` PT Data ZIPs fail Buy and Sell History with `invalid_or_oversized_data`, while current-position endpoints succeed. Regression source boundary `618b628`; no established validation cause and no fix committed. Additional `/api/v2/data/misc` Account Information is postponed. See [Monitor 5 handoff](handoffs/2026-11-15-monitor-5.md).
 
 
-**Updated:** November 14, 2026
+**Updated:** November 15, 2026
 
 **Application version:** 2.10.0, in development
 
 **Application branch:** `phase1/market-data-foundation`
 
-## Monitor — PT Data date-range pagination (November 13–14; live acceptance pending)
+## Monitor — HISTORICAL schema-1.1 PT Data date-range pagination (November 13–14; superseded)
 
 The **Control → PT Data** read-only ZIP exporter now uses **7-day, 1-month, 3-month, 6-month or All available** UTC trade-history windows instead of the superseded 250/1,000/5,000 record limits. Buy and sale history are retrieved from the configured ProfitTrailer target in descending `BOUGHTDATE` / `SOLDDATE` order, requesting `page=0` onward at `perPage=25`. The exporter parses nested source `{hashcode,data}` responses, deduplicates IDs, filters transaction dates, and produces `{data,sourcePageHashcodes}` aggregate history files. Original trade entries and historical `BUYNOTE`/`SELLNOTE` diagnostic `extraInfo -- CV:` contents are retained. The ZIP manifest is schema **1.1**, with date range, source page/record counts, cutoff/end and partial/failure metadata. Current positions (watchmode, pending, pairs, dca), optional funding and password-protected configured-target read-only restrictions are unchanged.
 

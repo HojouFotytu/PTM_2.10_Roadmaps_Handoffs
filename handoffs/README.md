@@ -1,6 +1,6 @@
 # PTMagic 2.10 — Development Handoffs
 
-**Current Monitor handoff — November 15, 2026:** [Monitor 5: PT Data regression, SSE Logs, TPS and simulated testing](2026-11-15-monitor-5.md). Latest source-inspected app `11fb69b`. `7d`/`all` trade-history ZIPs are **broken**; exact validation reason unknown, no fix committed. Previous-raid/Monitor WARN-ERROR retention and green TPS shield source-published with pending browser/live PT acceptance. Account Info from `/api/v2/data/misc` is deferred. The [Dev 9 app-wide handoff](2026-11-14-ptm-210-dev9.md) continues to govern market analytics.
+**November 15 — current Monitor PT Data handoff:** [PT Data — 2026-11-15 live pagination evidence and next steps](2026-11-15-pt-data-pagination-live-evidence-handoff.md). Exporter [`3c7eddd`](https://github.com/HojouFotytu/PTMagic/commit/3c7eddd9d4ce8694140c6210344253afef8eb41e) has 20/20 simulated download-to-ZIP tests and successful Monitor build, but the user's schema-1.2 `paged-json-v2` GeorgeLong ZIP shows **page 1 identical to page 0** for both buys/sales (10 unique rows each; `history_page_repeated`, status `partial`). Source accepts raw first pages and 29 PAIRS/1 DCA. Determine actual PT paging/query behavior before coding another fix; live multi-page acceptance is **FAILED**. Older Monitor 5 handoff is historical for PT Data; Dev 9 remains independent for analytics.
 
 
 **Current handoff — November 14, 2026:** [PTMagic 2.10 Dev 8 → Dev 9](2026-11-14-ptm-210-dev9.md) is the authoritative next-session entry point. **D-053 complete:** build + 36 focused checks + four 519-market configured TestMode raids PASS at `e31635a1`. **Taker Flow implemented:** 26 metrics (17 global-capable; nine asset-only), source `f7d802f` build + **33/33 focused checks PASS**; **configured 26-metric Taker Flow runtime and v2 cache migration still unverified**. The supplied November 13 log/archive ran the **older 24-metric `e31635a1`** and cannot validate Taker Flow. **Commit-based KST build ID** at `146f5733`: build 13.1s, DecisionHistory **14/14 PASS**, `Build unknown` corrected and **deployed raid display verified by owner**. **PT Data date-window pagination `618b6285`** and **Linux startup path fix `bda2394e`** are separate Monitor/platform workstreams; live PT history/ZIP and Linux deployment acceptance not established by the cited source commits. Application branch `phase1/market-data-foundation` (latest pre-doc source `bda2394e`); docs `main`. Historical dated entries below may say pending; they do not supersede this checkpoint.
@@ -18,15 +18,19 @@
 
 D-053 removes OI and all long/short positioning metrics and their planned market aggregates/higher-order dependencies. The 24-metric D-053 catalogue was a historical checkpoint; Phase 2 Taker Flow subsequently established 26 metrics. Current acceptance and next actions are in the [active Dev 9 handoff](2026-11-14-ptm-210-dev9.md). Earlier dated handoffs about OI or ratios are historical, **not future development instructions**.
 
-## PT Data — Current Monitor Handoff (November 14)
+## PT Data — historical schema-1.1 implementation (November 14; superseded)
 
-**November 14, 2026 — PT Data date-based pagination:** PTMagic export commit [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5) replaces the old 250/1,000/5,000 record-count selections with 7-day, 1-month, 3-month, 6-month and all-available ranges. Buys/sales now request `page=0` upward, `perPage=25`, `BOUGHTDATE`/`SOLDDATE` descending; nested `{hashcode,data}` responses are aggregated, preserving original trade records and `extraInfo -- CV:`. Schema-1.1 manifests record ranges, pages, counts and status. The earlier schema-1.0 ZIP (23 buys, 25 sales, 8 PAIRS, 2 DCA) validated the original export only; **new live multi-page/date-range export remains unverified**, and `range_coverage_complete` checks only for duplicate records, not completeness of PT lifetime history. The later PTMagic HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) does not alter PT Data files. [Current handoff](2026-11-13-monitor-performance-export-design.md).
+**November 14, 2026 — PT Data date-based pagination:** PTMagic export commit [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5) replaces the old 250/1,000/5,000 record-count selections with 7-day, 1-month, 3-month, 6-month and all-available ranges. Buys/sales now request `page=0` upward, `perPage=25`, `BOUGHTDATE`/`SOLDDATE` descending; nested `{hashcode,data}` responses are aggregated, preserving original trade records and `extraInfo -- CV:`. Schema-1.1 manifests record ranges, pages, counts and status. The earlier schema-1.0 ZIP (23 buys, 25 sales, 8 PAIRS, 2 DCA) validated the original export only; **new live multi-page/date-range export remains unverified**, and `range_coverage_complete` checks only for duplicate records, not completeness of PT lifetime history. The later PTMagic HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) does not alter PT Data files. [Earlier, superseded implementation handoff](2026-11-13-monitor-performance-export-design.md).
 
 The initial first-page and record-count design is historical; PBL, PT property readback, full strategy context and combined LONG/SHORT export are not part of the implemented seven-source exporter.
 
 ## Current handoffs
 
-### Monitor-only handoff
+### PT Data export — current
+
+**[PT Data — 2026-11-15 live pagination evidence and next steps](2026-11-15-pt-data-pagination-live-evidence-handoff.md)** — source/ZIP evidence, precise repeated-page failure, priorities and acceptance criteria. Do not substitute the historical Monitor 5/schemas 1.0–1.1 notes.
+
+### Other Monitor workstreams (historical handoffs)
 
 **[2026-11-13 — Expandable Market Analyzer asset metrics and value colors](2026-11-13-monitor-inline-asset-metrics.md)**
 
