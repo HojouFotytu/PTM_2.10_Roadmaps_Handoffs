@@ -1,6 +1,9 @@
 # PTMagic 2.10 — User Roadmap
 
-**November 15 — immediate Monitor workstream:** [PT Data — 2026-11-15 live pagination evidence and next steps](handoffs/2026-11-15-pt-data-pagination-live-evidence-handoff.md). Replacement `3c7eddd` passed simulated 20/20 and Monitor build, but actual PT Buy/Sell page 1 repeats page 0; history export still **partial, not accepted**. Verify the actual configured PT GET/query semantics, fix only the evidence-backed paging issue, validate another live ZIP **before** deferred `/api/v2/data/misc` Account Information. No change to market analytics priorities.
+**CURRENT MONITOR CHECKPOINT — 2026-11-17 (supersedes earlier Monitor-specific “current” statements):** [Full effective behavior and validation](CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary). App anchor `aec54eb`: first-raid-dependent sections show a Logs-linked waiting message, other routes remain usable; Logs stream first-startup output when no prior raid and offer a complete on-disk PTMagic+Monitor ZIP; asset tables show **every published per-asset metric** regardless of trigger/metric scope; ticker build tooltip uses the stamped KST commit ID. PT Data is **schema 1.3, page 1-based**, not the historical 1.2 repeated-page blocker. **CI Monitor build, 26 PT Data simulations, and no-first-raid Linux listener smoke PASS** (run 43915093122); authenticated live Logs ZIP, post-fix hover and 1.3 real PT multi-page acceptance remain unverified. No source behavior is changed by this documentation update.
+
+
+**HISTORICAL November 15 — schema-1.2 Monitor workstream, superseded:** [PT Data — 2026-11-15 live pagination evidence and next steps](handoffs/2026-11-15-pt-data-pagination-live-evidence-handoff.md). Replacement `3c7eddd` passed simulated 20/20 and Monitor build, but actual PT Buy/Sell page 1 repeats page 0; history export still **partial, not accepted**. Verify the actual configured PT GET/query semantics, fix only the evidence-backed paging issue, validate another live ZIP **before** deferred `/api/v2/data/misc` Account Information. No change to market analytics priorities.
 
 
 
