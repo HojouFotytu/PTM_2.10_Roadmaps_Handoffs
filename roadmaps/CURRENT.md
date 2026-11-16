@@ -1,5 +1,9 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+**CURRENT ANALYTICS AUTHORITY — NOVEMBER 17, 2026:** [35-metric dual-instance configured TestMode acceptance](../handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md). **18 completed raids (9 LONG/9 SHORT), 16/16 post-cold raids conclusive TestMode evaluation, zero post-warmup metric warnings, no PTMagic ERROR/CRITICAL or PT writes.** Compiled source `ef1f738` first 8 raids/bot; later `82ccf4a` in final warm restarts. Initial *uncached* raids still deferred after ~5m24s, with 302.7s normalized 5m acquisition exceeding the **unchanged 300s** pin-age check. Later raids **19–27s**, no cyclic H48 ~182s refetch; ~829,007 warm-cache candles restored on restart. Legacy 1m rebuild explicitly skipped. **35 metrics = 26 global-capable + 9 asset-only**, 10 MarketTrends, 8 GlobalSettings ending in uppercase `DEFAULT`, 11 SMS. Phase 3 price/quote-volume/taker confirmation/divergence is next; optional first-ever cold-start improvement separate. Current-source focused `NormalizedWarmStartCache` and `ConfigurationLifecycle` test PASS, non-TestMode delivery and browser acceptance not established. **Separate current Monitor authority:** PT Data schema **1.3 one-based** implemented and CI tested, real PT multi-page acceptance pending; old schema-1.2 repeated-page blocker is HISTORICAL. Earlier “Phase 2B planned”, “26 metrics current”, or “taker runtime unverified” statements below are superseded for current work.
+
+---
+
 **CURRENT MONITOR CHECKPOINT — 2026-11-17 (supersedes earlier Monitor-specific “current” statements):** [Full effective behavior and validation](../CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary). App anchor `aec54eb`: first-raid-dependent sections show a Logs-linked waiting message, other routes remain usable; Logs stream first-startup output when no prior raid and offer a complete on-disk PTMagic+Monitor ZIP; asset tables show **every published per-asset metric** regardless of trigger/metric scope; ticker build tooltip uses the stamped KST commit ID. PT Data is **schema 1.3, page 1-based**, not the historical 1.2 repeated-page blocker. **CI Monitor build, 26 PT Data simulations, and no-first-raid Linux listener smoke PASS** (run 43915093122); authenticated live Logs ZIP, post-fix hover and 1.3 real PT multi-page acceptance remain unverified. No source behavior is changed by this documentation update.
 
 
@@ -481,7 +485,7 @@ Insufficient retention leaves affected metrics unavailable with an explicit reas
 
 ## 6. Current metric catalogue
 
-**D-053 implemented: 24 canonical metric names** — 17 global-capable (including PriceTrend, which also has asset scope) and seven asset-only. The former 27-metric catalogue is historical; the current registry is 24. The underlying 22 legacy normalized/correlation metrics and the two funding metrics remain. Metric names are selected inside a named MarketTrend; do not create hardcoded metric names such as Breadth4h to replace the trend reference.
+**CURRENT: 35 canonical metrics (26 global-capable, nine asset-only), including both-scope PriceTrend counted once.** D-053's 24 and asset-taker's 26 were historical source stages. The table below covers original metrics; see §12 for the nine new global funding/taker aggregates and asset-only source metrics. The named MarketTrend determines timeframe and trigger eligibility.
 
 | Metric | Scope | Meaning / unit |
 |---|---|---|
@@ -551,7 +555,7 @@ MarketTrend.Metrics is a comma-separated canonical metric list:
 - Nonempty explicitly selects published metrics.
 - Omitted Trigger.Metric or OffTrigger.Metric requests normalized PriceTrend through dependency resolution.
 - An explicitly named metric must be enabled on the referenced trend.
-- Internal dependencies do not force every related metric to appear as a published output.
+- Compute only required dependencies for explicitly selected global/SMS metrics. Publish and display all values already calculated, including unselected dependencies, but **do not calculate extra values merely for display**. An unselected published value remains unavailable to trading triggers until explicitly enabled in its named MarketTrend.
 
 The old parallel legacy PriceTrend architecture is superseded. CoinMarketCap and removed exchange paths must not be restored to satisfy obsolete handoff language.
 
@@ -704,16 +708,13 @@ Proposed asset metrics:
 
 Confirm the Binance kline response supplies compatible total and taker-buy quote-volume fields and preserve their exact units and time alignment in the normalized candle model and persistent cache. **Prefer reusing already collected klines** rather than adding symbol-specific taker-flow history requests. Derive sell volume as total minus buy only when the source contract and numerical validation justify that interpretation. Zero/invalid totals, insufficient history or incompatible units remain UNAVAILABLE. Source implementation is published; source-stamped build, focused testing and configured raid validation are pending. Refer to the Phase 2 implementation record above.
 
-## 12. Phase 2B — Retained market-wide Futures aggregates
+## 12. Phase 2B — Funding and taker market aggregates (source complete, steady-state TestMode verified)
 
-Only **funding** and **taker flow** aggregates are approved. The previous OI median/expansion/contraction/extreme breadth, positioning median/concentration/breadth and top-trader measurement families are removed from the roadmap.
+**Current catalogue:** 35 names (26 global-capable, nine asset-only). Approved **funding globals:** `MedianFundingRate` latest Regular-settlement median; `PositiveFundingBreadth` (>0), `NegativeFundingBreadth` (<0), `ExtremePositiveFundingBreadth` (inclusive ≥+0.05 percentage-point default), `ExtremeNegativeFundingBreadth` (inclusive ≤−0.05 percentage-point default). Missing Regular settlement, wrong-sign/nonfinite thresholds and incomplete histories are UNAVAILABLE, never zero by assumption. Approved **taker globals:** `MedianTakerBuyRatio`, `BuyerDominanceBreadth` (ratio >0.5), `StrongBuyerDominanceBreadth` (ratio ≥0.60 default, finite >0.5..≤1), and `TakerImbalanceDispersion` (cross-sectional population standard deviation, nondirectional). Per-asset `TakerBuyRatio=Σtaker-buy quote volume / Σtotal quote volume` over latest fully closed UTC-aligned TrendMinutes; `TakerImbalance=2×ratio−1` is algebraically dependent, not another signal source. No OI/positioning families or new taker endpoint.
 
-| Family | Planned aggregate measurements |
-|---|---|
-| Funding | Median settled rate, positive/negative funding breadth, extreme positive/negative funding breadth |
-| Taker flow | Median taker-buy ratio, buyer-dominance breadth, strong-dominance breadth, taker-imbalance distribution |
+Freeze global eligible `MaxMarkets` population, require nonempty ≥ceil(90%×eligible) valid source; keep missing markets in eligible denominator; equally weight valid markets in cross-market calculations. Compute only necessary asset prerequisites: funding rate for globals, not additional unselected FundingSum; taker ratio and imbalance only when selected/needed. Monitor may display all already calculated and published values regardless of trigger selection, under their originating MarketTrend, with no extra calculation for display. Trigger enablement remains explicit.
 
-Define per-family source applicability, eligible population, valid sample count, completeness, freshness, thresholds and weighting. Preserve the existing 90% cross-sectional minimum where appropriate, and use a stricter requirement when a measure mathematically requires it. A valid cohort/subpopulation must be explicitly labeled; do not silently claim whole-market coverage.
+**Runtime evidence:** Both GeorgeLong and GeorgeShort November 17 logs at `ef1f738`/final `82ccf4a`: 18 raids, 16 post-cold conclusive TestMode evaluations with zero metric warnings. Initial cold full acquisition ~302.7s/instance deferred at 300s source age; rest ~19–27s/raid, no recurring ~182s H48 refetch, warm cache reused. `DEFAULT` spelling preserved for Linux. Targeted `NormalizedWarmStartCache`/`ConfigurationLifecycle` test run output, browser review and real PT delivery remain separate. Phase 3 is next; optional cold-first-raid latency optimization remains open. [Full current handoff](../handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md).
 
 ## 13. Phase 3 — Transparent higher-order flow conditions
 

@@ -1,5 +1,9 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
+**CURRENT ANALYTICS AUTHORITY — NOVEMBER 17, 2026:** [35-metric dual-instance configured TestMode acceptance](handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md). **18 completed raids (9 LONG/9 SHORT), 16/16 post-cold raids conclusive TestMode evaluation, zero post-warmup metric warnings, no PTMagic ERROR/CRITICAL or PT writes.** Compiled source `ef1f738` first 8 raids/bot; later `82ccf4a` in final warm restarts. Initial *uncached* raids still deferred after ~5m24s, with 302.7s normalized 5m acquisition exceeding the **unchanged 300s** pin-age check. Later raids **19–27s**, no cyclic H48 ~182s refetch; ~829,007 warm-cache candles restored on restart. Legacy 1m rebuild explicitly skipped. **35 metrics = 26 global-capable + 9 asset-only**, 10 MarketTrends, 8 GlobalSettings ending in uppercase `DEFAULT`, 11 SMS. Phase 3 price/quote-volume/taker confirmation/divergence is next; optional first-ever cold-start improvement separate. Current-source focused `NormalizedWarmStartCache` and `ConfigurationLifecycle` test PASS, non-TestMode delivery and browser acceptance not established. **Separate current Monitor authority:** PT Data schema **1.3 one-based** implemented and CI tested, real PT multi-page acceptance pending; old schema-1.2 repeated-page blocker is HISTORICAL. Earlier “Phase 2B planned”, “26 metrics current”, or “taker runtime unverified” statements below are superseded for current work.
+
+---
+
 **CURRENT MONITOR CHECKPOINT — 2026-11-17 (supersedes earlier Monitor-specific “current” statements):** [Full effective behavior and validation](CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary). App anchor `aec54eb`: first-raid-dependent sections show a Logs-linked waiting message, other routes remain usable; Logs stream first-startup output when no prior raid and offer a complete on-disk PTMagic+Monitor ZIP; asset tables show **every published per-asset metric** regardless of trigger/metric scope; ticker build tooltip uses the stamped KST commit ID. PT Data is **schema 1.3, page 1-based**, not the historical 1.2 repeated-page blocker. **CI Monitor build, 26 PT Data simulations, and no-first-raid Linux listener smoke PASS** (run 43915093122); authenticated live Logs ZIP, post-fix hover and 1.3 real PT multi-page acceptance remain unverified. No source behavior is changed by this documentation update.
 
 
@@ -85,11 +89,11 @@ Current user instructions take precedence over earlier project decisions. Record
 
 ## Validation ownership
 
-D-021, D-022, and D-038 remain active:
+D-021 and D-022 remain active; D-038 blanket publication is superseded by D-058's scoped-write authority:
 
 - The assistant implements source changes, reviews code, authors regression cases, and fixes reported failures.
 - The user runs local .NET builds, regression harnesses, and configured PTMagic/ProfitTrailer runtime checks.
-- The user has granted standing authorization to publish PTM 2.10 development changes to the application and documentation branches named in [D-038](DECISIONS.md#d-038--standing-authorization-to-publish-ptm-210-development). Do not request renewed conversational approval for those publications; actual tool restrictions still apply.
+- Explain exact intended files and behavioral changes before any repository write, obtain user authorization, use existing branches and leave independent LONG/SHORT trading settings and analyzer work unchanged.
 - A source commit, a written test, or a source review is not a passing execution result.
 - GitHub is used for source control and documentation. Automatic GitHub Actions or remote build/test execution requires an explicit user request. The earlier automatic regression workflow was removed; do not restore it by following a historical handoff.
 - Every source-change handoff supplies a complete, fail-fast PowerShell sequence with the exact current project paths and specific runtime checks.

@@ -1,5 +1,9 @@
 # PTMagic 2.10 — Current Decision Register
 
+**CURRENT ANALYTICS AUTHORITY — NOVEMBER 17, 2026:** [35-metric dual-instance configured TestMode acceptance](handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md). **18 completed raids (9 LONG/9 SHORT), 16/16 post-cold raids conclusive TestMode evaluation, zero post-warmup metric warnings, no PTMagic ERROR/CRITICAL or PT writes.** Compiled source `ef1f738` first 8 raids/bot; later `82ccf4a` in final warm restarts. Initial *uncached* raids still deferred after ~5m24s, with 302.7s normalized 5m acquisition exceeding the **unchanged 300s** pin-age check. Later raids **19–27s**, no cyclic H48 ~182s refetch; ~829,007 warm-cache candles restored on restart. Legacy 1m rebuild explicitly skipped. **35 metrics = 26 global-capable + 9 asset-only**, 10 MarketTrends, 8 GlobalSettings ending in uppercase `DEFAULT`, 11 SMS. Phase 3 price/quote-volume/taker confirmation/divergence is next; optional first-ever cold-start improvement separate. Current-source focused `NormalizedWarmStartCache` and `ConfigurationLifecycle` test PASS, non-TestMode delivery and browser acceptance not established. **Separate current Monitor authority:** PT Data schema **1.3 one-based** implemented and CI tested, real PT multi-page acceptance pending; old schema-1.2 repeated-page blocker is HISTORICAL. Earlier “Phase 2B planned”, “26 metrics current”, or “taker runtime unverified” statements below are superseded for current work.
+
+---
+
 ## November 17 — Effective Monitor decisions (supersede conflicting November 13–15 instructions)
 
 1. **Published asset data is displayable regardless of why acquired.** Under existing Market Analyzer Absolute/Relative asset rows, retain collapsed expansion and MarketTrend column alignment, but include every nonempty published `AssetMetrics` metric key (including PriceTrend and values calculated solely as global prerequisites). No `DisplayOnMarketAnalyzerList`, configured-trading-metric, registered asset scope, or `AssetSymbols` membership exclusion. This reverses the restrictive parts of D-055 below; no additional data acquisition, calculations, or new per-market page. Unpublished acquired data remain unavailable for display. Source `e7a74ea`/`99cbf01`/`ef8f2cb`.
@@ -563,3 +567,20 @@ D-053 withdrawn open-interest and long/short-positioning metrics remain removed;
 **Accepted and verified:** The application version is still `2.10.0`. Each compiled Git source embeds the HEAD commit timestamp in KST as `MMddyyyyHHmm` and the raid summary shows `(Build <number>)`; the full Git source SHA remains authoritative. The initial `Build unknown` failure was corrected. User-run source `146f57336eee28fa5bc5f30116420e323413bf89`: build PASS 13.1s, DecisionHistory 14/14 PASS, and **deployed raid display verified**. Do not infer that a source checkout/build has been deployed merely from its Git SHA. Preserve the `Core.dll`/PTMagic executable deployment pairing.
 
 **Current work order:** Continue from [Dev 9 active handoff](handoffs/2026-11-14-ptm-210-dev9.md), with current installed 26-metric Taker Flow configured TestMode acceptance first. The November 13 log/archive is strictly old `e31635a1`/24-metric/v1-cache evidence; the 33/33 offline Taker Flow source tests at `f7d802f` do not prove runtime behavior. Monitor PT Data export and Windows/Linux startup fixes have separate verification boundaries. D-053 removed metrics remain permanently out of scope, and D-052 PTMagic/strategy separation remains in force.
+
+
+## D-056 — Phase 2B retained global funding/taker metrics (current scope)
+
+**35 registered metrics, 26 global-capable, nine asset-only**. Five global funding aggregates: median latest verified Regular rate; positive/negative breadth for >0/<0; inclusive extreme positive/negative breadth default thresholds +0.05/−0.05 percentage points. Four global taker aggregates: median asset taker-buy quote-volume ratio, buyer-dominance breadth ratio >0.5, strong buyer dominance ≥configured 0.60, and population standard deviation of asset `TakerImbalance=2×TakerBuyRatio−1` (nondirectional). Source cohorts are frozen; minimum ≥ceil(90%×eligible) valid coverage and equal weighting per valid market. Missing data unavailable; OI/positioning withdrawn.
+
+## D-057 — Already-computed metric display is separate from calculation/trigger permission
+
+If a metric was actually computed for a selected global/SMS metric, publish and display it in the correct MarketTrend even if it is not independently selected for triggers; never compute extra values merely to populate Monitor. Global funding does not need extra unselected FundingSum; dispersion needs per-asset taker imbalance while ratio-based globals need the ratio. Published-but-unselected dependencies remain ineligible for triggers. Supersedes selected-only display instruction in historical D-055 and aligns with current Monitor display decision.
+
+## D-058 — Explicit scoped-change rule supersedes old publication permission
+
+Explain files and exact scope before GitHub writes, obtain authorization, do not create branches or modify independent LONG/SHORT personal analyzer, settings, strategy or preset work without a request. Previous D-038 blanket publication language is superseded. Distinguish code source, user-run .NET/focused test evidence, configured TestMode, actual PT delivery, and browser checks; do not upgrade historical source-specific PASS.
+
+## D-059 — Runtime acceptance of three corrections; first uncached raid still exceeds age cap
+
+Nov17 dual-instance TestMode log shows the cyclic H48 refetch avoided, normalized-only Futures legacy 1m reconstruction skipped, and unrelated **property-free, non-stopping** SMS uncertainty no longer blocks a conclusive configuration decision. Unknown property-changing/stop-process SMS and global uncertainty still fail closed. **18 total raids; 16 post-cold conclusive decisions, zero metric warnings, no PT writes; two first cold raids ~5m24s deferred under unchanged 300s source-pin age limit.** No browser or non-TestMode PT delivery PASS implied. [Evidence and next work](handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md).
