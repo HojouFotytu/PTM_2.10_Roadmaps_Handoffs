@@ -1,5 +1,16 @@
 # PTMagic 2.10 — Current Decision Register
 
+## November 17 — Effective Monitor decisions (supersede conflicting November 13–15 instructions)
+
+1. **Published asset data is displayable regardless of why acquired.** Under existing Market Analyzer Absolute/Relative asset rows, retain collapsed expansion and MarketTrend column alignment, but include every nonempty published `AssetMetrics` metric key (including PriceTrend and values calculated solely as global prerequisites). No `DisplayOnMarketAnalyzerList`, configured-trading-metric, registered asset scope, or `AssetSymbols` membership exclusion. This reverses the restrictive parts of D-055 below; no additional data acquisition, calculations, or new per-market page. Unpublished acquired data remain unavailable for display. Source `e7a74ea`/`99cbf01`/`ef8f2cb`.
+2. **First-raid Monitor UX:** Start HTTP server before `LastRuntimeSummary.json` exists. Only raid-data-dependent pages/fragments show “Data Unavailable until PTMagic completes its first raid” with an existing Logs link, checking at 60-second intervals. Independent Login, Logs, PT Data, settings remain usable. Do not restore the superseded application-wide startup wait.
+3. **Logs and ZIP:** When there is no previous completed raid, show current PTMagic startup messages/first raid immediately, continuing live via authenticated SSE. With a prior raid, retain only its summary plus the current live raid. The separate authenticated Logs ZIP includes **all files on disk from PTMagic and Monitor `_logs`**, not viewer-trimmed output, without a date cap; maintain limited read-only filesystem scope, reparse-point exclusion and temporary-file cleanup. Live content/auth acceptance pending.
+4. **Build tooltip:** Hovering over full visible version shows `BuildIdentity.CommitBuildNumber` from Core assembly's stamped HEAD timestamp KST, not parsed `PTMagic.dll` `ProductVersion`; blank metadata displays “Build unavailable.” Keep compiled Core and PTMagic deployment consistent.
+5. **PT Data active source:** `pt-history-v3` schema 1.3, one-based pages `1,2,...`, size 10 with true overflow reduction `10→5→1`; bounded date ranges stop at cutoff, `all` traverses available history. Old schema-1.2 page repetition is historical. 26 simulated tests + Monitor build PASS; real schema-1.3 multi-page acceptance pending. Do not implement deferred `/api/v2/data/misc` solely from these changes.
+
+**Provenance:** Application source `aec54eb`, [full current contract and CI evidence](CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary). GitHub modifications require advance explanation, and no new branches. Separate PTMagic application code from independently developed LONG/SHORT strategies.
+
+
 ## November 15 — Monitor 5 scope and pre-commit tests
 
 [Monitor 5 handoff](handoffs/2026-11-15-monitor-5.md). **Fix the existing PT Data buy/sell-history regression first**, by reproducing realistic pagination/validation cases offline, exposing safe specific failure reasons and verifying actual PT pages after a correction. The original exporter worked for a single PT page; the later `618b628` date-window rewrite is a behavioral boundary, **not proven failure cause**. A three-day bot history makes `7d` vs `all` an unsuitable isolation test. **Defer** Account Information `GET /api/v2/data/misc` with the seven specifically requested balance/TCV breakdown fields until history works.
@@ -536,9 +547,9 @@ Preserve legacy normalized OHLCV warm-start **version 1** cache compatibility fo
 
 ## D-055 — Inline expandable asset metrics in Market Analyzer
 
-**Owner-approved November 12–13, 2026. Implemented in source.** Do not reinstate the separate Per-Market Metrics page/table. Instead, add collapsed-by-default metric detail rows under the existing market rows of Market Analyzer Absolute/Relative Trend Changes, with names indented and native values aligned to their requesting MarketTrend columns.
+**Initial implementation November 12–13; current scope revised November 17 above.** Do not reinstate the separate Per-Market Metrics page/table. Instead, add collapsed-by-default metric detail rows under the existing market rows of Market Analyzer Absolute/Relative Trend Changes, with names indented and native values aligned to their requesting MarketTrend columns.
 
-Show only explicitly configured asset-scoped metrics for the trend's selected asset population. Unrequested cells are blank; invalid/stale/unpublished values show `--` with a reason; do not duplicate the primary-row `PriceTrend`. Expanded details collapse on mode switch and before sorting. Retain the existing Market-Wide Metrics grouped panel unchanged and do not recompute native values for the Relative view.
+**Superseded November 17:** The “only explicitly configured asset-scoped / selected population / no PriceTrend” restriction from the initial design is withdrawn. Include **all already-published** per-asset metric keys in the existing asset table regardless of calculation purpose, selected trigger, asset scope or displayed-trend flag; preserve native value/originating MarketTrend alignment, collapsed rows, mode-switch/sort handling and `--` for unavailable values. Do not fabricate data or recalculate solely for display.
 
 Determine colors from **unrounded numeric values**: green above / red below each metric's neutral reference, which is 0 for signed metrics, 1.0x for `VolumeExpansion`, and 0.5 for `TakerBuyRatio`. Exact neutral, unavailable and stale values are muted. Colors describe numeric direction, not trading profit. Use the existing `AssetMetrics` snapshot; do not add collection, calculation, a new page or settings.
 
