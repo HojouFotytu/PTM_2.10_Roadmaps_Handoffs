@@ -1,5 +1,8 @@
 # PTMagic 2.10 Monitor — Expandable asset metrics handoff
 
+> **Superseded implementation checkpoint — November 17, 2026:** This file records historical November 13–15 behavior, not active Monitor acceptance or current code. The [current effective Monitor contract](../CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary) and [current decisions](../DECISIONS.md#november-17--effective-monitor-decisions-supersede-conflicting-november-1315-instructions) take precedence. PT Data is **schema 1.3** (PT's pages 1-based, 26/26 simulated CI PASS, real 1.3 acceptance still pending), not the older schema-1.2 repeated-page failure. All already-published per-asset metrics display irrespective of trigger/configuration/scope; the full-version tooltip uses the stamped `BuildIdentity.CommitBuildNumber`, not `PTMagic.dll ProductVersion`; Logs replay startup before raid 1 when no previous raid exists and provide complete PTMagic+Monitor log ZIP. Independent Monitor pages start before the first raid; dependent views show the Logs-linked wait message and retry once per minute. No application or strategy changes in this documentation entry.
+
+
 **Date:** November 13, 2026 (KST)  
 **Application:** [PTMagic](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation) / existing `phase1/market-data-foundation` branch  
 **Inspected HEAD:** `5f09cd3d2da1bc87ccfca990170f7d24dc047767`  
@@ -19,9 +22,9 @@ The owner rejected a dedicated Per-Market Metrics table/page, then approved **ex
 
 1. The existing **Market-Wide Metrics** grouped panel remains unchanged. Do **not** add asset metrics to its market-wide aggregates.
 2. In the existing **Absolute Trend Changes** and **Relative Trend Changes** tables, show a chevron beside each market that has applicable configured asset-scoped metrics. All start collapsed; expanded metric labels are indented beneath the market name.
-3. Values appear **under the MarketTrend column that requested them**, not a separate metric/timeframe grid. Display only explicitly configured asset-scope metrics from the displayed Exchange MarketTrends (`DisplayOnMarketAnalyzerList`) and only for symbols in that trend's selected `AssetSymbols`.
+3. **Current November 17 contract (supersedes initial restrictions):** Values appear under their originating MarketTrend column; display **every published** per-asset metric, regardless of metric registration/scope, triggering, `DisplayOnMarketAnalyzerList` or membership in that trend's `AssetSymbols`. Rows include published assets absent from trading summary. No new page, provider acquisition or calculation is authorized.
 4. Omit unconfigured/inapplicable cells. For configured, missing/invalid/stale/unpublished features, show `--` with an explanatory tooltip; never fabricate zero.
-5. `PriceTrend` already appears in the parent row. Do not add duplicate PriceTrend detail rows; a blank `Metrics` field alone does not create extra rows.
+5. **November 17 revision:** `PriceTrend` is no longer excluded from published expanded metrics. Parent price trend cells still use the existing summary value or a published PriceTrend fallback. Blank `Metrics` does not authorize extra calculation; only actually published keys appear.
 6. Asset metric values are **native and identical** in Absolute and Relative modes; only the existing price-trend figures use those modes. Switching modes collapses detail rows.
 7. Tablesaw sort must collapse rows before sorting, so no metric row detaches from its market. Only expand to create detail DOM rows, not a permanent multiplication of hundreds of market rows.
 
@@ -42,7 +45,7 @@ These are numeric direction/reference colors, **not** profitability signals.
 
 ## Active metric scope (D-053 / D-054)
 
-The inspected branch has **26 registered metrics: 17 globally usable, nine asset-only**. Only configured ones appear in expanded rows. Nine eligible asset-only names: `RelativeStrengthMarket`, `RelativeStrengthBTC`, `ATRP`, `VolumeExpansion`, `CorrelationToBTC`, `FundingRate`, `FundingSum`, `TakerBuyRatio`, `TakerImbalance`.
+The inspected branch has **26 registered metrics: 17 globally usable, nine asset-only**. All already-published per-asset keys appear in expanded rows, whether or not configured as trigger metrics. Nine eligible asset-only names: `RelativeStrengthMarket`, `RelativeStrengthBTC`, `ATRP`, `VolumeExpansion`, `CorrelationToBTC`, `FundingRate`, `FundingSum`, `TakerBuyRatio`, `TakerImbalance`.
 
 **Do not restore withdrawn metrics** from the earlier discussion's illustration: `OpenInterestChange`, `OpenInterestValueChange`, `GlobalLongShortAccountRatio`, and the two top-trader ratio feeds are removed by prior decisions. The old long/short ratio's 1.0 neutral color rule is obsolete. `TakerBuyRatio` and `TakerImbalance` arrived later from kline-derived taker flow and are dependent measures, not independent sources.
 
