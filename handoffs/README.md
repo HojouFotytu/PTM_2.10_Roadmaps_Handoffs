@@ -1,6 +1,9 @@
 # PTMagic 2.10 — Development Handoffs
 
-**November 15 — current Monitor PT Data handoff:** [PT Data — 2026-11-15 live pagination evidence and next steps](2026-11-15-pt-data-pagination-live-evidence-handoff.md). Exporter [`3c7eddd`](https://github.com/HojouFotytu/PTMagic/commit/3c7eddd9d4ce8694140c6210344253afef8eb41e) has 20/20 simulated download-to-ZIP tests and successful Monitor build, but the user's schema-1.2 `paged-json-v2` GeorgeLong ZIP shows **page 1 identical to page 0** for both buys/sales (10 unique rows each; `history_page_repeated`, status `partial`). Source accepts raw first pages and 29 PAIRS/1 DCA. Determine actual PT paging/query behavior before coding another fix; live multi-page acceptance is **FAILED**. Older Monitor 5 handoff is historical for PT Data; Dev 9 remains independent for analytics.
+**CURRENT MONITOR CHECKPOINT — 2026-11-17 (supersedes earlier Monitor-specific “current” statements):** [Full effective behavior and validation](../CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary). App anchor `aec54eb`: first-raid-dependent sections show a Logs-linked waiting message, other routes remain usable; Logs stream first-startup output when no prior raid and offer a complete on-disk PTMagic+Monitor ZIP; asset tables show **every published per-asset metric** regardless of trigger/metric scope; ticker build tooltip uses the stamped KST commit ID. PT Data is **schema 1.3, page 1-based**, not the historical 1.2 repeated-page blocker. **CI Monitor build, 26 PT Data simulations, and no-first-raid Linux listener smoke PASS** (run 43915093122); authenticated live Logs ZIP, post-fix hover and 1.3 real PT multi-page acceptance remain unverified. No source behavior is changed by this documentation update.
+
+
+**November 15 — HISTORICAL schema-1.2 Monitor PT Data handoff (superseded by current schema 1.3):** [PT Data — 2026-11-15 live pagination evidence and next steps](2026-11-15-pt-data-pagination-live-evidence-handoff.md). Exporter [`3c7eddd`](https://github.com/HojouFotytu/PTMagic/commit/3c7eddd9d4ce8694140c6210344253afef8eb41e) has 20/20 simulated download-to-ZIP tests and successful Monitor build, but the user's schema-1.2 `paged-json-v2` GeorgeLong ZIP shows **page 1 identical to page 0** for both buys/sales (10 unique rows each; `history_page_repeated`, status `partial`). Source accepts raw first pages and 29 PAIRS/1 DCA. Determine actual PT paging/query behavior before coding another fix; live multi-page acceptance is **FAILED**. Older Monitor 5 handoff is historical for PT Data; Dev 9 remains independent for analytics.
 
 
 **Current handoff — November 14, 2026:** [PTMagic 2.10 Dev 8 → Dev 9](2026-11-14-ptm-210-dev9.md) is the authoritative next-session entry point. **D-053 complete:** build + 36 focused checks + four 519-market configured TestMode raids PASS at `e31635a1`. **Taker Flow implemented:** 26 metrics (17 global-capable; nine asset-only), source `f7d802f` build + **33/33 focused checks PASS**; **configured 26-metric Taker Flow runtime and v2 cache migration still unverified**. The supplied November 13 log/archive ran the **older 24-metric `e31635a1`** and cannot validate Taker Flow. **Commit-based KST build ID** at `146f5733`: build 13.1s, DecisionHistory **14/14 PASS**, `Build unknown` corrected and **deployed raid display verified by owner**. **PT Data date-window pagination `618b6285`** and **Linux startup path fix `bda2394e`** are separate Monitor/platform workstreams; live PT history/ZIP and Linux deployment acceptance not established by the cited source commits. Application branch `phase1/market-data-foundation` (latest pre-doc source `bda2394e`); docs `main`. Historical dated entries below may say pending; they do not supersede this checkpoint.
@@ -26,11 +29,11 @@ The initial first-page and record-count design is historical; PBL, PT property r
 
 ## Current handoffs
 
-### PT Data export — current
+### PT Data export — historical schema-1.2 case; current source is schema 1.3
 
 **[PT Data — 2026-11-15 live pagination evidence and next steps](2026-11-15-pt-data-pagination-live-evidence-handoff.md)** — source/ZIP evidence, precise repeated-page failure, priorities and acceptance criteria. Do not substitute the historical Monitor 5/schemas 1.0–1.1 notes.
 
-### Other Monitor workstreams (historical handoffs)
+### Other Monitor workstreams (historical handoffs; current behavior in changelog)
 
 **[2026-11-13 — Expandable Market Analyzer asset metrics and value colors](2026-11-13-monitor-inline-asset-metrics.md)**
 
