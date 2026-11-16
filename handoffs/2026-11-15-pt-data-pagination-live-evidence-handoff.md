@@ -1,5 +1,8 @@
 # PTMagic 2.10 Monitor — PT Data live pagination handoff
 
+> **Superseded implementation checkpoint — November 17, 2026:** This file records historical November 13–15 behavior, not active Monitor acceptance or current code. The [current effective Monitor contract](../CHANGELOG-2.10.md#november-17-2026--monitor-current-behavior-and-acceptance-boundary) and [current decisions](../DECISIONS.md#november-17--effective-monitor-decisions-supersede-conflicting-november-1315-instructions) take precedence. PT Data is **schema 1.3** (PT's pages 1-based, 26/26 simulated CI PASS, real 1.3 acceptance still pending), not the older schema-1.2 repeated-page failure. All already-published per-asset metrics display irrespective of trigger/configuration/scope; the full-version tooltip uses the stamped `BuildIdentity.CommitBuildNumber`, not `PTMagic.dll ProductVersion`; Logs replay startup before raid 1 when no previous raid exists and provide complete PTMagic+Monitor log ZIP. Independent Monitor pages start before the first raid; dependent views show the Logs-linked wait message and retry once per minute. No application or strategy changes in this documentation entry.
+
+
 **Date:** 2026-11-15 (KST). **Status: P1 BLOCKER, live multi-page Buy/Sell History NOT WORKING.**
 **Authority:** This document supersedes the *PT Data export status and next steps* in `2026-11-15-monitor-5.md` and `2026-11-13-monitor-performance-export-design.md`; those retain historical design and unrelated Monitor topics. It does not supersede the separate Dev 9 analytics handoff.
 **Application:** [PTMagic `phase1/market-data-foundation`](https://github.com/HojouFotytu/PTMagic/tree/phase1/market-data-foundation). **Exporter implementation:** [`3c7eddd9d4ce8694140c6210344253afef8eb41e`](https://github.com/HojouFotytu/PTMagic/commit/3c7eddd9d4ce8694140c6210344253afef8eb41e). Later inspected branch HEAD `77f5bbc4116cf18b663af6722107dd31e7933b9e` contains unrelated diagnostic TestMode analyzer commits `4645ab4` and `77f5bbc`; no later PT Data exporter change found.
@@ -33,7 +36,7 @@ For **each** of buys and sales, both files `Trades/{name}-pages/scan-00-page-000
 - `pages_retrieved: 2` is two **responses**, not 20 unique trades. `source_record_count: 10` and `included_record_count: 10` per history. Combined trade arrays exactly match first-page `data`. `duplicate_records: 0` is compatible with `history_page_repeated`, because the full-page repeat is rejected *before* individual rows on the repeated page are counted.
 - This is George**Long** evidence; earlier November 14 schema-1.1 failures were from George**Short**. Do not conflate bot instances or revision-specific manifests.
 
-## Exact source contract at `3c7eddd` (current exporter)
+## Historical source contract at `3c7eddd` (superseded exporter)
 
 `Monitor/_Internal/PTDataExportService.cs`: GETs against the **configured PT target**:
 - `/api/v2/data/buys?token=[REDACTED]&page=0&perPage=10&sort=BOUGHTDATE&sortDirection=DESCENDING`, then `page=1` (and onward).
@@ -51,7 +54,7 @@ For **each** of buys and sales, both files `Trades/{name}-pages/scan-00-page-000
 3. **Nov 15, `3c7eddd`, schema 1.2 (`paged-json-v2`):** New exporter; simulated 20/20 PASS and native Monitor Release build PASS in [workflow 43665987850](https://github.com/HojouFotytu/PTMagic/actions/runs/43665987850). Distinguish **synthetic/fake HTTP** from native PT behavior.
 4. **Nov 15 GeorgeLong live ZIP:** Source-deployed replacement proven by manifest; **both real history page 1 responses repeat page 0**, resulting in only 10 records each and explicit partial status. Real multi-page acceptance FAIL. Latest source branch `77f5bbc` has no subsequent exporter fix.
 
-## Next session — exact investigation order (no speculative fixes)
+## Historical November 15 schema-1.2 investigation order (superseded by 1.3 source)
 
 1. **Verify raw PT pagination behavior:** Using the configured instance, inspect the precise actual HTTP requests (safe logging of path, parameter names, page index, per-page value and HTTP status; never token/URL-with-token). Compare GET page 0 versus page 1 for buys and sales directly, with identical sort, date scope and page size. Check the real PT Swagger definition for **exact parameter spelling/case** (`page`, `perPage` versus other accepted names), zero-based indexing, supported sorts, and any PT-specific pagination semantics. Screenshots documenting parameters are earlier evidence of declared API support, **not** live proof of advancement.
 2. **Classify whether the problem is client query construction or PT backend behavior.** Compare independent API results for 0/1 requests. Do **not** automatically widen page size, paginate by inferred trade IDs, use unverified endpoints, or silently mark complete. Inspect source/response only on the read-only authenticated path.
