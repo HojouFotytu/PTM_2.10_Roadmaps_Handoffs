@@ -1,5 +1,8 @@
 # PTMagic 2.10 — User Roadmap
 
+**CURRENT PTM 2.10 DEVELOPMENT STATUS — NOVEMBER 17, 2026:** [Dev 10 → Dev 11 handoff](handoffs/2026-11-17-ptm-210-dev10-to-dev11.md) is the authoritative *analytics/application* continuation; older 35/26-metric and “Phase 3 planned” current-status statements below are retained as dated snapshots only. PTMagic application functional head `303b2e7` (subsequent docs-only `71bfc01`) registers **43 metrics (30 globally capable, 13 asset-only)**, with eight Phase 3 confirmations/divergences. A single direction-neutral 10-trend / 9 GS / 12 SMS test analyzer serves both isolated LONG and SHORT. Two deployed `24d70402` TestMode logs show 7 completed raids/bot, 6 conclusive post-cold/bot, **719/719 H1 Phase 3 global coverage**, new SMS12 active on **682–692** symbols, no PT writes or PTMagic ERROR/CRITICAL; first uncached raid **5m21s** deferred by unchanged 300s pinned freshness, steady raids **19–25s**. G08 fresh decisive global selection **pending** because earlier GS groups matched first. User-executed tests: **20/20 OHLCV** (before new 21st diagnostic group), **9/9 adaptive** (43-metric catalogue), **84/84 ConfigurationLifecycle twice** after final SMS single-line/no-extra-dots correction. **21/21 new OHLCV** and post-change deployed M15/M30 reason/log-output checks remain pending. Phase 4 integration / Phase 5 liquidity next, optional separate cold-start optimization. No strategy settings changes.
+
+
 ## Current Monitor 8 checkpoint — November 17, 2026 (KST)
 
 **Monitor-specific current authority:** [Monitor 8 handoff](handoffs/2026-11-17-monitor-8.md). Earlier November 13–15 pagination failures and November 17 pre-live-monitor statements remain dated history, **not the current acceptance status**. PT Data `pt-history-v3` schema 1.3 **live All-available pagination PASS on both configured bots**: GeorgeLong (33 buys / four pages; 22 sales / three pages, reproducible across two actual ZIPs) and GeorgeShort (41 buys / five pages; 54 sales / six pages). Each archive passes ZIP CRC, has available buy/sell datasets, `complete_for_selected_sources`, `end_of_available_history`, no detected history duplicates or pagination failures. **Live bounded 7d/1m/3m/6m cutoff remains pending** (26/26 simulated export tests and Monitor build PASS); lifetime completeness and atomic source snapshots are not implied. `/api/v2/data/misc` Account Information remains deferred.
@@ -37,7 +40,7 @@
 **D-053 implementation and removal-audit checkpoint — November 12, 2026:** PTMagic source [`892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d`](https://github.com/HojouFotytu/PTMagic/commit/892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d) contains the completed removal of `OpenInterestChange`, `OpenInterestValueChange` and `GlobalLongShortAccountRatio`, including their acquisition/services/active caches/registry/Monitor integrations. The source audit compared the **22-metric pre-introduction baseline** [`66629347`](https://github.com/HojouFotytu/PTMagic/commit/66629347f0dc9c7b68ea9f1c3f5bf536f3d7c427), **27-metric pre-removal** `d101b5a0` and current **24-metric** code: all 22 original metric identities and scopes survive; `FundingRate` and `FundingSum` also survive. A real shared Unicode symbol-validator dependency was temporarily broken by deleting OI, then repaired by [`02820822`](https://github.com/HojouFotytu/PTMagic/commit/02820822b9bb) and [`d7847c46`](https://github.com/HojouFotytu/PTMagic/commit/d7847c46190b). No further major/critical removal-related defect was established by source inspection; **current-revision local build, 15-harness test execution and configured runtime acceptance remain unverified**. The earlier 18-harness PASS at `d101b5a0` is strictly **pre-removal evidence**. [Full read-only audit](updates/2026-11-12-d053-removal-code-audit.md) (links relative to repository root). **This checkpoint supersedes all contradictory claims below that removal is pending, that retired OI/positioning is active, or that its tests/feature work remain required. Dated implementation evidence is retained as history.** No rollback and no strategy-settings work.
 
 
-**Updated:** November 14, 2026 · **Status:** In development · **Current scope:** [D-053](DECISIONS.md#d-053--remove-binance-futures-open-interest-and-longshort-positioning-metrics-from-ptmagic-210)
+**Current status updated November 17, 2026:** Phase 3 implemented; old 26-metric/D-053 plan below is historical. See the current 43-metric handoff and technical roadmap.
 
 [Current technical plan](roadmaps/CURRENT.md) · [Development status](STATUS.md) · [Active handoff](handoffs/2026-11-14-ptm-210-dev9.md)
 
@@ -55,19 +58,18 @@ Withdraw the corresponding data collectors, active disk-cache dependencies, trig
 
 **Implementation status (superseding historical audit):** D-053 is **implemented, built, focused-tested and configured-TestMode verified** at `e31635a1`. The original 24-metric audit was before Taker Flow added two asset-only metrics. The last user-validated pre-removal source `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` implemented 27 metrics; current source `892a5f1f` implements 24. A successful .NET 10.0.403 build and 18/18 offline harnesses at that SHA is historical pre-removal evidence, not evidence of removal.
 
-## Active development order
+## Active development order — current November 17
 
-| Stage | Remaining work |
+| Stage | Status / next work |
 |---|---|
-| **1 — Scope cleanup (complete; audited)** | D-053 source removal, test configuration, registry and Monitor label cleanup complete. One symbol-validator dependency break was repaired; no rollback. |
-| **2 — Configured verification** | Confirm remaining metrics, startup/raid behavior, funding persistence, rate-limiter safety and SMS/GlobalSetting selection with appropriate focused offline and runtime evidence. Do not repeat now-irrelevant OI/ratio persistence acceptance. |
-| **3 — Taker flow (Phase 2, built and focused-tested; runtime pending)** | Validate the published `TakerBuyRatio` and `TakerImbalance` with explicit units, complete periods, invalid-data handling and an economical data source; evaluate reusing existing Binance kline taker-buy volume before proposing a new endpoint. |
-| **4 — Market aggregates (Phase 2B)** | Funding median/positive-negative/extreme breadth; taker-flow median buy ratio, dominance breadth and imbalance distribution. Define true eligible/valid populations, weighting, freshness and coverage. |
-| **5 — Transparent conditions (Phase 3)** | Price/volume/taker-flow confirmation and divergence. Do not reconstruct removed leverage/crowding/deleveraging signals through undocumented proxies. |
-| **6 — Integration and liquidity (Phases 4–5)** | Integrate each retained family in GlobalSetting/SMS, Monitor, exports and history; add spread, depth, imbalance, slippage and liquidity/funding/volatility stress components. |
-| **7 — History and performance (Phase 6 onward)** | Expand reproducible decision history. Defer the broader performance program until remaining approved metric additions are complete. |
+| D-053 removal, funding/taker, Phase 2B | **Implemented; confirmed** at source-specific focused and configured TestMode checkpoints; OI/positioning remain withdrawn |
+| Phase 3 confirmation/divergence | **Implemented: eight metrics**, current catalogue 43. H1 global and SMS12 actual LONG/SHORT TestMode metrics verified; fresh conclusive G08 GS selection pending |
+| Diagnostics and SMS logging | Single-line whole-SMS pass + no compiler dots **84/84 ConfigurationLifecycle PASS**. New **21st** OHLCV error-class test unexecuted; updated runtime logs pending |
+| Phase 4 / Phase 5 | Continue native integrations; design spread/depth/slippage/liquidity/stress with source costs and validity contracts |
+| Cold first run / broader performance | Optional separate 719-market >300s cold-start fix; keep pin/freshness intact. Broad optimization after approved metric additions |
+| Phase 6 | Continue native historical analysis with proven provenance |
 
-## What remains available
+## What remains available — historical 26-metric snapshot, superseded by the current 43-metric registry
 
 **17 globally evaluable metrics:** PriceTrend; MedianPriceTrend; MeanMedianSpread; Breadth; Dispersion; Concentration; MedianATRP; VolatilityBreadth; MedianVolumeExpansion; VolumeExpansionBreadth; StrongVolumeExpansionBreadth; VolumeConcentration; TopNVolumeShare; BTCVolumeShare; BTCETHVolumeShare; MeanCorrelationToBTC; MedianCorrelationToBTC.
 

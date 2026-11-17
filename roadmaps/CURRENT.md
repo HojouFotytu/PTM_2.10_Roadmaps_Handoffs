@@ -1,5 +1,8 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+**CURRENT ANALYTICS AUTHORITY — NOVEMBER 17:** [Dev 10 → Dev 11](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md) supersedes the *current* 35/26-metric and Phase 3-planned claims below (which remain dated history). **43 metrics: 30 globally capable / 13 asset-only**, eight Phase 3. Source functional `303b2e7`, docs-only app `71bfc01`. User-executed `Phase1COhlcv` **20/20 PASS** before newly added 21st taker diagnostic group (**not yet run**), `Phase2AdaptiveAcquisition` **9/9 PASS**, `ConfigurationLifecycle` **84/84 PASS** on final one-line SMS/no separate compiler-dots change. Two deployed `24d70402` LONG/SHORT logs each 7 raids, 6 conclusive post-cold, **719/719 H1 new global values** with `SMS12` active on **682–692 markets**; G08 fresh decisive GS selection unverified, logs predate final diagnostics/log cleanup. First uncached raids **5m21s**, properly stale beyond 300s; steady **19–25s**. No PT writes. Separate Phase 4/5 follow-up and cold-start task.
+
+
 **CURRENT ANALYTICS AUTHORITY — NOVEMBER 17, 2026:** [35-metric dual-instance configured TestMode acceptance](../handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md). **18 completed raids (9 LONG/9 SHORT), 16/16 post-cold raids conclusive TestMode evaluation, zero post-warmup metric warnings, no PTMagic ERROR/CRITICAL or PT writes.** Compiled source `ef1f738` first 8 raids/bot; later `82ccf4a` in final warm restarts. Initial *uncached* raids still deferred after ~5m24s, with 302.7s normalized 5m acquisition exceeding the **unchanged 300s** pin-age check. Later raids **19–27s**, no cyclic H48 ~182s refetch; ~829,007 warm-cache candles restored on restart. Legacy 1m rebuild explicitly skipped. **35 metrics = 26 global-capable + 9 asset-only**, 10 MarketTrends, 8 GlobalSettings ending in uppercase `DEFAULT`, 11 SMS. Phase 3 price/quote-volume/taker confirmation/divergence is next; optional first-ever cold-start improvement separate. Current-source focused `NormalizedWarmStartCache` and `ConfigurationLifecycle` test PASS, non-TestMode delivery and browser acceptance not established. **Separate current Monitor authority:** PT Data schema **1.3 one-based** implemented and CI tested, real PT multi-page acceptance pending; old schema-1.2 repeated-page blocker is HISTORICAL. Earlier “Phase 2B planned”, “26 metrics current”, or “taker runtime unverified” statements below are superseded for current work.
 
 ---
@@ -325,7 +328,7 @@ The qualified Telegram fixture references are now verified by native execution; 
 | Phase 1E — inspection and robustness | Deterministic lifecycle/editor/history checks passed; configured PT, browser, cross-exchange and failure-path acceptance remain |
 | Phase 2 — Futures funding and taker flow | Funding implemented; OI/positioning withdrawal pending; taker flow next |
 | Phase 2B — funding and taker-flow market aggregates | Planned; OI/positioning aggregates withdrawn by D-053 |
-| Phase 3 — transparent flow confirmation/divergence | Planned; leverage/crowding/deleveraging conditions withdrawn |
+| Phase 3 — transparent flow confirmation/divergence | **Implemented: eight source metrics; 43 registered total. LONG/SHORT TestMode H1 global/SMS PASS; G08 fresh conclusive selection pending.** |
 | Phase 4 — trigger/UI integration | Implemented for current families, extended with each new family |
 | Phase 5 — liquidity/depth/stress | Planned |
 | Phase 6 — native history and historical analysis | Minimal decision audit trail has 13/13 passing checks at `d331fbd`; configured integration and the full analysis system remain |
@@ -718,6 +721,8 @@ Freeze global eligible `MaxMarkets` population, require nonempty ≥ceil(90%×el
 
 ## 13. Phase 3 — Transparent higher-order flow conditions
 
+**CURRENT NOVEMBER 17 PHASE 3 STATUS: IMPLEMENTED (EIGHT METRICS; 43 TOTAL).** The four asset binary confirmation/divergence flags compare signs of price OPEN→CLOSE and existing taker imbalance over one *complete UTC-aligned TrendMinutes* window. Four global `VolumeShare` percentages weight matching absolute aggressive net quote volume against **all** eligible quote turnover; require **100%** source validity across the frozen eligible cohort. The existing taker calculation traverses normalized candles once, captures first OPEN/last CLOSE and quote total; do not separately recalculate rolling PriceTrend or add an API endpoint. Same neutral H1 diagnostic file in isolated LONG/SHORT TestMode, H1 719/719 valid and SMS12 682–692 markets active; new G08 conclusive GS selection still pending. User 20/20 OHLCV + 9/9 adaptive PASS before the later 21st diagnostics test (unexecuted), and 84/84 lifecycle PASS on final SMS log cleanup. Old phase-planned wording below is historical, not current. [Authoritative next work](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md).
+
 Retain transparent **price/quote-volume/taker-flow confirmation and divergence** conditions, using only available validated components with explicit units, aligned periods, validity and thresholds. Funding/volatility context may be included only after a separate defined analytical contract.
 
 **Removed:** leverage expansion, long and short crowding inferred from withdrawn positioning/OI, OI-based deleveraging, and OI components of flow divergence. Funding alone must not be relabeled as verified trader leverage or long/short crowding.
@@ -744,6 +749,8 @@ Avoid a second arbitrary expression language for each family. Keep metric availa
 A future metric cannot force new optional endpoints merely by being present in a registry. Dependencies follow enabled/configured uses.
 
 ## 15. Phase 5 — Liquidity, depth, and stress
+
+**November 17 sequencing:** Phase 3 implementation complete with narrow G08 acceptance gap. Phase 4 integration continues; Phase 5 spread/depth/slippage and liquidity/funding/volatility stress remains planned, needing explicit native-source cost, validity and usefulness assessment. Broad optimization remains after approved metrics, except optional independent 719-market cold-first-raid latency work (never loosen the pinned source-age limit).
 
 **Status: planned after retained funding/taker-flow and higher-order metric work.** Endpoint cost and native sampling make this a separate stage; the dedicated performance program remains after approved metric additions.
 

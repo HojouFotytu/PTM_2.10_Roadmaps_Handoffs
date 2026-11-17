@@ -1,5 +1,10 @@
 # P1A-READY — Cold-start cross-sectional completeness
 
+## November 17 addendum — separate first-cold-raid performance constraint
+
+The **original Phase 1A correctness containment remains CLOSED**. A separate, current performance/capacity limitation is documented in the [Dev 10 → Dev 11 handoff](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md): at deployed `24d70402`, two 719-market 96h first-ever cold normalized-5m refreshes required ~296 seconds and complete raid duration **5m21s**, exceeding the existing **300-second pinned-source-age** decision gate (correctly deferred). Subsequent **19–25s** raids and warm cache behaved normally; no observed H48 cyclic re-fetch. Future source/concurrency/cost optimization may be scoped independently, but **do not relax source pinning, completeness, or freshness**. This observation is not a reopening of the old Phase 1A data-correctness issue nor proof of a new algorithmic Phase 3 regression.
+
+
 **State:** CLOSED — ACCEPTED CORRECTNESS CONTAINMENT (no longer blocks Phase 1C)
 **Date:** 2026-11-04
 **Application branch:** `HojouFotytu/PTMagic:phase1/market-data-foundation`
