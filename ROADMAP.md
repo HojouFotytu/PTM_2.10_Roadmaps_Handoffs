@@ -1,5 +1,19 @@
 # PTMagic 2.10 — User Roadmap
 
+## Current development direction — November 19, 2026 (D-062)
+
+**Authoritative next-work handoff:** [November 19 Metric Reassessment](handoffs/2026-11-19-ptm-210-metric-reassessment.md), [decision D-062](DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026), and [technical roadmap](roadmaps/CURRENT.md). The older November 17 Dev 10 → Dev 11 handoff and Phase 4/5 schedule remain historical evidence, **not current authorization or a quota** for new metrics.
+
+**Required hierarchy:** Trading need for LONG/SHORT regime, entry, exit or risk → analytical requirement → existing metric/combined coverage → demonstrated missing measurement → measurement-derived history, timeframes, resolution, freshness and market coverage → Binance and combined-bot acquisition feasibility → explicitly authorized implementation. Neither reject a worthwhile metric because it needs more than 96h of PTMagic-acquired history nor develop one simply because inputs exist. The 96h setting is diagnostic, not a design ceiling. Keep the separate 300s pinned freshness guard.
+
+**What exists:** 43 metric names (30 global-capable, 13 asset-only; `PriceTrend` also asset-capable), **not** 43 independent information sources: exact `TakerImbalance` transform, nested threshold breadths, and four sign-classification flags overlap. No removal or addition is approved. Current functional source `561bbc32` includes `4bbe299e`, which permits **≥90% observed frozen-cohort coverage** for four Phase 3 global flow/price volume shares. Verified no-trade markets count as observed zero-volume, missing/invalid data does not enter numerator or denominator, and partial economic turnover coverage may distort subset shares. Other strict-completeness metrics remain unchanged.
+
+**Priority analysis, not implementation backlog:** assess existing multi-horizon/metric combinations; determine whether retained metric histories explain regime strengthening, weakening and persistence; evaluate possible path-efficiency information in existing closed candles; determine whether actionable spreads, opposing depth and intended-notional slippage improve trading decisions (a genuine missing source); conditionally examine shocks, next funding/mark-index and portfolio exposure. Each proposed measurement requires demonstrated incremental decision value and a source/capacity contract.
+
+**Validation boundary:** the historical `24d70402` TestMode deployment had 719/719 H1 and six conclusive post-cold raids per bot, but predates the new 90% rule; past OHLCV **20/20 PASS**, adaptive **9/9 PASS**, and lifecycle **84/84 PASS** remain source-specific. Current OHLCV code defines **22** groups, without confirmed 22/22 execution. The isolated G08-first TestMode fixture exists; decisive newer G08 activation is unverified. No code, analyzer, strategy or execution changes are authorized by the documentation.
+
+---
+
 **CURRENT PTM 2.10 DEVELOPMENT STATUS — NOVEMBER 17, 2026:** [Dev 10 → Dev 11 handoff](handoffs/2026-11-17-ptm-210-dev10-to-dev11.md) is the authoritative *analytics/application* continuation; older 35/26-metric and “Phase 3 planned” current-status statements below are retained as dated snapshots only. PTMagic application functional head `303b2e7` (subsequent docs-only `71bfc01`) registers **43 metrics (30 globally capable, 13 asset-only)**, with eight Phase 3 confirmations/divergences. A single direction-neutral 10-trend / 9 GS / 12 SMS test analyzer serves both isolated LONG and SHORT. Two deployed `24d70402` TestMode logs show 7 completed raids/bot, 6 conclusive post-cold/bot, **719/719 H1 Phase 3 global coverage**, new SMS12 active on **682–692** symbols, no PT writes or PTMagic ERROR/CRITICAL; first uncached raid **5m21s** deferred by unchanged 300s pinned freshness, steady raids **19–25s**. G08 fresh decisive global selection **pending** because earlier GS groups matched first. User-executed tests: **20/20 OHLCV** (before new 21st diagnostic group), **9/9 adaptive** (43-metric catalogue), **84/84 ConfigurationLifecycle twice** after final SMS single-line/no-extra-dots correction. **21/21 new OHLCV** and post-change deployed M15/M30 reason/log-output checks remain pending. Phase 4 integration / Phase 5 liquidity next, optional separate cold-start optimization. No strategy settings changes.
 
 
@@ -58,14 +72,14 @@ Withdraw the corresponding data collectors, active disk-cache dependencies, trig
 
 **Implementation status (superseding historical audit):** D-053 is **implemented, built, focused-tested and configured-TestMode verified** at `e31635a1`. The original 24-metric audit was before Taker Flow added two asset-only metrics. The last user-validated pre-removal source `d101b5a03e01f8f76acf8cc9a6bde7214ff34aa2` implemented 27 metrics; current source `892a5f1f` implements 24. A successful .NET 10.0.403 build and 18/18 offline harnesses at that SHA is historical pre-removal evidence, not evidence of removal.
 
-## Active development order — current November 17
+## Historical November 17 development order (superseded by D-062)
 
 | Stage | Status / next work |
 |---|---|
 | D-053 removal, funding/taker, Phase 2B | **Implemented; confirmed** at source-specific focused and configured TestMode checkpoints; OI/positioning remain withdrawn |
 | Phase 3 confirmation/divergence | **Implemented: eight metrics**, current catalogue 43. H1 global and SMS12 actual LONG/SHORT TestMode metrics verified; fresh conclusive G08 GS selection pending |
 | Diagnostics and SMS logging | Single-line whole-SMS pass + no compiler dots **84/84 ConfigurationLifecycle PASS**. New **21st** OHLCV error-class test unexecuted; updated runtime logs pending |
-| Phase 4 / Phase 5 | Continue native integrations; design spread/depth/slippage/liquidity/stress with source costs and validity contracts |
+| Phase 4 / Phase 5 (historical) | Integration remains the process for any subsequently justified metric. Spread/depth/slippage are *candidate* needs requiring evidence and source feasibility, not preapproved milestones. |
 | Cold first run / broader performance | Optional separate 719-market >300s cold-start fix; keep pin/freshness intact. Broad optimization after approved metric additions |
 | Phase 6 | Continue native historical analysis with proven provenance |
 
