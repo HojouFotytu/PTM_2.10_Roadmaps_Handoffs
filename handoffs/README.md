@@ -1,5 +1,13 @@
 # PTMagic 2.10 — Development Handoffs
 
+## Current analytics handoff — November 19, 2026 (D-062)
+
+**Continue from [November 19 Metric Reassessment and Next Development Handoff](2026-11-19-ptm-210-metric-reassessment.md)** and [D-062](../DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026). This replaces all historical Dev 10 → Dev 11 / Phase 4/5 *work-order* claims, without rewriting the accuracy of prior TestMode, tests or implemented families. The next task is to determine which LONG/SHORT trading decisions existing measurements cannot reliably support, **not to fill a roadmap quota**.
+
+Existing 43 registered names are not all independent. New measurement decisions follow **trading need → analytical requirement → existing coverage → incremental value → derived history/timeframe/freshness/coverage → Binance/shared-bot feasibility → authorized implementation**. The 96h diagnostic cache setting is not a hard limit. Current `4bbe299e` Phase 3 global flow-price shares use **≥90% observed frozen-cohort coverage**; verified zero-trade source is observed at zero turnover, missing/invalid symbols do not contribute to weighted sums, and full-population bias remains possible. Other volume-concentration metrics keep stricter rules. Prior `24d70402` H1 719/719 coverage is historical, current OHLCV has 22 checks but latest verified was 20/20, and a G08-first fixture is not itself an accepted decisive runtime result.
+
+**Workstreams:** continue the current Monitor-specific [Monitor 8 handoff](2026-11-17-monitor-8.md) independently. Do not use this analytics handoff to change Monitor or the user's LONG/SHORT strategy settings. No GitHub code/settings writes without separate authorization.
+
 **CURRENT ANALYTICS AUTHORITY — NOVEMBER 17:** [Dev 10 → Dev 11](2026-11-17-ptm-210-dev10-to-dev11.md) supersedes the *current* 35/26-metric and Phase 3-planned claims below (which remain dated history). **43 metrics: 30 globally capable / 13 asset-only**, eight Phase 3. Source functional `303b2e7`, docs-only app `71bfc01`. User-executed `Phase1COhlcv` **20/20 PASS** before newly added 21st taker diagnostic group (**not yet run**), `Phase2AdaptiveAcquisition` **9/9 PASS**, `ConfigurationLifecycle` **84/84 PASS** on final one-line SMS/no separate compiler-dots change. Two deployed `24d70402` LONG/SHORT logs each 7 raids, 6 conclusive post-cold, **719/719 H1 new global values** with `SMS12` active on **682–692 markets**; G08 fresh decisive GS selection unverified, logs predate final diagnostics/log cleanup. First uncached raids **5m21s**, properly stale beyond 300s; steady **19–25s**. No PT writes. Separate Phase 4/5 follow-up and cold-start task.
 
 
