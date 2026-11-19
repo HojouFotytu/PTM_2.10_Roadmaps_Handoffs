@@ -1,3 +1,7 @@
+## November 19 — New-market insufficient-history INFO classification (source only)
+
+[November 19 reporting handoff](../handoffs/2026-11-19-new-market-history-reporting.md): PTMagic existing application branch preserves Futures `onboardDate`, reclassifies only verified pre-listing asset shortages as per-market INFO, retains all real warnings and three-valued/unavailable decisions, and adds two focused regression groups to `Phase1MetricWarnings` (21 total registered; execution pending). No new market metric or endpoint. [Current trading-need-first analytical authority](../handoffs/2026-11-19-ptm-210-metric-reassessment.md) supersedes older Phase 4/5 development-quota instructions.
+
 ## November 19 — Current analytical authority (D-062)
 
 **Current next-work handoff:** [November 19 need-driven metric reassessment](../handoffs/2026-11-19-ptm-210-metric-reassessment.md). This supersedes historical Phase 4/5 quotas and next-step instructions below, not prior source-specific evidence. The existing 43-name metric catalogue has derived/threshold overlaps. Future development follows actual LONG/SHORT trading need → analytical distinction → current coverage → justified measurement → timeframes/retention/freshness/coverage → Binance combined-bot feasibility → approved implementation. 96h diagnostic retention is not a restriction.
