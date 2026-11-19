@@ -1,5 +1,21 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+## Active analytics roadmap — November 19, 2026 (D-062)
+
+**Current controlling handoff:** [Metric Reassessment and Next Development Handoff](../handoffs/2026-11-19-ptm-210-metric-reassessment.md). **Current owner decision:** [D-062](../DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026). This supersedes the *metric-development order and quota* in all earlier phases, dated roadmaps and Dev 10 → Dev 11 handoff, but **not** historical implementation, testing, contracts or independent Monitor work. The full 43-name inventory, redundancy audit, trading-gap assessment and required data/feasibility gates are in the linked handoff and the application [reassessment](https://github.com/HojouFotytu/PTMagic/blob/phase1/market-data-foundation/CHANGELOG-2.10.md#november-19-2026--trading-need-first-metric-reassessment-documentation-only-design-authority).
+
+**Mandatory order:** (1) trading need for LONG/SHORT regimes, entries, exits or risk → (2) analytical requirement → (3) existing metric/combination/history coverage → (4) a measurement that demonstrably fills a gap → (5) measurement-derived resolution, horizons, retention, timestamps, freshness, cohorts and coverage → (6) proven Binance acquisition feasibility under combined LONG/SHORT capacity → (7) only then authorized implementation and verification. This replaces prescribed Phase 4/5 feature-development sequencing, not existing metric implementations or technical safeguards.
+
+**Current state:** 43 registered names (30 global-capable, 13 asset-only; `PriceTrend` also asset-capable), but several names are exact transformations, threshold variants or related sign-condition outputs—not 43 independent sources of trading evidence. Functional application source [`561bbc32`](https://github.com/HojouFotytu/PTMagic/commit/561bbc32c73a567c65348bf655328c5e7a1f5853) incorporates [`4bbe299e`](https://github.com/HojouFotytu/PTMagic/commit/4bbe299e64180ac1aaa9fe2bfccb342def8acad3): the *four Phase 3 global price/flow volume-share metrics* now use **≥90% observed frozen-cohort coverage**, counting verified no-trade markets as observed zero-volume, while missing/invalid markets remain absent from numerator/denominator; observed-subset turnover bias remains possible. **Other strict 100% quote-volume concentration requirements are unchanged.** Earlier 100% Phase 3 requirements and historical deployed 719/719 results below describe older source revisions. OHLCV harness now registers **22 groups**, but last documented user-run success was **20/20** at an earlier revision; no 22/22 PASS is asserted. The G08-first fixture exists, but its decisive fresh deployed TestMode outcome is unverified.
+
+**Trading questions to investigate, not approved metrics:** (a) can existing returns, breadth, volatility, volume and aggressive flow reliably distinguish sustained trends from whipsaw paths? If not, investigate price-path efficiency from contiguous PTMagic-captured closed candles; (b) can retained time-stamped *existing metric histories* reveal regime persistence/recovery/deterioration without registering new indicators? (c) executable spreads, opposing depth and intended-notional slippage are a genuinely missing observation family, but native API sources and selective cost must be justified before acquisition; (d) rapid adverse shocks, next funding/mark-index context and portfolio exposure are conditional on actual trading-decision gaps. No OI/positioning proxy resurrection.
+
+**History and acquisition:** Diagnostic `StoreDataMaxHours=96` is *not* a design ceiling; use as much or as little PTMagic-acquired history as a justified measurement needs, subject to source validity, full-warm/cold/gap budgets, shared Binance quotas and operating capacity. Never build a metric simply because inputs already exist. **Keep the 300-second pinned decision-age restriction**, fail-closed UNAVAILABLE behavior, source provenance, exact eligible cohorts and independent LONG/SHORT + Monitor/strategy boundaries. Success in technical TestMode is not proof of improved trades.
+
+**Current next steps:** audit marginal information from existing metrics and multi-horizon combinations; evaluate historical metric persistence and transition comparisons; formulate falsifiable path-quality and liquidity hypotheses; determine required data contract and feasibility per candidate; seek explicit authorization before code, settings, retention or acquisition changes. The phase map and detailed Phase 4/5/6 sections below are implementation history/technical possibilities, not permission to fill roadmap slots.
+
+---
+
 **CURRENT ANALYTICS AUTHORITY — NOVEMBER 17:** [Dev 10 → Dev 11](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md) supersedes the *current* 35/26-metric and Phase 3-planned claims below (which remain dated history). **43 metrics: 30 globally capable / 13 asset-only**, eight Phase 3. Source functional `303b2e7`, docs-only app `71bfc01`. User-executed `Phase1COhlcv` **20/20 PASS** before newly added 21st taker diagnostic group (**not yet run**), `Phase2AdaptiveAcquisition` **9/9 PASS**, `ConfigurationLifecycle` **84/84 PASS** on final one-line SMS/no separate compiler-dots change. Two deployed `24d70402` LONG/SHORT logs each 7 raids, 6 conclusive post-cold, **719/719 H1 new global values** with `SMS12` active on **682–692 markets**; G08 fresh decisive GS selection unverified, logs predate final diagnostics/log cleanup. First uncached raids **5m21s**, properly stale beyond 300s; steady **19–25s**. No PT writes. Separate Phase 4/5 follow-up and cold-start task.
 
 
@@ -316,7 +332,9 @@ The current work adds:
 
 The qualified Telegram fixture references are now verified by native execution; production source and test expectations were unchanged between the two tested revisions. Main-market parsing/inheritance, startup SOM orchestration, delivery retry, freshness, SMS transitions, and bounded history now have passing deterministic coverage. A later runtime log reproduces the old bare-USDT request and omits the current source/main-market logs. It executes pre-fix Core behavior with a runtime working directory separate from the checkout; its exact SHA and loaded DLL path are unknown. The next step explicitly selects the freshly built DLL with the existing runtime configuration and verifies identity in TestMode. This validation run does not permanently update the installed launcher, which needs a coherent application-bundle update before reuse. Actual PT and browser checks follow separately. Use the [current handoff](../handoffs/2026-11-07-stabilization-correlation-validation.md); its full twelve-project sequence remains a reference, with no rerun required for documentation-only updates.
 
-### Phase map
+### Phase map — historical implementation framework, not current mandatory sequence
+
+**D-062 supersedes any implication that the remaining numbered phases, particularly Phase 5 liquidity/depth, must be implemented merely because they were planned.**
 
 | Stage | Present state |
 |---|---|
@@ -717,11 +735,11 @@ Confirm the Binance kline response supplies compatible total and taker-buy quote
 
 Freeze global eligible `MaxMarkets` population, require nonempty ≥ceil(90%×eligible) valid source; keep missing markets in eligible denominator; equally weight valid markets in cross-market calculations. Compute only necessary asset prerequisites: funding rate for globals, not additional unselected FundingSum; taker ratio and imbalance only when selected/needed. Monitor may display all already calculated and published values regardless of trigger selection, under their originating MarketTrend, with no extra calculation for display. Trigger enablement remains explicit.
 
-**Runtime evidence:** Both GeorgeLong and GeorgeShort November 17 logs at `ef1f738`/final `82ccf4a`: 18 raids, 16 post-cold conclusive TestMode evaluations with zero metric warnings. Initial cold full acquisition ~302.7s/instance deferred at 300s source age; rest ~19–27s/raid, no recurring ~182s H48 refetch, warm cache reused. `DEFAULT` spelling preserved for Linux. Targeted `NormalizedWarmStartCache`/`ConfigurationLifecycle` test run output, browser review and real PT delivery remain separate. Phase 3 is next; optional cold-first-raid latency optimization remains open. [Full current handoff](../handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md).
+**Runtime evidence:** Both GeorgeLong and GeorgeShort November 17 logs at `ef1f738`/final `82ccf4a`: 18 raids, 16 post-cold conclusive TestMode evaluations with zero metric warnings. Initial cold full acquisition ~302.7s/instance deferred at 300s source age; rest ~19–27s/raid, no recurring ~182s H48 refetch, warm cache reused. `DEFAULT` spelling preserved for Linux. Targeted `NormalizedWarmStartCache`/`ConfigurationLifecycle` test run output, browser review and real PT delivery remain separate. Phase 3 subsequently completed as documented above; optional cold-first-raid latency optimization remains open. [Historical Phase 2B handoff](../handoffs/2026-11-17-phase2b-testmode-runtime-handoff.md).
 
 ## 13. Phase 3 — Transparent higher-order flow conditions
 
-**CURRENT NOVEMBER 17 PHASE 3 STATUS: IMPLEMENTED (EIGHT METRICS; 43 TOTAL).** The four asset binary confirmation/divergence flags compare signs of price OPEN→CLOSE and existing taker imbalance over one *complete UTC-aligned TrendMinutes* window. Four global `VolumeShare` percentages weight matching absolute aggressive net quote volume against **all** eligible quote turnover; require **100%** source validity across the frozen eligible cohort. The existing taker calculation traverses normalized candles once, captures first OPEN/last CLOSE and quote total; do not separately recalculate rolling PriceTrend or add an API endpoint. Same neutral H1 diagnostic file in isolated LONG/SHORT TestMode, H1 719/719 valid and SMS12 682–692 markets active; new G08 conclusive GS selection still pending. User 20/20 OHLCV + 9/9 adaptive PASS before the later 21st diagnostics test (unexecuted), and 84/84 lifecycle PASS on final SMS log cleanup. Old phase-planned wording below is historical, not current. [Authoritative next work](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md).
+**HISTORICAL NOVEMBER 17 PHASE 3 SOURCE STATUS: IMPLEMENTED (EIGHT METRICS; 43 TOTAL).** The four asset binary confirmation/divergence flags compare signs of price OPEN→CLOSE and existing taker imbalance over one *complete UTC-aligned TrendMinutes* window. Four global `VolumeShare` percentages weight matching absolute aggressive net quote volume against **all** eligible quote turnover; **historically required 100%**, subsequently revised at `4bbe299e` to **≥90% observed frozen-cohort coverage** with verified no-trade sources counted as observed zero-volume. The current subset denominator excludes missing/invalid source observations and therefore may be turnover-biased. The existing taker calculation traverses normalized candles once, captures first OPEN/last CLOSE and quote total; do not separately recalculate rolling PriceTrend or add an API endpoint. Same neutral H1 diagnostic file in isolated LONG/SHORT TestMode, H1 719/719 valid and SMS12 682–692 markets active; new G08 conclusive GS selection still pending. User 20/20 OHLCV + 9/9 adaptive PASS before the later 21st diagnostics test (unexecuted), and 84/84 lifecycle PASS on final SMS log cleanup. Old phase-planned wording below is historical, not current. [Current D-062 analytical direction](../handoffs/2026-11-19-ptm-210-metric-reassessment.md); [historical Dev 10 → 11 evidence](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md).
 
 Retain transparent **price/quote-volume/taker-flow confirmation and divergence** conditions, using only available validated components with explicit units, aligned periods, validity and thresholds. Funding/volatility context may be included only after a separate defined analytical contract.
 
@@ -729,7 +747,9 @@ Retain transparent **price/quote-volume/taker-flow confirmation and divergence**
 
 Prefer inspectable Boolean components or labeled states. Any future score must have a documented formula, weights, freshness and missing-input behavior before adoption.
 
-## 14. Phase 4 — Metric integration as each family arrives
+## 14. Phase 4 — Existing integration contract (apply only to approved measurements)
+
+**D-062 sequencing correction:** this section describes how an *approved* justified measurement integrates; it is **not** an instruction to add any family. First demonstrate a trading need, analytical gap, nonredundancy, data contract and feasible acquisition. [Current handoff](../handoffs/2026-11-19-ptm-210-metric-reassessment.md).
 
 Phase 4 began early with the existing normalized trigger adapter and continues with every added family.
 
@@ -748,11 +768,13 @@ Avoid a second arbitrary expression language for each family. Keep metric availa
 
 A future metric cannot force new optional endpoints merely by being present in a registry. Dependencies follow enabled/configured uses.
 
-## 15. Phase 5 — Liquidity, depth, and stress
+## 15. Former Phase 5 candidates — liquidity, depth, and stress (needs-based evaluation)
 
-**November 17 sequencing:** Phase 3 implementation complete with narrow G08 acceptance gap. Phase 4 integration continues; Phase 5 spread/depth/slippage and liquidity/funding/volatility stress remains planned, needing explicit native-source cost, validity and usefulness assessment. Broad optimization remains after approved metrics, except optional independent 719-market cold-first-raid latency work (never loosen the pinned source-age limit).
+**D-062 correction:** actual executable spread, opposing depth and order-notional execution cost are meaningful information gaps, **not automatically approved metric families**. The following design sketches are historical candidates pending decision value, native-source feasibility and explicit implementation authorization. No blanket book snapshots for all assets are assumed.
 
-**Status: planned after retained funding/taker-flow and higher-order metric work.** Endpoint cost and native sampling make this a separate stage; the dedicated performance program remains after approved metric additions.
+**Historical November 17 sequencing, superseded as a development mandate by D-062:** Phase 3 was implemented; targeted G08 acceptance and later source diagnostics remained. Liquidity, depth, slippage and stress are candidates *only where a trading need and acquisition feasibility justify them*. Independent cold-start performance remains open; do not loosen pinned freshness.
+
+**Status: investigation candidate, not approved implementation.** Acquisition costs, native sampling, freshness and achievable decision improvement control the selection; no phase quota authorizes new data collection.
 
 ### 15.1 Spread
 
@@ -806,7 +828,7 @@ No personal strategy implementation is part of Phase 6.
 
 ## 17. Post-metric performance program — explicitly deferred
 
-**Gate for the broader performance program: all *retained* approved metric additions are complete, including funding, taker flow, their aggregates, transparent flow conditions, and liquidity/depth. OI and positioning are not performance-program prerequisites.** The narrowly approved normalized-candle warm-start cache was implemented earlier under D-040.
+**D-062 gate clarification:** only *justified and explicitly approved* metric additions need completion before the broader performance program. Funding/taker/Phase 3 are implemented; liquidity/depth remain potential candidates, **not automatic prerequisites**. OI and positioning remain withdrawn. The narrowly approved normalized-candle warm-start cache was implemented earlier under D-040.
 
 This ordering is the November 7 user decision and supersedes earlier recommendations to optimize before correlation. Preserve required correctness and bounded storage during implementation; keep this separate optimization stage deferred.
 
