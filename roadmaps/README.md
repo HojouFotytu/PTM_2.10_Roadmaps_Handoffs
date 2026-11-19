@@ -1,5 +1,11 @@
 # PTMagic 2.10 Roadmaps
 
+## Current active roadmap — November 19, 2026
+
+**Use [CURRENT.md](CURRENT.md), [D-062](../DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026) and the [November 19 reassessment handoff](../handoffs/2026-11-19-ptm-210-metric-reassessment.md)** for all new PTMagic analytics planning. The earlier D-053/24/26/35-metric material below is historical source-specific context, not the active feature-development order.
+
+The application currently registers **43 metric names** (30 global-capable / 13 asset-only) with significant derived overlap; D-062 requires **trading need → analytical requirement → existing coverage → justified new measurement → required data/history → Binance/operational feasibility → implementation**. The 96h TestMode store is not a development cap. The four Phase 3 global flow-price volume shares use **≥90% observed frozen-cohort coverage** since `4bbe299e`; no-trade observations count as observed zero-volume, absent observations do not enter turnover sums. Other stricter volume metrics remain distinct. No new candidate—price-path quality, historical regime changes, order-book liquidity or other—is approved merely by its appearance in a roadmap.
+
 **D-053 implementation checkpoint — November 12, 2026:** PTMagic application source [`892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d`](https://github.com/HojouFotytu/PTMagic/commit/892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d) now removes the three OI/long-short positioning metrics, OI/ratio source acquisition and active cache integrations, obsolete tests, and UI labels. The **24 retained metrics** include 17 global-capable and seven asset-only measurements; settled funding remains with independent safe acquisition. A new user-local .NET build, the reduced **15-harness** offline suite and configured runtime checks are **pending**. The earlier `d101b5a0` 18-harness PASS is **pre-removal evidence**, not validation of the new code. This status **supersedes all earlier “source removal pending” or OI/positioning future-work instructions** in this document; past implementation and validation records are historical. The next step is local validation of `892a5f1f4729a3fccd3cb477ba6ad22fbbe0918d`, not further OI/positioning development.
 
 
