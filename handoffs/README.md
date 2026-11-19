@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Development Handoffs
 
+**CURRENT ANALYTICS DESIGN AUTHORITY — NOVEMBER 19:** [Metric reassessment](2026-11-19-ptm-210-metric-reassessment.md). Develop metrics only for demonstrated LONG/SHORT trading needs; the diagnostic 96-hour retention is not a design constraint. **New diagnostics source handoff:** [Verified new-market history INFO grouping](2026-11-19-new-market-history-reporting.md). Original 43 metric names unchanged; current application source now records Binance Futures onboarding and consolidates only provable pre-listing historical gaps into per-market INFO notices while retaining genuine WARN and fail-closed decisions. Focused build/tests and new-code TestMode still pending. Older Dev 10→11 and 35/26-metric handoffs are source-specific *history*, not next development instructions.
+
 ## Current analytics handoff — November 19, 2026 (D-062)
 
 **Continue from [November 19 Metric Reassessment and Next Development Handoff](2026-11-19-ptm-210-metric-reassessment.md)** and [D-062](../DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026). This replaces all historical Dev 10 → Dev 11 / Phase 4/5 *work-order* claims, without rewriting the accuracy of prior TestMode, tests or implemented families. The next task is to determine which LONG/SHORT trading decisions existing measurements cannot reliably support, **not to fill a roadmap quota**.
