@@ -8,7 +8,17 @@
 
 **What exists:** 43 metric names (30 global-capable, 13 asset-only; `PriceTrend` also asset-capable), **not** 43 independent information sources: exact `TakerImbalance` transform, nested threshold breadths, and four sign-classification flags overlap. No removal or addition is approved. Current functional source `561bbc32` includes `4bbe299e`, which permits **≥90% observed frozen-cohort coverage** for four Phase 3 global flow/price volume shares. Verified no-trade markets count as observed zero-volume, missing/invalid data does not enter numerator or denominator, and partial economic turnover coverage may distort subset shares. Other strict-completeness metrics remain unchanged.
 
-**Priority analysis, not implementation backlog:** assess existing multi-horizon/metric combinations; determine whether retained metric histories explain regime strengthening, weakening and persistence; evaluate possible path-efficiency information in existing closed candles; determine whether actionable spreads, opposing depth and intended-notional slippage improve trading decisions (a genuine missing source); conditionally examine shocks, next funding/mark-index and portfolio exposure. Each proposed measurement requires demonstrated incremental decision value and a source/capacity contract.
+**Immediate work is analytical, not metric implementation:** establish which concrete LONG/SHORT regime, entry, exit and risk decisions the current 43-name catalogue fails to distinguish. Use existing multi-horizon returns, breadth, dispersion, volatility, volume, funding and taker flow as the baseline; do not treat exact transforms or threshold variants as independent evidence.
+
+| Research deliverable | Acceptance question |
+|---|---|
+| **Existing coverage and redundancy** | Do actual trend/chop and entry/exit/risk examples demonstrate a missing distinction after combining existing metrics? |
+| **History of existing measurements** | Can preserved timestamped metric values and cohort/provenance histories reveal strengthening, weakening or persistence without new names? |
+| **Closed-candle path quality** | Does candidate directional efficiency provide incremental decision value beyond return, ATRP, dispersion and multi-horizon combinations? No metric is preapproved. |
+| **Executable liquidity feasibility** | Would fresh spread, opposing depth and intended-notional slippage change decisions, and can PTMagic acquire it at acceptable freshness/shared-IP cost without indiscriminate book polling? |
+| **Conditional risk studies** | Study adverse shocks, next funding/mark-index deviation or correlated open-position exposure only after a specific unmet trading need is identified. |
+
+**Approval gate:** for any candidate, produce the affected trading decision, baseline comparison, precise measurement/validity contract, justified history and cadence (not a 96h cap), native Binance source feasibility for both bots, cold/warm/gap cost and the unchanged 300s pin-age safety constraint, and a verification plan. **Explicit approval is required before registry, endpoint, retention, trigger, preset, or settings changes.** Historical Phase 4 is an integration workflow if approved; former Phase 5 is **not** a mandatory release milestone.
 
 **Validation boundary:** the historical `24d70402` TestMode deployment had 719/719 H1 and six conclusive post-cold raids per bot, but predates the new 90% rule; past OHLCV **20/20 PASS**, adaptive **9/9 PASS**, and lifecycle **84/84 PASS** remain source-specific. Current OHLCV code defines **22** groups, without confirmed 22/22 execution. The isolated G08-first TestMode fixture exists; decisive newer G08 activation is unverified. No code, analyzer, strategy or execution changes are authorized by the documentation.
 

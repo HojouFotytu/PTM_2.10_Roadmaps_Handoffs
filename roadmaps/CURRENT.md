@@ -14,6 +14,20 @@
 
 **Current next steps:** audit marginal information from existing metrics and multi-horizon combinations; evaluate historical metric persistence and transition comparisons; formulate falsifiable path-quality and liquidity hypotheses; determine required data contract and feasibility per candidate; seek explicit authorization before code, settings, retention or acquisition changes. The phase map and detailed Phase 4/5/6 sections below are implementation history/technical possibilities, not permission to fill roadmap slots.
 
+### Active work packages — analytical deliverables, not approved implementation
+
+| Work package | LONG/SHORT trading question | Required deliverable / decision gate |
+|---|---|---|
+| **A. Existing coverage first** | Which trend/chop, strengthening/weakening, entry, exit or risk decisions are actually ambiguous using the 43 existing names and their multi-horizon combinations? | A concrete decision-by-decision comparison showing current returns, breadth, dispersion, ATRP, flow and volume; retain existing measurements where they already distinguish the alternatives. Derived names are not independent confirmation. |
+| **B. Temporal persistence and regime transitions** | Can changes in already-calculated returns, breadth, volume, volatility and flow establish developing, persistent, recovering or deteriorating conditions? | Check whether timestamped **prior values of existing metrics** suffice. Specify source time, calculated time, cohort membership, missingness and retained-history rules before proposing another registry name. The existing latest-snapshot/JSONL audit is not a complete historical feature store. |
+| **C. Directional path quality** | Does endpoint return conceal reversals that matter for trend-following LONG/SHORT entries or exits? | Compare a *candidate* closed-candle directional path-efficiency measure with existing return/ATRP/dispersion and horizon combinations on representative trend and chop cases. Define contiguous window, zero-movement validity and look-ahead exclusions. **Not approved to build.** |
+| **D. Executable liquidity and impact** | Is apparent turnover sufficient to enter/exit the intended side and notional at acceptable spread/slippage? | Establish whether native fresh bid/ask, opposing book depth and notional-specific expected impact materially change decisions. Calculate selective sampling cadence, API weights for **both** instances, availability and staleness before suggesting any endpoint or all-symbol collection. **Not approved to build.** |
+| **E. Conditional risk information** | Do missed directional shocks, funding timing/mark-index dislocation or correlated held positions produce a specific decision failure? | Investigate only when an observable failure remains after A/B. Portfolio exposures require actual position/capital information, not a disguised market-wide metric. No OI or inferred-positioning revival. |
+
+**Mandatory go/no-go record for each proposed measurement:** name the affected trading decision and alternative classification; show incremental information compared with **existing** measurements; document validity and exact source semantics; derive resolution, window, retrospective depth and retention from the calculation; confirm PTMagic can natively acquire and maintain the observations without an external history provider; budget shared Binance API/IP usage, cold/warm/gap recovery, storage and the unchanged **300-second** pinned-decision guard; define deterministic/dual-TestMode and outcome-relevant verification; then request a separate explicit implementation approval. A candidate that fails the decision-value gate does not advance merely because collection is easy.
+
+**No metric or phase quota:** Phase 4 is an integration procedure *if* a new measurement is approved; the old Phase 5 liquidity/depth/stress list is a research sketch, not a release requirement. Historical Phase 6 records still have technical value, but time-stamped existing-metric persistence may become the first justified infrastructure improvement **only after** its analytical need and resource contract are established.
+
 ---
 
 **CURRENT ANALYTICS AUTHORITY — NOVEMBER 17:** [Dev 10 → Dev 11](../handoffs/2026-11-17-ptm-210-dev10-to-dev11.md) supersedes the *current* 35/26-metric and Phase 3-planned claims below (which remain dated history). **43 metrics: 30 globally capable / 13 asset-only**, eight Phase 3. Source functional `303b2e7`, docs-only app `71bfc01`. User-executed `Phase1COhlcv` **20/20 PASS** before newly added 21st taker diagnostic group (**not yet run**), `Phase2AdaptiveAcquisition` **9/9 PASS**, `ConfigurationLifecycle` **84/84 PASS** on final one-line SMS/no separate compiler-dots change. Two deployed `24d70402` LONG/SHORT logs each 7 raids, 6 conclusive post-cold, **719/719 H1 new global values** with `SMS12` active on **682–692 markets**; G08 fresh decisive GS selection unverified, logs predate final diagnostics/log cleanup. First uncached raids **5m21s**, properly stale beyond 300s; steady **19–25s**. No PT writes. Separate Phase 4/5 follow-up and cold-start task.
@@ -276,16 +290,9 @@ At the user's November 9 instruction, the persistent normalized OHLCV warm-start
 
 PTMagic measures market conditions and deterministically selects the PAIRS, DCA, and INDICATORS configuration sent to ProfitTrailer. ProfitTrailer remains responsible for native order and position execution.
 
-The expanded application measures:
+The implemented application measures normalized price direction/return, breadth/dispersion, volatility, quote-turnover participation/leadership, relative performance/BTC correlation, **settled funding**, aggressive taker flow and implemented price/flow classifications. The current registry contains **43 names**, not 43 independent observations.
 
-- Direction and return distribution.
-- Market breadth and dispersion.
-- Volatility and participation.
-- Relative strength and concentration.
-- Correlation and market cohesion.
-- Futures open interest, funding, positioning, and taker flow.
-- Transparent higher-order market conditions.
-- Liquidity, depth, spread, and stress.
+**Not implemented or approved by this roadmap:** bid/ask spread, opposing depth, notional-specific execution impact and composite stress metrics. These remain trading-need-first investigation candidates. D-053 removed open interest and long/short positioning; do not describe them as part of the expanded application.
 
 All analysis is implemented within PTMagic. No external AI service, AI-generated trading signals, or AI-driven settings authority is part of this architecture.
 
@@ -344,12 +351,12 @@ The qualified Telegram fixture references are now verified by native execution; 
 | Phase 1C — OHLC/volume metrics | Accepted baseline; new requirement reporting requires validation |
 | Phase 1D — correlation | 21/21 deterministic checks passed at `86c2ea3`; configured runtime acceptance pending |
 | Phase 1E — inspection and robustness | Deterministic lifecycle/editor/history checks passed; configured PT, browser, cross-exchange and failure-path acceptance remain |
-| Phase 2 — Futures funding and taker flow | Funding implemented; OI/positioning withdrawal pending; taker flow next |
-| Phase 2B — funding and taker-flow market aggregates | Planned; OI/positioning aggregates withdrawn by D-053 |
+| Phase 2 — Futures funding and taker flow | **Implemented** at documented source/test checkpoints; settled funding and taker flow retained, OI/positioning withdrawn by D-053 |
+| Phase 2B — funding and taker-flow market aggregates | **Implemented and configured TestMode-verified** at source-specific checkpoints; OI/positioning aggregates remain withdrawn |
 | Phase 3 — transparent flow confirmation/divergence | **Implemented: eight source metrics; 43 registered total. LONG/SHORT TestMode H1 global/SMS PASS; G08 fresh conclusive selection pending.** |
 | Phase 4 — trigger/UI integration | Implemented for current families, extended with each new family |
-| Phase 5 — liquidity/depth/stress | Planned |
-| Phase 6 — native history and historical analysis | Minimal decision audit trail has 13/13 passing checks at `d331fbd`; configured integration and the full analysis system remain |
+| Former Phase 5 — liquidity/depth/stress | **Unapproved research candidates only**; executable liquidity has a real information gap but requires decision benefit and source/capacity proof |
+| Phase 6 — native history and historical analysis | Historical JSONL decision-audit checks passed at `d331fbd`; retrospective metric persistence/replay is not yet established and advances only for a justified decision need |
 | Post-metric performance program | Deferred until all approved metric additions are complete |
 
 ## 3. Architectural rules
@@ -504,9 +511,9 @@ For 24-hour trends, the default parameters require conservative StoreDataMaxHour
 
 Insufficient retention leaves affected metrics unavailable with an explicit reason; it does not itself reject the whole configuration or resize the store. Unrelated metrics with sufficient history can remain valid. A 96-hour store cannot supply the default eight-hour ATR/expansion histories; that condition must remain visible instead of appearing as a valid zero.
 
-## 6. Current metric catalogue
+## 6. Metric definitions — historical pre-Phase-3 inventory
 
-**CURRENT: 35 canonical metrics (26 global-capable, nine asset-only), including both-scope PriceTrend counted once.** D-053's 24 and asset-taker's 26 were historical source stages. The table below covers original metrics; see §12 for the nine new global funding/taker aggregates and asset-only source metrics. The named MarketTrend determines timeframe and trigger eligibility.
+**Current authoritative catalogue: 43 names (30 global-capable / 13 asset-only), with `PriceTrend` also asset-capable.** The table below documents the original metric families; §12 records the later **35-name Phase 2B snapshot** and §13 the eight implemented Phase 3 names. Do **not** use a partial historical table as the current registry inventory. The [November 19 reassessment](../handoffs/2026-11-19-ptm-210-metric-reassessment.md) supplies the complete current catalogue and overlap audit. The named MarketTrend determines timeframe and trigger eligibility.
 
 | Metric | Scope | Meaning / unit |
 |---|---|---|
@@ -731,7 +738,7 @@ Confirm the Binance kline response supplies compatible total and taker-buy quote
 
 ## 12. Phase 2B — Funding and taker market aggregates (source complete, steady-state TestMode verified)
 
-**Current catalogue:** 35 names (26 global-capable, nine asset-only). Approved **funding globals:** `MedianFundingRate` latest Regular-settlement median; `PositiveFundingBreadth` (>0), `NegativeFundingBreadth` (<0), `ExtremePositiveFundingBreadth` (inclusive ≥+0.05 percentage-point default), `ExtremeNegativeFundingBreadth` (inclusive ≤−0.05 percentage-point default). Missing Regular settlement, wrong-sign/nonfinite thresholds and incomplete histories are UNAVAILABLE, never zero by assumption. Approved **taker globals:** `MedianTakerBuyRatio`, `BuyerDominanceBreadth` (ratio >0.5), `StrongBuyerDominanceBreadth` (ratio ≥0.60 default, finite >0.5..≤1), and `TakerImbalanceDispersion` (cross-sectional population standard deviation, nondirectional). Per-asset `TakerBuyRatio=Σtaker-buy quote volume / Σtotal quote volume` over latest fully closed UTC-aligned TrendMinutes; `TakerImbalance=2×ratio−1` is algebraically dependent, not another signal source. No OI/positioning families or new taker endpoint.
+**Historical Phase 2B snapshot:** 35 names (26 global-capable, nine asset-only), subsequently extended to **43** by Phase 3. Implemented **funding globals:** `MedianFundingRate` latest Regular-settlement median; `PositiveFundingBreadth` (>0), `NegativeFundingBreadth` (<0), `ExtremePositiveFundingBreadth` (inclusive ≥+0.05 percentage-point default), `ExtremeNegativeFundingBreadth` (inclusive ≤−0.05 percentage-point default). Missing Regular settlement, wrong-sign/nonfinite thresholds and incomplete histories are UNAVAILABLE, never zero by assumption. Approved **taker globals:** `MedianTakerBuyRatio`, `BuyerDominanceBreadth` (ratio >0.5), `StrongBuyerDominanceBreadth` (ratio ≥0.60 default, finite >0.5..≤1), and `TakerImbalanceDispersion` (cross-sectional population standard deviation, nondirectional). Per-asset `TakerBuyRatio=Σtaker-buy quote volume / Σtotal quote volume` over latest fully closed UTC-aligned TrendMinutes; `TakerImbalance=2×ratio−1` is algebraically dependent, not another signal source. No OI/positioning families or new taker endpoint.
 
 Freeze global eligible `MaxMarkets` population, require nonempty ≥ceil(90%×eligible) valid source; keep missing markets in eligible denominator; equally weight valid markets in cross-market calculations. Compute only necessary asset prerequisites: funding rate for globals, not additional unselected FundingSum; taker ratio and imbalance only when selected/needed. Monitor may display all already calculated and published values regardless of trigger selection, under their originating MarketTrend, with no extra calculation for display. Trigger enablement remains explicit.
 
@@ -787,7 +794,7 @@ Reject nonpositive mid, crossed/invalid books according to an explicit policy, s
 
 ### 15.2 Depth and imbalance
 
-Measure bid and ask depth separately within configured basis-point bands, such as 10, 25, and 50 bps, with consistent notional units.
+Investigate bid and ask depth separately in **decision-justified** basis-point bands with consistent notional units. Earlier examples of 10/25/50 bps are not approved thresholds or data-collection obligations.
 
 Depth imbalance can be defined as:
 
