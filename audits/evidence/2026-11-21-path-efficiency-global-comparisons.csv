@@ -1,0 +1,4 @@
+trend,minutes,first_offset_hours,second_offset_hours,shared_valid_assets,first_median_efficiency,second_median_efficiency,first_mean_return_pct,second_mean_return_pct,first_breadth_pct,second_breadth_pct,first_dispersion_pct,second_dispersion_pct
+M30,30,-38,-23,719,0.633185,0.360941,-0.485457,-0.429685,12.5174,19.1933,0.742583,0.737050
+H1,60,-21,-9,724,0.120610,0.249850,0.263518,0.187535,60.4972,64.9171,1.023111,1.153667
+H4,240,-45,-23,719,0.169676,0.271824,-2.165033,-2.272277,11.6829,9.3185,2.592500,2.582009

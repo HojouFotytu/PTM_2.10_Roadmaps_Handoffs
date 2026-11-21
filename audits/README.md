@@ -1,5 +1,7 @@
 # PTMagic 2.10 — Metric assessment and audit records
 
+**New completed candidate inclusion gate (2026-11-21):** [PricePathEfficiency / MedianPricePathEfficiency — final descriptive-value decision](2026-11-21-price-path-efficiency-inclusion-gate.md). This updates the earlier *pending* status: the family is **recommended for product inclusion**, but code implementation is not authorized. Supporting records: [per-horizon values](evidence/2026-11-21-path-efficiency-inclusion-profile.csv), [matched assets](evidence/2026-11-21-path-efficiency-matched-assets.csv), [fixed-cohort global comparisons](evidence/2026-11-21-path-efficiency-global-comparisons.csv), and [core reproducer](evidence/2026-11-21-price-path-reproducer.py).
+
 **Authoritative current metric-catalogue assessment (2026-11-21):**
 
 - [Individual disposition of all 43 metrics](2026-11-21-metric-catalogue-dispositions.md) — keep/derived/alias/classification decisions and one proposed path-quality measurement family; recommendations, **not** authorized source changes

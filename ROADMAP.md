@@ -1,5 +1,7 @@
 # PTMagic 2.10 — User Roadmap
 
+**November 21 — Price-path metric decision:** [Regime-information evaluation](audits/2026-11-21-price-path-efficiency-inclusion-gate.md) concludes **INCLUDE as a proposed product family**: **PricePathEfficiency** (asset) and **MedianPricePathEfficiency** (global). Same-horizon PriceTrend and ATRP do not capture closed-candle movement directness; the global median also has distinct descriptive variation. This is documentation/design inclusion, **not a source implementation authorization**. No trading-performance criterion or fixed MarketTrend/retention is involved.
+
 **November 21 — Metric-development evidence and scope:** The goal is accurate market-regime identification/characterization **only**, not trading performance, entry/exit scoring or predictive returns. The [43-metric disposition audit](audits/2026-11-21-metric-catalogue-dispositions.md) and [supporting CSV evidence](audits/README.md) are stored in this repository. Its proposed price-path efficiency family is a recommendation **requiring explicit approval**, not an implemented metric. The earlier predictive-return [Stage B report is superseded](history/2026-11-21-superseded-predictive-stage-b.md) and its NO-GO conclusions withdrawn. Horizon lengths and history are user-defined / measurement-derived, not fixed roadmap settings.
 
 ## Current development direction — November 19, 2026 (D-062)

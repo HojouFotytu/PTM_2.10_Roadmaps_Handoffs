@@ -1,0 +1,3 @@
+trend,first_symbol,second_symbol,first_price_trend_pct,second_price_trend_pct,first_atrp_pct,second_atrp_pct,first_efficiency,second_efficiency
+M30,ENSOUSDT,ALABUSDT,-1.206302,-1.145168,1.226617,1.163045,1.000000,0.206759
+H1,IBMUSDT,TRXUSDT,-0.546376,-0.611161,0.477567,0.343298,0.106163,0.785917
