@@ -1,0 +1,44 @@
+Metric,Family,Disposition,Basis
+PriceTrend,Price structure,KEEP — PRIMARY,Rolling endpoint return; market aggregation has specific outlier rule; primary directional measurement
+MedianPriceTrend,Price structure,KEEP — DERIVED,"Median of eligible market returns; robust center, distinct from filtered mean"
+MeanMedianSpread,Price structure,KEEP — DERIVED,Unfiltered mean minus median; detects cross-sectional return asymmetry
+Breadth,Price structure,KEEP — DERIVED,Share of valid markets with positive return; participation independent of return magnitude
+Dispersion,Price structure,KEEP — DERIVED,Cross-market standard deviation of returns; measures disagreement
+RelativeStrengthMarket,Relative performance,KEEP — DERIVED,Asset return minus market median; cross-sectional relative direction
+RelativeStrengthBTC,Relative performance,KEEP — DERIVED,Asset return minus BTC return; different benchmark from market median
+Concentration,Price structure,KEEP — DERIVED,Top10 turnover-ranked mean return minus remaining mean; leadership in returns
+ATRP,Volatility,KEEP — PRIMARY,"Within-asset true range, not cross-sectional return dispersion"
+MedianATRP,Volatility,KEEP — DERIVED,Median within-asset normalized range; global range intensity
+VolatilityBreadth,Volatility,KEEP — DERIVED,"Fraction beyond configured ATRP threshold; distribution, not median"
+VolumeExpansion,Volume participation,KEEP — PRIMARY,Current complete-period quote volume relative to historical volume baseline
+MedianVolumeExpansion,Volume participation,KEEP — DERIVED,"Typical expansion, robust to outliers"
+VolumeExpansionBreadth,Volume participation,KEEP — DERIVED,Extent of activity expansion across markets
+StrongVolumeExpansionBreadth,Volume participation,KEEP — DERIVED,Tail of expansion distribution; Nov19 H1 35.45% vs ordinary 58.90%
+VolumeConcentration,Turnover leadership,KEEP — DERIVED,HHI of turnover weights; whole-distribution concentration
+TopNVolumeShare,Turnover leadership,KEEP — DERIVED,Turnover share of selected top N; distinct from HHI
+BTCVolumeShare,Turnover leadership,KEEP — DERIVED,BTC share of turnover; special leader interpretation
+BTCETHVolumeShare,Turnover leadership,KEEP — DERIVED,BTC+ETH share; difference from BTC-only is ETH component
+CorrelationToBTC,BTC synchronization,KEEP — PRIMARY,Asset/BTC synchronized return correlation
+MeanCorrelationToBTC,BTC synchronization,KEEP — DERIVED,Mean cross-market BTC correlation; sensitive to tails
+MedianCorrelationToBTC,BTC synchronization,KEEP — DERIVED,Median BTC correlation; resistant to outliers
+FundingRate,Settled funding,KEEP — PRIMARY,Latest verified Regular settlement in selected window; no positioning inference
+FundingSum,Settled funding,KEEP — DERIVED,"Sum of verified settlements; accumulative, not equal to latest"
+MedianFundingRate,Settled funding,KEEP — DERIVED,Typical settled funding across eligible markets
+PositiveFundingBreadth,Settled funding,KEEP — DERIVED,Share with positive Regular funding; sign distribution
+NegativeFundingBreadth,Settled funding,KEEP — DERIVED,Share with negative Regular funding; zeros mean not necessarily complement
+ExtremePositiveFundingBreadth,Settled funding,KEEP — DERIVED,Positive extreme tail distinct from sign breadth; Nov19 H24 2.62% vs positive 70.35%
+ExtremeNegativeFundingBreadth,Settled funding,KEEP — DERIVED,Negative extreme tail distinct from sign breadth
+TakerBuyRatio,Aggressive flow,KEEP — PRIMARY,Source-verified buyer aggressor quote volume over total quote volume
+TakerImbalance,Aggressive flow,KEEP — ALIAS,"Exactly 2*TakerBuyRatio - 1; retain as trigger-facing convenience, never independent evidence"
+MedianTakerBuyRatio,Aggressive flow,KEEP — DERIVED,Typical buyer aggressor share across eligible markets
+BuyerDominanceBreadth,Aggressive flow,KEEP — DERIVED,Fraction of markets >0.5 taker buy ratio; market participation
+StrongBuyerDominanceBreadth,Aggressive flow,KEEP — DERIVED,High-dominance tail; Nov19 H1 5.10% vs ordinary 41.66%
+TakerImbalanceDispersion,Aggressive flow,KEEP — DERIVED,Spread of individual aggressor balances; derived from same ratios but not their median
+BuyerFlowPriceConfirmation,Price/flow class,KEEP — CLASSIFICATION,One of four outputs of sign-based aligned price/flow classification; trigger convenience
+SellerFlowPriceConfirmation,Price/flow class,KEEP — CLASSIFICATION,One of four outputs of sign-based aligned price/flow classification; trigger convenience
+BuyerFlowPriceDivergence,Price/flow class,KEEP — CLASSIFICATION,One of four outputs of sign-based aligned price/flow classification; trigger convenience
+SellerFlowPriceDivergence,Price/flow class,KEEP — CLASSIFICATION,One of four outputs of sign-based aligned price/flow classification; trigger convenience
+BuyerFlowPriceConfirmationVolumeShare,Price/flow class,KEEP — COMPONENT,Net aggressor-weighted contribution of buyer-aligned price rises / total observed turnover
+SellerFlowPriceConfirmationVolumeShare,Price/flow class,KEEP — COMPONENT,Net aggressor-weighted contribution of seller-aligned price falls / total observed turnover
+BuyerFlowPriceDivergenceVolumeShare,Price/flow class,KEEP — COMPONENT,Net aggressor-weighted contribution of buyer-aggressive price falls / total observed turnover
+SellerFlowPriceDivergenceVolumeShare,Price/flow class,KEEP — COMPONENT,Net aggressor-weighted contribution of seller-aggressive price rises / total observed turnover

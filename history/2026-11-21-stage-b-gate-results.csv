@@ -1,0 +1,21 @@
+trend,minutes,side,periods,source_samples,validation_samples,baseline_auc,baseline_logloss,path_delta_logloss,history_delta_logloss,combined_delta_logloss,status
+M15,15,LONG,381,127754,65117,0.509418,0.688549,-0.001837,0.008667,0.006741,diagnostic forward-only validation
+M15,15,SHORT,381,132889,66279,0.501504,0.690983,-0.000578,0.001051,0.00033,diagnostic forward-only validation
+M30,30,LONG,170,58181,30102,0.457235,0.697121,0.001081,0.001402,0.002436,diagnostic forward-only validation
+M30,30,SHORT,170,60388,29235,0.498232,0.695965,4.2e-05,0.011571,0.01153,diagnostic forward-only validation
+H1,60,LONG,74,25912,12913,0.411656,0.739904,0.000375,0.044037,0.04517,diagnostic forward-only validation
+H1,60,SHORT,74,26152,13097,0.514113,0.75132,0.00115,-0.006978,-0.005468,diagnostic forward-only validation
+H2,120,LONG,45,16687,8726,0.441967,0.827095,0.00028,0.039155,0.038307,diagnostic forward-only validation
+H2,120,SHORT,45,15202,7611,0.431124,0.790587,-0.000413,-0.012448,-0.01383,diagnostic forward-only validation
+H4,240,LONG,2,956,0,,,,,,insufficient chronological periods
+H4,240,SHORT,2,458,0,,,,,,insufficient chronological periods
+H6,360,LONG,4,1369,0,,,,,,insufficient chronological periods
+H6,360,SHORT,4,1479,0,,,,,,insufficient chronological periods
+H12,720,LONG,1,164,0,,,,,,insufficient chronological periods
+H12,720,SHORT,1,552,0,,,,,,insufficient chronological periods
+H24,1440,LONG,0,0,0,,,,,,insufficient source endpoints/selected historical-metric inputs
+H24,1440,SHORT,0,0,0,,,,,,insufficient source endpoints/selected historical-metric inputs
+H48,2880,LONG,0,0,0,,,,,,insufficient source endpoints/selected historical-metric inputs
+H48,2880,SHORT,0,0,0,,,,,,insufficient source endpoints/selected historical-metric inputs
+H72,4320,LONG,0,0,0,,,,,,insufficient source endpoints/selected historical-metric inputs
+H72,4320,SHORT,0,0,0,,,,,,insufficient source endpoints/selected historical-metric inputs

@@ -1,5 +1,7 @@
 # PTMagic 2.10 — User Roadmap
 
+**November 21 — Metric-development evidence and scope:** The goal is accurate market-regime identification/characterization **only**, not trading performance, entry/exit scoring or predictive returns. The [43-metric disposition audit](audits/2026-11-21-metric-catalogue-dispositions.md) and [supporting CSV evidence](audits/README.md) are stored in this repository. Its proposed price-path efficiency family is a recommendation **requiring explicit approval**, not an implemented metric. The earlier predictive-return [Stage B report is superseded](history/2026-11-21-superseded-predictive-stage-b.md) and its NO-GO conclusions withdrawn. Horizon lengths and history are user-defined / measurement-derived, not fixed roadmap settings.
+
 ## Current development direction — November 19, 2026 (D-062)
 
 **Authoritative next-work handoff:** [November 19 Metric Reassessment](handoffs/2026-11-19-ptm-210-metric-reassessment.md), [decision D-062](DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026), and [technical roadmap](roadmaps/CURRENT.md). The older November 17 Dev 10 → Dev 11 handoff and Phase 4/5 schedule remain historical evidence, **not current authorization or a quota** for new metrics.
