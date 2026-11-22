@@ -1,5 +1,9 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+## Current Dev 14 → Dev 15 handoff — November 22, 2026
+
+**Application HEAD:** [e3019a9](https://github.com/HojouFotytu/PTMagic/commit/e3019a993bfa679ff08356a2ab7bfdad7a76e2a1), branch phase1/market-data-foundation. **Sole runtime-test fixture:** Tests/Settings/settings.analyzer.json **v2.6.3**, DescriptiveName **"2.6.3"**, heading **"2.6.3 RAID SUMMARY #N"** (blank: **"RAID SUMMARY #N"**). **Delta and the Descriptive Name field are committed but new build/focused tests and LONG/SHORT TestMode acceptance are PENDING**. Earlier PricePathEfficiency tests/acceptance are CLOSED on predecessor source. **Current authoritative continuation:** [Dev 14 → Dev 15 AI handoff](../handoffs/2026-11-22-ptm-210-dev14-to-dev15.md). Older dated paragraphs below describing Delta as unimplemented or the v2.5.1 fixture as current are superseded.
+
 ## Active development — November 22, 2026
 
 **Price-path milestone: CLOSED and accepted.** Owner-run .NET tests passed (25 OHLCV, 9 adaptive, 84 lifecycle); source revision f75f229 and single testing analyzer v2.5.1 passed isolated LONG/SHORT TestMode G09 selections **13/16 fresh determinate raids**, with valid source-aligned global medians and SMS13 evaluation. Catalogue is **45 registered names (31 global-capable / 14 asset-only)**. [Acceptance record](../audits/2026-11-22-price-path-efficiency-runtime-acceptance.md). Existing source-specific historical counts below do not supersede this result.
