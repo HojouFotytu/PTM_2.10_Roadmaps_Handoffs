@@ -1,10 +1,41 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
-## Current Dev 14 → Dev 15 handoff — November 22, 2026
+## Current metric-development assessment — November 22, 2026 (Dev 15)
+
+**Dev 15 status — 2026-11-22.** There is **no demonstrated need for another PTMagic market metric**. The existing catalogue has **45 names (31 global-capable, 14 asset-only)**, with overlapping transformations and classifications rather than 45 independent sources. The corrected source [`29c81bdd`](https://github.com/HojouFotytu/PTMagic/commit/29c81bdd5679b7f2c1fcdb1b678819a982049160), existing analyzer test fixture **2.6.4**, has owner-reviewed .NET build and **85/85 ConfigurationLifecycle PASS** plus **13/13 G10-selected TestMode raids on each isolated LONG/SHORT instance**. Three global Delta calculations, distinct rolling/completed-period source timestamps, SMS14 activation/OffTrigger and the `2.6.4 RAID SUMMARY` heading passed. No TestMode PT writes or app ERROR/CRITICAL were observed. This does not establish non-TestMode PT delivery or cross-exchange release acceptance.
+
+**Consequence:** The metric-development roadmap is **on hold pending evidence of a material descriptive information gap**, not declared mathematically exhaustive. Price direction and relative returns, breadth/dispersion, volatility, path efficiency, volume participation/concentration/leadership, taker flow, funding distributions, BTC correlation and configurable multi-horizon `Delta` already cover the principal dimensions of current and evolving market regimes. More metrics should not be built merely to fill a phase.
+
+**Only substantial new raw-data candidate — executable liquidity.** Bid/ask spread, opposing order-book depth and order-notional impact are not directly captured by turnover. Keep these as a **conditional research item only**: first demonstrate that they reveal regime distinctions the existing data cannot; establish source freshness, symbol/side/notional semantics, selective acquisition, shared-IP weight and two-instance operating cost. Do **not** authorize all-symbol book polling, additional endpoints or code implementation.
+
+**Optional functionality, not a missing metric — condition persistence.** An elapsed-duration measure of a *user-defined* observed condition might distinguish sustained from interrupted regimes, but its necessity has not been demonstrated beyond existing horizons and Delta. Repeated reports of an unchanged completed source period are not independent observations; SMS active duration does not prove persistence of the underlying condition. No generic PersistenceScore, new registry family, fixed universal regime labels or mandatory history warehouse is approved.
+
+**Other proposals:** Rapid shocks are substantially covered by price, volatility, breadth, flow and Delta; settled-funding extremes are already covered; mark/index deviations are conceptually distinct but not demonstrated to materially improve regime characterization; composite stress scores, acceleration/higher derivatives, broader correlations and higher-order regime labels have no proven incremental need. These remain unapproved, conditional ideas, **not an implementation queue**.
+
+**Next priority:** verify accuracy, source-time/cohort/coverage validity, reporting and operational reliability of the existing measurements, with applicable release-integration gates. Any future metric needs an evidenced regime-descriptive gap, nonredundancy proof, precise measurement/history/validity contract, provider-cost/freshness feasibility, and a separately authorized change. The 96-hour diagnostic retention is not a design ceiling; preserve the 300-second pinned decision-age safeguard and three-valued UNAVAILABLE handling. No changes to source, analyzer JSON, provider acquisition, presets or separate ProfitTrailer strategy settings are authorized by this documentation. The governing aim is **market-regime characterization**, not trading-performance optimization.
+
+
+
+### Remaining metric candidates — disposition matrix
+
+| Candidate | Incremental information? | Decision |
+|---|---|---|
+| Bid/ask spread, opposing book depth, order-size slippage | Real missing observation family: executable liquidity differs from traded activity | **Research only**, subject to demonstrated regime value, fresh samples, selective scope and combined-bot provider budget |
+| Persistence of an observed user-defined condition | Potentially distinct temporal *interpretation*, but overlaps existing multi-horizon metrics and Delta | **Optional study**, not a new metric or an automatic Phase 6/history project |
+| Rapid adverse shocks | Substantially represented by price, breadth, volatility, flow and Delta | No demonstrated new family |
+| Funding extremes | Existing funding and breadth distributions | Covered |
+| Mark/index deviation | Conceptually distinct; material descriptive value unproven | Conditional investigation only |
+| Composite stress scores / universal regime labels | Mostly interpretations of existing measurements | Not justified as new source metrics |
+| Higher-order acceleration metrics | Multi-horizon/Delta overlap | Not justified |
+| Full pairwise/extra correlations | Marginal value and compute cost unproven | Not justified |
+
+**Stage interpretation:** historical Phase 4 remains integration procedure for *subsequently approved* measurements. Former Phase 5 liquidity/depth and Phase 6 expanded history are **not release prerequisites** or mandated feature additions. The post-metric performance program may be evaluated in its own right once justified approved metric work is complete. Do not conflate observed source-measurement history with independent repeated raids, or describe a globally valid persistence duration without handling unknown intervals and changed cohorts.
+
+## Historical Dev 14 → Dev 15 pre-acceptance handoff — November 22, 2026 (superseded)
 
 **Application HEAD:** [e3019a9](https://github.com/HojouFotytu/PTMagic/commit/e3019a993bfa679ff08356a2ab7bfdad7a76e2a1), branch phase1/market-data-foundation. **Sole runtime-test fixture:** Tests/Settings/settings.analyzer.json **v2.6.3**, DescriptiveName **"2.6.3"**, heading **"2.6.3 RAID SUMMARY #N"** (blank: **"RAID SUMMARY #N"**). **Delta and the Descriptive Name field are committed but new build/focused tests and LONG/SHORT TestMode acceptance are PENDING**. Earlier PricePathEfficiency tests/acceptance are CLOSED on predecessor source. **Current authoritative continuation:** [Dev 14 → Dev 15 AI handoff](../handoffs/2026-11-22-ptm-210-dev14-to-dev15.md). Older dated paragraphs below describing Delta as unimplemented or the v2.5.1 fixture as current are superseded.
 
-## Active development — November 22, 2026
+## Historical pre-Delta development direction — November 22, 2026 (superseded)
 
 **Price-path milestone: CLOSED and accepted.** Owner-run .NET tests passed (25 OHLCV, 9 adaptive, 84 lifecycle); source revision f75f229 and single testing analyzer v2.5.1 passed isolated LONG/SHORT TestMode G09 selections **13/16 fresh determinate raids**, with valid source-aligned global medians and SMS13 evaluation. Catalogue is **45 registered names (31 global-capable / 14 asset-only)**. [Acceptance record](../audits/2026-11-22-price-path-efficiency-runtime-acceptance.md). Existing source-specific historical counts below do not supersede this result.
 
