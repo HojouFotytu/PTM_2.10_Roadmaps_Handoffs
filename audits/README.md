@@ -1,5 +1,9 @@
 # PTMagic 2.10 — Metric assessment and audit records
 
+**CURRENT — November 22, 2026:** [Final LONG/SHORT PricePathEfficiency acceptance — CLOSED](2026-11-22-price-path-efficiency-runtime-acceptance.md); [temporal measurement information audit — next work gate](2026-11-22-temporal-metric-information-audit.md). The earlier 43-name report describes the prior catalogue; current published catalogue is **45**. The temporal audit approves **only the information requirement and next design verification**, not new registered metrics, source changes, or a history-infrastructure build.
+
+**Historical reports follow.**
+
 **New completed candidate inclusion gate (2026-11-21):** [PricePathEfficiency / MedianPricePathEfficiency — final descriptive-value decision](2026-11-21-price-path-efficiency-inclusion-gate.md). This updates the earlier *pending* status: the family is **recommended for product inclusion**, but code implementation is not authorized. Supporting records: [per-horizon values](evidence/2026-11-21-path-efficiency-inclusion-profile.csv), [matched assets](evidence/2026-11-21-path-efficiency-matched-assets.csv), [fixed-cohort global comparisons](evidence/2026-11-21-path-efficiency-global-comparisons.csv), and [core reproducer](evidence/2026-11-21-price-path-reproducer.py).
 
 **Authoritative current metric-catalogue assessment (2026-11-21):**

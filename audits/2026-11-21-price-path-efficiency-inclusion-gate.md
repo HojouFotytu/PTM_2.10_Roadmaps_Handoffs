@@ -1,6 +1,6 @@
 # PTMagic 2.10 — Price-path efficiency: final regime-information inclusion gate
 
-**Date:** November 21, 2026. **Status:** **PASS design inclusion** for one measurement family, with an asset output and a global-median output. **Design-gate status at audit creation:** this document alone did not authorize implementation. **Subsequent implementation:** source commit [49dd01f](https://github.com/HojouFotytu/PTMagic/commit/49dd01f438f1c75f88a8873ff8e86bc1738f8d9b), build and runtime acceptance pending.
+**Date:** November 21, 2026. **Status:** **PASS design inclusion** for one measurement family, with an asset output and a global-median output. **Design-gate status at audit creation:** this document alone did not authorize implementation. **Subsequent implementation:** source commit [49dd01f](https://github.com/HojouFotytu/PTMagic/commit/49dd01f438f1c75f88a8873ff8e86bc1738f8d9b), **build and LONG/SHORT TestMode runtime acceptance have now PASSED**; see the [2026-11-22 acceptance record](2026-11-22-price-path-efficiency-runtime-acceptance.md).
 
 **Scope:** accurate **market-regime characterization** for arbitrary user-configured MarketTrend durations and retention. **Excluded:** ProfitTrailer performance, trading entries/exits, future-price prediction, profitability and forecasting scores. This audit supersedes only the *pending-inclusion status* for the two proposed path-efficiency names in the [earlier catalogue review](2026-11-21-metric-catalogue-dispositions.md).
 
