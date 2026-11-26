@@ -1,6 +1,14 @@
 # PTMagic 2.10 — Change log
 
 
+## November 26 — Dev 16 current application checkpoint (source only)
+
+Latest [current Dev 16 machine handoff](handoffs/2026-11-26-ptm210-dev16-current.md) and [cumulative changelog](CHANGELOG-2.10.md) supersede this file's earlier "current" PT Data exporter/page-zero/1.1-schema claims. The functioning PT Data exporter uses PT 2.6.1 one-based history paging with schema-1.3 manifests, and now accepts a numeric day/week/month/All historical range; the user ran the PTDataExport harness successfully (28/28) on that earlier checkpoint. Also recorded: source-level unified historical retention and estimator, Monitor menu/ticker/Global Description cleanup, log ZIP range, new context/held-defense engine source, and optional reserved FAILSAFE/provisional Global/watchdog with separately persisted warning after acknowledged PT delivery. Two generic distribution Analyzer sample copies, **no LONG/SHORT distribution variants**. The separate trading strategy repo independently advanced both Analyzers to 0.10.3 as Global Description metadata (DEFAULT 1.1.25 unchanged).
+
+Current application code checkpoint `24db0b56bd7c33e32fcccfc25f6aaf40a1883bd5` has **no reported post-FAILSAFE .NET build or lifecycle PASS and no live PT protection confirmation**. The historical DecisionHistory 17/17, full build, and PTDataExport 28/28 were performed before later source additions. All earlier claims of complete current deployment/testing must be read within their dated source snapshots.
+
+
+
 ## November 14 — PT Data date-range pagination implementation
 
 **November 14, 2026 — PT Data Export handoff:** PTMagic [`618b628`](https://github.com/HojouFotytu/PTMagic/commit/618b6285d18e3c655139ae675bce389b72034ee5) replaces historical record limits with **7 days / 1 month / 3 months / 6 months / all available**, requests sorted descending buys/sales across page-zero-based `perPage=25` batches, and writes schema-1.1 manifests while preserving historical `extraInfo -- CV:` values. Application HEAD [`bda2394`](https://github.com/HojouFotytu/PTMagic/commit/bda2394eccd0e0439a8578bf7c7b1c4287e15382) does not further change the PT Data source. The November 13 **schema-1.0** ZIP showed 23 buys, 25 sales, eight PAIRS and two DCA; it does **not** validate the new multi-page exporter. Current live date-cutoff, multi-page and security acceptance remain open. The manifest's `range_coverage_complete` means only no duplicates were detected; it does **not** prove lifetime completeness. See [current PT Data handoff](handoffs/2026-11-13-monitor-performance-export-design.md).
