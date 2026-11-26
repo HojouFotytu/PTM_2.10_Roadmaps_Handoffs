@@ -1,5 +1,13 @@
 # PTMagic 2.10 — Market Analysis Expansion
 
+
+## Current application continuity — November 26, 2026 (PTMagic 2.10 Dev 16)
+
+**Current authoritative application handoff:** [Dev 16 current AI handoff](handoffs/2026-11-26-ptm210-dev16-current.md). PTMagic source `phase1/market-data-foundation` at functional checkpoint `24db0b56bd7c33e32fcccfc25f6aaf40a1883bd5`; recent application and Monitor code is **committed, not yet build/lifecycle/runtime accepted at this head**. This is separate from older metric-development scope and the LONG/SHORT strategy settings maintained in the Settings workflow.
+
+**Recent changes absent from historical 2026-11-19/22 material:** optional reserved operational `FAILSAFE` Global, incomplete-data best-available classification without FAILSAFE, independent stalled-raid watchdog, provisional WARN + persisted acknowledgement state, SMS suppression, generic sample definition in BOTH distribution Analyzer copies only; historical MarketData/DecisionHistory 30-day unified retention, no 256 MiB quota, storage estimator; numeric day/week/month ZIP periods for PT Data and PTMagic Logs, full _data export unchanged; Control menu/labels, Global descriptions/info icon and text tooltip cleanup; log/progress diagnostics; newer contextual metric/held-defense source. **Validated earlier**: DecisionHistory 17/17, one full solution build, PTDataExport 28/28. **Not validated**: current FAILSAFE ConfigurationLifecycle, new full build, browser behavior, live PT stop/buy/exit protection. Consult handoff for exact limitations and follow-up.
+
+
 ## Current metric-development authority — November 19, 2026
 
 The [November 19 reassessment handoff](handoffs/2026-11-19-ptm-210-metric-reassessment.md), [current technical roadmap](roadmaps/CURRENT.md) and [D-062](DECISIONS.md#d-062--trading-need-first-metric-design-and-43-metric-reassessment-november-19-2026) **supersede the earlier Phase 4/5 development sequence**, not prior source-specific results. New metrics follow seven ordered decisions: **trading need; analytical requirement; existing coverage; genuine missing measurement; measurement-driven data contract; Binance + operating feasibility; authorized implementation**. Neither a preselected metric count nor the diagnostic 96h historical retention decides what is worth developing.
