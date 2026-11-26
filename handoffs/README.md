@@ -1,5 +1,11 @@
 # PTMagic 2.10 — Development Handoffs
 
+
+## Current continuation — November 26, 2026 (Dev 16)
+
+**Use [2026-11-26 PTMagic Dev 16 current AI handoff](2026-11-26-ptm210-dev16-current.md) as the application/Monitor continuation checkpoint**, not the Nov 19 metric-development handoff for operational application code. Records optional FAILSAFE (two generic distribution copies only), best-available incomplete-data Global selection, watchdog and acknowledgement, WARN status, plus all remaining Nov 23–26 history/storage/export/Monitor/metrics/held-defense/log changes and exact validation separation. Earlier metrics-focused handoffs are historical and retain their source-specific findings; the latest app source `24db0b5` is unbuilt/untested after FAILSAFE changes.
+
+
 **CURRENT ANALYTICS DESIGN AUTHORITY — NOVEMBER 19:** [Metric reassessment](2026-11-19-ptm-210-metric-reassessment.md). Develop metrics only for demonstrated LONG/SHORT trading needs; the diagnostic 96-hour retention is not a design constraint. **New diagnostics source handoff:** [Verified new-market history INFO grouping](2026-11-19-new-market-history-reporting.md). Original 43 metric names unchanged; current application source now records Binance Futures onboarding and consolidates only provable pre-listing historical gaps into per-market INFO notices while retaining genuine WARN and fail-closed decisions. Focused build/tests and new-code TestMode still pending. Older Dev 10→11 and 35/26-metric handoffs are source-specific *history*, not next development instructions.
 
 ## Current analytics handoff — November 19, 2026 (D-062)
