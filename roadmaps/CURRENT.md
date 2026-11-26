@@ -1,5 +1,13 @@
 # PTMagic 2.10 — Current Technical Roadmap
 
+
+## Latest operational source and verification gate — November 26, 2026
+
+**See [Dev 16 machine-readable handoff](../handoffs/2026-11-26-ptm210-dev16-current.md)** before applying historical "current metric development" sections below. PTMagic engine functional checkpoint `24db0b56bd7c33e32fcccfc25f6aaf40a1883bd5` (branch `phase1/market-data-foundation`), no post-FAILSAFE build/ConfigurationLifecycle or live integration acceptance supplied. Source changes: independent deadline watchdog; optional reserved FAILSAFE Global (native `DEFAULT_sell_only_mode_enabled=true`, no SMS overlays) or non-FAILSAFE best-available provisional Global; acknowledged/persisted incomplete-data WARN; generic development+default distribution samples only; contextual analytics and independently recorded held-market-defense; age-only archive retention/storage estimator; enhanced Logs/PT Data export and Monitor ticker descriptions/menus; streamlined logs.
+
+**Required next gate:** owner-run latest lifecycle harness then solution build; repair failures; verify actual native properties, SMS/pair precedence, startup SOM ownership, watchdog/normal-raid serialization, restart and recovery, and real-world PT delivery. Absent FAILSAFE, latest current observations take precedence when available, but the implementation uses a known-TRUE clause heuristic and may reuse retained state in an overdue raid; log its age, don't mistake it for refreshed evidence. Fail-safe sample does not promise structural stop tightening or reset armed entries. Existing metrics roadmap follows need-first source validation, not a metric quota. Separate strategy repo and installed-binary revision.
+
+
 ## Current metric-development assessment — November 22, 2026 (Dev 15)
 
 **Dev 15 status — 2026-11-22.** There is **no demonstrated need for another PTMagic market metric**. The existing catalogue has **45 names (31 global-capable, 14 asset-only)**, with overlapping transformations and classifications rather than 45 independent sources. The corrected source [`29c81bdd`](https://github.com/HojouFotytu/PTMagic/commit/29c81bdd5679b7f2c1fcdb1b678819a982049160), existing analyzer test fixture **2.6.4**, has owner-reviewed .NET build and **85/85 ConfigurationLifecycle PASS** plus **13/13 G10-selected TestMode raids on each isolated LONG/SHORT instance**. Three global Delta calculations, distinct rolling/completed-period source timestamps, SMS14 activation/OffTrigger and the `2.6.4 RAID SUMMARY` heading passed. No TestMode PT writes or app ERROR/CRITICAL were observed. This does not establish non-TestMode PT delivery or cross-exchange release acceptance.
