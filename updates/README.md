@@ -1,4 +1,10 @@
 ## November 19 — New-market insufficient-history INFO classification (source only)
+## November 26 — Consolidated PTMagic Dev 16 source updates and unverified integration
+
+[Current application handoff](../handoffs/2026-11-26-ptm210-dev16-current.md) records the optional FAILSAFE versus no-FAILSAFE best-available Global policy; independent freshness watchdog, persisted warning/acknowledgment and SMS control; generic dual distribution copies; unified history retention and projected storage estimator; PTMagic Logs and PT Data integer day/week/month ZIP downloads; Monitor Control menu, labels and description tooltips; metrics/held-defense source and logging changes. Previously executed 17 DecisionHistory and 28 PTDataExport checks and one full solution build apply only to earlier checkpoints. Current lifecycle/build/live PT acceptance remain pending. This index does not authorize changing active LONG/SHORT strategy settings.
+
+
+
 
 [November 19 reporting handoff](../handoffs/2026-11-19-new-market-history-reporting.md): PTMagic existing application branch preserves Futures `onboardDate`, reclassifies only verified pre-listing asset shortages as per-market INFO, retains all real warnings and three-valued/unavailable decisions, and adds two focused regression groups to `Phase1MetricWarnings` (21 total registered; execution pending). No new market metric or endpoint. [Current trading-need-first analytical authority](../handoffs/2026-11-19-ptm-210-metric-reassessment.md) supersedes older Phase 4/5 development-quota instructions.
 
