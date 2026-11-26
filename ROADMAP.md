@@ -1,5 +1,13 @@
 # PTMagic 2.10 — User Roadmap
 
+
+## Operational update — November 26, 2026 (Dev 16; current application scope)
+
+Follow [current Dev 16 application handoff](handoffs/2026-11-26-ptm210-dev16-current.md) for the last source/acceptance status. Nov 23–26 completed-source changes include: unified age-only DecisionHistory/MarketData retention and Monitor storage estimator; numeric day/week/month ZIP periods, Monitor Logs/Data and ticker/description improvements; condensed logs; expanded contextual market metrics and held-defense interface; optional `FAILSAFE` recognition, best-available incomplete-data delivery, independent freshness watchdog and persisted WARN provenance. The packaged and development generic Analyzer presets each include one optional FAILSAFE entry with only native sell-only true. No new LONG/SHORT distribution presets or strategy formula updates.
+
+**Outstanding acceptance priority:** current source build and `Tests/ConfigurationLifecycle` first, then MonitorSettingsRoundTrip/relevant analytics tests; verify startup-vs-watchdog behavior, opt-in/opt-out Global selection, no SMS or pair-level entry bypass, complete multi-target acknowledgement, restart/recovery, provenance and warning color, native pending/held exit behavior. Previously operator-confirmed earlier DecisionHistory 17/17, PTDataExport 28/28 and full solution build are **not** current-head acceptance. Treat this as operational application reliability work, not a newly approved metric inventory/strategy roadmap quota.
+
+
 ## Current metric-development assessment — November 22, 2026 (Dev 15)
 
 **Dev 15 status — 2026-11-22.** There is **no demonstrated need for another PTMagic market metric**. The existing catalogue has **45 names (31 global-capable, 14 asset-only)**, with overlapping transformations and classifications rather than 45 independent sources. The corrected source [`29c81bdd`](https://github.com/HojouFotytu/PTMagic/commit/29c81bdd5679b7f2c1fcdb1b678819a982049160), existing analyzer test fixture **2.6.4**, has owner-reviewed .NET build and **85/85 ConfigurationLifecycle PASS** plus **13/13 G10-selected TestMode raids on each isolated LONG/SHORT instance**. Three global Delta calculations, distinct rolling/completed-period source timestamps, SMS14 activation/OffTrigger and the `2.6.4 RAID SUMMARY` heading passed. No TestMode PT writes or app ERROR/CRITICAL were observed. This does not establish non-TestMode PT delivery or cross-exchange release acceptance.
